@@ -48,7 +48,7 @@
     {
       "dir": "go",
       "generator": "go",
-      "label": "Go 1.21+",
+      "label": "Go 1.23+",
       "config": {
         "packageName": "growwer",
         "isGoSubmodule": true,
@@ -84,6 +84,7 @@
         "packageName": "Growwer.Api",
         "targetFramework": "net8.0",
         "library": "httpclient",
+        "releaseNote": "",
         "disallowAdditionalPropertiesIfNotPresent": false
       }
     },

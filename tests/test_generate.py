@@ -119,6 +119,69 @@ class GoTestRegenerationTest(unittest.TestCase):
         self.assertEqual(["go.json"], [path.name for path in temporary_outputs])
 
 
+class GoGenerationInputsTest(unittest.TestCase):
+    """Go is generated into an empty directory and tidied afterwards; neither step may lose what the
+    committed client pins."""
+
+    FAKE_DOCKER = (
+        "import os, pathlib, sys\n"
+        "if 'generate' not in sys.argv:\n"
+        "    with open(os.environ['FAKE_DOCKER_LOG'], 'a') as log:\n"
+        "        log.write(sys.argv[-1] + '\\n')\n"
+        "    sys.exit(0)\n"
+        "output = pathlib.Path(sys.argv[sys.argv.index('-o') + 1].removeprefix('/local/'))\n"
+        # Like the real generator, it skips every path the output directory's ignore file names.
+        "ignore = output / '.openapi-generator-ignore'\n"
+        "skipped = set(ignore.read_text().split()) if ignore.exists() else set()\n"
+        "written = [name for name in ('README.md', 'client.go') if name not in skipped]\n"
+        "for name in written:\n"
+        "    (output / name).write_text('generated github.com/viralitymedia/growwer-api-sdk/growwer')\n"
+        "(output / '.openapi-generator').mkdir(exist_ok=True)\n"
+        "(output / '.openapi-generator/FILES').write_text(''.join(name + '\\n' for name in written))\n"
+    )
+
+    def setUp(self):
+        directory = tempfile.TemporaryDirectory(prefix="growwer-go-inputs-test-")
+        self.addCleanup(directory.cleanup)
+        self.root = Path(directory.name)
+        copy_entry_point(self.root)
+        commands = self.root / "bin"
+        commands.mkdir()
+        docker = commands / "docker"
+        docker.write_text(f"#!{sys.executable}\n" + self.FAKE_DOCKER)
+        docker.chmod(0o755)
+        self.log = self.root / "docker.log"
+        self.env = {**os.environ, "PATH": f"{commands}:{os.environ['PATH']}", "FAKE_DOCKER_LOG": str(self.log)}
+        (self.root / "go").mkdir()
+
+    def generate(self):
+        result = subprocess.run(
+            ["bash", "generate.sh", "go"], cwd=self.root, env=self.env, capture_output=True, text=True, check=False
+        )
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        return self.log.read_text().splitlines()
+
+    def test_a_path_the_committed_ignore_file_names_keeps_its_hand_edits(self):
+        (self.root / "go/.openapi-generator-ignore").write_text("README.md\n")
+        (self.root / "go/README.md").write_text("edited by hand")
+        self.generate()
+        self.assertEqual("edited by hand", (self.root / "go/README.md").read_text())
+        self.assertEqual("generated github.com/viralitymedia/growwer-api-sdk/go", (self.root / "go/client.go").read_text())
+        self.assertEqual("README.md\n", (self.root / "go/.openapi-generator-ignore").read_text())
+
+    def test_tidy_keeps_the_testify_release_the_committed_go_mod_names(self):
+        (self.root / "go/go.mod").write_text(
+            "module github.com/viralitymedia/growwer-api-sdk/go\n\ngo 1.23\n\n"
+            "require (\n\tgithub.com/stretchr/testify v1.11.1\n\tgopkg.in/validator.v2 v2.0.1\n)\n"
+        )
+        self.assertEqual(
+            ["go mod edit -require=github.com/stretchr/testify@v1.11.1 && go mod tidy"], self.generate()
+        )
+
+    def test_a_first_generation_without_a_go_mod_tidies_unpinned(self):
+        self.assertEqual(["go mod tidy"], self.generate())
+
+
 FAKE_GENERATOR = (
     "import os, pathlib, sys\n"
     "if 'generate' not in sys.argv: sys.exit(0)\n"
@@ -373,7 +436,7 @@ class OrphanedFileTest(unittest.TestCase):
 class ContractSyncTest(unittest.TestCase):
     """`--sync` writes the fetched contract in the committed layout, or not at all."""
 
-    def sync(self, contract, curl_status=0, contract_url=None):
+    def sync(self, contract, curl_status=0, contract_url=None, arguments=("--sync", "typescript")):
         """Runs `--sync` on a copy of the entry point. With `contract_url`, the real curl fetches that
         URL; otherwise a stand-in curl serves `contract`."""
         with tempfile.TemporaryDirectory(prefix="growwer-sync-test-") as directory:
@@ -393,7 +456,7 @@ class ContractSyncTest(unittest.TestCase):
             docker.write_text("#!/bin/sh\nexit 0\n")
             docker.chmod(0o755)
             result = subprocess.run(
-                ["bash", "generate.sh", "--sync", "typescript"],
+                ["bash", "generate.sh", *arguments],
                 cwd=root,
                 env=env,
                 capture_output=True,
@@ -494,6 +557,18 @@ class ContractSyncTest(unittest.TestCase):
         self.assertGreaterEqual(len(operations), 60)
         self.assertEqual(len(operations), len({operation["operationId"] for operation in operations}))
         self.assertEqual("https://tool.growwer.com", contract["servers"][0]["url"])
+
+    def test_an_invalid_argument_is_refused_before_anything_is_fetched(self):
+        committed = (ROOT / "openapi.json").read_bytes()
+        served = json.dumps({"openapi": "3.0.0", "paths": {f"/p/{n}": {"get": {}} for n in range(60)}}).encode()
+        for arguments in (("--sync", "bogus"), ("--sync", "--bogus"), ("--sync", "typescript", "bogus")):
+            with self.subTest(arguments=arguments):
+                result, written, leftover = self.sync(served, arguments=arguments)
+                self.assertEqual(1, result.returncode)
+                self.assertIn("unknown", result.stderr)
+                self.assertNotIn("fetching", result.stdout)
+                self.assertEqual(committed, written)
+                self.assertFalse(leftover)
 
     def test_a_failed_fetch_keeps_the_committed_contract(self):
         committed = (ROOT / "openapi.json").read_bytes()
@@ -617,6 +692,57 @@ class RubyOneOfUnknownKeysTest(unittest.TestCase):
     def test_the_committed_ruby_client_has_no_one_of_check_left(self):
         for path in (ROOT / "ruby/lib/growwer/models").glob("*.rb"):
             self.assertNotIn("data.keys - const.acceptable_attributes", path.read_text(encoding="utf-8"), path.name)
+
+
+class WorkflowSecretTest(unittest.TestCase):
+    """A secret expanded into a `run` script becomes part of the shell source, where quoting it is the
+    script's job and a stray character can break or leak it; it is passed through `env` instead."""
+
+    @staticmethod
+    def run_scripts(text):
+        scripts, block, indent = [], None, 0
+        for line in text.splitlines():
+            stripped = line.lstrip(" ")
+            depth = len(line) - len(stripped)
+            if block is not None:
+                if stripped and depth <= indent:
+                    scripts.append("\n".join(block))
+                    block = None
+                else:
+                    block.append(line)
+                    continue
+            key = stripped.removeprefix("- ")
+            if key.startswith("run:"):
+                value = key.removeprefix("run:").strip()
+                if value in ("|", ">", "|-", ">-"):
+                    block, indent = [], depth
+                else:
+                    scripts.append(value)
+        if block is not None:
+            scripts.append("\n".join(block))
+        return scripts
+
+    def test_the_reader_finds_secrets_in_block_and_inline_scripts(self):
+        text = (
+            "steps:\n"
+            "  - run: echo ${{ secrets.A }}\n"
+            "  - env:\n"
+            "      B: ${{ secrets.B }}\n"
+            "    run: |\n"
+            "      printf '%s' \"$B\"\n"
+            "      echo ${{ secrets.C }}\n"
+            "  - uses: x\n"
+        )
+        scripts = self.run_scripts(text)
+        self.assertEqual(2, len(scripts))
+        self.assertIn("secrets.A", scripts[0])
+        self.assertIn("secrets.C", scripts[1])
+        self.assertNotIn("secrets.B", "".join(scripts))
+
+    def test_no_workflow_expands_a_secret_inside_a_run_script(self):
+        for workflow in sorted((ROOT / ".github/workflows").glob("*.yml")):
+            for script in self.run_scripts(workflow.read_text(encoding="utf-8")):
+                self.assertNotIn("secrets.", script, f"{workflow.name}: {script}")
 
 
 if __name__ == "__main__":

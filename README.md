@@ -3,9 +3,8 @@
 [![CI](https://github.com/viralitymedia/growwer-api-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/viralitymedia/growwer-api-sdk/actions/workflows/ci.yml)
 [![Release](https://github.com/viralitymedia/growwer-api-sdk/actions/workflows/release.yml/badge.svg)](https://github.com/viralitymedia/growwer-api-sdk/actions/workflows/release.yml)
 
-Official clients for the [Growwer](https://growwer.com) customer API — 66 operations over your
-account, projects, orders, the media catalogue, your seller medias and orders, wallets and the
-managed service.
+Official clients for the [Growwer](https://growwer.com) customer API: your account, projects,
+orders, the media catalogue, your seller medias and orders, wallets and the managed service.
 
 Every client here is **generated from the OpenAPI contract the API itself publishes**, so they say
 what the running service does rather than what a handwritten wrapper remembers about it. One
@@ -16,7 +15,7 @@ contract, one generator run, one version: a change to the API reaches all seven 
 | Python 3.9+ | `growwer` | [![PyPI](https://img.shields.io/pypi/v/growwer?label=pypi&color=informational)](https://pypi.org/project/growwer/) | [`python/`](python/) |
 | TypeScript (Node 18+, browsers) | `@growwer/api` | [![npm](https://img.shields.io/npm/v/%40growwer%2Fapi?label=npm&color=informational)](https://www.npmjs.com/package/@growwer/api) | [`typescript/`](typescript/) |
 | PHP 8.1+ | `growwer/growwer-api-sdk` | [![Packagist](https://img.shields.io/packagist/v/growwer/growwer-api-sdk?label=packagist&color=informational)](https://packagist.org/packages/growwer/growwer-api-sdk) | [`php/`](php/) |
-| Go 1.21+ | `github.com/viralitymedia/growwer-api-sdk/go` | [![Go module](https://img.shields.io/github/v/tag/viralitymedia/growwer-api-sdk?filter=go%2F*&label=go&color=informational)](https://pkg.go.dev/github.com/viralitymedia/growwer-api-sdk/go) | [`go/`](go/) |
+| Go 1.23+ | `github.com/viralitymedia/growwer-api-sdk/go` | [![Go module](https://img.shields.io/github/v/tag/viralitymedia/growwer-api-sdk?filter=go%2F*&label=go&color=informational)](https://pkg.go.dev/github.com/viralitymedia/growwer-api-sdk/go) | [`go/`](go/) |
 | Java 11+ | `com.growwer:growwer-api` | [![Maven Central](https://img.shields.io/maven-central/v/com.growwer/growwer-api?label=maven%20central&color=informational)](https://central.sonatype.com/artifact/com.growwer/growwer-api) | [`java/`](java/) |
 | .NET 8 | `Growwer.Api` | [![NuGet](https://img.shields.io/nuget/v/Growwer.Api?label=nuget&color=informational)](https://www.nuget.org/packages/Growwer.Api/) | [`csharp/`](csharp/) |
 | Ruby 3.0+ | `growwer` | [![RubyGems](https://img.shields.io/gem/v/growwer?label=gem&color=informational)](https://rubygems.org/gems/growwer) | [`ruby/`](ruby/) |
@@ -200,6 +199,23 @@ that id in `requestId`. Quote it when you report a problem and it identifies you
 `details` appears on some errors only — the invalid fields of a `422 validation_failed`, the
 shortfall of a `409 insufficient_balance` — as each operation's responses describe.
 
+In **Python** the common statuses raise their own subclass of `ApiException`: `BadRequestException`
+(400), `UnauthorizedException` (401), `ForbiddenException` (403), `NotFoundException` (404),
+`ConflictException` (409), `UnprocessableEntityException` (422) and `ServiceException` (5xx). They
+live in `growwer.exceptions`, not at the top level of the `growwer` package, and `data` holds the
+parsed envelope whenever the operation documents that status:
+
+```python
+from growwer.exceptions import ApiException, BadRequestException
+
+try:
+    ...
+except BadRequestException as error:
+    print(error.data.code, error.data.message, error.data.request_id)
+except ApiException as error:
+    print(error.status, error.headers.get("X-Request-Id"))
+```
+
 Header names are case-insensitive, so look them up that way. This matters in **C#**: .NET rewrites
 the header names it knows, so `X-Request-Id` arrives as `X-Request-ID`, and the client's
 `Multimap` of response headers compares names exactly:
@@ -250,9 +266,10 @@ unmetered; retry later.
 
 ### Writes are idempotent
 
-**Every write requires an `Idempotency-Key` header**: 1 to 255 printable ASCII characters. A UUID
-is the obvious choice. Use a new key for each operation and reuse it only to retry that same
-operation. Keys belong to your account, not to one API key.
+**Every write requires an `Idempotency-Key` header**: 1 to 255 printable ASCII characters without
+spaces (`!` to `~`); any other key answers `400 invalid_idempotency_key`. A UUID is the obvious
+choice. Use a new key for each operation and reuse it only to retry that same operation. Keys
+belong to your account, not to one API key.
 
 ```python
 import uuid
@@ -395,7 +412,8 @@ contract dropped them:
   `.openapi-generator/FILES` and the second drops them again, which is the list CI expects.
 - **`.openapi-generator-ignore`**, which the generator likewise writes only when it is missing.
 - **Any path the target's `.openapi-generator-ignore` names**: the generator stopped writing it
-  because it is now maintained by hand.
+  because it is now maintained by hand. Go's empty output directory gets a copy of
+  `go/.openapi-generator-ignore` before each run, so the file works there as it does elsewhere.
 
 These corrections are applied by the generator script rather than by hand, because a hand edit
 would be discarded on the next run:

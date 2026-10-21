@@ -70,10 +70,11 @@ print(sum(len(methods & set(item)) for item in paths.values()))
   echo "openapi.json updated (${operations} operations)"
 }
 
+sync=false
 targets=()
 for argument in "$@"; do
   case "${argument}" in
-    --sync) sync_contract ;;
+    --sync) sync=true ;;
     -*) echo "unknown option: ${argument}" >&2; exit 1 ;;
     *) targets+=("${argument}") ;;
   esac
@@ -94,6 +95,12 @@ else
       exit 1
     fi
   done
+fi
+
+# Fetched only once every argument is known to be valid, so a mistyped target cannot leave a new
+# contract on disk with no client regenerated from it.
+if [[ "${sync}" == true ]]; then
+  sync_contract
 fi
 
 mkdir -p .generator-configs
@@ -211,6 +218,19 @@ for source, renamed in sdk.get('nameMappings', {}).items():
     # successful generation. A generator failure leaves the existing client and tests intact.
     go_output=$(mktemp -d .generator-configs/go.XXXXXXXX)
     output_dir="${go_output}"
+    # The generator honours .openapi-generator-ignore only in the directory it writes to, so the
+    # committed one goes into the empty directory too; without it every path it names would be
+    # regenerated and copied over the hand-maintained file.
+    if [[ -f go/.openapi-generator-ignore ]]; then
+      cp go/.openapi-generator-ignore "${go_output}/"
+    fi
+    # The template requires no testify, so `go mod tidy` below would add whatever release is the
+    # newest on the day and a regeneration with no contract change would rewrite go.mod and go.sum.
+    # The version the committed go.mod names is kept instead; bump it there to move it.
+    go_testify=""
+    if [[ -f go/go.mod ]]; then
+      go_testify=$(sed -n 's|.*github.com/stretchr/testify \(v[^ ]*\).*|\1|p' go/go.mod | head -n 1)
+    fi
   fi
 
   # The generator records every file it writes in .openapi-generator/FILES but never deletes one it
@@ -386,10 +406,14 @@ for name in sorted(listed(previous_list) - listed(current_list)):
     # fails on a fresh checkout with "no required module provides package". Tidying here keeps
     # that fix inside the generation step, where the next run reproduces it, instead of leaving a
     # manual `go mod tidy` that regeneration would silently undo.
+    tidy="go mod tidy"
+    if [[ -n "${go_testify}" ]]; then
+      tidy="go mod edit -require=github.com/stretchr/testify@${go_testify} && ${tidy}"
+    fi
     docker run --rm -u "$(id -u):$(id -g)" \
       -e GOCACHE=/tmp/go-build -e GOMODCACHE=/tmp/go-mod \
       -v "$PWD/go:/src" -w /src \
-      "golang:${GO_TOOLCHAIN}-alpine" go mod tidy
+      "golang:${GO_TOOLCHAIN}-alpine" sh -c "${tidy}"
   fi
 done
 

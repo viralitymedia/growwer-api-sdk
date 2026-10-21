@@ -1,0 +1,29 @@
+{
+  "name": "@growwer/api",
+  "version": "1.0.0",
+  "description": "Official client for the Growwer API: orders, projects, the media catalogue, seller medias and wallets.",
+  "author": "Growwer Support <support@growwer.com> (https://growwer.com)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/viralitymedia/growwer-api-sdk.git"
+  },
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "module": "./dist/esm/index.js",
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsc && tsc -p tsconfig.esm.json",
+    "prepare": "npm run build"
+  },
+  "devDependencies": {
+    "typescript": "^4.0 || ^5.0"
+  },
+  "keywords": [
+    "growwer",
+    "api",
+    "sdk",
+    "seo",
+    "link-building"
+  ]
+}

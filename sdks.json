@@ -1,0 +1,103 @@
+{
+  "generatorVersion": "7.24.0",
+  "packageVersion": "1.0.0",
+  "contractUrl": "https://tool.growwer.com/api/v1/doc/json",
+  "license": {
+    "name": "MIT",
+    "url": "https://github.com/viralitymedia/growwer-api-sdk/blob/main/LICENSE"
+  },
+  "author": {
+    "name": "Growwer Support",
+    "email": "support@growwer.com",
+    "organization": "Virality Media, S.L.",
+    "url": "https://growwer.com"
+  },
+  "description": "Official client for the Growwer API: orders, projects, the media catalogue, seller medias and wallets.",
+  "sdks": [
+    {
+      "dir": "python",
+      "generator": "python",
+      "label": "Python 3.9+",
+      "testStubDir": "test",
+      "config": {
+        "packageName": "growwer",
+        "projectName": "growwer",
+        "library": "urllib3"
+      }
+    },
+    {
+      "dir": "typescript",
+      "generator": "typescript-fetch",
+      "label": "TypeScript (Node 18+ and browsers)",
+      "config": {
+        "npmName": "@growwer/api",
+        "supportsES6": true,
+        "typescriptThreePlus": true,
+        "withInterfaces": true
+      }
+    },
+    {
+      "dir": "php",
+      "generator": "php",
+      "label": "PHP 8.1+",
+      "testStubDir": "test",
+      "config": {
+        "invokerPackage": "Growwer\\Api"
+      }
+    },
+    {
+      "dir": "go",
+      "generator": "go",
+      "label": "Go 1.21+",
+      "config": {
+        "packageName": "growwer",
+        "isGoSubmodule": true,
+        "withGoMod": true,
+        "disallowAdditionalPropertiesIfNotPresent": false
+      }
+    },
+    {
+      "dir": "java",
+      "generator": "java",
+      "label": "Java 11+",
+      "testStubDir": "src/test",
+      "config": {
+        "library": "okhttp-gson",
+        "groupId": "com.growwer",
+        "artifactId": "growwer-api",
+        "invokerPackage": "com.growwer.api",
+        "apiPackage": "com.growwer.api.api",
+        "modelPackage": "com.growwer.api.model",
+        "artifactUrl": "https://github.com/viralitymedia/growwer-api-sdk",
+        "scmConnection": "scm:git:git://github.com/viralitymedia/growwer-api-sdk.git",
+        "scmDeveloperConnection": "scm:git:ssh://git@github.com/viralitymedia/growwer-api-sdk.git",
+        "scmUrl": "https://github.com/viralitymedia/growwer-api-sdk",
+        "disallowAdditionalPropertiesIfNotPresent": false
+      }
+    },
+    {
+      "dir": "csharp",
+      "generator": "csharp",
+      "label": ".NET 8",
+      "testStubDir": "src/Growwer.Api.Test",
+      "config": {
+        "packageName": "Growwer.Api",
+        "targetFramework": "net8.0",
+        "library": "httpclient"
+      }
+    },
+    {
+      "dir": "ruby",
+      "generator": "ruby",
+      "label": "Ruby 3.0+",
+      "testStubDir": "spec",
+      "config": {
+        "gemName": "growwer",
+        "moduleName": "Growwer",
+        "library": "faraday"
+      }
+    }
+  ],
+  "goToolchain": "1.23",
+  "centralPublishingPluginVersion": "0.11.0"
+}

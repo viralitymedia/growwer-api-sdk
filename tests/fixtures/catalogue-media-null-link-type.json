@@ -1,0 +1,39 @@
+{
+  "id": "c1d2e3f4-a5b6-4c7d-8e9f-a0b1c2d3e4f5",
+  "domain": "press.example",
+  "type": "press",
+  "language": "en",
+  "country": "GB",
+  "topics": [5],
+  "metrics": {
+    "organicTraffic": null,
+    "domainRating": null,
+    "referringDomains": null,
+    "linkedDomains": null,
+    "linkedToReferringRatio": null
+  },
+  "positiveTrafficTrend": false,
+  "bestSeller": true,
+  "publicationRate": 87,
+  "averageDaysToPublication": 4,
+  "onHoliday": false,
+  "flashOffer": null,
+  "postOffer": {
+    "price": {"amount": 18000, "currency": "EUR"},
+    "linkType": null,
+    "prices": {},
+    "previousPrice": {"amount": 20000, "currency": "EUR"},
+    "advertisingLabel": true,
+    "promotedSocialNetworks": [],
+    "extras": {
+      "homepageListing": {"amount": 2500, "currency": "EUR"},
+      "sensitiveTopic": {"allowed": true, "extraPrice": {"amount": 3000, "currency": "EUR"}}
+    }
+  },
+  "linkAdditionOffer": {
+    "price": {"amount": 6000, "currency": "EUR"},
+    "linkType": null,
+    "prices": {},
+    "previousPrice": null
+  }
+}

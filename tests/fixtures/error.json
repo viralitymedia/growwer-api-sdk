@@ -1,0 +1,6 @@
+{
+  "code": "catalogue_daily_cap_reached",
+  "message": "This response would take the account beyond the medias it may see today.",
+  "requestId": "4f1c2a9e8b7d6c5e",
+  "details": {"remaining": 0}
+}

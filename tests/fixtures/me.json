@@ -1,0 +1,24 @@
+{
+  "id": "5d0c3f7a-1b2e-4c6d-8e9f-0a1b2c3d4e5f",
+  "email": "buyer@shop.example",
+  "firstName": "Ana",
+  "language": "es",
+  "createdAt": "2025-03-14T08:15:00+00:00",
+  "buyer": {
+    "balance": {
+      "available": {"amount": 250000, "currency": "EUR"},
+      "pending": {"amount": 12500, "currency": "EUR"}
+    }
+  },
+  "seller": {
+    "balance": {
+      "available": {"amount": 0, "currency": "EUR"},
+      "pending": {"amount": 0, "currency": "EUR"}
+    },
+    "restricted": false,
+    "onHoliday": false,
+    "holidayEndDate": null
+  },
+  "catalogue": {"eligible": true},
+  "managedService": {"active": false}
+}

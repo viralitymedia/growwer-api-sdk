@@ -62,7 +62,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="CatalogueMedia" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected CatalogueMedia() { }
+        protected CatalogueMedia()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="CatalogueMedia" /> class.
         /// </summary>
@@ -148,6 +151,7 @@ namespace Growwer.Api.Model
                 throw new ArgumentNullException("linkAdditionOffer is a required property for CatalogueMedia and cannot be null");
             }
             this.LinkAdditionOffer = linkAdditionOffer;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -245,6 +249,12 @@ namespace Growwer.Api.Model
         public CatalogueOfferOrNull LinkAdditionOffer { get; set; }
 
         /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -267,6 +277,7 @@ namespace Growwer.Api.Model
             sb.Append("  FlashOffer: ").Append(FlashOffer).Append("\n");
             sb.Append("  PostOffer: ").Append(PostOffer).Append("\n");
             sb.Append("  LinkAdditionOffer: ").Append(LinkAdditionOffer).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

@@ -168,7 +168,27 @@ func TestAnOrderWithFieldsThisClientDoesNotKnowStillDeserialises(t *testing.T) {
 	equal(t, "pendingAction", order.GetPendingAction(), "seller")
 	equal(t, "hasFile", order.Draft.Get().HasFile, true)
 	equal(t, "channel", order.Channel.Created, "api")
+	if order.Briefing.PostOrderBriefing == nil || order.Briefing.LinkAdditionOrderBriefing != nil {
+		t.Fatalf("briefing = %#v, want a PostOrderBriefing only", order.Briefing)
+	}
 	equal(t, "title", *order.Briefing.PostOrderBriefing.Title.Get(), "Choosing running shoes")
+	equal(t, "link type", order.Briefing.PostOrderBriefing.Links[0].Type, "dofollow")
+}
+
+func TestALinkAdditionOrderWithFieldsThisClientDoesNotKnowStillDeserialises(t *testing.T) {
+	client, _ := answer(200, fixture(t, "link-addition-order-with-unknown-field.json"), nil)
+
+	order, _, err := client.OrdersAPI.GetOrder(authorised(), orderID).Execute()
+	check(t, err)
+
+	equal(t, "type", order.Type, "link_addition")
+	if order.Briefing.LinkAdditionOrderBriefing == nil || order.Briefing.PostOrderBriefing != nil {
+		t.Fatalf("briefing = %#v, want a LinkAdditionOrderBriefing only", order.Briefing)
+	}
+	briefing := order.Briefing.LinkAdditionOrderBriefing
+	equal(t, "linkingFrom", briefing.LinkingFrom, "https://blog.example/best-trails")
+	equal(t, "anchor", *briefing.Link.Anchor.Get(), "trail shoes")
+	equal(t, "link type", briefing.Link.Type, "nofollow")
 }
 
 func TestACatalogueMediaReadsANullPreviousPriceAndLinkAdditionOffer(t *testing.T) {

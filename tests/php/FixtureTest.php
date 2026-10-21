@@ -132,6 +132,21 @@ final class FixtureTest extends TestCase
         self::assertTrue($order->getDraft()->getHasFile());
         self::assertSame('api', $order->getChannel()->getCreated());
         self::assertSame('Choosing running shoes', $order->getBriefing()->getTitle());
+        self::assertSame('dofollow', $order->getBriefing()->getLinks()[0]->getType());
+        self::assertNull($order->getBriefing()->getLinkingFrom());
+    }
+
+    public function testALinkAdditionOrderWithFieldsThisClientDoesNotKnowStillDeserialises(): void
+    {
+        $order = (new OrdersApi(...$this->answer(200, self::fixture('link-addition-order-with-unknown-field.json'))))
+            ->getOrder(self::ORDER_ID);
+
+        self::assertSame('link_addition', $order->getType());
+        $briefing = $order->getBriefing();
+        self::assertSame('https://blog.example/best-trails', $briefing->getLinkingFrom());
+        self::assertSame('trail shoes', $briefing->getLink()->getAnchor());
+        self::assertSame('nofollow', $briefing->getLink()->getType());
+        self::assertNull($briefing->getLinks());
     }
 
     public function testACatalogueMediaReadsANullPreviousPriceAndLinkAdditionOffer(): void

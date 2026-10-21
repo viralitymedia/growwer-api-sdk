@@ -37,7 +37,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="ListOrders200Response" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected ListOrders200Response() { }
+        protected ListOrders200Response()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="ListOrders200Response" /> class.
         /// </summary>
@@ -52,6 +55,7 @@ namespace Growwer.Api.Model
             }
             this.Items = items;
             this.Total = total;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -67,6 +71,12 @@ namespace Growwer.Api.Model
         public int Total { get; set; }
 
         /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -76,6 +86,7 @@ namespace Growwer.Api.Model
             sb.Append("class ListOrders200Response {\n");
             sb.Append("  Items: ").Append(Items).Append("\n");
             sb.Append("  Total: ").Append(Total).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

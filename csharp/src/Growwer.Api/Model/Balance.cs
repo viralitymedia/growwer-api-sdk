@@ -37,7 +37,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="Balance" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected Balance() { }
+        protected Balance()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="Balance" /> class.
         /// </summary>
@@ -57,6 +60,7 @@ namespace Growwer.Api.Model
                 throw new ArgumentNullException("pending is a required property for Balance and cannot be null");
             }
             this.Pending = pending;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -74,6 +78,12 @@ namespace Growwer.Api.Model
         public Money Pending { get; set; }
 
         /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -83,6 +93,7 @@ namespace Growwer.Api.Model
             sb.Append("class Balance {\n");
             sb.Append("  Available: ").Append(Available).Append("\n");
             sb.Append("  Pending: ").Append(Pending).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

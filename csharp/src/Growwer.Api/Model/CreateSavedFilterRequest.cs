@@ -70,7 +70,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="CreateSavedFilterRequest" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected CreateSavedFilterRequest() { }
+        protected CreateSavedFilterRequest()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="CreateSavedFilterRequest" /> class.
         /// </summary>
@@ -92,6 +95,7 @@ namespace Growwer.Api.Model
             }
             this.Filters = filters;
             this.NotificationFrequency = notificationFrequency;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -112,6 +116,12 @@ namespace Growwer.Api.Model
         public Dictionary<string, Object> Filters { get; set; }
 
         /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -122,6 +132,7 @@ namespace Growwer.Api.Model
             sb.Append("  Name: ").Append(Name).Append("\n");
             sb.Append("  Filters: ").Append(Filters).Append("\n");
             sb.Append("  NotificationFrequency: ").Append(NotificationFrequency).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

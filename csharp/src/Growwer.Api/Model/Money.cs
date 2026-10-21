@@ -37,7 +37,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="Money" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected Money() { }
+        protected Money()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="Money" /> class.
         /// </summary>
@@ -52,6 +55,7 @@ namespace Growwer.Api.Model
                 throw new ArgumentNullException("currency is a required property for Money and cannot be null");
             }
             this.Currency = currency;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -75,6 +79,12 @@ namespace Growwer.Api.Model
         public string Currency { get; set; }
 
         /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -84,6 +94,7 @@ namespace Growwer.Api.Model
             sb.Append("class Money {\n");
             sb.Append("  Amount: ").Append(Amount).Append("\n");
             sb.Append("  Currency: ").Append(Currency).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

@@ -37,7 +37,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="CataloguePostOfferAllOfExtras" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected CataloguePostOfferAllOfExtras() { }
+        protected CataloguePostOfferAllOfExtras()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="CataloguePostOfferAllOfExtras" /> class.
         /// </summary>
@@ -57,6 +60,7 @@ namespace Growwer.Api.Model
                 throw new ArgumentNullException("sensitiveTopic is a required property for CataloguePostOfferAllOfExtras and cannot be null");
             }
             this.SensitiveTopic = sensitiveTopic;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -73,6 +77,12 @@ namespace Growwer.Api.Model
         public CataloguePostOfferAllOfExtrasSensitiveTopic SensitiveTopic { get; set; }
 
         /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -82,6 +92,7 @@ namespace Growwer.Api.Model
             sb.Append("class CataloguePostOfferAllOfExtras {\n");
             sb.Append("  HomepageListing: ").Append(HomepageListing).Append("\n");
             sb.Append("  SensitiveTopic: ").Append(SensitiveTopic).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

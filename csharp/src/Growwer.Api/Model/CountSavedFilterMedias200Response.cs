@@ -37,7 +37,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="CountSavedFilterMedias200Response" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected CountSavedFilterMedias200Response() { }
+        protected CountSavedFilterMedias200Response()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="CountSavedFilterMedias200Response" /> class.
         /// </summary>
@@ -45,6 +48,7 @@ namespace Growwer.Api.Model
         public CountSavedFilterMedias200Response(int count = default)
         {
             this.Count = count;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -52,6 +56,12 @@ namespace Growwer.Api.Model
         /// </summary>
         [DataMember(Name = "count", IsRequired = true, EmitDefaultValue = true)]
         public int Count { get; set; }
+
+        /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -62,6 +72,7 @@ namespace Growwer.Api.Model
             StringBuilder sb = new StringBuilder();
             sb.Append("class CountSavedFilterMedias200Response {\n");
             sb.Append("  Count: ").Append(Count).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

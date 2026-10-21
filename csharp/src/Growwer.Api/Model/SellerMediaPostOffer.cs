@@ -37,7 +37,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="SellerMediaPostOffer" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected SellerMediaPostOffer() { }
+        protected SellerMediaPostOffer()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="SellerMediaPostOffer" /> class.
         /// </summary>
@@ -57,6 +60,7 @@ namespace Growwer.Api.Model
                 throw new ArgumentNullException("extraServices is a required property for SellerMediaPostOffer and cannot be null");
             }
             this.ExtraServices = extraServices;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -73,6 +77,12 @@ namespace Growwer.Api.Model
         public List<UpdateSellerMediaRequestExtraServicesInner> ExtraServices { get; set; }
 
         /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -82,6 +92,7 @@ namespace Growwer.Api.Model
             sb.Append("class SellerMediaPostOffer {\n");
             sb.Append("  PricingOptions: ").Append(PricingOptions).Append("\n");
             sb.Append("  ExtraServices: ").Append(ExtraServices).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

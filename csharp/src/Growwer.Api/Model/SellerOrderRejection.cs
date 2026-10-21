@@ -37,7 +37,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="SellerOrderRejection" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected SellerOrderRejection() { }
+        protected SellerOrderRejection()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="SellerOrderRejection" /> class.
         /// </summary>
@@ -50,6 +53,7 @@ namespace Growwer.Api.Model
                 throw new ArgumentNullException("reason is a required property for SellerOrderRejection and cannot be null");
             }
             this.Reason = reason;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -57,6 +61,12 @@ namespace Growwer.Api.Model
         /// </summary>
         [DataMember(Name = "reason", IsRequired = true, EmitDefaultValue = true)]
         public SellerOrderRejectionReason Reason { get; set; }
+
+        /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -67,6 +77,7 @@ namespace Growwer.Api.Model
             StringBuilder sb = new StringBuilder();
             sb.Append("class SellerOrderRejection {\n");
             sb.Append("  Reason: ").Append(Reason).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

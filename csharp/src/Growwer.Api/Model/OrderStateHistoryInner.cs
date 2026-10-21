@@ -37,7 +37,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="OrderStateHistoryInner" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected OrderStateHistoryInner() { }
+        protected OrderStateHistoryInner()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="OrderStateHistoryInner" /> class.
         /// </summary>
@@ -59,6 +62,7 @@ namespace Growwer.Api.Model
                 throw new ArgumentNullException("reason is a required property for OrderStateHistoryInner and cannot be null");
             }
             this.Reason = reason;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -80,6 +84,12 @@ namespace Growwer.Api.Model
         public OrderStateHistoryInnerReason Reason { get; set; }
 
         /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -90,6 +100,7 @@ namespace Growwer.Api.Model
             sb.Append("  State: ").Append(State).Append("\n");
             sb.Append("  Date: ").Append(Date).Append("\n");
             sb.Append("  Reason: ").Append(Reason).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

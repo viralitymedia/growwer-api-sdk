@@ -125,7 +125,21 @@ class FixtureTest(unittest.TestCase):
         self.assertEqual(order.pending_action, "seller")
         self.assertTrue(order.draft.has_file)
         self.assertEqual(order.channel.created, "api")
+        self.assertIsInstance(order.briefing.actual_instance, PostOrderBriefing)
         self.assertEqual(order.briefing.actual_instance.title, "Choosing running shoes")
+        self.assertEqual(order.briefing.actual_instance.links[0].type, "dofollow")
+
+    def test_link_addition_order_with_fields_this_client_does_not_know_still_deserialises(self):
+        order = OrdersApi(
+            self.client(200, fixture("link-addition-order-with-unknown-field.json"))
+        ).get_order(ORDER_ID)
+
+        self.assertEqual(order.type, "link_addition")
+        briefing = order.briefing.actual_instance
+        self.assertIsInstance(briefing, LinkAdditionOrderBriefing)
+        self.assertEqual(briefing.linking_from, "https://blog.example/best-trails")
+        self.assertEqual(briefing.link.anchor, "trail shoes")
+        self.assertEqual(briefing.link.type, "nofollow")
 
     def test_catalogue_media_reads_null_previous_price_and_link_addition_offer(self):
         media = CatalogueApi(self.client(200, fixture("catalogue-media.json"))).get_catalogue_media(MEDIA_ID)

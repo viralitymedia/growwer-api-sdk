@@ -37,7 +37,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="GetMe200ResponseBuyer" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected GetMe200ResponseBuyer() { }
+        protected GetMe200ResponseBuyer()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="GetMe200ResponseBuyer" /> class.
         /// </summary>
@@ -50,6 +53,7 @@ namespace Growwer.Api.Model
                 throw new ArgumentNullException("balance is a required property for GetMe200ResponseBuyer and cannot be null");
             }
             this.Balance = balance;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -57,6 +61,12 @@ namespace Growwer.Api.Model
         /// </summary>
         [DataMember(Name = "balance", IsRequired = true, EmitDefaultValue = true)]
         public Balance Balance { get; set; }
+
+        /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -67,6 +77,7 @@ namespace Growwer.Api.Model
             StringBuilder sb = new StringBuilder();
             sb.Append("class GetMe200ResponseBuyer {\n");
             sb.Append("  Balance: ").Append(Balance).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

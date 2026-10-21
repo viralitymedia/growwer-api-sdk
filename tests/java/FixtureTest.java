@@ -151,7 +151,20 @@ public class FixtureTest {
         equal("pendingAction", order.getPendingAction().getValue(), "seller");
         equal("hasFile", order.getDraft().getHasFile(), true);
         equal("channel", order.getChannel().getCreated().getValue(), "api");
+        equal("briefing type", order.getBriefing().getActualInstance().getClass(), PostOrderBriefing.class);
         equal("title", order.getBriefing().getPostOrderBriefing().getTitle(), "Choosing running shoes");
+        equal("link type", order.getBriefing().getPostOrderBriefing().getLinks().get(0).getType().getValue(), "dofollow");
+    }
+
+    void aLinkAdditionOrderWithFieldsThisClientDoesNotKnowStillDeserialises() throws Exception {
+        Order order = new OrdersApi(answer(fixture("link-addition-order-with-unknown-field.json"))).getOrder(ORDER_ID);
+
+        equal("type", order.getType().getValue(), "link_addition");
+        equal("briefing type", order.getBriefing().getActualInstance().getClass(), LinkAdditionOrderBriefing.class);
+        LinkAdditionOrderBriefing briefing = order.getBriefing().getLinkAdditionOrderBriefing();
+        equal("linkingFrom", briefing.getLinkingFrom(), "https://blog.example/best-trails");
+        equal("anchor", briefing.getLink().getAnchor(), "trail shoes");
+        equal("link type", briefing.getLink().getType().getValue(), "nofollow");
     }
 
     void aCatalogueMediaReadsANullPreviousPriceAndLinkAdditionOffer() throws Exception {
@@ -257,6 +270,7 @@ public class FixtureTest {
         cases.put("the base URL is overridable", test::theBaseUrlIsOverridable);
         cases.put("listOrders reads items and total, with both order types", test::listOrdersReadsItemsAndTotalWithBothOrderTypes);
         cases.put("an order with fields this client does not know still deserialises", test::anOrderWithFieldsThisClientDoesNotKnowStillDeserialises);
+        cases.put("a link addition order with fields this client does not know still deserialises", test::aLinkAdditionOrderWithFieldsThisClientDoesNotKnowStillDeserialises);
         cases.put("a catalogue media reads a null previousPrice and linkAdditionOffer", test::aCatalogueMediaReadsANullPreviousPriceAndLinkAdditionOffer);
         cases.put("a catalogue media reads a null linkType beside present offers", test::aCatalogueMediaReadsANullLinkTypeBesidePresentOffers);
         cases.put("a seller media reads null competitiveFees", test::aSellerMediaReadsNullCompetitiveFees);

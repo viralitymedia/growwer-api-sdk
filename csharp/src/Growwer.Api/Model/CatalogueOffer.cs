@@ -70,7 +70,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="CatalogueOffer" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected CatalogueOffer() { }
+        protected CatalogueOffer()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="CatalogueOffer" /> class.
         /// </summary>
@@ -99,6 +102,7 @@ namespace Growwer.Api.Model
                 throw new ArgumentNullException("previousPrice is a required property for CatalogueOffer and cannot be null");
             }
             this.PreviousPrice = previousPrice;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -123,6 +127,12 @@ namespace Growwer.Api.Model
         public MoneyOrNull PreviousPrice { get; set; }
 
         /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -134,6 +144,7 @@ namespace Growwer.Api.Model
             sb.Append("  LinkType: ").Append(LinkType).Append("\n");
             sb.Append("  Prices: ").Append(Prices).Append("\n");
             sb.Append("  PreviousPrice: ").Append(PreviousPrice).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

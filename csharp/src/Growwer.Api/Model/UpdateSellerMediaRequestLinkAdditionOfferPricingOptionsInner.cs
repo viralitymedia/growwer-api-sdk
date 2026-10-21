@@ -68,7 +68,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="UpdateSellerMediaRequestLinkAdditionOfferPricingOptionsInner" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected UpdateSellerMediaRequestLinkAdditionOfferPricingOptionsInner() { }
+        protected UpdateSellerMediaRequestLinkAdditionOfferPricingOptionsInner()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="UpdateSellerMediaRequestLinkAdditionOfferPricingOptionsInner" /> class.
         /// </summary>
@@ -83,6 +86,7 @@ namespace Growwer.Api.Model
                 throw new ArgumentNullException("fee is a required property for UpdateSellerMediaRequestLinkAdditionOfferPricingOptionsInner and cannot be null");
             }
             this.Fee = fee;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -91,6 +95,12 @@ namespace Growwer.Api.Model
         /// <value>Your base fee for adding a link of this type.</value>
         [DataMember(Name = "fee", IsRequired = true, EmitDefaultValue = true)]
         public Money Fee { get; set; }
+
+        /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -102,6 +112,7 @@ namespace Growwer.Api.Model
             sb.Append("class UpdateSellerMediaRequestLinkAdditionOfferPricingOptionsInner {\n");
             sb.Append("  LinkType: ").Append(LinkType).Append("\n");
             sb.Append("  Fee: ").Append(Fee).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

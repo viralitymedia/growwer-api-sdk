@@ -64,7 +64,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="OrderChannel" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected OrderChannel() { }
+        protected OrderChannel()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="OrderChannel" /> class.
         /// </summary>
@@ -72,7 +75,14 @@ namespace Growwer.Api.Model
         public OrderChannel(CreatedEnum created = default)
         {
             this.Created = created;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
+
+        /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -83,6 +93,7 @@ namespace Growwer.Api.Model
             StringBuilder sb = new StringBuilder();
             sb.Append("class OrderChannel {\n");
             sb.Append("  Created: ").Append(Created).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

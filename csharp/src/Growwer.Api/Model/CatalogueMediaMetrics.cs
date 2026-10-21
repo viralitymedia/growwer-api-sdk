@@ -37,7 +37,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="CatalogueMediaMetrics" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected CatalogueMediaMetrics() { }
+        protected CatalogueMediaMetrics()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="CatalogueMediaMetrics" /> class.
         /// </summary>
@@ -78,6 +81,7 @@ namespace Growwer.Api.Model
                 throw new ArgumentNullException("linkedToReferringRatio is a required property for CatalogueMediaMetrics and cannot be null");
             }
             this.LinkedToReferringRatio = linkedToReferringRatio;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -112,6 +116,12 @@ namespace Growwer.Api.Model
         public decimal? LinkedToReferringRatio { get; set; }
 
         /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -124,6 +134,7 @@ namespace Growwer.Api.Model
             sb.Append("  ReferringDomains: ").Append(ReferringDomains).Append("\n");
             sb.Append("  LinkedDomains: ").Append(LinkedDomains).Append("\n");
             sb.Append("  LinkedToReferringRatio: ").Append(LinkedToReferringRatio).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

@@ -68,7 +68,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="SellerMediaLinkAdditionOfferPricingOptionsInner" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected SellerMediaLinkAdditionOfferPricingOptionsInner() { }
+        protected SellerMediaLinkAdditionOfferPricingOptionsInner()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="SellerMediaLinkAdditionOfferPricingOptionsInner" /> class.
         /// </summary>
@@ -90,6 +93,7 @@ namespace Growwer.Api.Model
                 throw new ArgumentNullException("currentCost is a required property for SellerMediaLinkAdditionOfferPricingOptionsInner and cannot be null");
             }
             this.CurrentCost = currentCost;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -107,6 +111,12 @@ namespace Growwer.Api.Model
         public MoneyOrNull CurrentCost { get; set; }
 
         /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -117,6 +127,7 @@ namespace Growwer.Api.Model
             sb.Append("  LinkType: ").Append(LinkType).Append("\n");
             sb.Append("  Fee: ").Append(Fee).Append("\n");
             sb.Append("  CurrentCost: ").Append(CurrentCost).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

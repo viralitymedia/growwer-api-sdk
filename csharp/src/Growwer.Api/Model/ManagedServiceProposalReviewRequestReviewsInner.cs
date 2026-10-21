@@ -62,7 +62,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="ManagedServiceProposalReviewRequestReviewsInner" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected ManagedServiceProposalReviewRequestReviewsInner() { }
+        protected ManagedServiceProposalReviewRequestReviewsInner()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="ManagedServiceProposalReviewRequestReviewsInner" /> class.
         /// </summary>
@@ -74,6 +77,7 @@ namespace Growwer.Api.Model
             this.ProposalId = proposalId;
             this.Decision = decision;
             this.Comment = comment;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -90,6 +94,12 @@ namespace Growwer.Api.Model
         public string Comment { get; set; }
 
         /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -100,6 +110,7 @@ namespace Growwer.Api.Model
             sb.Append("  ProposalId: ").Append(ProposalId).Append("\n");
             sb.Append("  Decision: ").Append(Decision).Append("\n");
             sb.Append("  Comment: ").Append(Comment).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

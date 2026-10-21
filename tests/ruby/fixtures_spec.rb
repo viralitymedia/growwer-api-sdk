@@ -115,7 +115,19 @@ RSpec.describe 'Growwer fixtures' do
     expect(order.pending_action).to eq('seller')
     expect(order.draft.has_file).to be(true)
     expect(order.channel.created).to eq('api')
+    expect(order.briefing).to be_a(Growwer::PostOrderBriefing)
     expect(order.briefing.title).to eq('Choosing running shoes')
+    expect(order.briefing.links[0].type).to eq('dofollow')
+  end
+
+  it 'still deserialises a link addition order with fields this client does not know' do
+    order = Growwer::OrdersApi.new(answer(200, fixture('link-addition-order-with-unknown-field.json'))).get_order(ORDER_ID)
+
+    expect(order.type).to eq('link_addition')
+    expect(order.briefing).to be_a(Growwer::LinkAdditionOrderBriefing)
+    expect(order.briefing.linking_from).to eq('https://blog.example/best-trails')
+    expect(order.briefing.link.anchor).to eq('trail shoes')
+    expect(order.briefing.link.type).to eq('nofollow')
   end
 
   it 'reads a catalogue media with a null previousPrice and linkAdditionOffer' do

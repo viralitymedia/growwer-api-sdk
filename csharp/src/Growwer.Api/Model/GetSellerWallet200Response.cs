@@ -37,7 +37,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="GetSellerWallet200Response" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected GetSellerWallet200Response() { }
+        protected GetSellerWallet200Response()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="GetSellerWallet200Response" /> class.
         /// </summary>
@@ -52,6 +55,7 @@ namespace Growwer.Api.Model
             }
             this.Balance = balance;
             this.Restricted = restricted;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -68,6 +72,12 @@ namespace Growwer.Api.Model
         public bool Restricted { get; set; }
 
         /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -77,6 +87,7 @@ namespace Growwer.Api.Model
             sb.Append("class GetSellerWallet200Response {\n");
             sb.Append("  Balance: ").Append(Balance).Append("\n");
             sb.Append("  Restricted: ").Append(Restricted).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

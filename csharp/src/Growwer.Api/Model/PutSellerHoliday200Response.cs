@@ -37,7 +37,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="PutSellerHoliday200Response" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected PutSellerHoliday200Response() { }
+        protected PutSellerHoliday200Response()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="PutSellerHoliday200Response" /> class.
         /// </summary>
@@ -52,6 +55,7 @@ namespace Growwer.Api.Model
                 throw new ArgumentNullException("endDate is a required property for PutSellerHoliday200Response and cannot be null");
             }
             this.EndDate = endDate;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -68,6 +72,12 @@ namespace Growwer.Api.Model
         public DateOnly? EndDate { get; set; }
 
         /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -77,6 +87,7 @@ namespace Growwer.Api.Model
             sb.Append("class PutSellerHoliday200Response {\n");
             sb.Append("  OnHoliday: ").Append(OnHoliday).Append("\n");
             sb.Append("  EndDate: ").Append(EndDate).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

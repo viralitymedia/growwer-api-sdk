@@ -20,6 +20,7 @@ POST_PROCESSING_SCRIPTS = (
     "license.py",
     "package-metadata.py",
     "php-root-manifest.py",
+    "ruby-oneof-unknown-keys.py",
 )
 
 
@@ -500,6 +501,122 @@ class ContractSyncTest(unittest.TestCase):
         self.assertNotEqual(0, result.returncode)
         self.assertEqual(committed, written)
         self.assertFalse(leftover)
+
+
+class RubyOneOfUnknownKeysTest(unittest.TestCase):
+    """scripts/ruby-oneof-unknown-keys.py drops the oneOf check that refuses unknown keys, but only
+    while every member stays distinguishable without it."""
+
+    CHECK = (
+        "              # raise if data contains keys that are not known to the model\n"
+        "              raise if const.respond_to?(:acceptable_attributes) && "
+        "!(data.keys - const.acceptable_attributes).empty?\n"
+    )
+    ONE_OF = (
+        "            else\n"
+        "{check}"
+        "              model = const.build_from_hash(data)\n"
+        "              return model if model\n"
+        "            end\n"
+    )
+
+    def run_script(self, schemas, models):
+        with tempfile.TemporaryDirectory(prefix="growwer-ruby-oneof-test-") as directory:
+            root = Path(directory)
+            (root / "scripts").mkdir()
+            shutil.copyfile(ROOT / "scripts/ruby-oneof-unknown-keys.py", root / "scripts/ruby-oneof-unknown-keys.py")
+            (root / "openapi.json").write_text(json.dumps({"components": {"schemas": schemas}}))
+            folder = root / "ruby/lib/growwer/models"
+            folder.mkdir(parents=True)
+            for name, text in models.items():
+                (folder / f"{name}.rb").write_text(text)
+            result = subprocess.run(
+                [sys.executable, "scripts/ruby-oneof-unknown-keys.py"],
+                cwd=root,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            return result, {path.stem: path.read_text() for path in folder.glob("*.rb")}
+
+    @staticmethod
+    def schemas(post_required=("title", "links"), post_properties=None):
+        return {
+            "Order": {"properties": {"briefing": {"oneOf": [
+                {"$ref": "#/components/schemas/PostBriefing"},
+                {"$ref": "#/components/schemas/LinkAdditionBriefing"},
+            ]}}},
+            "PostBriefing": {
+                "required": list(post_required),
+                "properties": post_properties or {"title": {"type": "string"}, "links": {"type": "array"}},
+            },
+            "LinkAdditionBriefing": {
+                "required": ["linkingFrom", "link"],
+                "properties": {"linkingFrom": {"type": "string"}, "link": {"type": "object"}},
+            },
+        }
+
+    def test_the_check_is_dropped_from_every_one_of_module_and_nothing_else_changes(self):
+        unrelated = "class Project\n  # raise if data contains keys that are not known to the model\nend\n"
+        result, models = self.run_script(
+            self.schemas(),
+            {
+                "order_briefing": self.ONE_OF.format(check=self.CHECK),
+                "seller_order_briefing": self.ONE_OF.format(check=self.CHECK),
+                "project": unrelated,
+            },
+        )
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        self.assertEqual(self.ONE_OF.format(check=""), models["order_briefing"])
+        self.assertEqual(self.ONE_OF.format(check=""), models["seller_order_briefing"])
+        self.assertEqual(unrelated, models["project"])
+        self.assertIn("order_briefing, seller_order_briefing", result.stdout)
+
+    def test_a_generator_that_no_longer_emits_the_check_fails_the_run(self):
+        result, models = self.run_script(self.schemas(), {"order_briefing": self.ONE_OF.format(check="")})
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("remove scripts/ruby-oneof-unknown-keys.py", result.stderr)
+
+    def test_members_told_apart_only_by_the_check_fail_the_run_and_are_not_patched(self):
+        cases = {
+            "a required property the other member also declares": self.schemas(
+                post_required=("link",),
+                post_properties={"link": {"type": "object"}, "title": {"type": "string"}},
+            ),
+            "a required property that is nullable": self.schemas(
+                post_required=("title",),
+                post_properties={"title": {"type": "string", "nullable": True}},
+            ),
+            "no required property": self.schemas(post_required=()),
+        }
+        for case, schemas in cases.items():
+            with self.subTest(case=case):
+                result, models = self.run_script(schemas, {"order_briefing": self.ONE_OF.format(check=self.CHECK)})
+                self.assertNotEqual(0, result.returncode)
+                self.assertIn("PostBriefing requires no non-nullable property", result.stderr)
+                self.assertEqual(self.ONE_OF.format(check=self.CHECK), models["order_briefing"])
+
+    def test_the_committed_contract_keeps_every_one_of_member_distinguishable(self):
+        with tempfile.TemporaryDirectory(prefix="growwer-ruby-oneof-test-") as directory:
+            root = Path(directory)
+            (root / "scripts").mkdir()
+            shutil.copyfile(ROOT / "scripts/ruby-oneof-unknown-keys.py", root / "scripts/ruby-oneof-unknown-keys.py")
+            shutil.copyfile(ROOT / "openapi.json", root / "openapi.json")
+            folder = root / "ruby/lib/growwer/models"
+            folder.mkdir(parents=True)
+            (folder / "order_briefing.rb").write_text(self.ONE_OF.format(check=self.CHECK))
+            result = subprocess.run(
+                [sys.executable, "scripts/ruby-oneof-unknown-keys.py"],
+                cwd=root,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+
+    def test_the_committed_ruby_client_has_no_one_of_check_left(self):
+        for path in (ROOT / "ruby/lib/growwer/models").glob("*.rb"):
+            self.assertNotIn("data.keys - const.acceptable_attributes", path.read_text(encoding="utf-8"), path.name)
 
 
 if __name__ == "__main__":

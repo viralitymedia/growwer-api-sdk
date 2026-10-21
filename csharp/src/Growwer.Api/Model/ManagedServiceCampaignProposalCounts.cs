@@ -37,7 +37,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="ManagedServiceCampaignProposalCounts" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected ManagedServiceCampaignProposalCounts() { }
+        protected ManagedServiceCampaignProposalCounts()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="ManagedServiceCampaignProposalCounts" /> class.
         /// </summary>
@@ -53,6 +56,7 @@ namespace Growwer.Api.Model
             this.Cancelled = cancelled;
             this.PurchaseStarted = purchaseStarted;
             this.PurchaseFinished = purchaseFinished;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -86,6 +90,12 @@ namespace Growwer.Api.Model
         public int PurchaseFinished { get; set; }
 
         /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -98,6 +108,7 @@ namespace Growwer.Api.Model
             sb.Append("  Cancelled: ").Append(Cancelled).Append("\n");
             sb.Append("  PurchaseStarted: ").Append(PurchaseStarted).Append("\n");
             sb.Append("  PurchaseFinished: ").Append(PurchaseFinished).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

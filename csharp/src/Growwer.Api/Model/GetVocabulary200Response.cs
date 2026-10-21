@@ -81,7 +81,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="GetVocabulary200Response" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected GetVocabulary200Response() { }
+        protected GetVocabulary200Response()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="GetVocabulary200Response" /> class.
         /// </summary>
@@ -129,6 +132,7 @@ namespace Growwer.Api.Model
                 throw new ArgumentNullException("orderStates is a required property for GetVocabulary200Response and cannot be null");
             }
             this.OrderStates = orderStates;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -171,6 +175,12 @@ namespace Growwer.Api.Model
         public List<string> OrderStates { get; set; }
 
         /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -184,6 +194,7 @@ namespace Growwer.Api.Model
             sb.Append("  ProductTypes: ").Append(ProductTypes).Append("\n");
             sb.Append("  LinkTypes: ").Append(LinkTypes).Append("\n");
             sb.Append("  OrderStates: ").Append(OrderStates).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

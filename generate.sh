@@ -362,6 +362,13 @@ for name in sorted(listed(previous_list) - listed(current_list)):
     python3 scripts/csharp-nullable-enums.py
   fi
 
+  if [[ "${target}" == "ruby" ]]; then
+    # The Ruby oneOf template refuses a member whose data carries a key it does not declare, so a
+    # field the API adds to an order briefing makes every order unreadable. The check is dropped
+    # here after every run, once the contract proves the members stay distinguishable without it.
+    python3 scripts/ruby-oneof-unknown-keys.py
+  fi
+
   if [[ "${target}" == "go" ]]; then
     # Go has no package registry: the import path IS the repository URL plus the directory, so in a
     # monorepo it has to be ".../growwer-api-sdk/go". The generator derives the module path from

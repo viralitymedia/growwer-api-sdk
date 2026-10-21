@@ -37,7 +37,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="GetBuyerWallet200Response" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected GetBuyerWallet200Response() { }
+        protected GetBuyerWallet200Response()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="GetBuyerWallet200Response" /> class.
         /// </summary>
@@ -57,6 +60,7 @@ namespace Growwer.Api.Model
                 throw new ArgumentNullException("topUpUrl is a required property for GetBuyerWallet200Response and cannot be null");
             }
             this.TopUpUrl = topUpUrl;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -73,6 +77,12 @@ namespace Growwer.Api.Model
         public string TopUpUrl { get; set; }
 
         /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -82,6 +92,7 @@ namespace Growwer.Api.Model
             sb.Append("class GetBuyerWallet200Response {\n");
             sb.Append("  Balance: ").Append(Balance).Append("\n");
             sb.Append("  TopUpUrl: ").Append(TopUpUrl).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

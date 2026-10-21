@@ -40,6 +40,7 @@ namespace Growwer.Api.Model
         public ManagedServiceProposalsEstimateRequest(List<Guid> accept = default)
         {
             this.Accept = accept;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -50,6 +51,12 @@ namespace Growwer.Api.Model
         public List<Guid> Accept { get; set; }
 
         /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -58,6 +65,7 @@ namespace Growwer.Api.Model
             StringBuilder sb = new StringBuilder();
             sb.Append("class ManagedServiceProposalsEstimateRequest {\n");
             sb.Append("  Accept: ").Append(Accept).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

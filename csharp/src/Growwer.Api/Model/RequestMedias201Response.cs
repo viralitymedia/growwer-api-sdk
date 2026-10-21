@@ -37,7 +37,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="RequestMedias201Response" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected RequestMedias201Response() { }
+        protected RequestMedias201Response()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="RequestMedias201Response" /> class.
         /// </summary>
@@ -50,6 +53,7 @@ namespace Growwer.Api.Model
                 throw new ArgumentNullException("domains is a required property for RequestMedias201Response and cannot be null");
             }
             this.Domains = domains;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -57,6 +61,12 @@ namespace Growwer.Api.Model
         /// </summary>
         [DataMember(Name = "domains", IsRequired = true, EmitDefaultValue = true)]
         public List<string> Domains { get; set; }
+
+        /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -67,6 +77,7 @@ namespace Growwer.Api.Model
             StringBuilder sb = new StringBuilder();
             sb.Append("class RequestMedias201Response {\n");
             sb.Append("  Domains: ").Append(Domains).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

@@ -37,7 +37,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="UploadFile201Response" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected UploadFile201Response() { }
+        protected UploadFile201Response()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="UploadFile201Response" /> class.
         /// </summary>
@@ -56,6 +59,7 @@ namespace Growwer.Api.Model
             this.Name = name;
             this.Size = size;
             this.ExpiresAt = expiresAt;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -85,6 +89,12 @@ namespace Growwer.Api.Model
         public DateTime ExpiresAt { get; set; }
 
         /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -96,6 +106,7 @@ namespace Growwer.Api.Model
             sb.Append("  Name: ").Append(Name).Append("\n");
             sb.Append("  Size: ").Append(Size).Append("\n");
             sb.Append("  ExpiresAt: ").Append(ExpiresAt).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

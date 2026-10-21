@@ -37,7 +37,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="GetMe200ResponseCatalogue" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected GetMe200ResponseCatalogue() { }
+        protected GetMe200ResponseCatalogue()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="GetMe200ResponseCatalogue" /> class.
         /// </summary>
@@ -45,6 +48,7 @@ namespace Growwer.Api.Model
         public GetMe200ResponseCatalogue(bool eligible = default)
         {
             this.Eligible = eligible;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -55,6 +59,12 @@ namespace Growwer.Api.Model
         public bool Eligible { get; set; }
 
         /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -63,6 +73,7 @@ namespace Growwer.Api.Model
             StringBuilder sb = new StringBuilder();
             sb.Append("class GetMe200ResponseCatalogue {\n");
             sb.Append("  Eligible: ").Append(Eligible).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

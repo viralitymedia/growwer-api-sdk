@@ -37,7 +37,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="CataloguePostOfferAllOfExtrasSensitiveTopic" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected CataloguePostOfferAllOfExtrasSensitiveTopic() { }
+        protected CataloguePostOfferAllOfExtrasSensitiveTopic()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="CataloguePostOfferAllOfExtrasSensitiveTopic" /> class.
         /// </summary>
@@ -52,6 +55,7 @@ namespace Growwer.Api.Model
                 throw new ArgumentNullException("extraPrice is a required property for CataloguePostOfferAllOfExtrasSensitiveTopic and cannot be null");
             }
             this.ExtraPrice = extraPrice;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -69,6 +73,12 @@ namespace Growwer.Api.Model
         public MoneyOrNull ExtraPrice { get; set; }
 
         /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -78,6 +88,7 @@ namespace Growwer.Api.Model
             sb.Append("class CataloguePostOfferAllOfExtrasSensitiveTopic {\n");
             sb.Append("  Allowed: ").Append(Allowed).Append("\n");
             sb.Append("  ExtraPrice: ").Append(ExtraPrice).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

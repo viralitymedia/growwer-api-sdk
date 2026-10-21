@@ -76,7 +76,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="SavedFilterNotifications" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected SavedFilterNotifications() { }
+        protected SavedFilterNotifications()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="SavedFilterNotifications" /> class.
         /// </summary>
@@ -86,6 +89,7 @@ namespace Growwer.Api.Model
         {
             this.Enabled = enabled;
             this.Frequency = frequency;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -93,6 +97,12 @@ namespace Growwer.Api.Model
         /// </summary>
         [DataMember(Name = "enabled", IsRequired = true, EmitDefaultValue = true)]
         public bool Enabled { get; set; }
+
+        /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -104,6 +114,7 @@ namespace Growwer.Api.Model
             sb.Append("class SavedFilterNotifications {\n");
             sb.Append("  Enabled: ").Append(Enabled).Append("\n");
             sb.Append("  Frequency: ").Append(Frequency).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

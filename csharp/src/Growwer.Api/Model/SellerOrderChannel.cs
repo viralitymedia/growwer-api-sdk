@@ -91,7 +91,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="SellerOrderChannel" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected SellerOrderChannel() { }
+        protected SellerOrderChannel()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="SellerOrderChannel" /> class.
         /// </summary>
@@ -101,7 +104,14 @@ namespace Growwer.Api.Model
         {
             this.Created = created;
             this.Accepted = accepted;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
+
+        /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -113,6 +123,7 @@ namespace Growwer.Api.Model
             sb.Append("class SellerOrderChannel {\n");
             sb.Append("  Created: ").Append(Created).Append("\n");
             sb.Append("  Accepted: ").Append(Accepted).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

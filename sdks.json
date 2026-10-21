@@ -83,7 +83,8 @@
       "config": {
         "packageName": "Growwer.Api",
         "targetFramework": "net8.0",
-        "library": "httpclient"
+        "library": "httpclient",
+        "disallowAdditionalPropertiesIfNotPresent": false
       }
     },
     {

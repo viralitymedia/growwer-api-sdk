@@ -37,7 +37,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="SellerFees" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected SellerFees() { }
+        protected SellerFees()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="SellerFees" /> class.
         /// </summary>
@@ -57,6 +60,7 @@ namespace Growwer.Api.Model
                 throw new ArgumentNullException("feeWhenSellerDoesNotWritePost is a required property for SellerFees and cannot be null");
             }
             this.FeeWhenSellerDoesNotWritePost = feeWhenSellerDoesNotWritePost;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -74,6 +78,12 @@ namespace Growwer.Api.Model
         public MoneyOrNull FeeWhenSellerDoesNotWritePost { get; set; }
 
         /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -83,6 +93,7 @@ namespace Growwer.Api.Model
             sb.Append("class SellerFees {\n");
             sb.Append("  FeeWhenSellerWritesPost: ").Append(FeeWhenSellerWritesPost).Append("\n");
             sb.Append("  FeeWhenSellerDoesNotWritePost: ").Append(FeeWhenSellerDoesNotWritePost).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

@@ -158,7 +158,21 @@ internal static class Program
         Equal("pendingAction", (Order.PendingActionEnum?)order.PendingAction, Order.PendingActionEnum.Seller);
         Equal("hasFile", order.Draft.HasFile, true);
         Equal("channel", order.Channel.Created, OrderChannel.CreatedEnum.Api);
+        Equal("briefing type", order.Briefing.ActualInstance.GetType(), typeof(PostOrderBriefing));
         Equal("title", order.Briefing.GetPostOrderBriefing().Title, "Choosing running shoes");
+        Equal("link type", order.Briefing.GetPostOrderBriefing().Links[0].Type, OrderLink.TypeEnum.Dofollow);
+    }
+
+    private static void ALinkAdditionOrderWithFieldsThisClientDoesNotKnowStillDeserialises()
+    {
+        Order order = new OrdersApi(Answer(Fixture("link-addition-order-with-unknown-field.json")), Key()).GetOrder(OrderId);
+
+        Equal("type", order.Type, Order.TypeEnum.LinkAddition);
+        Equal("briefing type", order.Briefing.ActualInstance.GetType(), typeof(LinkAdditionOrderBriefing));
+        LinkAdditionOrderBriefing briefing = order.Briefing.GetLinkAdditionOrderBriefing();
+        Equal("linkingFrom", briefing.LinkingFrom, "https://blog.example/best-trails");
+        Equal("anchor", briefing.Link.Anchor, "trail shoes");
+        Equal("link type", briefing.Link.Type, OrderLink.TypeEnum.Nofollow);
     }
 
     private static void ACatalogueMediaReadsANullPreviousPriceAndLinkAdditionOffer()
@@ -268,6 +282,7 @@ internal static class Program
             ("the base URL is overridable", TheBaseUrlIsOverridable),
             ("listOrders reads items and total, with both order types", ListOrdersReadsItemsAndTotalWithBothOrderTypes),
             ("an order with fields this client does not know still deserialises", AnOrderWithFieldsThisClientDoesNotKnowStillDeserialises),
+            ("a link addition order with fields this client does not know still deserialises", ALinkAdditionOrderWithFieldsThisClientDoesNotKnowStillDeserialises),
             ("a catalogue media reads a null previousPrice and linkAdditionOffer", ACatalogueMediaReadsANullPreviousPriceAndLinkAdditionOffer),
             ("a catalogue media reads a null linkType beside present offers", ACatalogueMediaReadsANullLinkTypeBesidePresentOffers),
             ("a seller media reads null competitiveFees", ASellerMediaReadsNullCompetitiveFees),

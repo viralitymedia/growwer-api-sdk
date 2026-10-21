@@ -56,7 +56,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="PostOrderBriefing" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected PostOrderBriefing() { }
+        protected PostOrderBriefing()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="PostOrderBriefing" /> class.
         /// </summary>
@@ -99,6 +102,7 @@ namespace Growwer.Api.Model
             }
             this.AdditionalInfo = additionalInfo;
             this.HasProposedDraft = hasProposedDraft;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -140,6 +144,12 @@ namespace Growwer.Api.Model
         public bool HasProposedDraft { get; set; }
 
         /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -153,6 +163,7 @@ namespace Growwer.Api.Model
             sb.Append("  ExtraServices: ").Append(ExtraServices).Append("\n");
             sb.Append("  AdditionalInfo: ").Append(AdditionalInfo).Append("\n");
             sb.Append("  HasProposedDraft: ").Append(HasProposedDraft).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

@@ -27,6 +27,7 @@ const path = require('node:path');
 const FIXTURES = path.join(__dirname, '..', 'fixtures');
 const MEDIA_ID = 'c1d2e3f4-a5b6-4c7d-8e9f-a0b1c2d3e4f5';
 const ORDER_ID = '0b9c6a4e-6f1d-4c39-9a51-2f5d7c1e8a01';
+const POST_BRIEFING_FIELDS = ['additionalInfo', 'extraServices', 'hasProposedDraft', 'language', 'links', 'title'];
 
 function fixture(name: string): Uint8Array {
   return new Uint8Array(fs.readFileSync(path.join(FIXTURES, name)));
@@ -123,7 +124,27 @@ const tests: Array<[string, () => Promise<void>]> = [
     assert.equal(order.pendingAction, 'seller');
     assert.equal(order.draft?.hasFile, true);
     assert.equal(order.channel.created, 'api');
-    assert.equal((order.briefing as PostOrderBriefing).title, 'Choosing running shoes');
+    // Read through the post member, which keeps only the fields it declares.
+    assert.deepEqual(Object.keys(order.briefing).sort(), POST_BRIEFING_FIELDS);
+    const briefing = order.briefing as PostOrderBriefing;
+    assert.equal(briefing.title, 'Choosing running shoes');
+    assert.deepEqual(Object.keys(briefing.links[0]).sort(), ['anchor', 'targetUrl', 'type']);
+    assert.equal(briefing.links[0].type, 'dofollow');
+  }],
+
+  ['a link addition order with fields this client does not know still deserialises', async () => {
+    const sent: Sent[] = [];
+    const order = await new OrdersApi(answer(sent, 200, fixture('link-addition-order-with-unknown-field.json')))
+      .getOrder({ id: ORDER_ID });
+
+    assert.equal(order.type, 'link_addition');
+    // Read through the link addition member, which keeps only the fields it declares.
+    assert.deepEqual(Object.keys(order.briefing).sort(), ['additionalInfo', 'link', 'linkingFrom']);
+    const briefing = order.briefing as LinkAdditionOrderBriefing;
+    assert.equal(briefing.linkingFrom, 'https://blog.example/best-trails');
+    assert.deepEqual(Object.keys(briefing.link).sort(), ['anchor', 'targetUrl', 'type']);
+    assert.equal(briefing.link.anchor, 'trail shoes');
+    assert.equal(briefing.link.type, 'nofollow');
   }],
 
   ['a catalogue media reads a null previousPrice and linkAdditionOffer', async () => {

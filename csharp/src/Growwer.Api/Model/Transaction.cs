@@ -95,7 +95,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="Transaction" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected Transaction() { }
+        protected Transaction()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="Transaction" /> class.
         /// </summary>
@@ -155,6 +158,7 @@ namespace Growwer.Api.Model
             this.HasDocument = hasDocument;
             this.CreatedAt = createdAt;
             this.UpdatedAt = updatedAt;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -224,6 +228,12 @@ namespace Growwer.Api.Model
         public DateTime UpdatedAt { get; set; }
 
         /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -243,6 +253,7 @@ namespace Growwer.Api.Model
             sb.Append("  HasDocument: ").Append(HasDocument).Append("\n");
             sb.Append("  CreatedAt: ").Append(CreatedAt).Append("\n");
             sb.Append("  UpdatedAt: ").Append(UpdatedAt).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

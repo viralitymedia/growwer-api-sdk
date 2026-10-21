@@ -37,7 +37,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="SellerOrderPostDelivery" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected SellerOrderPostDelivery() { }
+        protected SellerOrderPostDelivery()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="SellerOrderPostDelivery" /> class.
         /// </summary>
@@ -52,6 +55,7 @@ namespace Growwer.Api.Model
             }
             this.Url = url;
             this.PublicationDateConfirmed = publicationDateConfirmed;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -69,6 +73,12 @@ namespace Growwer.Api.Model
         public bool PublicationDateConfirmed { get; set; }
 
         /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -78,6 +88,7 @@ namespace Growwer.Api.Model
             sb.Append("class SellerOrderPostDelivery {\n");
             sb.Append("  Url: ").Append(Url).Append("\n");
             sb.Append("  PublicationDateConfirmed: ").Append(PublicationDateConfirmed).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

@@ -62,7 +62,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="UpdateSellerMediaRequestExtraServicesInner" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected UpdateSellerMediaRequestExtraServicesInner() { }
+        protected UpdateSellerMediaRequestExtraServicesInner()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="UpdateSellerMediaRequestExtraServicesInner" /> class.
         /// </summary>
@@ -77,6 +80,7 @@ namespace Growwer.Api.Model
                 throw new ArgumentNullException("cost is a required property for UpdateSellerMediaRequestExtraServicesInner and cannot be null");
             }
             this.Cost = cost;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -85,6 +89,12 @@ namespace Growwer.Api.Model
         /// <value>What you are paid for the extra service.</value>
         [DataMember(Name = "cost", IsRequired = true, EmitDefaultValue = true)]
         public Money Cost { get; set; }
+
+        /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -96,6 +106,7 @@ namespace Growwer.Api.Model
             sb.Append("class UpdateSellerMediaRequestExtraServicesInner {\n");
             sb.Append("  Name: ").Append(Name).Append("\n");
             sb.Append("  Cost: ").Append(Cost).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

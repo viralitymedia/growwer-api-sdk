@@ -37,7 +37,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="GetMe200Response" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected GetMe200Response() { }
+        protected GetMe200Response()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="GetMe200Response" /> class.
         /// </summary>
@@ -96,6 +99,7 @@ namespace Growwer.Api.Model
                 throw new ArgumentNullException("managedService is a required property for GetMe200Response and cannot be null");
             }
             this.ManagedService = managedService;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -157,6 +161,12 @@ namespace Growwer.Api.Model
         public GetMe200ResponseManagedService ManagedService { get; set; }
 
         /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -173,6 +183,7 @@ namespace Growwer.Api.Model
             sb.Append("  Seller: ").Append(Seller).Append("\n");
             sb.Append("  Catalogue: ").Append(Catalogue).Append("\n");
             sb.Append("  ManagedService: ").Append(ManagedService).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

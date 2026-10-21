@@ -113,7 +113,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="CataloguePostOffer" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected CataloguePostOffer() { }
+        protected CataloguePostOffer()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="CataloguePostOffer" /> class.
         /// </summary>
@@ -158,6 +161,7 @@ namespace Growwer.Api.Model
                 throw new ArgumentNullException("extras is a required property for CataloguePostOffer and cannot be null");
             }
             this.Extras = extras;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -202,6 +206,12 @@ namespace Growwer.Api.Model
         public CataloguePostOfferAllOfExtras Extras { get; set; }
 
         /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -216,6 +226,7 @@ namespace Growwer.Api.Model
             sb.Append("  AdvertisingLabel: ").Append(AdvertisingLabel).Append("\n");
             sb.Append("  PromotedSocialNetworks: ").Append(PromotedSocialNetworks).Append("\n");
             sb.Append("  Extras: ").Append(Extras).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

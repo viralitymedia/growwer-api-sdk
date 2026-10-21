@@ -62,7 +62,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="OrderCreateRequest" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected OrderCreateRequest() { }
+        protected OrderCreateRequest()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="OrderCreateRequest" /> class.
         /// </summary>
@@ -94,6 +97,7 @@ namespace Growwer.Api.Model
             this.ScheduledPublicationDate = scheduledPublicationDate;
             this.DraftReviewable = draftReviewable;
             this.ProposedDraftFileId = proposedDraftFileId;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -145,6 +149,12 @@ namespace Growwer.Api.Model
         public Money ExpectedPrice { get; set; }
 
         /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -160,6 +170,7 @@ namespace Growwer.Api.Model
             sb.Append("  DraftReviewable: ").Append(DraftReviewable).Append("\n");
             sb.Append("  ProposedDraftFileId: ").Append(ProposedDraftFileId).Append("\n");
             sb.Append("  ExpectedPrice: ").Append(ExpectedPrice).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

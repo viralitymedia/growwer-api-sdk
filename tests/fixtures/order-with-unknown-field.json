@@ -15,11 +15,12 @@
     "title": "Choosing running shoes",
     "language": "es",
     "links": [
-      {"targetUrl": "https://shop.example/running-shoes", "anchor": "running shoes", "type": "dofollow"}
+      {"targetUrl": "https://shop.example/running-shoes", "anchor": "running shoes", "type": "dofollow", "rel": "sponsored"}
     ],
     "extraServices": [],
     "additionalInfo": "Mention the spring sale.",
-    "hasProposedDraft": true
+    "hasProposedDraft": true,
+    "wordCount": 1200
   },
   "draft": {"authoredByBuyer": true, "reviewable": false, "hasFile": true},
   "stateHistory": [

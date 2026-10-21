@@ -76,7 +76,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="SellerOrderRejectionReason" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected SellerOrderRejectionReason() { }
+        protected SellerOrderRejectionReason()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="SellerOrderRejectionReason" /> class.
         /// </summary>
@@ -86,6 +89,7 @@ namespace Growwer.Api.Model
         {
             this.Name = name;
             this.AdditionalInfo = additionalInfo;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -94,6 +98,12 @@ namespace Growwer.Api.Model
         /// <value>More about the reason, which the buyer is told, 10 to 2000 characters. Required with &#x60;other_reasons&#x60;.</value>
         [DataMember(Name = "additionalInfo", EmitDefaultValue = true)]
         public string AdditionalInfo { get; set; }
+
+        /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -105,6 +115,7 @@ namespace Growwer.Api.Model
             sb.Append("class SellerOrderRejectionReason {\n");
             sb.Append("  Name: ").Append(Name).Append("\n");
             sb.Append("  AdditionalInfo: ").Append(AdditionalInfo).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

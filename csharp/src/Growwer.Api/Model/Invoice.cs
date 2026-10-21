@@ -37,7 +37,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="Invoice" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected Invoice() { }
+        protected Invoice()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="Invoice" /> class.
         /// </summary>
@@ -61,6 +64,7 @@ namespace Growwer.Api.Model
                 throw new ArgumentNullException("total is a required property for Invoice and cannot be null");
             }
             this.Total = total;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -89,6 +93,12 @@ namespace Growwer.Api.Model
         public Money Total { get; set; }
 
         /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -100,6 +110,7 @@ namespace Growwer.Api.Model
             sb.Append("  Number: ").Append(Number).Append("\n");
             sb.Append("  IssuedAt: ").Append(IssuedAt).Append("\n");
             sb.Append("  Total: ").Append(Total).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

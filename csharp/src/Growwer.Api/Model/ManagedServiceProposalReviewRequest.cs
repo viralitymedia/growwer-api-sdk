@@ -37,7 +37,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="ManagedServiceProposalReviewRequest" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected ManagedServiceProposalReviewRequest() { }
+        protected ManagedServiceProposalReviewRequest()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="ManagedServiceProposalReviewRequest" /> class.
         /// </summary>
@@ -50,6 +53,7 @@ namespace Growwer.Api.Model
                 throw new ArgumentNullException("reviews is a required property for ManagedServiceProposalReviewRequest and cannot be null");
             }
             this.Reviews = reviews;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -60,6 +64,12 @@ namespace Growwer.Api.Model
         public List<ManagedServiceProposalReviewRequestReviewsInner> Reviews { get; set; }
 
         /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -68,6 +78,7 @@ namespace Growwer.Api.Model
             StringBuilder sb = new StringBuilder();
             sb.Append("class ManagedServiceProposalReviewRequest {\n");
             sb.Append("  Reviews: ").Append(Reviews).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

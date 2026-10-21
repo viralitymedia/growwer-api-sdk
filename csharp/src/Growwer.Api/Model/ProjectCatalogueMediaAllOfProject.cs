@@ -37,7 +37,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="ProjectCatalogueMediaAllOfProject" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected ProjectCatalogueMediaAllOfProject() { }
+        protected ProjectCatalogueMediaAllOfProject()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="ProjectCatalogueMediaAllOfProject" /> class.
         /// </summary>
@@ -55,6 +58,7 @@ namespace Growwer.Api.Model
             this.Recommended = recommended;
             this.Bought = bought;
             this.New = varNew;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -97,6 +101,12 @@ namespace Growwer.Api.Model
         public bool New { get; set; }
 
         /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -110,6 +120,7 @@ namespace Growwer.Api.Model
             sb.Append("  Recommended: ").Append(Recommended).Append("\n");
             sb.Append("  Bought: ").Append(Bought).Append("\n");
             sb.Append("  New: ").Append(New).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

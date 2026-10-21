@@ -117,7 +117,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="SellerOrder" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected SellerOrder() { }
+        protected SellerOrder()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="SellerOrder" /> class.
         /// </summary>
@@ -217,6 +220,7 @@ namespace Growwer.Api.Model
                 throw new ArgumentNullException("channel is a required property for SellerOrder and cannot be null");
             }
             this.Channel = channel;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -322,6 +326,12 @@ namespace Growwer.Api.Model
         public SellerOrderChannel Channel { get; set; }
 
         /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -346,6 +356,7 @@ namespace Growwer.Api.Model
             sb.Append("  Draft: ").Append(Draft).Append("\n");
             sb.Append("  StateHistory: ").Append(StateHistory).Append("\n");
             sb.Append("  Channel: ").Append(Channel).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

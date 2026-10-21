@@ -68,7 +68,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="ManagedServiceProposalBriefingLinksInner" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected ManagedServiceProposalBriefingLinksInner() { }
+        protected ManagedServiceProposalBriefingLinksInner()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="ManagedServiceProposalBriefingLinksInner" /> class.
         /// </summary>
@@ -90,6 +93,7 @@ namespace Growwer.Api.Model
             }
             this.Anchor = anchor;
             this.Type = type;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -105,6 +109,12 @@ namespace Growwer.Api.Model
         public string Anchor { get; set; }
 
         /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -115,6 +125,7 @@ namespace Growwer.Api.Model
             sb.Append("  TargetUrl: ").Append(TargetUrl).Append("\n");
             sb.Append("  Anchor: ").Append(Anchor).Append("\n");
             sb.Append("  Type: ").Append(Type).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

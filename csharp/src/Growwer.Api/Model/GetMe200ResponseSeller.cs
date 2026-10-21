@@ -37,7 +37,10 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="GetMe200ResponseSeller" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected GetMe200ResponseSeller() { }
+        protected GetMe200ResponseSeller()
+        {
+            this.AdditionalProperties = new Dictionary<string, object>();
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="GetMe200ResponseSeller" /> class.
         /// </summary>
@@ -61,6 +64,7 @@ namespace Growwer.Api.Model
                 throw new ArgumentNullException("holidayEndDate is a required property for GetMe200ResponseSeller and cannot be null");
             }
             this.HolidayEndDate = holidayEndDate;
+            this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -91,6 +95,12 @@ namespace Growwer.Api.Model
         public DateOnly? HolidayEndDate { get; set; }
 
         /// <summary>
+        /// Gets or Sets additional properties
+        /// </summary>
+        [JsonExtensionData]
+        public IDictionary<string, object> AdditionalProperties { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -102,6 +112,7 @@ namespace Growwer.Api.Model
             sb.Append("  Restricted: ").Append(Restricted).Append("\n");
             sb.Append("  OnHoliday: ").Append(OnHoliday).Append("\n");
             sb.Append("  HolidayEndDate: ").Append(HolidayEndDate).Append("\n");
+            sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

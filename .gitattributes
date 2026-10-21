@@ -1,0 +1,24 @@
+# Composer installs from the archive GitHub builds for a tag. Without this, a PHP project
+# would download all seven language clients to use one of them.
+
+/.github export-ignore
+/.generator-configs export-ignore
+/.gitattributes export-ignore
+/.gitignore export-ignore
+/csharp export-ignore
+/generate.sh export-ignore
+/go export-ignore
+/java export-ignore
+/python export-ignore
+/ruby export-ignore
+/scripts export-ignore
+/sdks.json export-ignore
+/tests export-ignore
+/typescript export-ignore
+
+# The PHP client's own development scaffolding is not needed to consume it either.
+/php/test export-ignore
+/php/.openapi-generator export-ignore
+/php/.openapi-generator-ignore export-ignore
+/php/git_push.sh export-ignore
+/php/phpunit.xml.dist export-ignore

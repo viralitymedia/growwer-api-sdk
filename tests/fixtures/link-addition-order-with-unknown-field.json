@@ -1,0 +1,25 @@
+{
+  "id": "1a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+  "reference": "GW-1002",
+  "type": "link_addition",
+  "state": "pending_acceptance",
+  "pendingAction": "seller",
+  "price": {"amount": 4000, "currency": "EUR"},
+  "project": {"id": "7f3e2d1c-0b9a-4876-9543-210fedcba987", "url": "https://shop.example"},
+  "media": {"id": "c1d2e3f4-a5b6-4c7d-8e9f-a0b1c2d3e4f5", "url": "https://blog.example"},
+  "createdAt": "2026-09-20T16:45:00+00:00",
+  "updatedAt": "2026-09-20T16:45:00+00:00",
+  "scheduledPublicationDate": null,
+  "delivery": null,
+  "briefing": {
+    "linkingFrom": "https://blog.example/best-trails",
+    "link": {"targetUrl": "https://shop.example/trail", "anchor": "trail shoes", "type": "nofollow", "rel": "sponsored"},
+    "additionalInfo": null,
+    "position": "first paragraph"
+  },
+  "draft": null,
+  "stateHistory": [
+    {"state": "pending_acceptance", "date": "2026-09-20T16:45:00+00:00", "reason": null}
+  ],
+  "channel": {"created": "api"}
+}

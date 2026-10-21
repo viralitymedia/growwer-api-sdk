@@ -1,0 +1,164 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  # The clients are generated, so the failure this guards against is not "somebody wrote bad code"
+  # but "somebody committed a regeneration they never compiled". Every language is built from the
+  # committed sources exactly as a consumer would get them, then reads the shared response fixtures
+  # in tests/fixtures/ offline, so a contract change that breaks deserialisation fails here.
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+      - working-directory: python
+        run: |
+          pip install --quiet -e .
+          python -c "
+          from growwer import ApiClient, Configuration
+          from growwer.api import AccountApi
+          config = Configuration(host='https://tool.growwer.com', access_token='ci')
+          with ApiClient(config) as client:
+              method, url, headers, _, _ = AccountApi(client)._get_me_serialize(
+                  _request_auth=None, _content_type=None, _headers=None, _host_index=0
+              )
+          assert url == 'https://tool.growwer.com/api/v1/me', url
+          assert headers['Authorization'] == 'Bearer ci', headers
+          print('python ok:', method, url)
+          "
+      - run: python -m unittest discover -s tests/python -v
+
+  typescript:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: typescript/package-lock.json
+      - working-directory: typescript
+        run: |
+          # Skip prepare: build below compiles both CommonJS and ESM exactly once.
+          npm ci --ignore-scripts --no-audit --no-fund
+          npm run build
+      # Compiled against the built package's declarations, so a fixture field the generated types
+      # lack fails the compile, not only the run.
+      - run: |
+          typescript/node_modules/.bin/tsc -p tests/typescript
+          node tests/typescript/fixtures.test.js
+
+  go:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.23"
+          cache-dependency-path: |
+            go/go.sum
+            tests/go/go.sum
+      - working-directory: go
+        run: |
+          go build ./...
+          go vet ./...
+      - working-directory: tests/go
+        run: |
+          go vet ./...
+          go test ./...
+
+  php:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+      - run: find php/lib -name '*.php' -print0 | xargs -0 -n1 -P4 php -l > /dev/null
+      # The ROOT manifest is the published package: Packagist has no notion of a package living in
+      # a subdirectory, so that is what a consumer installs and that is what CI must prove.
+      - run: |
+          composer validate --no-check-publish
+          composer install --no-interaction --no-progress --quiet
+          php -r "require 'vendor/autoload.php'; new Growwer\Api\Api\AccountApi(); echo 'php ok', PHP_EOL;"
+          php vendor/bin/phpunit --bootstrap vendor/autoload.php tests/php
+
+  java:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "11"
+          cache: maven
+      - working-directory: java
+        run: |
+          mvn --batch-mode --no-transfer-progress -DskipTests package
+          mvn --batch-mode --no-transfer-progress dependency:build-classpath \
+            -Dmdep.outputFile="${RUNNER_TEMP}/classpath.txt" -Dmdep.includeScope=runtime
+      # A single-file program against the packaged classes, so the fixtures need no test module
+      # inside the generated project, where the next regeneration would own it.
+      - run: java -cp "java/target/classes:$(cat "${RUNNER_TEMP}/classpath.txt")" tests/java/FixtureTest.java
+
+  csharp:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0"
+      - working-directory: csharp
+        run: dotnet build src/Growwer.Api/Growwer.Api.csproj --configuration Release
+      - run: dotnet run --project tests/csharp
+
+  ruby:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.0"
+          working-directory: ruby
+          bundler-cache: true
+      - working-directory: ruby
+        run: |
+          find lib -name '*.rb' -print0 | xargs -0 -n1 ruby -c > /dev/null
+          # Through bundler: the client requires faraday at load time, and a bare `ruby -Ilib`
+          # cannot see a gem that bundler installed.
+          bundle exec ruby -Ilib -e "require 'growwer'; Growwer::AccountApi.new; puts 'ruby ok'"
+          bundle exec rspec ../tests/ruby
+
+  # Regenerating must be a no-op against the committed contract. When it is not, either somebody
+  # edited generated code by hand — which the next regeneration would silently discard — or the
+  # committed clients were built from a different contract than the one in this repository.
+  generated-sources-are-current:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 -m unittest discover -s tests -p "test_*.py"
+      - run: ./generate.sh
+      # `git status`, not `git diff`: a file the generator emits for the first time is untracked, and
+      # `git diff` does not report untracked files. A file it no longer emits is deleted by the script
+      # and shows up here as a deletion.
+      - run: |
+          changes=$(git status --porcelain)
+          if [[ -n "${changes}" ]]; then
+            echo "::error::regenerating changed the tree — the committed clients do not match openapi.json"
+            echo "${changes}"
+            exit 1
+          fi
+          echo "generated sources match openapi.json"

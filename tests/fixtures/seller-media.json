@@ -1,0 +1,33 @@
+{
+  "id": "c1d2e3f4-a5b6-4c7d-8e9f-a0b1c2d3e4f5",
+  "domain": "blog.example",
+  "url": "https://blog.example",
+  "state": "active",
+  "deactivationStrikes": 0,
+  "country": null,
+  "language": "es",
+  "topics": [3, 17],
+  "bannedTopics": [],
+  "providerComments": null,
+  "publicationRate": null,
+  "averageDaysToPublication": null,
+  "numPublishedOrders": 12,
+  "onHoliday": false,
+  "flashOffer": null,
+  "postOffer": {
+    "pricingOptions": [
+      {
+        "feeWhenSellerWritesPost": {"amount": 6000, "currency": "EUR"},
+        "feeWhenSellerDoesNotWritePost": null,
+        "linkType": "dofollow",
+        "currentCost": null
+      }
+    ],
+    "extraServices": [
+      {"name": "list_on_homepage", "cost": {"amount": 1500, "currency": "EUR"}}
+    ]
+  },
+  "linkAdditionOffer": null,
+  "competitiveFees": null,
+  "createdAt": "2025-01-10T12:00:00+00:00"
+}

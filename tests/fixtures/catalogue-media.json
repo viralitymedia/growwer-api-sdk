@@ -1,0 +1,37 @@
+{
+  "id": "c1d2e3f4-a5b6-4c7d-8e9f-a0b1c2d3e4f5",
+  "domain": "blog.example",
+  "type": "blog",
+  "language": "es",
+  "country": null,
+  "topics": [3, 17],
+  "metrics": {
+    "organicTraffic": 15400,
+    "domainRating": 41,
+    "referringDomains": null,
+    "linkedDomains": null,
+    "linkedToReferringRatio": null
+  },
+  "positiveTrafficTrend": true,
+  "bestSeller": false,
+  "publicationRate": null,
+  "averageDaysToPublication": null,
+  "onHoliday": false,
+  "flashOffer": null,
+  "postOffer": {
+    "price": {"amount": 9000, "currency": "EUR"},
+    "linkType": "dofollow",
+    "prices": {
+      "dofollow": {"amount": 9000, "currency": "EUR"},
+      "nofollow": {"amount": 7000, "currency": "EUR"}
+    },
+    "previousPrice": null,
+    "advertisingLabel": false,
+    "promotedSocialNetworks": ["twitter", "newsletter"],
+    "extras": {
+      "homepageListing": null,
+      "sensitiveTopic": {"allowed": false, "extraPrice": null}
+    }
+  },
+  "linkAdditionOffer": null
+}

@@ -1,0 +1,63 @@
+{
+  "items": [
+    {
+      "id": "0b9c6a4e-6f1d-4c39-9a51-2f5d7c1e8a01",
+      "reference": "GW-1001",
+      "type": "post",
+      "state": "pending_acceptance",
+      "pendingAction": null,
+      "price": {"amount": 12500, "currency": "EUR"},
+      "project": {"id": "7f3e2d1c-0b9a-4876-9543-210fedcba987", "url": "https://shop.example"},
+      "media": {"id": "c1d2e3f4-a5b6-4c7d-8e9f-a0b1c2d3e4f5", "url": "https://blog.example"},
+      "createdAt": "2026-10-01T09:30:00+00:00",
+      "updatedAt": "2026-10-01T09:30:00+00:00",
+      "scheduledPublicationDate": null,
+      "delivery": null,
+      "briefing": {
+        "title": null,
+        "language": "es",
+        "links": [
+          {"targetUrl": "https://shop.example/running-shoes", "anchor": "running shoes", "type": "dofollow"}
+        ],
+        "extraServices": ["list_on_homepage"],
+        "additionalInfo": null,
+        "hasProposedDraft": false
+      },
+      "draft": null,
+      "stateHistory": [
+        {"state": "pending_acceptance", "date": "2026-10-01T09:30:00+00:00", "reason": null}
+      ],
+      "channel": {"created": "api"}
+    },
+    {
+      "id": "1a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+      "reference": "GW-1002",
+      "type": "link_addition",
+      "state": "cancelled",
+      "pendingAction": null,
+      "price": {"amount": 4000, "currency": "EUR"},
+      "project": {"id": null, "url": "https://shop.example"},
+      "media": {"id": "c1d2e3f4-a5b6-4c7d-8e9f-a0b1c2d3e4f5", "url": "https://blog.example"},
+      "createdAt": "2026-09-20T16:45:00+00:00",
+      "updatedAt": "2026-09-27T16:45:00+00:00",
+      "scheduledPublicationDate": null,
+      "delivery": null,
+      "briefing": {
+        "linkingFrom": "https://blog.example/best-trails",
+        "link": {"targetUrl": "https://shop.example/trail", "anchor": null, "type": "nofollow"},
+        "additionalInfo": null
+      },
+      "draft": null,
+      "stateHistory": [
+        {"state": "pending_acceptance", "date": "2026-09-20T16:45:00+00:00", "reason": null},
+        {
+          "state": "cancelled",
+          "date": "2026-09-27T16:45:00+00:00",
+          "reason": {"code": "no_seller_response", "additionalInfo": null}
+        }
+      ],
+      "channel": {"created": "web"}
+    }
+  ],
+  "total": 42
+}

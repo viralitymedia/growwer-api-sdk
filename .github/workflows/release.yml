@@ -1,0 +1,199 @@
+name: Release
+
+# Publishing is driven by a `vX.Y.Z` tag. Every registry gets the same version from the same
+# commit, because a client that is version 1.2.0 in one language and 1.1.0 in another is a support
+# question nobody can answer.
+#
+# Before the first release, set `packageVersion` in sdks.json to the version being tagged and
+# regenerate: the version is baked into each package manifest and into the User-Agent every client
+# sends, so a tag that disagrees with the committed sources publishes the wrong number.
+#
+# Required secrets, per registry. A job whose secret is absent fails loudly rather than skipping:
+# a release that silently published five of seven languages is worse than one that stopped.
+#
+#   npm            NPM_TOKEN                 automation token with publish rights on @growwer
+#   RubyGems       RUBYGEMS_API_KEY          push key for the growwer gem
+#   Maven Central  MAVEN_CENTRAL_USERNAME    Sonatype portal token
+#                  MAVEN_CENTRAL_PASSWORD
+#                  MAVEN_GPG_PRIVATE_KEY     armoured key; Central refuses unsigned artifacts
+#                  MAVEN_GPG_PASSPHRASE
+#
+# PyPI and NuGet use trusted publishing (OIDC) and need no secret: each run exchanges its own
+# short-lived identity token for a credential that expires in minutes. Both require a policy
+# registered on the registry first — naming this repository, `release.yml` and the `release`
+# environment — or the upload is rejected. That registration is the credential; there is nothing
+# to rotate and nothing to leak. NuGet's login also names the nuget.org account the policy was
+# created under; it is read from the repository variable NUGET_USER, which is not a secret.
+#
+# npm and RubyGems both support trusted publishing now, and both were deliberately left on tokens
+# for the first release. npm's trusted publisher is configured against an EXISTING package, and
+# `@growwer/api` does not exist yet; its tracker also carries an open bug for OIDC publishing of
+# scoped packages, which is exactly what this is. RubyGems' own action drives a rake release task
+# the generated Rakefile does not define, and adding one means another exception to "everything
+# here is generated". Revisit both once 1.0.0 is out and the packages exist.
+#
+# Packagist and the Go module proxy need no job at all: Packagist watches the repository through
+# its GitHub webhook, and the Go proxy resolves whatever tags exist. Go is the reason `tag-go`
+# runs: a module in a subdirectory is versioned by a `go/vX.Y.Z` tag, not by `vX.Y.Z`.
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: The tag must match the version baked into the packages
+        run: |
+          tagged="${GITHUB_REF_NAME#v}"
+          committed=$(python3 -c 'import json; print(json.load(open("sdks.json"))["packageVersion"])')
+          if [[ "${tagged}" != "${committed}" ]]; then
+            echo "::error::tag ${GITHUB_REF_NAME} does not match sdks.json packageVersion ${committed}"
+            exit 1
+          fi
+          echo "releasing ${tagged}"
+
+      # sdks.json agreeing with the tag says nothing about the seven manifests that are actually
+      # published: three generators read a version option of their own, so they can sit a release
+      # behind while sdks.json looks correct.
+      - name: Every package must carry the version being released
+        run: python3 scripts/check-versions.py
+
+      - name: The committed clients must match the contract
+        run: |
+          ./generate.sh
+          # `git status`, not `git diff`, so a file the generator emits for the first time, which is
+          # untracked, also stops the release.
+          changes=$(git status --porcelain)
+          if [[ -n "${changes}" ]]; then
+            echo "::error::regenerating changed the tree — refusing to publish sources nobody built"
+            echo "${changes}"
+            exit 1
+          fi
+
+  pypi:
+    needs: verify
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - working-directory: python
+        run: |
+          pip install --quiet build
+          python -m build
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: python/dist
+
+  npm:
+    needs: verify
+    runs-on: ubuntu-latest
+    environment: release
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: https://registry.npmjs.org
+      - working-directory: typescript
+        run: |
+          npm install --no-audit --no-fund
+          npm run build
+          npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  nuget:
+    needs: verify
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0"
+      # Trusted publishing: the run exchanges its OIDC token for an API key that lives minutes,
+      # so there is no long-lived push credential to leak or to rotate. `user` is the nuget.org
+      # account the trusted-publishing policy was created under, not a secret.
+      - uses: NuGet/login@v1.2.0
+        id: nuget-login
+        with:
+          user: ${{ vars.NUGET_USER }}
+      - working-directory: csharp
+        run: |
+          dotnet pack src/Growwer.Api/Growwer.Api.csproj --configuration Release --output ../artifacts
+          dotnet nuget push "../artifacts/*.nupkg" \
+            --api-key "${{ steps.nuget-login.outputs.NUGET_API_KEY }}" \
+            --source https://api.nuget.org/v3/index.json
+
+  rubygems:
+    needs: verify
+    runs-on: ubuntu-latest
+    environment: release
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.1"
+          working-directory: ruby
+      - working-directory: ruby
+        env:
+          RUBYGEMS_API_KEY: ${{ secrets.RUBYGEMS_API_KEY }}
+        run: |
+          mkdir -p ~/.gem
+          printf -- '---\n:rubygems_api_key: %s\n' "$RUBYGEMS_API_KEY" > ~/.gem/credentials
+          chmod 0600 ~/.gem/credentials
+          gem build growwer.gemspec
+          gem push growwer-*.gem
+
+  maven-central:
+    needs: verify
+    runs-on: ubuntu-latest
+    environment: release
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "11"
+          server-id: central
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
+          gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+          gpg-passphrase: MAVEN_GPG_PASSPHRASE
+      # Central refuses unsigned artifacts, and the generated pom keeps GPG behind a profile, so
+      # the profile has to be named here or the upload is rejected for a missing signature.
+      - working-directory: java
+        run: mvn --batch-mode --no-transfer-progress -DskipTests -P sign-artifacts deploy
+        env:
+          MAVEN_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+
+  # Go resolves a module in a subdirectory by a tag carrying that subdirectory as a prefix. Without
+  # this, `go get github.com/viralitymedia/growwer-api-sdk/go@v1.2.0` finds nothing at all.
+  tag-go:
+    needs: verify
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - run: |
+          git tag "go/${GITHUB_REF_NAME}" "${GITHUB_SHA}"
+          git push origin "go/${GITHUB_REF_NAME}"

@@ -1,4 +1,5 @@
-"""Replaces the generator's own name in the manifests whose templates offer no option for it.
+"""Replaces the generator's own name in the manifests whose templates offer no option for it, and
+raises the Python dependency floors past the releases with open advisories.
 
 Java, C#, Ruby and PHP take their author, description and homepage as options, and generate.sh
 feeds them from sdks.json. Three manifests keep template text that no option reaches:

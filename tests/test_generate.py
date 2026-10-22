@@ -803,12 +803,23 @@ class PythonDependencyFloorsTest(unittest.TestCase):
         }
         self.assertEqual(expected, manifests)
 
-    def test_a_manifest_without_the_floor_line_fails_the_run(self):
+    def test_a_manifest_without_exactly_one_floor_or_anchor_line_fails_the_run(self):
         generated = self.manifests()
-        generated["requirements.txt"] = "python_dateutil >= 2.8.2\n"
-        (result,), _ = self.run_script(generated)
-        self.assertNotEqual(0, result.returncode)
-        self.assertIn("requirements.txt", result.stderr)
+        cases = {
+            "requirements.txt": "python_dateutil >= 2.8.2\n",
+            # raise_floor refuses to guess which of two matching lines is the dependency.
+            "setup.py": generated["setup.py"].replace(
+                '    "python-dateutil >= 2.8.2",\n', '    "python-dateutil >= 2.8.2",\n    "urllib3 >= 2.6.3, < 3.0.0",\n'
+            ),
+            # add_floor has no tox line to put the filelock floor after.
+            "test-requirements.txt": "pytest >= 8.4.2\npytest-cov >= 2.8.1\nflake8 >= 4.0.0\n",
+        }
+        for name, text in cases.items():
+            with self.subTest(name):
+                broken = {**generated, name: text}
+                (result,), _ = self.run_script(broken)
+                self.assertNotEqual(0, result.returncode)
+                self.assertIn(name, result.stderr)
 
     def test_the_committed_python_manifests_carry_the_floors(self):
         python = ROOT / "python"

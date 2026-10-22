@@ -431,7 +431,9 @@ would be discarded on the next run:
 - **Package metadata.** Left alone, the Python, TypeScript and PHP manifests name OpenAPI Generator
   as their author and carry its description and keywords. They are rewritten from
   [`sdks.json`](sdks.json) by [`scripts/package-metadata.py`](scripts/package-metadata.py), which
-  also sets the PHP package name.
+  also sets the PHP package name and raises the Python dependency floors (Python, urllib3, pytest
+  and filelock) past the releases with open advisories, since Dependabot cannot update a project
+  with neither a lockfile nor a pinned version.
 
 The two template fixes fail the run when they find nothing left to correct, so a generator upgrade
 that makes one obsolete removes it rather than leaving a silent no-op.

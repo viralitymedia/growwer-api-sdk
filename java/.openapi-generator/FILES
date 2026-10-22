@@ -280,7 +280,3 @@ src/main/java/com/growwer/api/model/UpdateSellerMediaRequestPostOffer.java
 src/main/java/com/growwer/api/model/UpdateSellerMediaRequestPostOfferPricingOptionsInner.java
 src/main/java/com/growwer/api/model/UploadFile201Response.java
 src/main/java/com/growwer/api/model/Withdrawal.java
-src/test/java/com/growwer/api/api/BuyerOrdersApiTest.java
-src/test/java/com/growwer/api/api/BuyerWalletApiTest.java
-src/test/java/com/growwer/api/api/SellerAccountApiTest.java
-src/test/java/com/growwer/api/api/SellerWalletApiTest.java

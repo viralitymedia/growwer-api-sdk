@@ -267,8 +267,4 @@ setup.cfg
 setup.py
 test-requirements.txt
 test/__init__.py
-test/test_buyer_orders_api.py
-test/test_buyer_wallet_api.py
-test/test_seller_account_api.py
-test/test_seller_wallet_api.py
 tox.ini

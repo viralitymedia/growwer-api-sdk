@@ -127,10 +127,6 @@ docs/UpdateSellerMediaRequestPostOfferPricingOptionsInner.md
 docs/UploadFile201Response.md
 docs/Withdrawal.md
 git_push.sh
-src/Growwer.Api.Test/Api/BuyerOrdersApiTests.cs
-src/Growwer.Api.Test/Api/BuyerWalletApiTests.cs
-src/Growwer.Api.Test/Api/SellerAccountApiTests.cs
-src/Growwer.Api.Test/Api/SellerWalletApiTests.cs
 src/Growwer.Api.Test/Growwer.Api.Test.csproj
 src/Growwer.Api/Api/AccountApi.cs
 src/Growwer.Api/Api/BuyerOrdersApi.cs

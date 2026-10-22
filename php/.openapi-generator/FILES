@@ -259,7 +259,3 @@ lib/Model/UploadFile201Response.php
 lib/Model/Withdrawal.php
 lib/ObjectSerializer.php
 phpunit.xml.dist
-test/Api/BuyerOrdersApiTest.php
-test/Api/BuyerWalletApiTest.php
-test/Api/SellerAccountApiTest.php
-test/Api/SellerWalletApiTest.php

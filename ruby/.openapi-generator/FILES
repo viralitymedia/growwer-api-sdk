@@ -262,8 +262,4 @@ lib/growwer/models/update_seller_media_request_post_offer_pricing_options_inner.
 lib/growwer/models/upload_file201_response.rb
 lib/growwer/models/withdrawal.rb
 lib/growwer/version.rb
-spec/api/buyer_orders_api_spec.rb
-spec/api/buyer_wallet_api_spec.rb
-spec/api/seller_account_api_spec.rb
-spec/api/seller_wallet_api_spec.rb
 spec/spec_helper.rb

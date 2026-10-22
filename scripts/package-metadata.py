@@ -15,6 +15,14 @@ feeds them from sdks.json. Three manifests keep template text that no option rea
 A registry shows these fields on the package page, so left alone every package would present itself
 as the work of OpenAPI Generator. They are rewritten from sdks.json on each run, since a hand edit is
 discarded by the next regeneration.
+
+The Python manifests also get their dependency floors raised. The generator writes the floors of its
+own templates (urllib3 >= 2.6.3, pytest >= 8.4.2, Python >= 3.9) and has no option to change them,
+while Dependabot cannot fix a vulnerable dependency in a project with neither a lockfile nor a pinned
+version: it can only report it. So the floors that exclude the known vulnerable releases are written
+here, into pyproject.toml, setup.py, requirements.txt and test-requirements.txt, which have to agree
+because pip, Poetry and tox each read a different one. filelock reaches the dev environment only
+through tox, so the generator never lists it and its floor is added as a line of its own.
 """
 
 import json
@@ -31,6 +39,12 @@ description = manifest["description"]
 KEYWORDS = ["growwer", "api", "sdk", "seo", "link-building"]
 COMPOSER_NAME = "growwer/growwer-api-sdk"
 
+# The lowest releases free of the advisories open against the Python SDK, all of which need 3.10.
+PYTHON_FLOOR = "3.10"
+URLLIB3_FLOOR = "2.8.0"
+PYTEST_FLOOR = "9.0.3"
+FILELOCK_FLOOR = "3.20.3"
+
 target = sys.argv[1]
 
 
@@ -41,6 +55,38 @@ def replace_line(path, pattern, new):
     if len(matches) != 1:
         raise SystemExit(f"expected exactly one line matching {pattern!r} in {path}")
     path.write_text(re.sub(pattern, lambda _: new, text, flags=re.MULTILINE), encoding="utf-8")
+
+
+def version(text):
+    return tuple(int(part) for part in text.split("."))
+
+
+def raise_floor(path, pattern, floor):
+    # Only the version inside the generated line is rewritten, so an upper bound or the quoting stays
+    # the generator's. A floor a later generator release writes higher than this one is kept, not
+    # lowered, and compared as numbers because "3.9" sorts after "3.10" as text.
+    text = path.read_text(encoding="utf-8")
+    matches = list(re.finditer(pattern, text, re.MULTILINE))
+    if len(matches) != 1:
+        raise SystemExit(f"expected exactly one line matching {pattern!r} in {path}")
+    match = matches[0]
+    if version(match["floor"]) >= version(floor):
+        return
+    path.write_text(text[:match.start("floor")] + floor + text[match.end("floor"):], encoding="utf-8")
+
+
+def add_floor(path, pattern, floor, after, line):
+    # For a dependency the generator never lists: the line goes in after the one matching `after` on
+    # the first run, and a later run over the same file only raises its floor.
+    text = path.read_text(encoding="utf-8")
+    if re.search(pattern, text, re.MULTILINE):
+        raise_floor(path, pattern, floor)
+        return
+    anchors = list(re.finditer(after, text, re.MULTILINE))
+    if len(anchors) != 1:
+        raise SystemExit(f"expected exactly one line matching {after!r} in {path}")
+    end = anchors[0].end()
+    path.write_text(text[:end] + "\n" + line + text[end:], encoding="utf-8")
 
 
 def rewrite_json(path, indent, update):
@@ -65,6 +111,34 @@ elif target == "python":
     replace_line(ROOT / "python" / "pyproject.toml", r"^keywords = \[.*\]$", f"keywords = {keywords}")
     replace_line(ROOT / "python" / "setup.py", r"^    keywords=\[.*\],$", f"    keywords={keywords},")
     print("  pyproject.toml, setup.py: keywords")
+
+    python = ROOT / "python"
+    floor = r"(?P<floor>\d+(?:\.\d+)*)"
+    raise_floor(python / "pyproject.toml", rf'^requires-python = ">={floor}"$', PYTHON_FLOOR)
+    raise_floor(python / "pyproject.toml", rf'^  "urllib3 \(>={floor},.*\)",$', URLLIB3_FLOOR)
+    raise_floor(python / "pyproject.toml", rf'^pytest = ">= {floor}"$', PYTEST_FLOOR)
+    add_floor(
+        python / "pyproject.toml",
+        rf'^filelock = ">= {floor}"$',
+        FILELOCK_FLOOR,
+        r'^tox = ".*"$',
+        f'filelock = ">= {FILELOCK_FLOOR}"',
+    )
+    raise_floor(python / "setup.py", rf'^PYTHON_REQUIRES = ">= {floor}"$', PYTHON_FLOOR)
+    raise_floor(python / "setup.py", rf'^    "urllib3 >= {floor},.*",$', URLLIB3_FLOOR)
+    raise_floor(python / "requirements.txt", rf"^urllib3 >= {floor},.*$", URLLIB3_FLOOR)
+    raise_floor(python / "test-requirements.txt", rf"^pytest >= {floor}$", PYTEST_FLOOR)
+    add_floor(
+        python / "test-requirements.txt",
+        rf"^filelock >= {floor}$",
+        FILELOCK_FLOOR,
+        r"^tox >= .*$",
+        f"filelock >= {FILELOCK_FLOOR}",
+    )
+    print(
+        f"  pyproject.toml, setup.py, requirements.txt, test-requirements.txt: Python >= {PYTHON_FLOOR}, "
+        f"urllib3 >= {URLLIB3_FLOOR}, pytest >= {PYTEST_FLOOR}, filelock >= {FILELOCK_FLOOR}"
+    )
 
 elif target == "php":
     def update(composer):

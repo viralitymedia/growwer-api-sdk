@@ -694,6 +694,138 @@ class RubyOneOfUnknownKeysTest(unittest.TestCase):
             self.assertNotIn("data.keys - const.acceptable_attributes", path.read_text(encoding="utf-8"), path.name)
 
 
+class PythonDependencyFloorsTest(unittest.TestCase):
+    """scripts/package-metadata.py raises the floors the generator writes into the four Python
+    manifests to releases free of the open advisories, and adds the filelock floor tox needs."""
+
+    GENERATED = {
+        "pyproject.toml": (
+            'keywords = ["OpenAPI", "OpenAPI-Generator", "Growwer API"]\n'
+            'requires-python = ">={python}"\n'
+            "\n"
+            "dependencies = [\n"
+            '  "urllib3 (>={urllib3},<3.0.0)",\n'
+            '  "python-dateutil (>=2.8.2)",\n'
+            "]\n"
+            "\n"
+            "[tool.poetry.group.dev.dependencies]\n"
+            'pytest = ">= {pytest}"\n'
+            'pytest-cov = ">= 2.8.1"\n'
+            'tox = ">= 3.9.0"\n'
+            "{filelock_toml}"
+            'flake8 = ">= 4.0.0"\n'
+        ),
+        "setup.py": (
+            'PYTHON_REQUIRES = ">= {python_setup}"\n'
+            "REQUIRES = [\n"
+            '    "urllib3 >= {urllib3}, < 3.0.0",\n'
+            '    "python-dateutil >= 2.8.2",\n'
+            "]\n"
+            "\n"
+            "setup(\n"
+            '    keywords=["OpenAPI", "OpenAPI-Generator", "Growwer API"],\n'
+            ")\n"
+        ),
+        "requirements.txt": "urllib3 >= {urllib3}, < 3.0.0\npython_dateutil >= 2.8.2\n",
+        "test-requirements.txt": (
+            "pytest >= {pytest}\npytest-cov >= 2.8.1\ntox >= 3.9.0\n{filelock_txt}flake8 >= 4.0.0\n"
+        ),
+    }
+    # What openapi-generator 7.24.0 writes, before any floor is raised.
+    GENERATOR_FLOORS = {
+        "python": "3.9", "python_setup": "3.10", "urllib3": "2.6.3", "pytest": "8.4.2",
+        "filelock_toml": "", "filelock_txt": "",
+    }
+    RAISED_FLOORS = {
+        "python": "3.10", "python_setup": "3.10", "urllib3": "2.8.0", "pytest": "9.0.3",
+        "filelock_toml": 'filelock = ">= 3.20.3"\n', "filelock_txt": "filelock >= 3.20.3\n",
+    }
+
+    def manifests(self, **floors):
+        values = {**self.GENERATOR_FLOORS, **floors}
+        return {name: text.format(**values) for name, text in self.GENERATED.items()}
+
+    @staticmethod
+    def expected_keywords(text):
+        keywords = '["growwer", "api", "sdk", "seo", "link-building"]'
+        return text.replace('["OpenAPI", "OpenAPI-Generator", "Growwer API"]', keywords)
+
+    def run_script(self, manifests, runs=1):
+        with tempfile.TemporaryDirectory(prefix="growwer-python-floors-test-") as directory:
+            root = Path(directory)
+            (root / "scripts").mkdir()
+            shutil.copyfile(ROOT / "scripts/package-metadata.py", root / "scripts/package-metadata.py")
+            shutil.copyfile(ROOT / "sdks.json", root / "sdks.json")
+            folder = root / "python"
+            folder.mkdir()
+            for name, text in manifests.items():
+                (folder / name).write_text(text, encoding="utf-8")
+            results = [
+                subprocess.run(
+                    [sys.executable, "scripts/package-metadata.py", "python"],
+                    cwd=root,
+                    capture_output=True,
+                    text=True,
+                    check=False,
+                )
+                for _ in range(runs)
+            ]
+            return results, {name: (folder / name).read_text(encoding="utf-8") for name in manifests}
+
+    def test_generator_floors_below_the_advisories_are_raised_in_every_manifest(self):
+        (result,), manifests = self.run_script(self.manifests(python_setup="3.9"))
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        expected = {
+            name: self.expected_keywords(text.format(**self.RAISED_FLOORS))
+            for name, text in self.GENERATED.items()
+        }
+        self.assertEqual(expected, manifests)
+        self.assertIn("urllib3 >= 2.8.0, pytest >= 9.0.3, filelock >= 3.20.3", result.stdout)
+
+    def test_a_second_run_over_its_own_output_changes_nothing(self):
+        (first,), once = self.run_script(self.manifests())
+        results, twice = self.run_script(self.manifests(), runs=2)
+        for result in (first, *results):
+            self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        self.assertEqual(once, twice)
+        self.assertEqual(1, twice["pyproject.toml"].count("filelock"))
+        self.assertEqual(1, twice["test-requirements.txt"].count("filelock"))
+
+    def test_a_higher_floor_a_later_generator_writes_is_kept(self):
+        higher = {
+            "python": "3.11", "python_setup": "3.11", "urllib3": "2.10.0", "pytest": "10.0",
+            "filelock_toml": 'filelock = ">= 3.21.0"\n', "filelock_txt": "filelock >= 3.21.0\n",
+        }
+        (result,), manifests = self.run_script(self.manifests(**higher))
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        expected = {
+            name: self.expected_keywords(text.format(**higher)) for name, text in self.GENERATED.items()
+        }
+        self.assertEqual(expected, manifests)
+
+    def test_a_manifest_without_the_floor_line_fails_the_run(self):
+        generated = self.manifests()
+        generated["requirements.txt"] = "python_dateutil >= 2.8.2\n"
+        (result,), _ = self.run_script(generated)
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("requirements.txt", result.stderr)
+
+    def test_the_committed_python_manifests_carry_the_floors(self):
+        python = ROOT / "python"
+        pyproject = (python / "pyproject.toml").read_text(encoding="utf-8")
+        self.assertIn('requires-python = ">=3.10"\n', pyproject)
+        self.assertIn('  "urllib3 (>=2.8.0,<3.0.0)",\n', pyproject)
+        self.assertIn('\npytest = ">= 9.0.3"\n', pyproject)
+        self.assertIn('\nfilelock = ">= 3.20.3"\n', pyproject)
+        setup = (python / "setup.py").read_text(encoding="utf-8")
+        self.assertIn('PYTHON_REQUIRES = ">= 3.10"\n', setup)
+        self.assertIn('    "urllib3 >= 2.8.0, < 3.0.0",\n', setup)
+        self.assertIn("urllib3 >= 2.8.0, < 3.0.0\n", (python / "requirements.txt").read_text(encoding="utf-8"))
+        test_requirements = (python / "test-requirements.txt").read_text(encoding="utf-8")
+        self.assertIn("pytest >= 9.0.3\n", test_requirements)
+        self.assertIn("filelock >= 3.20.3\n", test_requirements)
+
+
 class WorkflowSecretTest(unittest.TestCase):
     """A secret expanded into a `run` script becomes part of the shell source, where quoting it is the
     script's job and a stray character can break or leak it; it is passed through `env` instead."""

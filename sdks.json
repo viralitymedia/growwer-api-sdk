@@ -1,6 +1,6 @@
 {
   "generatorVersion": "7.24.0",
-  "packageVersion": "1.0.0",
+  "packageVersion": "1.0.1",
   "contractUrl": "https://tool.growwer.com/api/v1/doc/json",
   "license": {
     "name": "MIT",
@@ -101,5 +101,5 @@
     }
   ],
   "goToolchain": "1.23",
-  "centralPublishingPluginVersion": "0.11.0"
+  "centralPublishingPluginVersion": "0.12.0"
 }

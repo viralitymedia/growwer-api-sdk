@@ -1,6 +1,6 @@
 /*
  * Growwer API
- * The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601. 
+ * The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters without spaces) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601. 
  *
  * The version of the OpenAPI document: 1
  * Contact: support@growwer.com
@@ -884,7 +884,7 @@ public class ManagedServicesApi {
     }
     /**
      * Build call for requestManagedServiceCampaign
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param managedServiceRequest  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
@@ -894,7 +894,7 @@ public class ManagedServicesApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> The request was sent. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 409 </td><td> You have no managed service yet (code &#x60;managed_service_required&#x60;), or the &#x60;Idempotency-Key&#x60; conflicts (codes &#x60;idempotency_key_reused&#x60;, &#x60;idempotency_request_in_progress&#x60;, &#x60;idempotency_outcome_unknown&#x60;). </td><td>  -  </td></tr>
@@ -973,7 +973,7 @@ public class ManagedServicesApi {
     /**
      * Request a new campaign
      * Asks your account manager for a new campaign, as the managed service page does: the team emails you to agree on it. For accounts with a managed service (GET /me &#x60;managedService.active&#x60;); without one, POST /managed-service/info-requests asks about the service.  You may send 5 such requests per UTC day through the API. Past them it answers 429 &#x60;managed_service_request_limit_reached&#x60;, with &#x60;Retry-After&#x60; the time to the next UTC midnight. A request that is refused (4xx) does not count; one that fails on the server (5xx) does, as it may have been sent.
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param managedServiceRequest  (required)
      * @return ManagedServiceRequestSent
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -982,7 +982,7 @@ public class ManagedServicesApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> The request was sent. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 409 </td><td> You have no managed service yet (code &#x60;managed_service_required&#x60;), or the &#x60;Idempotency-Key&#x60; conflicts (codes &#x60;idempotency_key_reused&#x60;, &#x60;idempotency_request_in_progress&#x60;, &#x60;idempotency_outcome_unknown&#x60;). </td><td>  -  </td></tr>
@@ -1000,7 +1000,7 @@ public class ManagedServicesApi {
     /**
      * Request a new campaign
      * Asks your account manager for a new campaign, as the managed service page does: the team emails you to agree on it. For accounts with a managed service (GET /me &#x60;managedService.active&#x60;); without one, POST /managed-service/info-requests asks about the service.  You may send 5 such requests per UTC day through the API. Past them it answers 429 &#x60;managed_service_request_limit_reached&#x60;, with &#x60;Retry-After&#x60; the time to the next UTC midnight. A request that is refused (4xx) does not count; one that fails on the server (5xx) does, as it may have been sent.
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param managedServiceRequest  (required)
      * @return ApiResponse&lt;ManagedServiceRequestSent&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -1009,7 +1009,7 @@ public class ManagedServicesApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> The request was sent. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 409 </td><td> You have no managed service yet (code &#x60;managed_service_required&#x60;), or the &#x60;Idempotency-Key&#x60; conflicts (codes &#x60;idempotency_key_reused&#x60;, &#x60;idempotency_request_in_progress&#x60;, &#x60;idempotency_outcome_unknown&#x60;). </td><td>  -  </td></tr>
@@ -1028,7 +1028,7 @@ public class ManagedServicesApi {
     /**
      * Request a new campaign (asynchronously)
      * Asks your account manager for a new campaign, as the managed service page does: the team emails you to agree on it. For accounts with a managed service (GET /me &#x60;managedService.active&#x60;); without one, POST /managed-service/info-requests asks about the service.  You may send 5 such requests per UTC day through the API. Past them it answers 429 &#x60;managed_service_request_limit_reached&#x60;, with &#x60;Retry-After&#x60; the time to the next UTC midnight. A request that is refused (4xx) does not count; one that fails on the server (5xx) does, as it may have been sent.
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param managedServiceRequest  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
@@ -1038,7 +1038,7 @@ public class ManagedServicesApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> The request was sent. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 409 </td><td> You have no managed service yet (code &#x60;managed_service_required&#x60;), or the &#x60;Idempotency-Key&#x60; conflicts (codes &#x60;idempotency_key_reused&#x60;, &#x60;idempotency_request_in_progress&#x60;, &#x60;idempotency_outcome_unknown&#x60;). </td><td>  -  </td></tr>
@@ -1057,7 +1057,7 @@ public class ManagedServicesApi {
     }
     /**
      * Build call for requestManagedServiceInfo
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param managedServiceRequest  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
@@ -1067,7 +1067,7 @@ public class ManagedServicesApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> The request was sent. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 409 </td><td> You already have a managed service (code &#x60;managed_service_exists&#x60;), or the &#x60;Idempotency-Key&#x60; conflicts (codes &#x60;idempotency_key_reused&#x60;, &#x60;idempotency_request_in_progress&#x60;, &#x60;idempotency_outcome_unknown&#x60;). </td><td>  -  </td></tr>
@@ -1146,7 +1146,7 @@ public class ManagedServicesApi {
     /**
      * Ask about the managed service
      * Asks the team about the managed service for your website, as the managed service landing page does: the team contacts you. For accounts without a managed service (GET /me &#x60;managedService.active&#x60;); with one, POST /managed-service/campaign-requests requests a new campaign.  You may send 5 such requests per UTC day through the API. Past them it answers 429 &#x60;managed_service_request_limit_reached&#x60;, with &#x60;Retry-After&#x60; the time to the next UTC midnight. A request that is refused (4xx) does not count; one that fails on the server (5xx) does, as it may have been sent.
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param managedServiceRequest  (required)
      * @return ManagedServiceRequestSent
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -1155,7 +1155,7 @@ public class ManagedServicesApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> The request was sent. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 409 </td><td> You already have a managed service (code &#x60;managed_service_exists&#x60;), or the &#x60;Idempotency-Key&#x60; conflicts (codes &#x60;idempotency_key_reused&#x60;, &#x60;idempotency_request_in_progress&#x60;, &#x60;idempotency_outcome_unknown&#x60;). </td><td>  -  </td></tr>
@@ -1173,7 +1173,7 @@ public class ManagedServicesApi {
     /**
      * Ask about the managed service
      * Asks the team about the managed service for your website, as the managed service landing page does: the team contacts you. For accounts without a managed service (GET /me &#x60;managedService.active&#x60;); with one, POST /managed-service/campaign-requests requests a new campaign.  You may send 5 such requests per UTC day through the API. Past them it answers 429 &#x60;managed_service_request_limit_reached&#x60;, with &#x60;Retry-After&#x60; the time to the next UTC midnight. A request that is refused (4xx) does not count; one that fails on the server (5xx) does, as it may have been sent.
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param managedServiceRequest  (required)
      * @return ApiResponse&lt;ManagedServiceRequestSent&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -1182,7 +1182,7 @@ public class ManagedServicesApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> The request was sent. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 409 </td><td> You already have a managed service (code &#x60;managed_service_exists&#x60;), or the &#x60;Idempotency-Key&#x60; conflicts (codes &#x60;idempotency_key_reused&#x60;, &#x60;idempotency_request_in_progress&#x60;, &#x60;idempotency_outcome_unknown&#x60;). </td><td>  -  </td></tr>
@@ -1201,7 +1201,7 @@ public class ManagedServicesApi {
     /**
      * Ask about the managed service (asynchronously)
      * Asks the team about the managed service for your website, as the managed service landing page does: the team contacts you. For accounts without a managed service (GET /me &#x60;managedService.active&#x60;); with one, POST /managed-service/campaign-requests requests a new campaign.  You may send 5 such requests per UTC day through the API. Past them it answers 429 &#x60;managed_service_request_limit_reached&#x60;, with &#x60;Retry-After&#x60; the time to the next UTC midnight. A request that is refused (4xx) does not count; one that fails on the server (5xx) does, as it may have been sent.
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param managedServiceRequest  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
@@ -1211,7 +1211,7 @@ public class ManagedServicesApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> The request was sent. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 409 </td><td> You already have a managed service (code &#x60;managed_service_exists&#x60;), or the &#x60;Idempotency-Key&#x60; conflicts (codes &#x60;idempotency_key_reused&#x60;, &#x60;idempotency_request_in_progress&#x60;, &#x60;idempotency_outcome_unknown&#x60;). </td><td>  -  </td></tr>
@@ -1231,7 +1231,7 @@ public class ManagedServicesApi {
     /**
      * Build call for reviewManagedServiceProposals
      * @param id  (required)
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param managedServiceProposalReviewRequest  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
@@ -1241,7 +1241,7 @@ public class ManagedServicesApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> The campaign and the proposals you reviewed, as they now are. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The campaign is not yours, or a proposal named is not one of the campaign&#39;s (code &#x60;not_found&#x60;, with &#x60;details.proposalId&#x60;). </td><td>  -  </td></tr>
@@ -1328,7 +1328,7 @@ public class ManagedServicesApi {
      * Accept or reject proposals
      * Decides on every proposal of the campaign that awaits your review (&#x60;state&#x60; &#x60;proposed&#x60;), as the campaign page does: name each one once, with &#x60;accept&#x60; or &#x60;reject&#x60;, and a comment for the team to reject one. Their order in the body does not matter. Accepting charges nothing: the team places the orders for the accepted proposals and your wallet pays for them then. POST /managed-service/campaigns/{id}/proposals/estimate says what they would cost.  When every proposal is accepted the campaign moves to &#x60;proposal_accepted&#x60;; when one is rejected the team is told and prepares others. A proposal someone else moved on the campaign page while the request ran is answered in the state it reached.
      * @param id  (required)
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param managedServiceProposalReviewRequest  (required)
      * @return ManagedServiceProposalReview
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -1337,7 +1337,7 @@ public class ManagedServicesApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> The campaign and the proposals you reviewed, as they now are. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The campaign is not yours, or a proposal named is not one of the campaign&#39;s (code &#x60;not_found&#x60;, with &#x60;details.proposalId&#x60;). </td><td>  -  </td></tr>
@@ -1357,7 +1357,7 @@ public class ManagedServicesApi {
      * Accept or reject proposals
      * Decides on every proposal of the campaign that awaits your review (&#x60;state&#x60; &#x60;proposed&#x60;), as the campaign page does: name each one once, with &#x60;accept&#x60; or &#x60;reject&#x60;, and a comment for the team to reject one. Their order in the body does not matter. Accepting charges nothing: the team places the orders for the accepted proposals and your wallet pays for them then. POST /managed-service/campaigns/{id}/proposals/estimate says what they would cost.  When every proposal is accepted the campaign moves to &#x60;proposal_accepted&#x60;; when one is rejected the team is told and prepares others. A proposal someone else moved on the campaign page while the request ran is answered in the state it reached.
      * @param id  (required)
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param managedServiceProposalReviewRequest  (required)
      * @return ApiResponse&lt;ManagedServiceProposalReview&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -1366,7 +1366,7 @@ public class ManagedServicesApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> The campaign and the proposals you reviewed, as they now are. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The campaign is not yours, or a proposal named is not one of the campaign&#39;s (code &#x60;not_found&#x60;, with &#x60;details.proposalId&#x60;). </td><td>  -  </td></tr>
@@ -1387,7 +1387,7 @@ public class ManagedServicesApi {
      * Accept or reject proposals (asynchronously)
      * Decides on every proposal of the campaign that awaits your review (&#x60;state&#x60; &#x60;proposed&#x60;), as the campaign page does: name each one once, with &#x60;accept&#x60; or &#x60;reject&#x60;, and a comment for the team to reject one. Their order in the body does not matter. Accepting charges nothing: the team places the orders for the accepted proposals and your wallet pays for them then. POST /managed-service/campaigns/{id}/proposals/estimate says what they would cost.  When every proposal is accepted the campaign moves to &#x60;proposal_accepted&#x60;; when one is rejected the team is told and prepares others. A proposal someone else moved on the campaign page while the request ran is answered in the state it reached.
      * @param id  (required)
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param managedServiceProposalReviewRequest  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
@@ -1397,7 +1397,7 @@ public class ManagedServicesApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> The campaign and the proposals you reviewed, as they now are. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The campaign is not yours, or a proposal named is not one of the campaign&#39;s (code &#x60;not_found&#x60;, with &#x60;details.proposalId&#x60;). </td><td>  -  </td></tr>

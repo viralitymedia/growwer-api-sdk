@@ -1,6 +1,6 @@
 /*
  * Growwer API
- * The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601. 
+ * The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters without spaces) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601. 
  *
  * The version of the OpenAPI document: 1
  * Contact: support@growwer.com
@@ -344,7 +344,7 @@ public class AccountApi {
     }
     /**
      * Build call for putSellerHoliday
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param putSellerHolidayRequest  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
@@ -354,7 +354,7 @@ public class AccountApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Your holiday, as it now is. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 409 </td><td> Your seller account is restricted, so its holiday cannot change (code &#x60;seller_restricted&#x60;), or the &#x60;Idempotency-Key&#x60; conflicts (codes &#x60;idempotency_key_reused&#x60;, &#x60;idempotency_request_in_progress&#x60;, &#x60;idempotency_outcome_unknown&#x60;). </td><td>  -  </td></tr>
@@ -433,7 +433,7 @@ public class AccountApi {
     /**
      * Set your holiday
      * Starts, changes or ends your holiday, as the holiday settings of your profile page do. While you are on holiday your medias take no orders. &#x60;endDate&#x60; is the day your holiday ends, at 00:00 of that day in Growwer&#39;s server time, and must be later than now; leave it out, or send null, for a holiday you end yourself. Ending the holiday takes no &#x60;endDate&#x60;.  A holiday that already is as you ask is answered 200 without a change. A restricted seller account stays on holiday until the restriction is lifted, so any change is refused. Your holiday is also in GET /me.
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param putSellerHolidayRequest  (required)
      * @return PutSellerHoliday200Response
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -442,7 +442,7 @@ public class AccountApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Your holiday, as it now is. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 409 </td><td> Your seller account is restricted, so its holiday cannot change (code &#x60;seller_restricted&#x60;), or the &#x60;Idempotency-Key&#x60; conflicts (codes &#x60;idempotency_key_reused&#x60;, &#x60;idempotency_request_in_progress&#x60;, &#x60;idempotency_outcome_unknown&#x60;). </td><td>  -  </td></tr>
@@ -460,7 +460,7 @@ public class AccountApi {
     /**
      * Set your holiday
      * Starts, changes or ends your holiday, as the holiday settings of your profile page do. While you are on holiday your medias take no orders. &#x60;endDate&#x60; is the day your holiday ends, at 00:00 of that day in Growwer&#39;s server time, and must be later than now; leave it out, or send null, for a holiday you end yourself. Ending the holiday takes no &#x60;endDate&#x60;.  A holiday that already is as you ask is answered 200 without a change. A restricted seller account stays on holiday until the restriction is lifted, so any change is refused. Your holiday is also in GET /me.
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param putSellerHolidayRequest  (required)
      * @return ApiResponse&lt;PutSellerHoliday200Response&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -469,7 +469,7 @@ public class AccountApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Your holiday, as it now is. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 409 </td><td> Your seller account is restricted, so its holiday cannot change (code &#x60;seller_restricted&#x60;), or the &#x60;Idempotency-Key&#x60; conflicts (codes &#x60;idempotency_key_reused&#x60;, &#x60;idempotency_request_in_progress&#x60;, &#x60;idempotency_outcome_unknown&#x60;). </td><td>  -  </td></tr>
@@ -488,7 +488,7 @@ public class AccountApi {
     /**
      * Set your holiday (asynchronously)
      * Starts, changes or ends your holiday, as the holiday settings of your profile page do. While you are on holiday your medias take no orders. &#x60;endDate&#x60; is the day your holiday ends, at 00:00 of that day in Growwer&#39;s server time, and must be later than now; leave it out, or send null, for a holiday you end yourself. Ending the holiday takes no &#x60;endDate&#x60;.  A holiday that already is as you ask is answered 200 without a change. A restricted seller account stays on holiday until the restriction is lifted, so any change is refused. Your holiday is also in GET /me.
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param putSellerHolidayRequest  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
@@ -498,7 +498,7 @@ public class AccountApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Your holiday, as it now is. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 409 </td><td> Your seller account is restricted, so its holiday cannot change (code &#x60;seller_restricted&#x60;), or the &#x60;Idempotency-Key&#x60; conflicts (codes &#x60;idempotency_key_reused&#x60;, &#x60;idempotency_request_in_progress&#x60;, &#x60;idempotency_outcome_unknown&#x60;). </td><td>  -  </td></tr>

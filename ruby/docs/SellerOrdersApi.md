@@ -39,7 +39,7 @@ end
 
 api_instance = Growwer::SellerOrdersApi.new
 id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # String | 
-idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 
 begin
   # Accept an order
@@ -73,7 +73,7 @@ end
 | Name | Type | Description | Notes |
 | ---- | ---- | ----------- | ----- |
 | **id** | **String** |  |  |
-| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. |  |
+| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. |  |
 
 ### Return type
 
@@ -110,7 +110,7 @@ end
 
 api_instance = Growwer::SellerOrdersApi.new
 id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # String | 
-idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 opts = {
   seller_order_post_delivery: Growwer::SellerOrderPostDelivery.new({url: 'url_example', publication_date_confirmed: false}) # SellerOrderPostDelivery | 
 }
@@ -147,7 +147,7 @@ end
 | Name | Type | Description | Notes |
 | ---- | ---- | ----------- | ----- |
 | **id** | **String** |  |  |
-| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. |  |
+| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. |  |
 | **seller_order_post_delivery** | [**SellerOrderPostDelivery**](SellerOrderPostDelivery.md) |  | [optional] |
 
 ### Return type
@@ -185,7 +185,7 @@ end
 
 api_instance = Growwer::SellerOrdersApi.new
 id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # String | 
-idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 seller_order_draft_file = Growwer::SellerOrderDraftFile.new({file_id: 'file_id_example'}) # SellerOrderDraftFile | 
 
 begin
@@ -220,7 +220,7 @@ end
 | Name | Type | Description | Notes |
 | ---- | ---- | ----------- | ----- |
 | **id** | **String** |  |  |
-| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. |  |
+| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. |  |
 | **seller_order_draft_file** | [**SellerOrderDraftFile**](SellerOrderDraftFile.md) |  |  |
 
 ### Return type
@@ -258,7 +258,7 @@ end
 
 api_instance = Growwer::SellerOrdersApi.new
 id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # String | 
-idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 seller_order_draft_file = Growwer::SellerOrderDraftFile.new({file_id: 'file_id_example'}) # SellerOrderDraftFile | 
 
 begin
@@ -293,7 +293,7 @@ end
 | Name | Type | Description | Notes |
 | ---- | ---- | ----------- | ----- |
 | **id** | **String** |  |  |
-| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. |  |
+| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. |  |
 | **seller_order_draft_file** | [**SellerOrderDraftFile**](SellerOrderDraftFile.md) |  |  |
 
 ### Return type
@@ -331,7 +331,7 @@ end
 
 api_instance = Growwer::SellerOrdersApi.new
 id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # String | 
-idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 opts = {
   seller_order_post_delivery: Growwer::SellerOrderPostDelivery.new({url: 'url_example', publication_date_confirmed: false}) # SellerOrderPostDelivery | 
 }
@@ -368,7 +368,7 @@ end
 | Name | Type | Description | Notes |
 | ---- | ---- | ----------- | ----- |
 | **id** | **String** |  |  |
-| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. |  |
+| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. |  |
 | **seller_order_post_delivery** | [**SellerOrderPostDelivery**](SellerOrderPostDelivery.md) |  | [optional] |
 
 ### Return type
@@ -694,7 +694,7 @@ end
 
 api_instance = Growwer::SellerOrdersApi.new
 id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # String | 
-idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 seller_order_refutation = Growwer::SellerOrderRefutation.new({reason: 'reason_example'}) # SellerOrderRefutation | 
 
 begin
@@ -729,7 +729,7 @@ end
 | Name | Type | Description | Notes |
 | ---- | ---- | ----------- | ----- |
 | **id** | **String** |  |  |
-| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. |  |
+| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. |  |
 | **seller_order_refutation** | [**SellerOrderRefutation**](SellerOrderRefutation.md) |  |  |
 
 ### Return type
@@ -767,7 +767,7 @@ end
 
 api_instance = Growwer::SellerOrdersApi.new
 id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # String | 
-idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 seller_order_refutation = Growwer::SellerOrderRefutation.new({reason: 'reason_example'}) # SellerOrderRefutation | 
 
 begin
@@ -802,7 +802,7 @@ end
 | Name | Type | Description | Notes |
 | ---- | ---- | ----------- | ----- |
 | **id** | **String** |  |  |
-| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. |  |
+| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. |  |
 | **seller_order_refutation** | [**SellerOrderRefutation**](SellerOrderRefutation.md) |  |  |
 
 ### Return type
@@ -840,7 +840,7 @@ end
 
 api_instance = Growwer::SellerOrdersApi.new
 id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # String | 
-idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 seller_order_rejection = Growwer::SellerOrderRejection.new({reason: Growwer::SellerOrderRejectionReason.new({name: 'media_is_competition'})}) # SellerOrderRejection | 
 
 begin
@@ -875,7 +875,7 @@ end
 | Name | Type | Description | Notes |
 | ---- | ---- | ----------- | ----- |
 | **id** | **String** |  |  |
-| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. |  |
+| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. |  |
 | **seller_order_rejection** | [**SellerOrderRejection**](SellerOrderRejection.md) |  |  |
 
 ### Return type

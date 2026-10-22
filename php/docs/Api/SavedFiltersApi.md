@@ -102,7 +102,7 @@ $apiInstance = new Growwer\Api\Api\SavedFiltersApi(
     $config
 );
 $id = 'id_example'; // string | The project.
-$idempotency_key = 'idempotency_key_example'; // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+$idempotency_key = 'idempotency_key_example'; // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 $create_saved_filter_request = new \Growwer\Api\Model\CreateSavedFilterRequest(); // \Growwer\Api\Model\CreateSavedFilterRequest
 
 try {
@@ -118,7 +118,7 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **id** | **string**| The project. | |
-| **idempotency_key** | **string**| A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. | |
+| **idempotency_key** | **string**| A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | |
 | **create_saved_filter_request** | [**\Growwer\Api\Model\CreateSavedFilterRequest**](../Model/CreateSavedFilterRequest.md)|  | |
 
 ### Return type
@@ -167,7 +167,7 @@ $apiInstance = new Growwer\Api\Api\SavedFiltersApi(
 );
 $id = 'id_example'; // string | The project.
 $filter_id = 'filter_id_example'; // string | The saved filter.
-$idempotency_key = 'idempotency_key_example'; // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+$idempotency_key = 'idempotency_key_example'; // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 
 try {
     $apiInstance->deleteSavedFilter($id, $filter_id, $idempotency_key);
@@ -182,7 +182,7 @@ try {
 | ------------- | ------------- | ------------- | ------------- |
 | **id** | **string**| The project. | |
 | **filter_id** | **string**| The saved filter. | |
-| **idempotency_key** | **string**| A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. | |
+| **idempotency_key** | **string**| A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | |
 
 ### Return type
 

@@ -1,7 +1,7 @@
 =begin
 #Growwer API
 
-#The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601. 
+#The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters without spaces) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601. 
 
 The version of the OpenAPI document: 1
 Contact: support@growwer.com
@@ -23,7 +23,7 @@ module Growwer
     # Discards a media for one of your projects, as the web does. Discarding it again changes nothing. The media must be one the catalogue shows for the project: another media, including one of your own as a seller, is answered as not found.
     # @param id [String] The project.
     # @param media_id [String] The media.
-    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
     # @param [Hash] opts the optional parameters
     # @return [nil]
     def discard_media(id, media_id, idempotency_key, opts = {})
@@ -35,7 +35,7 @@ module Growwer
     # Discards a media for one of your projects, as the web does. Discarding it again changes nothing. The media must be one the catalogue shows for the project: another media, including one of your own as a seller, is answered as not found.
     # @param id [String] The project.
     # @param media_id [String] The media.
-    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
     # @param [Hash] opts the optional parameters
     # @return [Array<(nil, Integer, Hash)>] nil, response status code and response headers
     def discard_media_with_http_info(id, media_id, idempotency_key, opts = {})
@@ -103,7 +103,7 @@ module Growwer
     # Marks a media as a favourite of one of your projects, as the heart on the web does. Adding a favourite again changes nothing. The media must be one the catalogue shows for the project: another media, including one of your own as a seller, is answered as not found.
     # @param id [String] The project.
     # @param media_id [String] The media.
-    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
     # @param [Hash] opts the optional parameters
     # @return [nil]
     def favourite_media(id, media_id, idempotency_key, opts = {})
@@ -115,7 +115,7 @@ module Growwer
     # Marks a media as a favourite of one of your projects, as the heart on the web does. Adding a favourite again changes nothing. The media must be one the catalogue shows for the project: another media, including one of your own as a seller, is answered as not found.
     # @param id [String] The project.
     # @param media_id [String] The media.
-    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
     # @param [Hash] opts the optional parameters
     # @return [Array<(nil, Integer, Hash)>] nil, response status code and response headers
     def favourite_media_with_http_info(id, media_id, idempotency_key, opts = {})
@@ -438,7 +438,7 @@ module Growwer
     # Request specific medias for a project
     # Asks Growwer to find the medias of these domains for one of your projects, as the \"request specific domains\" form on the web does. Each entry may be a domain or a URL; it is read as its full domain, lowercased. Repeated domains are requested once, and a domain already requested changes nothing. Up to 200 distinct domains per call. They then appear in the project's catalogue with `project.requested` true (`requested=true` on GET /projects/{id}/medias) once Growwer lists them.
     # @param id [String] The project.
-    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
     # @param request_medias_request [RequestMediasRequest] 
     # @param [Hash] opts the optional parameters
     # @return [RequestMedias201Response]
@@ -450,7 +450,7 @@ module Growwer
     # Request specific medias for a project
     # Asks Growwer to find the medias of these domains for one of your projects, as the \&quot;request specific domains\&quot; form on the web does. Each entry may be a domain or a URL; it is read as its full domain, lowercased. Repeated domains are requested once, and a domain already requested changes nothing. Up to 200 distinct domains per call. They then appear in the project&#39;s catalogue with &#x60;project.requested&#x60; true (&#x60;requested&#x3D;true&#x60; on GET /projects/{id}/medias) once Growwer lists them.
     # @param id [String] The project.
-    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
     # @param request_medias_request [RequestMediasRequest] 
     # @param [Hash] opts the optional parameters
     # @return [Array<(RequestMedias201Response, Integer, Hash)>] RequestMedias201Response data, response status code and response headers
@@ -722,7 +722,7 @@ module Growwer
     # Restores a media you discarded for one of your projects. Restoring one that is not discarded changes nothing. It works for any media, even one the catalogue no longer shows.
     # @param id [String] The project.
     # @param media_id [String] The media.
-    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
     # @param [Hash] opts the optional parameters
     # @return [nil]
     def undiscard_media(id, media_id, idempotency_key, opts = {})
@@ -734,7 +734,7 @@ module Growwer
     # Restores a media you discarded for one of your projects. Restoring one that is not discarded changes nothing. It works for any media, even one the catalogue no longer shows.
     # @param id [String] The project.
     # @param media_id [String] The media.
-    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
     # @param [Hash] opts the optional parameters
     # @return [Array<(nil, Integer, Hash)>] nil, response status code and response headers
     def undiscard_media_with_http_info(id, media_id, idempotency_key, opts = {})
@@ -802,7 +802,7 @@ module Growwer
     # Removes a media from the favourites of one of your projects. Removing one that is not a favourite changes nothing. It works for any media, even one the catalogue no longer shows.
     # @param id [String] The project.
     # @param media_id [String] The media.
-    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
     # @param [Hash] opts the optional parameters
     # @return [nil]
     def unfavourite_media(id, media_id, idempotency_key, opts = {})
@@ -814,7 +814,7 @@ module Growwer
     # Removes a media from the favourites of one of your projects. Removing one that is not a favourite changes nothing. It works for any media, even one the catalogue no longer shows.
     # @param id [String] The project.
     # @param media_id [String] The media.
-    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
     # @param [Hash] opts the optional parameters
     # @return [Array<(nil, Integer, Hash)>] nil, response status code and response headers
     def unfavourite_media_with_http_info(id, media_id, idempotency_key, opts = {})

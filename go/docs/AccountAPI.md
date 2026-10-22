@@ -153,7 +153,7 @@ import (
 )
 
 func main() {
-	idempotencyKey := "idempotencyKey_example" // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+	idempotencyKey := "idempotencyKey_example" // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 	putSellerHolidayRequest := *openapiclient.NewPutSellerHolidayRequest(false) // PutSellerHolidayRequest | 
 
 	configuration := openapiclient.NewConfiguration()
@@ -179,7 +179,7 @@ Other parameters are passed through a pointer to a apiPutSellerHolidayRequest st
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **idempotencyKey** | **string** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. | 
+ **idempotencyKey** | **string** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | 
  **putSellerHolidayRequest** | [**PutSellerHolidayRequest**](PutSellerHolidayRequest.md) |  | 
 
 ### Return type

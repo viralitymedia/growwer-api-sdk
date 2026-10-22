@@ -45,7 +45,7 @@ async function example() {
     id: 38400000-8cf0-11bd-b23e-10b96e4ef00d,
     // string | The media.
     mediaId: 38400000-8cf0-11bd-b23e-10b96e4ef00d,
-    // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+    // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
     idempotencyKey: idempotencyKey_example,
   } satisfies DiscardMediaRequest;
 
@@ -68,7 +68,7 @@ example().catch(console.error);
 |------------- | ------------- | ------------- | -------------|
 | **id** | `string` | The project. | [Defaults to `undefined`] |
 | **mediaId** | `string` | The media. | [Defaults to `undefined`] |
-| **idempotencyKey** | `string` | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. | [Defaults to `undefined`] |
+| **idempotencyKey** | `string` | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | [Defaults to `undefined`] |
 
 ### Return type
 
@@ -88,7 +88,7 @@ example().catch(console.error);
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 | **204** | The media is discarded for the project. |  -  |
-| **400** | The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). |  -  |
+| **400** | The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). |  -  |
 | **401** | The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). |  -  |
 | **403** | The key lacks the capability the operation needs (code &#x60;insufficient_capability&#x60;), or the account may not perform it (code &#x60;forbidden&#x60;). |  -  |
 | **404** | The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). |  -  |
@@ -130,7 +130,7 @@ async function example() {
     id: 38400000-8cf0-11bd-b23e-10b96e4ef00d,
     // string | The media.
     mediaId: 38400000-8cf0-11bd-b23e-10b96e4ef00d,
-    // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+    // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
     idempotencyKey: idempotencyKey_example,
   } satisfies FavouriteMediaRequest;
 
@@ -153,7 +153,7 @@ example().catch(console.error);
 |------------- | ------------- | ------------- | -------------|
 | **id** | `string` | The project. | [Defaults to `undefined`] |
 | **mediaId** | `string` | The media. | [Defaults to `undefined`] |
-| **idempotencyKey** | `string` | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. | [Defaults to `undefined`] |
+| **idempotencyKey** | `string` | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | [Defaults to `undefined`] |
 
 ### Return type
 
@@ -173,7 +173,7 @@ example().catch(console.error);
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 | **204** | The media is a favourite of the project. |  -  |
-| **400** | The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). |  -  |
+| **400** | The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). |  -  |
 | **401** | The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). |  -  |
 | **403** | The key lacks the capability the operation needs (code &#x60;insufficient_capability&#x60;), or the account may not perform it (code &#x60;forbidden&#x60;). |  -  |
 | **404** | The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). |  -  |
@@ -473,7 +473,7 @@ async function example() {
   const body = {
     // string | The project.
     id: 38400000-8cf0-11bd-b23e-10b96e4ef00d,
-    // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+    // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
     idempotencyKey: idempotencyKey_example,
     // RequestMediasRequest
     requestMediasRequest: ...,
@@ -497,7 +497,7 @@ example().catch(console.error);
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
 | **id** | `string` | The project. | [Defaults to `undefined`] |
-| **idempotencyKey** | `string` | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. | [Defaults to `undefined`] |
+| **idempotencyKey** | `string` | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | [Defaults to `undefined`] |
 | **requestMediasRequest** | [RequestMediasRequest](RequestMediasRequest.md) |  | |
 
 ### Return type
@@ -518,7 +518,7 @@ example().catch(console.error);
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 | **201** | The domains were requested: each distinct domain, as Growwer read it. |  -  |
-| **400** | The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). |  -  |
+| **400** | The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). |  -  |
 | **401** | The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). |  -  |
 | **403** | The key lacks the capability the operation needs (code &#x60;insufficient_capability&#x60;), or the account may not perform it (code &#x60;forbidden&#x60;). |  -  |
 | **404** | The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). |  -  |
@@ -750,7 +750,7 @@ async function example() {
     id: 38400000-8cf0-11bd-b23e-10b96e4ef00d,
     // string | The media.
     mediaId: 38400000-8cf0-11bd-b23e-10b96e4ef00d,
-    // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+    // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
     idempotencyKey: idempotencyKey_example,
   } satisfies UndiscardMediaRequest;
 
@@ -773,7 +773,7 @@ example().catch(console.error);
 |------------- | ------------- | ------------- | -------------|
 | **id** | `string` | The project. | [Defaults to `undefined`] |
 | **mediaId** | `string` | The media. | [Defaults to `undefined`] |
-| **idempotencyKey** | `string` | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. | [Defaults to `undefined`] |
+| **idempotencyKey** | `string` | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | [Defaults to `undefined`] |
 
 ### Return type
 
@@ -793,7 +793,7 @@ example().catch(console.error);
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 | **204** | The media is not discarded for the project. |  -  |
-| **400** | The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). |  -  |
+| **400** | The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). |  -  |
 | **401** | The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). |  -  |
 | **403** | The key lacks the capability the operation needs (code &#x60;insufficient_capability&#x60;), or the account may not perform it (code &#x60;forbidden&#x60;). |  -  |
 | **404** | The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). |  -  |
@@ -835,7 +835,7 @@ async function example() {
     id: 38400000-8cf0-11bd-b23e-10b96e4ef00d,
     // string | The media.
     mediaId: 38400000-8cf0-11bd-b23e-10b96e4ef00d,
-    // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+    // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
     idempotencyKey: idempotencyKey_example,
   } satisfies UnfavouriteMediaRequest;
 
@@ -858,7 +858,7 @@ example().catch(console.error);
 |------------- | ------------- | ------------- | -------------|
 | **id** | `string` | The project. | [Defaults to `undefined`] |
 | **mediaId** | `string` | The media. | [Defaults to `undefined`] |
-| **idempotencyKey** | `string` | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. | [Defaults to `undefined`] |
+| **idempotencyKey** | `string` | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | [Defaults to `undefined`] |
 
 ### Return type
 
@@ -878,7 +878,7 @@ example().catch(console.error);
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 | **204** | The media is not a favourite of the project. |  -  |
-| **400** | The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). |  -  |
+| **400** | The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). |  -  |
 | **401** | The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). |  -  |
 | **403** | The key lacks the capability the operation needs (code &#x60;insufficient_capability&#x60;), or the account may not perform it (code &#x60;forbidden&#x60;). |  -  |
 | **404** | The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). |  -  |

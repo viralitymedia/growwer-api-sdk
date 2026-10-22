@@ -1,7 +1,7 @@
 =begin
 #Growwer API
 
-#The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601. 
+#The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters without spaces) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601. 
 
 The version of the OpenAPI document: 1
 Contact: support@growwer.com
@@ -22,7 +22,7 @@ module Growwer
     # Accept an order
     # Accepts an order placed on one of your medias (`state` `pending_acceptance`), as the web does. A post order whose draft is still to be written (by you or by Growwer) moves to `pending_draft`; any other order moves to `pending_order_delivery`. The buyer is told. Takes no body.
     # @param id [String] 
-    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
     # @param [Hash] opts the optional parameters
     # @return [SellerOrder]
     def accept_seller_order(id, idempotency_key, opts = {})
@@ -33,7 +33,7 @@ module Growwer
     # Accept an order
     # Accepts an order placed on one of your medias (&#x60;state&#x60; &#x60;pending_acceptance&#x60;), as the web does. A post order whose draft is still to be written (by you or by Growwer) moves to &#x60;pending_draft&#x60;; any other order moves to &#x60;pending_order_delivery&#x60;. The buyer is told. Takes no body.
     # @param id [String] 
-    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
     # @param [Hash] opts the optional parameters
     # @return [Array<(SellerOrder, Integer, Hash)>] SellerOrder data, response status code and response headers
     def accept_seller_order_with_http_info(id, idempotency_key, opts = {})
@@ -96,7 +96,7 @@ module Growwer
     # Deliver an order
     # Delivers an order placed on one of your medias (`state` `pending_order_delivery`), as the web does. A post order takes the URL of the published post and the confirmation of its publication date; a link addition order takes no body, and any field is refused. The order moves to `pending_order_delivery_review` and the buyer is asked to review it, or, for a post order whose scheduled publication date is still to come, to `scheduled` without telling the buyer yet. The URL is checked to be a URL only, as the web does.
     # @param id [String] 
-    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
     # @param [Hash] opts the optional parameters
     # @option opts [SellerOrderPostDelivery] :seller_order_post_delivery 
     # @return [SellerOrder]
@@ -108,7 +108,7 @@ module Growwer
     # Deliver an order
     # Delivers an order placed on one of your medias (&#x60;state&#x60; &#x60;pending_order_delivery&#x60;), as the web does. A post order takes the URL of the published post and the confirmation of its publication date; a link addition order takes no body, and any field is refused. The order moves to &#x60;pending_order_delivery_review&#x60; and the buyer is asked to review it, or, for a post order whose scheduled publication date is still to come, to &#x60;scheduled&#x60; without telling the buyer yet. The URL is checked to be a URL only, as the web does.
     # @param id [String] 
-    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
     # @param [Hash] opts the optional parameters
     # @option opts [SellerOrderPostDelivery] :seller_order_post_delivery 
     # @return [Array<(SellerOrder, Integer, Hash)>] SellerOrder data, response status code and response headers
@@ -177,7 +177,7 @@ module Growwer
     # Deliver a draft
     # Delivers the draft of a post order placed on one of your medias whose draft you write (`state` `pending_draft`), as the web does, from a file you uploaded with POST /files. The order moves to `pending_draft_review` when the buyer reviews drafts, otherwise to `pending_order_delivery`. The file is used up once the draft is delivered; a refused request leaves it usable.
     # @param id [String] 
-    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
     # @param seller_order_draft_file [SellerOrderDraftFile] 
     # @param [Hash] opts the optional parameters
     # @return [SellerOrder]
@@ -189,7 +189,7 @@ module Growwer
     # Deliver a draft
     # Delivers the draft of a post order placed on one of your medias whose draft you write (&#x60;state&#x60; &#x60;pending_draft&#x60;), as the web does, from a file you uploaded with POST /files. The order moves to &#x60;pending_draft_review&#x60; when the buyer reviews drafts, otherwise to &#x60;pending_order_delivery&#x60;. The file is used up once the draft is delivered; a refused request leaves it usable.
     # @param id [String] 
-    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
     # @param seller_order_draft_file [SellerOrderDraftFile] 
     # @param [Hash] opts the optional parameters
     # @return [Array<(SellerOrder, Integer, Hash)>] SellerOrder data, response status code and response headers
@@ -262,7 +262,7 @@ module Growwer
     # Deliver a draft update
     # Delivers the draft update the buyer asked for on a post order placed on one of your medias whose draft you write (`state` `pending_draft_update`), as the web does, from a file you uploaded with POST /files. The order moves back to `pending_draft_review`. The file is used up once the draft is delivered; a refused request leaves it usable.
     # @param id [String] 
-    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
     # @param seller_order_draft_file [SellerOrderDraftFile] 
     # @param [Hash] opts the optional parameters
     # @return [SellerOrder]
@@ -274,7 +274,7 @@ module Growwer
     # Deliver a draft update
     # Delivers the draft update the buyer asked for on a post order placed on one of your medias whose draft you write (&#x60;state&#x60; &#x60;pending_draft_update&#x60;), as the web does, from a file you uploaded with POST /files. The order moves back to &#x60;pending_draft_review&#x60;. The file is used up once the draft is delivered; a refused request leaves it usable.
     # @param id [String] 
-    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
     # @param seller_order_draft_file [SellerOrderDraftFile] 
     # @param [Hash] opts the optional parameters
     # @return [Array<(SellerOrder, Integer, Hash)>] SellerOrder data, response status code and response headers
@@ -347,7 +347,7 @@ module Growwer
     # Deliver an update
     # Delivers the update the buyer asked for on an order placed on one of your medias (`state` `pending_order_delivery_update`), as the web does. A post order takes the URL of the published post, which may be the same as before, and the confirmation of its publication date; both must be sent. A link addition order takes no body, and any field is refused. The order moves back to `pending_order_delivery_review` and the buyer is asked to review it.
     # @param id [String] 
-    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
     # @param [Hash] opts the optional parameters
     # @option opts [SellerOrderPostDelivery] :seller_order_post_delivery 
     # @return [SellerOrder]
@@ -359,7 +359,7 @@ module Growwer
     # Deliver an update
     # Delivers the update the buyer asked for on an order placed on one of your medias (&#x60;state&#x60; &#x60;pending_order_delivery_update&#x60;), as the web does. A post order takes the URL of the published post, which may be the same as before, and the confirmation of its publication date; both must be sent. A link addition order takes no body, and any field is refused. The order moves back to &#x60;pending_order_delivery_review&#x60; and the buyer is asked to review it.
     # @param id [String] 
-    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
     # @param [Hash] opts the optional parameters
     # @option opts [SellerOrderPostDelivery] :seller_order_post_delivery 
     # @return [Array<(SellerOrder, Integer, Hash)>] SellerOrder data, response status code and response headers
@@ -708,7 +708,7 @@ module Growwer
     # Refuse a draft update
     # Refuses the draft update the buyer asked for on a post order placed on one of your medias whose draft you write (`state` `pending_draft_update`), as the web does. The order moves back to `pending_draft_review` and the buyer is told your reason. A draft Growwer or the buyer writes cannot be refused here.
     # @param id [String] 
-    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
     # @param seller_order_refutation [SellerOrderRefutation] 
     # @param [Hash] opts the optional parameters
     # @return [SellerOrder]
@@ -720,7 +720,7 @@ module Growwer
     # Refuse a draft update
     # Refuses the draft update the buyer asked for on a post order placed on one of your medias whose draft you write (&#x60;state&#x60; &#x60;pending_draft_update&#x60;), as the web does. The order moves back to &#x60;pending_draft_review&#x60; and the buyer is told your reason. A draft Growwer or the buyer writes cannot be refused here.
     # @param id [String] 
-    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
     # @param seller_order_refutation [SellerOrderRefutation] 
     # @param [Hash] opts the optional parameters
     # @return [Array<(SellerOrder, Integer, Hash)>] SellerOrder data, response status code and response headers
@@ -793,7 +793,7 @@ module Growwer
     # Refuse an update
     # Refuses the update the buyer asked for on an order placed on one of your medias (`state` `pending_order_delivery_update`), as the web does. The order moves back to `pending_order_delivery_review` and the buyer is told your reason.
     # @param id [String] 
-    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
     # @param seller_order_refutation [SellerOrderRefutation] 
     # @param [Hash] opts the optional parameters
     # @return [SellerOrder]
@@ -805,7 +805,7 @@ module Growwer
     # Refuse an update
     # Refuses the update the buyer asked for on an order placed on one of your medias (&#x60;state&#x60; &#x60;pending_order_delivery_update&#x60;), as the web does. The order moves back to &#x60;pending_order_delivery_review&#x60; and the buyer is told your reason.
     # @param id [String] 
-    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
     # @param seller_order_refutation [SellerOrderRefutation] 
     # @param [Hash] opts the optional parameters
     # @return [Array<(SellerOrder, Integer, Hash)>] SellerOrder data, response status code and response headers
@@ -878,7 +878,7 @@ module Growwer
     # Reject an order
     # Rejects an order placed on one of your medias that you have not accepted yet (`state` `pending_acceptance`), as the web does. The order moves to `rejected_by_seller`, its price returns to the buyer, and the buyer is told your reason.
     # @param id [String] 
-    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
     # @param seller_order_rejection [SellerOrderRejection] 
     # @param [Hash] opts the optional parameters
     # @return [SellerOrder]
@@ -890,7 +890,7 @@ module Growwer
     # Reject an order
     # Rejects an order placed on one of your medias that you have not accepted yet (&#x60;state&#x60; &#x60;pending_acceptance&#x60;), as the web does. The order moves to &#x60;rejected_by_seller&#x60;, its price returns to the buyer, and the buyer is told your reason.
     # @param id [String] 
-    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
     # @param seller_order_rejection [SellerOrderRejection] 
     # @param [Hash] opts the optional parameters
     # @return [Array<(SellerOrder, Integer, Hash)>] SellerOrder data, response status code and response headers

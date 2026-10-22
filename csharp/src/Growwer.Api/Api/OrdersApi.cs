@@ -1,7 +1,7 @@
 /*
  * Growwer API
  *
- * The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601. 
+ * The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters without spaces) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601. 
  *
  * The version of the OpenAPI document: 1
  * Contact: support@growwer.com
@@ -36,7 +36,7 @@ namespace Growwer.Api.Api
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <returns>Order</returns>
         Order ApproveOrder(Guid id, string idempotencyKey);
 
@@ -48,7 +48,7 @@ namespace Growwer.Api.Api
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <returns>ApiResponse of Order</returns>
         ApiResponse<Order> ApproveOrderWithHttpInfo(Guid id, string idempotencyKey);
         /// <summary>
@@ -59,7 +59,7 @@ namespace Growwer.Api.Api
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <returns>Order</returns>
         Order ApproveOrderDraft(Guid id, string idempotencyKey);
 
@@ -71,7 +71,7 @@ namespace Growwer.Api.Api
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <returns>ApiResponse of Order</returns>
         ApiResponse<Order> ApproveOrderDraftWithHttpInfo(Guid id, string idempotencyKey);
         /// <summary>
@@ -82,7 +82,7 @@ namespace Growwer.Api.Api
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="orderActionReason"></param>
         /// <returns>Order</returns>
         Order CancelOrder(Guid id, string idempotencyKey, OrderActionReason orderActionReason);
@@ -95,7 +95,7 @@ namespace Growwer.Api.Api
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="orderActionReason"></param>
         /// <returns>ApiResponse of Order</returns>
         ApiResponse<Order> CancelOrderWithHttpInfo(Guid id, string idempotencyKey, OrderActionReason orderActionReason);
@@ -106,7 +106,7 @@ namespace Growwer.Api.Api
         /// Places an order on a media for one of your projects and pays its price from your wallet&#39;s available balance, as ordering on the web does. Estimate the order first (POST /orders/estimate) and send the price it answers as &#x60;expectedPrice&#x60;: the order is placed only at that price.  Placing the same order (same project, media, type and price) again within 5 seconds of one still in progress is refused with &#x60;duplicate_order&#x60;. Its &#x60;details.orderId&#x60; is the earlier order, or null when that order has finished or was deleted since.  A proposed draft (&#x60;proposedDraftFileId&#x60;, from POST /files) is used up when the order is placed. If the order is then refused because another request changed your balance, the media or its price, or placed the same order, the file is used up all the same and the refusal&#39;s message says so: upload it again before retrying.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="orderCreateRequest"></param>
         /// <returns>Order</returns>
         Order CreateOrder(string idempotencyKey, OrderCreateRequest orderCreateRequest);
@@ -118,7 +118,7 @@ namespace Growwer.Api.Api
         /// Places an order on a media for one of your projects and pays its price from your wallet&#39;s available balance, as ordering on the web does. Estimate the order first (POST /orders/estimate) and send the price it answers as &#x60;expectedPrice&#x60;: the order is placed only at that price.  Placing the same order (same project, media, type and price) again within 5 seconds of one still in progress is refused with &#x60;duplicate_order&#x60;. Its &#x60;details.orderId&#x60; is the earlier order, or null when that order has finished or was deleted since.  A proposed draft (&#x60;proposedDraftFileId&#x60;, from POST /files) is used up when the order is placed. If the order is then refused because another request changed your balance, the media or its price, or placed the same order, the file is used up all the same and the refusal&#39;s message says so: upload it again before retrying.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="orderCreateRequest"></param>
         /// <returns>ApiResponse of Order</returns>
         ApiResponse<Order> CreateOrderWithHttpInfo(string idempotencyKey, OrderCreateRequest orderCreateRequest);
@@ -247,7 +247,7 @@ namespace Growwer.Api.Api
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="orderActionReason"></param>
         /// <returns>Order</returns>
         Order RequestOrderDraftUpdate(Guid id, string idempotencyKey, OrderActionReason orderActionReason);
@@ -260,7 +260,7 @@ namespace Growwer.Api.Api
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="orderActionReason"></param>
         /// <returns>ApiResponse of Order</returns>
         ApiResponse<Order> RequestOrderDraftUpdateWithHttpInfo(Guid id, string idempotencyKey, OrderActionReason orderActionReason);
@@ -272,7 +272,7 @@ namespace Growwer.Api.Api
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="orderActionReason"></param>
         /// <returns>Order</returns>
         Order RequestOrderUpdate(Guid id, string idempotencyKey, OrderActionReason orderActionReason);
@@ -285,7 +285,7 @@ namespace Growwer.Api.Api
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="orderActionReason"></param>
         /// <returns>ApiResponse of Order</returns>
         ApiResponse<Order> RequestOrderUpdateWithHttpInfo(Guid id, string idempotencyKey, OrderActionReason orderActionReason);
@@ -306,7 +306,7 @@ namespace Growwer.Api.Api
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Order</returns>
         System.Threading.Tasks.Task<Order> ApproveOrderAsync(Guid id, string idempotencyKey, System.Threading.CancellationToken cancellationToken = default);
@@ -319,7 +319,7 @@ namespace Growwer.Api.Api
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Order)</returns>
         System.Threading.Tasks.Task<ApiResponse<Order>> ApproveOrderWithHttpInfoAsync(Guid id, string idempotencyKey, System.Threading.CancellationToken cancellationToken = default);
@@ -331,7 +331,7 @@ namespace Growwer.Api.Api
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Order</returns>
         System.Threading.Tasks.Task<Order> ApproveOrderDraftAsync(Guid id, string idempotencyKey, System.Threading.CancellationToken cancellationToken = default);
@@ -344,7 +344,7 @@ namespace Growwer.Api.Api
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Order)</returns>
         System.Threading.Tasks.Task<ApiResponse<Order>> ApproveOrderDraftWithHttpInfoAsync(Guid id, string idempotencyKey, System.Threading.CancellationToken cancellationToken = default);
@@ -356,7 +356,7 @@ namespace Growwer.Api.Api
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="orderActionReason"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Order</returns>
@@ -370,7 +370,7 @@ namespace Growwer.Api.Api
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="orderActionReason"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Order)</returns>
@@ -382,7 +382,7 @@ namespace Growwer.Api.Api
         /// Places an order on a media for one of your projects and pays its price from your wallet&#39;s available balance, as ordering on the web does. Estimate the order first (POST /orders/estimate) and send the price it answers as &#x60;expectedPrice&#x60;: the order is placed only at that price.  Placing the same order (same project, media, type and price) again within 5 seconds of one still in progress is refused with &#x60;duplicate_order&#x60;. Its &#x60;details.orderId&#x60; is the earlier order, or null when that order has finished or was deleted since.  A proposed draft (&#x60;proposedDraftFileId&#x60;, from POST /files) is used up when the order is placed. If the order is then refused because another request changed your balance, the media or its price, or placed the same order, the file is used up all the same and the refusal&#39;s message says so: upload it again before retrying.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="orderCreateRequest"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Order</returns>
@@ -395,7 +395,7 @@ namespace Growwer.Api.Api
         /// Places an order on a media for one of your projects and pays its price from your wallet&#39;s available balance, as ordering on the web does. Estimate the order first (POST /orders/estimate) and send the price it answers as &#x60;expectedPrice&#x60;: the order is placed only at that price.  Placing the same order (same project, media, type and price) again within 5 seconds of one still in progress is refused with &#x60;duplicate_order&#x60;. Its &#x60;details.orderId&#x60; is the earlier order, or null when that order has finished or was deleted since.  A proposed draft (&#x60;proposedDraftFileId&#x60;, from POST /files) is used up when the order is placed. If the order is then refused because another request changed your balance, the media or its price, or placed the same order, the file is used up all the same and the refusal&#39;s message says so: upload it again before retrying.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="orderCreateRequest"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Order)</returns>
@@ -535,7 +535,7 @@ namespace Growwer.Api.Api
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="orderActionReason"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Order</returns>
@@ -549,7 +549,7 @@ namespace Growwer.Api.Api
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="orderActionReason"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Order)</returns>
@@ -562,7 +562,7 @@ namespace Growwer.Api.Api
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="orderActionReason"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Order</returns>
@@ -576,7 +576,7 @@ namespace Growwer.Api.Api
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="orderActionReason"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Order)</returns>
@@ -799,7 +799,7 @@ namespace Growwer.Api.Api
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <returns>Order</returns>
         public Order ApproveOrder(Guid id, string idempotencyKey)
         {
@@ -812,7 +812,7 @@ namespace Growwer.Api.Api
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <returns>ApiResponse of Order</returns>
         public Growwer.Api.Client.ApiResponse<Order> ApproveOrderWithHttpInfo(Guid id, string idempotencyKey)
         {
@@ -863,7 +863,7 @@ namespace Growwer.Api.Api
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Order</returns>
         public async System.Threading.Tasks.Task<Order> ApproveOrderAsync(Guid id, string idempotencyKey, System.Threading.CancellationToken cancellationToken = default)
@@ -877,7 +877,7 @@ namespace Growwer.Api.Api
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Order)</returns>
         public async System.Threading.Tasks.Task<Growwer.Api.Client.ApiResponse<Order>> ApproveOrderWithHttpInfoAsync(Guid id, string idempotencyKey, System.Threading.CancellationToken cancellationToken = default)
@@ -932,7 +932,7 @@ namespace Growwer.Api.Api
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <returns>Order</returns>
         public Order ApproveOrderDraft(Guid id, string idempotencyKey)
         {
@@ -945,7 +945,7 @@ namespace Growwer.Api.Api
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <returns>ApiResponse of Order</returns>
         public Growwer.Api.Client.ApiResponse<Order> ApproveOrderDraftWithHttpInfo(Guid id, string idempotencyKey)
         {
@@ -996,7 +996,7 @@ namespace Growwer.Api.Api
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Order</returns>
         public async System.Threading.Tasks.Task<Order> ApproveOrderDraftAsync(Guid id, string idempotencyKey, System.Threading.CancellationToken cancellationToken = default)
@@ -1010,7 +1010,7 @@ namespace Growwer.Api.Api
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Order)</returns>
         public async System.Threading.Tasks.Task<Growwer.Api.Client.ApiResponse<Order>> ApproveOrderDraftWithHttpInfoAsync(Guid id, string idempotencyKey, System.Threading.CancellationToken cancellationToken = default)
@@ -1065,7 +1065,7 @@ namespace Growwer.Api.Api
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="orderActionReason"></param>
         /// <returns>Order</returns>
         public Order CancelOrder(Guid id, string idempotencyKey, OrderActionReason orderActionReason)
@@ -1079,7 +1079,7 @@ namespace Growwer.Api.Api
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="orderActionReason"></param>
         /// <returns>ApiResponse of Order</returns>
         public Growwer.Api.Client.ApiResponse<Order> CancelOrderWithHttpInfo(Guid id, string idempotencyKey, OrderActionReason orderActionReason)
@@ -1137,7 +1137,7 @@ namespace Growwer.Api.Api
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="orderActionReason"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Order</returns>
@@ -1152,7 +1152,7 @@ namespace Growwer.Api.Api
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="orderActionReason"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Order)</returns>
@@ -1213,7 +1213,7 @@ namespace Growwer.Api.Api
         /// Place an order Places an order on a media for one of your projects and pays its price from your wallet&#39;s available balance, as ordering on the web does. Estimate the order first (POST /orders/estimate) and send the price it answers as &#x60;expectedPrice&#x60;: the order is placed only at that price.  Placing the same order (same project, media, type and price) again within 5 seconds of one still in progress is refused with &#x60;duplicate_order&#x60;. Its &#x60;details.orderId&#x60; is the earlier order, or null when that order has finished or was deleted since.  A proposed draft (&#x60;proposedDraftFileId&#x60;, from POST /files) is used up when the order is placed. If the order is then refused because another request changed your balance, the media or its price, or placed the same order, the file is used up all the same and the refusal&#39;s message says so: upload it again before retrying.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="orderCreateRequest"></param>
         /// <returns>Order</returns>
         public Order CreateOrder(string idempotencyKey, OrderCreateRequest orderCreateRequest)
@@ -1226,7 +1226,7 @@ namespace Growwer.Api.Api
         /// Place an order Places an order on a media for one of your projects and pays its price from your wallet&#39;s available balance, as ordering on the web does. Estimate the order first (POST /orders/estimate) and send the price it answers as &#x60;expectedPrice&#x60;: the order is placed only at that price.  Placing the same order (same project, media, type and price) again within 5 seconds of one still in progress is refused with &#x60;duplicate_order&#x60;. Its &#x60;details.orderId&#x60; is the earlier order, or null when that order has finished or was deleted since.  A proposed draft (&#x60;proposedDraftFileId&#x60;, from POST /files) is used up when the order is placed. If the order is then refused because another request changed your balance, the media or its price, or placed the same order, the file is used up all the same and the refusal&#39;s message says so: upload it again before retrying.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="orderCreateRequest"></param>
         /// <returns>ApiResponse of Order</returns>
         public Growwer.Api.Client.ApiResponse<Order> CreateOrderWithHttpInfo(string idempotencyKey, OrderCreateRequest orderCreateRequest)
@@ -1282,7 +1282,7 @@ namespace Growwer.Api.Api
         /// Place an order Places an order on a media for one of your projects and pays its price from your wallet&#39;s available balance, as ordering on the web does. Estimate the order first (POST /orders/estimate) and send the price it answers as &#x60;expectedPrice&#x60;: the order is placed only at that price.  Placing the same order (same project, media, type and price) again within 5 seconds of one still in progress is refused with &#x60;duplicate_order&#x60;. Its &#x60;details.orderId&#x60; is the earlier order, or null when that order has finished or was deleted since.  A proposed draft (&#x60;proposedDraftFileId&#x60;, from POST /files) is used up when the order is placed. If the order is then refused because another request changed your balance, the media or its price, or placed the same order, the file is used up all the same and the refusal&#39;s message says so: upload it again before retrying.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="orderCreateRequest"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Order</returns>
@@ -1296,7 +1296,7 @@ namespace Growwer.Api.Api
         /// Place an order Places an order on a media for one of your projects and pays its price from your wallet&#39;s available balance, as ordering on the web does. Estimate the order first (POST /orders/estimate) and send the price it answers as &#x60;expectedPrice&#x60;: the order is placed only at that price.  Placing the same order (same project, media, type and price) again within 5 seconds of one still in progress is refused with &#x60;duplicate_order&#x60;. Its &#x60;details.orderId&#x60; is the earlier order, or null when that order has finished or was deleted since.  A proposed draft (&#x60;proposedDraftFileId&#x60;, from POST /files) is used up when the order is placed. If the order is then refused because another request changed your balance, the media or its price, or placed the same order, the file is used up all the same and the refusal&#39;s message says so: upload it again before retrying.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="orderCreateRequest"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Order)</returns>
@@ -2044,7 +2044,7 @@ namespace Growwer.Api.Api
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="orderActionReason"></param>
         /// <returns>Order</returns>
         public Order RequestOrderDraftUpdate(Guid id, string idempotencyKey, OrderActionReason orderActionReason)
@@ -2058,7 +2058,7 @@ namespace Growwer.Api.Api
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="orderActionReason"></param>
         /// <returns>ApiResponse of Order</returns>
         public Growwer.Api.Client.ApiResponse<Order> RequestOrderDraftUpdateWithHttpInfo(Guid id, string idempotencyKey, OrderActionReason orderActionReason)
@@ -2116,7 +2116,7 @@ namespace Growwer.Api.Api
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="orderActionReason"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Order</returns>
@@ -2131,7 +2131,7 @@ namespace Growwer.Api.Api
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="orderActionReason"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Order)</returns>
@@ -2193,7 +2193,7 @@ namespace Growwer.Api.Api
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="orderActionReason"></param>
         /// <returns>Order</returns>
         public Order RequestOrderUpdate(Guid id, string idempotencyKey, OrderActionReason orderActionReason)
@@ -2207,7 +2207,7 @@ namespace Growwer.Api.Api
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="orderActionReason"></param>
         /// <returns>ApiResponse of Order</returns>
         public Growwer.Api.Client.ApiResponse<Order> RequestOrderUpdateWithHttpInfo(Guid id, string idempotencyKey, OrderActionReason orderActionReason)
@@ -2265,7 +2265,7 @@ namespace Growwer.Api.Api
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="orderActionReason"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Order</returns>
@@ -2280,7 +2280,7 @@ namespace Growwer.Api.Api
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="orderActionReason"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Order)</returns>

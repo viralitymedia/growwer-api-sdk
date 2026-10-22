@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Growwer API
- * The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601. 
+ * The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters without spaces) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601. 
  *
  * The version of the OpenAPI document: 1
  * Contact: support@growwer.com
@@ -122,7 +122,7 @@ export interface SellerOrdersApiInterface {
     /**
      * Creates request options for acceptSellerOrder without sending the request
      * @param {string} id 
-     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
      * @throws {RequiredError}
      * @memberof SellerOrdersApiInterface
      */
@@ -132,7 +132,7 @@ export interface SellerOrdersApiInterface {
      * Accepts an order placed on one of your medias (`state` `pending_acceptance`), as the web does. A post order whose draft is still to be written (by you or by Growwer) moves to `pending_draft`; any other order moves to `pending_order_delivery`. The buyer is told. Takes no body.
      * @summary Accept an order
      * @param {string} id 
-     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SellerOrdersApiInterface
@@ -148,7 +148,7 @@ export interface SellerOrdersApiInterface {
     /**
      * Creates request options for deliverSellerOrder without sending the request
      * @param {string} id 
-     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
      * @param {SellerOrderPostDelivery} [sellerOrderPostDelivery] 
      * @throws {RequiredError}
      * @memberof SellerOrdersApiInterface
@@ -159,7 +159,7 @@ export interface SellerOrdersApiInterface {
      * Delivers an order placed on one of your medias (`state` `pending_order_delivery`), as the web does. A post order takes the URL of the published post and the confirmation of its publication date; a link addition order takes no body, and any field is refused. The order moves to `pending_order_delivery_review` and the buyer is asked to review it, or, for a post order whose scheduled publication date is still to come, to `scheduled` without telling the buyer yet. The URL is checked to be a URL only, as the web does.
      * @summary Deliver an order
      * @param {string} id 
-     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
      * @param {SellerOrderPostDelivery} [sellerOrderPostDelivery] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -176,7 +176,7 @@ export interface SellerOrdersApiInterface {
     /**
      * Creates request options for deliverSellerOrderDraft without sending the request
      * @param {string} id 
-     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
      * @param {SellerOrderDraftFile} sellerOrderDraftFile 
      * @throws {RequiredError}
      * @memberof SellerOrdersApiInterface
@@ -187,7 +187,7 @@ export interface SellerOrdersApiInterface {
      * Delivers the draft of a post order placed on one of your medias whose draft you write (`state` `pending_draft`), as the web does, from a file you uploaded with POST /files. The order moves to `pending_draft_review` when the buyer reviews drafts, otherwise to `pending_order_delivery`. The file is used up once the draft is delivered; a refused request leaves it usable.
      * @summary Deliver a draft
      * @param {string} id 
-     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
      * @param {SellerOrderDraftFile} sellerOrderDraftFile 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -204,7 +204,7 @@ export interface SellerOrdersApiInterface {
     /**
      * Creates request options for deliverSellerOrderDraftUpdate without sending the request
      * @param {string} id 
-     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
      * @param {SellerOrderDraftFile} sellerOrderDraftFile 
      * @throws {RequiredError}
      * @memberof SellerOrdersApiInterface
@@ -215,7 +215,7 @@ export interface SellerOrdersApiInterface {
      * Delivers the draft update the buyer asked for on a post order placed on one of your medias whose draft you write (`state` `pending_draft_update`), as the web does, from a file you uploaded with POST /files. The order moves back to `pending_draft_review`. The file is used up once the draft is delivered; a refused request leaves it usable.
      * @summary Deliver a draft update
      * @param {string} id 
-     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
      * @param {SellerOrderDraftFile} sellerOrderDraftFile 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -232,7 +232,7 @@ export interface SellerOrdersApiInterface {
     /**
      * Creates request options for deliverSellerOrderUpdate without sending the request
      * @param {string} id 
-     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
      * @param {SellerOrderPostDelivery} [sellerOrderPostDelivery] 
      * @throws {RequiredError}
      * @memberof SellerOrdersApiInterface
@@ -243,7 +243,7 @@ export interface SellerOrdersApiInterface {
      * Delivers the update the buyer asked for on an order placed on one of your medias (`state` `pending_order_delivery_update`), as the web does. A post order takes the URL of the published post, which may be the same as before, and the confirmation of its publication date; both must be sent. A link addition order takes no body, and any field is refused. The order moves back to `pending_order_delivery_review` and the buyer is asked to review it.
      * @summary Deliver an update
      * @param {string} id 
-     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
      * @param {SellerOrderPostDelivery} [sellerOrderPostDelivery] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -366,7 +366,7 @@ export interface SellerOrdersApiInterface {
     /**
      * Creates request options for refuteSellerOrderDraftUpdate without sending the request
      * @param {string} id 
-     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
      * @param {SellerOrderRefutation} sellerOrderRefutation 
      * @throws {RequiredError}
      * @memberof SellerOrdersApiInterface
@@ -377,7 +377,7 @@ export interface SellerOrdersApiInterface {
      * Refuses the draft update the buyer asked for on a post order placed on one of your medias whose draft you write (`state` `pending_draft_update`), as the web does. The order moves back to `pending_draft_review` and the buyer is told your reason. A draft Growwer or the buyer writes cannot be refused here.
      * @summary Refuse a draft update
      * @param {string} id 
-     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
      * @param {SellerOrderRefutation} sellerOrderRefutation 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -394,7 +394,7 @@ export interface SellerOrdersApiInterface {
     /**
      * Creates request options for refuteSellerOrderUpdate without sending the request
      * @param {string} id 
-     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
      * @param {SellerOrderRefutation} sellerOrderRefutation 
      * @throws {RequiredError}
      * @memberof SellerOrdersApiInterface
@@ -405,7 +405,7 @@ export interface SellerOrdersApiInterface {
      * Refuses the update the buyer asked for on an order placed on one of your medias (`state` `pending_order_delivery_update`), as the web does. The order moves back to `pending_order_delivery_review` and the buyer is told your reason.
      * @summary Refuse an update
      * @param {string} id 
-     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
      * @param {SellerOrderRefutation} sellerOrderRefutation 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -422,7 +422,7 @@ export interface SellerOrdersApiInterface {
     /**
      * Creates request options for rejectSellerOrder without sending the request
      * @param {string} id 
-     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
      * @param {SellerOrderRejection} sellerOrderRejection 
      * @throws {RequiredError}
      * @memberof SellerOrdersApiInterface
@@ -433,7 +433,7 @@ export interface SellerOrdersApiInterface {
      * Rejects an order placed on one of your medias that you have not accepted yet (`state` `pending_acceptance`), as the web does. The order moves to `rejected_by_seller`, its price returns to the buyer, and the buyer is told your reason.
      * @summary Reject an order
      * @param {string} id 
-     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
      * @param {SellerOrderRejection} sellerOrderRejection 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}

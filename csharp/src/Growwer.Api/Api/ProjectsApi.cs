@@ -1,7 +1,7 @@
 /*
  * Growwer API
  *
- * The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601. 
+ * The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters without spaces) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601. 
  *
  * The version of the OpenAPI document: 1
  * Contact: support@growwer.com
@@ -35,7 +35,7 @@ namespace Growwer.Api.Api
         /// Creates a project for a website, as the web&#39;s project creation does. Growwer then analyses it in the background to recommend media: the project is answered with &#x60;state: analyzing&#x60; and turns &#x60;finished&#x60; when the analysis ends. Analysis can take hours, and it never finishes when no medium matches the project, so poll GET /projects/{id} with backoff and use &#x60;createdAt&#x60; to decide when to stop.  Every value is validated as on the web: &#x60;topics&#x60;, &#x60;language&#x60; and &#x60;country&#x60; take the identifiers GET /vocabulary publishes.  Creating a project also categorises its website through an external service, as the web does. When that service fails the answer is 500, although the project may already be saved, and a retry under the same Idempotency-Key answers 409 &#x60;idempotency_outcome_unknown&#x60;. After either, list your projects (GET /projects) before retrying with a new key, or you may create a duplicate.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="createProjectRequest"></param>
         /// <returns>Project</returns>
         Project CreateProject(string idempotencyKey, CreateProjectRequest createProjectRequest);
@@ -47,7 +47,7 @@ namespace Growwer.Api.Api
         /// Creates a project for a website, as the web&#39;s project creation does. Growwer then analyses it in the background to recommend media: the project is answered with &#x60;state: analyzing&#x60; and turns &#x60;finished&#x60; when the analysis ends. Analysis can take hours, and it never finishes when no medium matches the project, so poll GET /projects/{id} with backoff and use &#x60;createdAt&#x60; to decide when to stop.  Every value is validated as on the web: &#x60;topics&#x60;, &#x60;language&#x60; and &#x60;country&#x60; take the identifiers GET /vocabulary publishes.  Creating a project also categorises its website through an external service, as the web does. When that service fails the answer is 500, although the project may already be saved, and a retry under the same Idempotency-Key answers 409 &#x60;idempotency_outcome_unknown&#x60;. After either, list your projects (GET /projects) before retrying with a new key, or you may create a duplicate.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="createProjectRequest"></param>
         /// <returns>ApiResponse of Project</returns>
         ApiResponse<Project> CreateProjectWithHttpInfo(string idempotencyKey, CreateProjectRequest createProjectRequest);
@@ -59,7 +59,7 @@ namespace Growwer.Api.Api
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <returns></returns>
         void DeleteProject(Guid id, string idempotencyKey);
 
@@ -71,7 +71,7 @@ namespace Growwer.Api.Api
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <returns>ApiResponse of Object(void)</returns>
         ApiResponse<Object> DeleteProjectWithHttpInfo(Guid id, string idempotencyKey);
         /// <summary>
@@ -126,7 +126,7 @@ namespace Growwer.Api.Api
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="updateProjectRequest"></param>
         /// <returns>Project</returns>
         Project UpdateProject(Guid id, string idempotencyKey, UpdateProjectRequest updateProjectRequest);
@@ -139,7 +139,7 @@ namespace Growwer.Api.Api
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="updateProjectRequest"></param>
         /// <returns>ApiResponse of Project</returns>
         ApiResponse<Project> UpdateProjectWithHttpInfo(Guid id, string idempotencyKey, UpdateProjectRequest updateProjectRequest);
@@ -159,7 +159,7 @@ namespace Growwer.Api.Api
         /// Creates a project for a website, as the web&#39;s project creation does. Growwer then analyses it in the background to recommend media: the project is answered with &#x60;state: analyzing&#x60; and turns &#x60;finished&#x60; when the analysis ends. Analysis can take hours, and it never finishes when no medium matches the project, so poll GET /projects/{id} with backoff and use &#x60;createdAt&#x60; to decide when to stop.  Every value is validated as on the web: &#x60;topics&#x60;, &#x60;language&#x60; and &#x60;country&#x60; take the identifiers GET /vocabulary publishes.  Creating a project also categorises its website through an external service, as the web does. When that service fails the answer is 500, although the project may already be saved, and a retry under the same Idempotency-Key answers 409 &#x60;idempotency_outcome_unknown&#x60;. After either, list your projects (GET /projects) before retrying with a new key, or you may create a duplicate.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="createProjectRequest"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Project</returns>
@@ -172,7 +172,7 @@ namespace Growwer.Api.Api
         /// Creates a project for a website, as the web&#39;s project creation does. Growwer then analyses it in the background to recommend media: the project is answered with &#x60;state: analyzing&#x60; and turns &#x60;finished&#x60; when the analysis ends. Analysis can take hours, and it never finishes when no medium matches the project, so poll GET /projects/{id} with backoff and use &#x60;createdAt&#x60; to decide when to stop.  Every value is validated as on the web: &#x60;topics&#x60;, &#x60;language&#x60; and &#x60;country&#x60; take the identifiers GET /vocabulary publishes.  Creating a project also categorises its website through an external service, as the web does. When that service fails the answer is 500, although the project may already be saved, and a retry under the same Idempotency-Key answers 409 &#x60;idempotency_outcome_unknown&#x60;. After either, list your projects (GET /projects) before retrying with a new key, or you may create a duplicate.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="createProjectRequest"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Project)</returns>
@@ -185,7 +185,7 @@ namespace Growwer.Api.Api
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of void</returns>
         System.Threading.Tasks.Task DeleteProjectAsync(Guid id, string idempotencyKey, System.Threading.CancellationToken cancellationToken = default);
@@ -198,7 +198,7 @@ namespace Growwer.Api.Api
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse</returns>
         System.Threading.Tasks.Task<ApiResponse<Object>> DeleteProjectWithHttpInfoAsync(Guid id, string idempotencyKey, System.Threading.CancellationToken cancellationToken = default);
@@ -258,7 +258,7 @@ namespace Growwer.Api.Api
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="updateProjectRequest"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Project</returns>
@@ -272,7 +272,7 @@ namespace Growwer.Api.Api
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="updateProjectRequest"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Project)</returns>
@@ -494,7 +494,7 @@ namespace Growwer.Api.Api
         /// Create a project Creates a project for a website, as the web&#39;s project creation does. Growwer then analyses it in the background to recommend media: the project is answered with &#x60;state: analyzing&#x60; and turns &#x60;finished&#x60; when the analysis ends. Analysis can take hours, and it never finishes when no medium matches the project, so poll GET /projects/{id} with backoff and use &#x60;createdAt&#x60; to decide when to stop.  Every value is validated as on the web: &#x60;topics&#x60;, &#x60;language&#x60; and &#x60;country&#x60; take the identifiers GET /vocabulary publishes.  Creating a project also categorises its website through an external service, as the web does. When that service fails the answer is 500, although the project may already be saved, and a retry under the same Idempotency-Key answers 409 &#x60;idempotency_outcome_unknown&#x60;. After either, list your projects (GET /projects) before retrying with a new key, or you may create a duplicate.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="createProjectRequest"></param>
         /// <returns>Project</returns>
         public Project CreateProject(string idempotencyKey, CreateProjectRequest createProjectRequest)
@@ -507,7 +507,7 @@ namespace Growwer.Api.Api
         /// Create a project Creates a project for a website, as the web&#39;s project creation does. Growwer then analyses it in the background to recommend media: the project is answered with &#x60;state: analyzing&#x60; and turns &#x60;finished&#x60; when the analysis ends. Analysis can take hours, and it never finishes when no medium matches the project, so poll GET /projects/{id} with backoff and use &#x60;createdAt&#x60; to decide when to stop.  Every value is validated as on the web: &#x60;topics&#x60;, &#x60;language&#x60; and &#x60;country&#x60; take the identifiers GET /vocabulary publishes.  Creating a project also categorises its website through an external service, as the web does. When that service fails the answer is 500, although the project may already be saved, and a retry under the same Idempotency-Key answers 409 &#x60;idempotency_outcome_unknown&#x60;. After either, list your projects (GET /projects) before retrying with a new key, or you may create a duplicate.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="createProjectRequest"></param>
         /// <returns>ApiResponse of Project</returns>
         public Growwer.Api.Client.ApiResponse<Project> CreateProjectWithHttpInfo(string idempotencyKey, CreateProjectRequest createProjectRequest)
@@ -563,7 +563,7 @@ namespace Growwer.Api.Api
         /// Create a project Creates a project for a website, as the web&#39;s project creation does. Growwer then analyses it in the background to recommend media: the project is answered with &#x60;state: analyzing&#x60; and turns &#x60;finished&#x60; when the analysis ends. Analysis can take hours, and it never finishes when no medium matches the project, so poll GET /projects/{id} with backoff and use &#x60;createdAt&#x60; to decide when to stop.  Every value is validated as on the web: &#x60;topics&#x60;, &#x60;language&#x60; and &#x60;country&#x60; take the identifiers GET /vocabulary publishes.  Creating a project also categorises its website through an external service, as the web does. When that service fails the answer is 500, although the project may already be saved, and a retry under the same Idempotency-Key answers 409 &#x60;idempotency_outcome_unknown&#x60;. After either, list your projects (GET /projects) before retrying with a new key, or you may create a duplicate.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="createProjectRequest"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Project</returns>
@@ -577,7 +577,7 @@ namespace Growwer.Api.Api
         /// Create a project Creates a project for a website, as the web&#39;s project creation does. Growwer then analyses it in the background to recommend media: the project is answered with &#x60;state: analyzing&#x60; and turns &#x60;finished&#x60; when the analysis ends. Analysis can take hours, and it never finishes when no medium matches the project, so poll GET /projects/{id} with backoff and use &#x60;createdAt&#x60; to decide when to stop.  Every value is validated as on the web: &#x60;topics&#x60;, &#x60;language&#x60; and &#x60;country&#x60; take the identifiers GET /vocabulary publishes.  Creating a project also categorises its website through an external service, as the web does. When that service fails the answer is 500, although the project may already be saved, and a retry under the same Idempotency-Key answers 409 &#x60;idempotency_outcome_unknown&#x60;. After either, list your projects (GET /projects) before retrying with a new key, or you may create a duplicate.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="createProjectRequest"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Project)</returns>
@@ -638,7 +638,7 @@ namespace Growwer.Api.Api
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <returns></returns>
         public void DeleteProject(Guid id, string idempotencyKey)
         {
@@ -650,7 +650,7 @@ namespace Growwer.Api.Api
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <returns>ApiResponse of Object(void)</returns>
         public Growwer.Api.Client.ApiResponse<Object> DeleteProjectWithHttpInfo(Guid id, string idempotencyKey)
         {
@@ -701,7 +701,7 @@ namespace Growwer.Api.Api
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of void</returns>
         public async System.Threading.Tasks.Task DeleteProjectAsync(Guid id, string idempotencyKey, System.Threading.CancellationToken cancellationToken = default)
@@ -714,7 +714,7 @@ namespace Growwer.Api.Api
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse</returns>
         public async System.Threading.Tasks.Task<Growwer.Api.Client.ApiResponse<Object>> DeleteProjectWithHttpInfoAsync(Guid id, string idempotencyKey, System.Threading.CancellationToken cancellationToken = default)
@@ -1025,7 +1025,7 @@ namespace Growwer.Api.Api
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="updateProjectRequest"></param>
         /// <returns>Project</returns>
         public Project UpdateProject(Guid id, string idempotencyKey, UpdateProjectRequest updateProjectRequest)
@@ -1039,7 +1039,7 @@ namespace Growwer.Api.Api
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="updateProjectRequest"></param>
         /// <returns>ApiResponse of Project</returns>
         public Growwer.Api.Client.ApiResponse<Project> UpdateProjectWithHttpInfo(Guid id, string idempotencyKey, UpdateProjectRequest updateProjectRequest)
@@ -1097,7 +1097,7 @@ namespace Growwer.Api.Api
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="updateProjectRequest"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Project</returns>
@@ -1112,7 +1112,7 @@ namespace Growwer.Api.Api
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="updateProjectRequest"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Project)</returns>

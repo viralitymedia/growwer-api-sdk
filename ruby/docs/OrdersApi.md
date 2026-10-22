@@ -38,7 +38,7 @@ end
 
 api_instance = Growwer::OrdersApi.new
 id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # String | 
-idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 
 begin
   # Approve an order's delivery
@@ -72,7 +72,7 @@ end
 | Name | Type | Description | Notes |
 | ---- | ---- | ----------- | ----- |
 | **id** | **String** |  |  |
-| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. |  |
+| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. |  |
 
 ### Return type
 
@@ -109,7 +109,7 @@ end
 
 api_instance = Growwer::OrdersApi.new
 id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # String | 
-idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 
 begin
   # Approve a draft
@@ -143,7 +143,7 @@ end
 | Name | Type | Description | Notes |
 | ---- | ---- | ----------- | ----- |
 | **id** | **String** |  |  |
-| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. |  |
+| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. |  |
 
 ### Return type
 
@@ -180,7 +180,7 @@ end
 
 api_instance = Growwer::OrdersApi.new
 id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # String | 
-idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 order_action_reason = Growwer::OrderActionReason.new({reason: 'reason_example'}) # OrderActionReason | 
 
 begin
@@ -215,7 +215,7 @@ end
 | Name | Type | Description | Notes |
 | ---- | ---- | ----------- | ----- |
 | **id** | **String** |  |  |
-| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. |  |
+| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. |  |
 | **order_action_reason** | [**OrderActionReason**](OrderActionReason.md) |  |  |
 
 ### Return type
@@ -252,7 +252,7 @@ Growwer.configure do |config|
 end
 
 api_instance = Growwer::OrdersApi.new
-idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 order_create_request = Growwer::OrderCreateRequest.new({type: 'post', project_id: 'project_id_example', media_id: 'media_id_example', briefing: Growwer::LinkAdditionOrderBriefingRequest.new({linking_from: 'linking_from_example', link: Growwer::OrderLinkRequest.new({type: 'dofollow'})}), expected_price: Growwer::Money.new({amount: 12500, currency: 'EUR'})}) # OrderCreateRequest | 
 
 begin
@@ -286,7 +286,7 @@ end
 
 | Name | Type | Description | Notes |
 | ---- | ---- | ----------- | ----- |
-| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. |  |
+| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. |  |
 | **order_create_request** | [**OrderCreateRequest**](OrderCreateRequest.md) |  |  |
 
 ### Return type
@@ -683,7 +683,7 @@ end
 
 api_instance = Growwer::OrdersApi.new
 id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # String | 
-idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 order_action_reason = Growwer::OrderActionReason.new({reason: 'reason_example'}) # OrderActionReason | 
 
 begin
@@ -718,7 +718,7 @@ end
 | Name | Type | Description | Notes |
 | ---- | ---- | ----------- | ----- |
 | **id** | **String** |  |  |
-| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. |  |
+| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. |  |
 | **order_action_reason** | [**OrderActionReason**](OrderActionReason.md) |  |  |
 
 ### Return type
@@ -756,7 +756,7 @@ end
 
 api_instance = Growwer::OrdersApi.new
 id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # String | 
-idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 order_action_reason = Growwer::OrderActionReason.new({reason: 'reason_example'}) # OrderActionReason | 
 
 begin
@@ -791,7 +791,7 @@ end
 | Name | Type | Description | Notes |
 | ---- | ---- | ----------- | ----- |
 | **id** | **String** |  |  |
-| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. |  |
+| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. |  |
 | **order_action_reason** | [**OrderActionReason**](OrderActionReason.md) |  |  |
 
 ### Return type

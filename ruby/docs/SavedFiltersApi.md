@@ -102,7 +102,7 @@ end
 
 api_instance = Growwer::SavedFiltersApi.new
 id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # String | The project.
-idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 create_saved_filter_request = Growwer::CreateSavedFilterRequest.new({name: 'name_example', filters: { key: 3.56}}) # CreateSavedFilterRequest | 
 
 begin
@@ -137,7 +137,7 @@ end
 | Name | Type | Description | Notes |
 | ---- | ---- | ----------- | ----- |
 | **id** | **String** | The project. |  |
-| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. |  |
+| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. |  |
 | **create_saved_filter_request** | [**CreateSavedFilterRequest**](CreateSavedFilterRequest.md) |  |  |
 
 ### Return type
@@ -176,7 +176,7 @@ end
 api_instance = Growwer::SavedFiltersApi.new
 id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # String | The project.
 filter_id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # String | The saved filter.
-idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 
 begin
   # Delete a saved filter
@@ -210,7 +210,7 @@ end
 | ---- | ---- | ----------- | ----- |
 | **id** | **String** | The project. |  |
 | **filter_id** | **String** | The saved filter. |  |
-| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. |  |
+| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. |  |
 
 ### Return type
 

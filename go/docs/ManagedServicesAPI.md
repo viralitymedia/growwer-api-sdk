@@ -392,7 +392,7 @@ import (
 )
 
 func main() {
-	idempotencyKey := "idempotencyKey_example" // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+	idempotencyKey := "idempotencyKey_example" // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 	managedServiceRequest := *openapiclient.NewManagedServiceRequest("ProjectUrl_example", "Goal_example", "Country_example", "Duration_example", *openapiclient.NewMoney(int32(12500), "EUR")) // ManagedServiceRequest | 
 
 	configuration := openapiclient.NewConfiguration()
@@ -418,7 +418,7 @@ Other parameters are passed through a pointer to a apiRequestManagedServiceCampa
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **idempotencyKey** | **string** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. | 
+ **idempotencyKey** | **string** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | 
  **managedServiceRequest** | [**ManagedServiceRequest**](ManagedServiceRequest.md) |  | 
 
 ### Return type
@@ -460,7 +460,7 @@ import (
 )
 
 func main() {
-	idempotencyKey := "idempotencyKey_example" // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+	idempotencyKey := "idempotencyKey_example" // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 	managedServiceRequest := *openapiclient.NewManagedServiceRequest("ProjectUrl_example", "Goal_example", "Country_example", "Duration_example", *openapiclient.NewMoney(int32(12500), "EUR")) // ManagedServiceRequest | 
 
 	configuration := openapiclient.NewConfiguration()
@@ -486,7 +486,7 @@ Other parameters are passed through a pointer to a apiRequestManagedServiceInfoR
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **idempotencyKey** | **string** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. | 
+ **idempotencyKey** | **string** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | 
  **managedServiceRequest** | [**ManagedServiceRequest**](ManagedServiceRequest.md) |  | 
 
 ### Return type
@@ -529,7 +529,7 @@ import (
 
 func main() {
 	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | 
-	idempotencyKey := "idempotencyKey_example" // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+	idempotencyKey := "idempotencyKey_example" // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 	managedServiceProposalReviewRequest := *openapiclient.NewManagedServiceProposalReviewRequest([]openapiclient.ManagedServiceProposalReviewRequestReviewsInner{*openapiclient.NewManagedServiceProposalReviewRequestReviewsInner("ProposalId_example", "Decision_example")}) // ManagedServiceProposalReviewRequest | 
 
 	configuration := openapiclient.NewConfiguration()
@@ -560,7 +560,7 @@ Other parameters are passed through a pointer to a apiReviewManagedServicePropos
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **idempotencyKey** | **string** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. | 
+ **idempotencyKey** | **string** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | 
  **managedServiceProposalReviewRequest** | [**ManagedServiceProposalReviewRequest**](ManagedServiceProposalReviewRequest.md) |  | 
 
 ### Return type

@@ -1,6 +1,6 @@
 /*
  * Growwer API
- * The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601. 
+ * The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters without spaces) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601. 
  *
  * The version of the OpenAPI document: 1
  * Contact: support@growwer.com
@@ -84,7 +84,7 @@ public class OrdersApi {
     /**
      * Build call for approveOrder
      * @param id  (required)
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -93,7 +93,7 @@ public class OrdersApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> The order, approved. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). </td><td>  -  </td></tr>
@@ -173,7 +173,7 @@ public class OrdersApi {
      * Approve an order&#39;s delivery
      * Approves the delivery of an order whose &#x60;pendingAction&#x60; is yours to review the delivery, as the web does. The order finishes and the seller is paid. It takes no body.
      * @param id  (required)
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @return Order
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
@@ -181,7 +181,7 @@ public class OrdersApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> The order, approved. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). </td><td>  -  </td></tr>
@@ -200,7 +200,7 @@ public class OrdersApi {
      * Approve an order&#39;s delivery
      * Approves the delivery of an order whose &#x60;pendingAction&#x60; is yours to review the delivery, as the web does. The order finishes and the seller is paid. It takes no body.
      * @param id  (required)
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @return ApiResponse&lt;Order&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
@@ -208,7 +208,7 @@ public class OrdersApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> The order, approved. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). </td><td>  -  </td></tr>
@@ -228,7 +228,7 @@ public class OrdersApi {
      * Approve an order&#39;s delivery (asynchronously)
      * Approves the delivery of an order whose &#x60;pendingAction&#x60; is yours to review the delivery, as the web does. The order finishes and the seller is paid. It takes no body.
      * @param id  (required)
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -237,7 +237,7 @@ public class OrdersApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> The order, approved. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). </td><td>  -  </td></tr>
@@ -257,7 +257,7 @@ public class OrdersApi {
     /**
      * Build call for approveOrderDraft
      * @param id  (required)
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -266,7 +266,7 @@ public class OrdersApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> The order, with its draft approved. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). </td><td>  -  </td></tr>
@@ -346,7 +346,7 @@ public class OrdersApi {
      * Approve a draft
      * Approves the draft of a post order whose &#x60;pendingAction&#x60; is yours to review the draft (GET /orders/{id}/draft downloads it), as the web does. The seller then publishes it. It takes no body.
      * @param id  (required)
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @return Order
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
@@ -354,7 +354,7 @@ public class OrdersApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> The order, with its draft approved. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). </td><td>  -  </td></tr>
@@ -373,7 +373,7 @@ public class OrdersApi {
      * Approve a draft
      * Approves the draft of a post order whose &#x60;pendingAction&#x60; is yours to review the draft (GET /orders/{id}/draft downloads it), as the web does. The seller then publishes it. It takes no body.
      * @param id  (required)
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @return ApiResponse&lt;Order&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
@@ -381,7 +381,7 @@ public class OrdersApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> The order, with its draft approved. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). </td><td>  -  </td></tr>
@@ -401,7 +401,7 @@ public class OrdersApi {
      * Approve a draft (asynchronously)
      * Approves the draft of a post order whose &#x60;pendingAction&#x60; is yours to review the draft (GET /orders/{id}/draft downloads it), as the web does. The seller then publishes it. It takes no body.
      * @param id  (required)
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -410,7 +410,7 @@ public class OrdersApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> The order, with its draft approved. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). </td><td>  -  </td></tr>
@@ -430,7 +430,7 @@ public class OrdersApi {
     /**
      * Build call for cancelOrder
      * @param id  (required)
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param orderActionReason  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
@@ -440,7 +440,7 @@ public class OrdersApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> The order, cancelled. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). </td><td>  -  </td></tr>
@@ -527,7 +527,7 @@ public class OrdersApi {
      * Cancel an order
      * Cancels an order the seller has not accepted yet (&#x60;state&#x60; &#x60;pending_acceptance&#x60;), as the web does. Its price returns to your wallet&#39;s available balance, and the seller is told your reason.
      * @param id  (required)
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param orderActionReason  (required)
      * @return Order
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -536,7 +536,7 @@ public class OrdersApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> The order, cancelled. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). </td><td>  -  </td></tr>
@@ -556,7 +556,7 @@ public class OrdersApi {
      * Cancel an order
      * Cancels an order the seller has not accepted yet (&#x60;state&#x60; &#x60;pending_acceptance&#x60;), as the web does. Its price returns to your wallet&#39;s available balance, and the seller is told your reason.
      * @param id  (required)
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param orderActionReason  (required)
      * @return ApiResponse&lt;Order&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -565,7 +565,7 @@ public class OrdersApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> The order, cancelled. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). </td><td>  -  </td></tr>
@@ -586,7 +586,7 @@ public class OrdersApi {
      * Cancel an order (asynchronously)
      * Cancels an order the seller has not accepted yet (&#x60;state&#x60; &#x60;pending_acceptance&#x60;), as the web does. Its price returns to your wallet&#39;s available balance, and the seller is told your reason.
      * @param id  (required)
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param orderActionReason  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
@@ -596,7 +596,7 @@ public class OrdersApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> The order, cancelled. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). </td><td>  -  </td></tr>
@@ -616,7 +616,7 @@ public class OrdersApi {
     }
     /**
      * Build call for createOrder
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param orderCreateRequest  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
@@ -626,7 +626,7 @@ public class OrdersApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 201 </td><td> The order, placed and paid. &#x60;Location&#x60; is its URL. </td><td>  * Location - The URL of the new project. <br>  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The project is not yours, or the media does not exist or is not one you can order for this project (code &#x60;not_found&#x60;). </td><td>  -  </td></tr>
@@ -706,7 +706,7 @@ public class OrdersApi {
     /**
      * Place an order
      * Places an order on a media for one of your projects and pays its price from your wallet&#39;s available balance, as ordering on the web does. Estimate the order first (POST /orders/estimate) and send the price it answers as &#x60;expectedPrice&#x60;: the order is placed only at that price.  Placing the same order (same project, media, type and price) again within 5 seconds of one still in progress is refused with &#x60;duplicate_order&#x60;. Its &#x60;details.orderId&#x60; is the earlier order, or null when that order has finished or was deleted since.  A proposed draft (&#x60;proposedDraftFileId&#x60;, from POST /files) is used up when the order is placed. If the order is then refused because another request changed your balance, the media or its price, or placed the same order, the file is used up all the same and the refusal&#39;s message says so: upload it again before retrying.
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param orderCreateRequest  (required)
      * @return Order
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -715,7 +715,7 @@ public class OrdersApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 201 </td><td> The order, placed and paid. &#x60;Location&#x60; is its URL. </td><td>  * Location - The URL of the new project. <br>  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The project is not yours, or the media does not exist or is not one you can order for this project (code &#x60;not_found&#x60;). </td><td>  -  </td></tr>
@@ -734,7 +734,7 @@ public class OrdersApi {
     /**
      * Place an order
      * Places an order on a media for one of your projects and pays its price from your wallet&#39;s available balance, as ordering on the web does. Estimate the order first (POST /orders/estimate) and send the price it answers as &#x60;expectedPrice&#x60;: the order is placed only at that price.  Placing the same order (same project, media, type and price) again within 5 seconds of one still in progress is refused with &#x60;duplicate_order&#x60;. Its &#x60;details.orderId&#x60; is the earlier order, or null when that order has finished or was deleted since.  A proposed draft (&#x60;proposedDraftFileId&#x60;, from POST /files) is used up when the order is placed. If the order is then refused because another request changed your balance, the media or its price, or placed the same order, the file is used up all the same and the refusal&#39;s message says so: upload it again before retrying.
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param orderCreateRequest  (required)
      * @return ApiResponse&lt;Order&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -743,7 +743,7 @@ public class OrdersApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 201 </td><td> The order, placed and paid. &#x60;Location&#x60; is its URL. </td><td>  * Location - The URL of the new project. <br>  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The project is not yours, or the media does not exist or is not one you can order for this project (code &#x60;not_found&#x60;). </td><td>  -  </td></tr>
@@ -763,7 +763,7 @@ public class OrdersApi {
     /**
      * Place an order (asynchronously)
      * Places an order on a media for one of your projects and pays its price from your wallet&#39;s available balance, as ordering on the web does. Estimate the order first (POST /orders/estimate) and send the price it answers as &#x60;expectedPrice&#x60;: the order is placed only at that price.  Placing the same order (same project, media, type and price) again within 5 seconds of one still in progress is refused with &#x60;duplicate_order&#x60;. Its &#x60;details.orderId&#x60; is the earlier order, or null when that order has finished or was deleted since.  A proposed draft (&#x60;proposedDraftFileId&#x60;, from POST /files) is used up when the order is placed. If the order is then refused because another request changed your balance, the media or its price, or placed the same order, the file is used up all the same and the refusal&#39;s message says so: upload it again before retrying.
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param orderCreateRequest  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
@@ -773,7 +773,7 @@ public class OrdersApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 201 </td><td> The order, placed and paid. &#x60;Location&#x60; is its URL. </td><td>  * Location - The URL of the new project. <br>  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The project is not yours, or the media does not exist or is not one you can order for this project (code &#x60;not_found&#x60;). </td><td>  -  </td></tr>
@@ -1593,7 +1593,7 @@ public class OrdersApi {
     /**
      * Build call for requestOrderDraftUpdate
      * @param id  (required)
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param orderActionReason  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
@@ -1603,7 +1603,7 @@ public class OrdersApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> The order, with its draft back with the seller. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). </td><td>  -  </td></tr>
@@ -1690,7 +1690,7 @@ public class OrdersApi {
      * Request changes to a draft
      * Asks the seller to change the draft of a post order whose &#x60;pendingAction&#x60; is yours to review the draft, as the web does. The seller is told your reason.
      * @param id  (required)
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param orderActionReason  (required)
      * @return Order
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -1699,7 +1699,7 @@ public class OrdersApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> The order, with its draft back with the seller. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). </td><td>  -  </td></tr>
@@ -1719,7 +1719,7 @@ public class OrdersApi {
      * Request changes to a draft
      * Asks the seller to change the draft of a post order whose &#x60;pendingAction&#x60; is yours to review the draft, as the web does. The seller is told your reason.
      * @param id  (required)
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param orderActionReason  (required)
      * @return ApiResponse&lt;Order&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -1728,7 +1728,7 @@ public class OrdersApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> The order, with its draft back with the seller. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). </td><td>  -  </td></tr>
@@ -1749,7 +1749,7 @@ public class OrdersApi {
      * Request changes to a draft (asynchronously)
      * Asks the seller to change the draft of a post order whose &#x60;pendingAction&#x60; is yours to review the draft, as the web does. The seller is told your reason.
      * @param id  (required)
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param orderActionReason  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
@@ -1759,7 +1759,7 @@ public class OrdersApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> The order, with its draft back with the seller. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). </td><td>  -  </td></tr>
@@ -1780,7 +1780,7 @@ public class OrdersApi {
     /**
      * Build call for requestOrderUpdate
      * @param id  (required)
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param orderActionReason  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
@@ -1790,7 +1790,7 @@ public class OrdersApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> The order, back with the seller. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). </td><td>  -  </td></tr>
@@ -1877,7 +1877,7 @@ public class OrdersApi {
      * Request changes to a delivery
      * Asks the seller to change the delivery of an order whose &#x60;pendingAction&#x60; is yours to review the delivery, as the web does. The seller is told your reason.
      * @param id  (required)
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param orderActionReason  (required)
      * @return Order
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -1886,7 +1886,7 @@ public class OrdersApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> The order, back with the seller. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). </td><td>  -  </td></tr>
@@ -1906,7 +1906,7 @@ public class OrdersApi {
      * Request changes to a delivery
      * Asks the seller to change the delivery of an order whose &#x60;pendingAction&#x60; is yours to review the delivery, as the web does. The seller is told your reason.
      * @param id  (required)
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param orderActionReason  (required)
      * @return ApiResponse&lt;Order&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -1915,7 +1915,7 @@ public class OrdersApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> The order, back with the seller. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). </td><td>  -  </td></tr>
@@ -1936,7 +1936,7 @@ public class OrdersApi {
      * Request changes to a delivery (asynchronously)
      * Asks the seller to change the delivery of an order whose &#x60;pendingAction&#x60; is yours to review the delivery, as the web does. The seller is told your reason.
      * @param id  (required)
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param orderActionReason  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
@@ -1946,7 +1946,7 @@ public class OrdersApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> The order, back with the seller. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;). </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). </td><td>  -  </td></tr>

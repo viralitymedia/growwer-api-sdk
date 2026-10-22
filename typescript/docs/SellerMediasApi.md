@@ -39,7 +39,7 @@ async function example() {
   const body = {
     // string
     id: 38400000-8cf0-11bd-b23e-10b96e4ef00d,
-    // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+    // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
     idempotencyKey: idempotencyKey_example,
   } satisfies ApplySellerMediaCompetitiveFeesRequest;
 
@@ -61,7 +61,7 @@ example().catch(console.error);
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
 | **id** | `string` |  | [Defaults to `undefined`] |
-| **idempotencyKey** | `string` | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. | [Defaults to `undefined`] |
+| **idempotencyKey** | `string` | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | [Defaults to `undefined`] |
 
 ### Return type
 
@@ -81,7 +81,7 @@ example().catch(console.error);
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 | **200** | The media, with the suggested fees set. |  -  |
-| **400** | The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). |  -  |
+| **400** | The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). |  -  |
 | **401** | The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). |  -  |
 | **403** | The key is read-only (code &#x60;insufficient_capability&#x60;). |  -  |
 | **404** | The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). |  -  |
@@ -283,7 +283,7 @@ async function example() {
   const body = {
     // string
     id: 38400000-8cf0-11bd-b23e-10b96e4ef00d,
-    // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+    // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
     idempotencyKey: idempotencyKey_example,
     // UpdateSellerMediaRequest
     updateSellerMediaRequest: {"postOffer":{"pricingOptions":[{"linkType":"dofollow","feeWhenSellerWritesPost":{"amount":12000,"currency":"EUR"},"feeWhenSellerDoesNotWritePost":{"amount":10000,"currency":"EUR"}},{"linkType":"nofollow","feeWhenSellerWritesPost":{"amount":9000,"currency":"EUR"},"feeWhenSellerDoesNotWritePost":{"amount":7000,"currency":"EUR"}}]},"linkAdditionOffer":null,"extraServices":[{"name":"list_on_homepage","cost":{"amount":5000,"currency":"EUR"}}]},
@@ -307,7 +307,7 @@ example().catch(console.error);
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
 | **id** | `string` |  | [Defaults to `undefined`] |
-| **idempotencyKey** | `string` | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. | [Defaults to `undefined`] |
+| **idempotencyKey** | `string` | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | [Defaults to `undefined`] |
 | **updateSellerMediaRequest** | [UpdateSellerMediaRequest](UpdateSellerMediaRequest.md) |  | |
 
 ### Return type
@@ -328,7 +328,7 @@ example().catch(console.error);
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 | **200** | The media, with the fees saved. |  -  |
-| **400** | The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). |  -  |
+| **400** | The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). |  -  |
 | **401** | The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). |  -  |
 | **403** | The key is read-only (code &#x60;insufficient_capability&#x60;). |  -  |
 | **404** | The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). |  -  |

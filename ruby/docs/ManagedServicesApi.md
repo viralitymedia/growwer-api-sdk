@@ -397,7 +397,7 @@ Growwer.configure do |config|
 end
 
 api_instance = Growwer::ManagedServicesApi.new
-idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 managed_service_request = Growwer::ManagedServiceRequest.new({project_url: 'project_url_example', goal: 'link_building', country: 'country_example', duration: 'one_time', estimated_budget: Growwer::Money.new({amount: 12500, currency: 'EUR'})}) # ManagedServiceRequest | 
 
 begin
@@ -431,7 +431,7 @@ end
 
 | Name | Type | Description | Notes |
 | ---- | ---- | ----------- | ----- |
-| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. |  |
+| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. |  |
 | **managed_service_request** | [**ManagedServiceRequest**](ManagedServiceRequest.md) |  |  |
 
 ### Return type
@@ -468,7 +468,7 @@ Growwer.configure do |config|
 end
 
 api_instance = Growwer::ManagedServicesApi.new
-idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 managed_service_request = Growwer::ManagedServiceRequest.new({project_url: 'project_url_example', goal: 'link_building', country: 'country_example', duration: 'one_time', estimated_budget: Growwer::Money.new({amount: 12500, currency: 'EUR'})}) # ManagedServiceRequest | 
 
 begin
@@ -502,7 +502,7 @@ end
 
 | Name | Type | Description | Notes |
 | ---- | ---- | ----------- | ----- |
-| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. |  |
+| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. |  |
 | **managed_service_request** | [**ManagedServiceRequest**](ManagedServiceRequest.md) |  |  |
 
 ### Return type
@@ -540,7 +540,7 @@ end
 
 api_instance = Growwer::ManagedServicesApi.new
 id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # String | 
-idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 managed_service_proposal_review_request = Growwer::ManagedServiceProposalReviewRequest.new({reviews: [Growwer::ManagedServiceProposalReviewRequestReviewsInner.new({proposal_id: 'proposal_id_example', decision: 'accept'})]}) # ManagedServiceProposalReviewRequest | 
 
 begin
@@ -575,7 +575,7 @@ end
 | Name | Type | Description | Notes |
 | ---- | ---- | ----------- | ----- |
 | **id** | **String** |  |  |
-| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. |  |
+| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. |  |
 | **managed_service_proposal_review_request** | [**ManagedServiceProposalReviewRequest**](ManagedServiceProposalReviewRequest.md) |  |  |
 
 ### Return type

@@ -161,7 +161,7 @@ Growwer.configure do |config|
 end
 
 api_instance = Growwer::AccountApi.new
-idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 put_seller_holiday_request = Growwer::PutSellerHolidayRequest.new({on_holiday: false}) # PutSellerHolidayRequest | 
 
 begin
@@ -195,7 +195,7 @@ end
 
 | Name | Type | Description | Notes |
 | ---- | ---- | ----------- | ----- |
-| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. |  |
+| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. |  |
 | **put_seller_holiday_request** | [**PutSellerHolidayRequest**](PutSellerHolidayRequest.md) |  |  |
 
 ### Return type

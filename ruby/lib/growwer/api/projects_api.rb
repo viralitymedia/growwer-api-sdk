@@ -1,7 +1,7 @@
 =begin
 #Growwer API
 
-#The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601. 
+#The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters without spaces) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601. 
 
 The version of the OpenAPI document: 1
 Contact: support@growwer.com
@@ -21,7 +21,7 @@ module Growwer
     end
     # Create a project
     # Creates a project for a website, as the web's project creation does. Growwer then analyses it in the background to recommend media: the project is answered with `state: analyzing` and turns `finished` when the analysis ends. Analysis can take hours, and it never finishes when no medium matches the project, so poll GET /projects/{id} with backoff and use `createdAt` to decide when to stop.  Every value is validated as on the web: `topics`, `language` and `country` take the identifiers GET /vocabulary publishes.  Creating a project also categorises its website through an external service, as the web does. When that service fails the answer is 500, although the project may already be saved, and a retry under the same Idempotency-Key answers 409 `idempotency_outcome_unknown`. After either, list your projects (GET /projects) before retrying with a new key, or you may create a duplicate.
-    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
     # @param create_project_request [CreateProjectRequest] 
     # @param [Hash] opts the optional parameters
     # @return [Project]
@@ -32,7 +32,7 @@ module Growwer
 
     # Create a project
     # Creates a project for a website, as the web&#39;s project creation does. Growwer then analyses it in the background to recommend media: the project is answered with &#x60;state: analyzing&#x60; and turns &#x60;finished&#x60; when the analysis ends. Analysis can take hours, and it never finishes when no medium matches the project, so poll GET /projects/{id} with backoff and use &#x60;createdAt&#x60; to decide when to stop.  Every value is validated as on the web: &#x60;topics&#x60;, &#x60;language&#x60; and &#x60;country&#x60; take the identifiers GET /vocabulary publishes.  Creating a project also categorises its website through an external service, as the web does. When that service fails the answer is 500, although the project may already be saved, and a retry under the same Idempotency-Key answers 409 &#x60;idempotency_outcome_unknown&#x60;. After either, list your projects (GET /projects) before retrying with a new key, or you may create a duplicate.
-    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
     # @param create_project_request [CreateProjectRequest] 
     # @param [Hash] opts the optional parameters
     # @return [Array<(Project, Integer, Hash)>] Project data, response status code and response headers
@@ -101,7 +101,7 @@ module Growwer
     # Delete a project
     # Deletes one of your projects. A project with an order in progress cannot be deleted until its orders finish.
     # @param id [String] 
-    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
     # @param [Hash] opts the optional parameters
     # @return [nil]
     def delete_project(id, idempotency_key, opts = {})
@@ -112,7 +112,7 @@ module Growwer
     # Delete a project
     # Deletes one of your projects. A project with an order in progress cannot be deleted until its orders finish.
     # @param id [String] 
-    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
     # @param [Hash] opts the optional parameters
     # @return [Array<(nil, Integer, Hash)>] nil, response status code and response headers
     def delete_project_with_http_info(id, idempotency_key, opts = {})
@@ -313,7 +313,7 @@ module Growwer
     # Edit a project
     # Changes only the fields you send. `rootUrl` cannot be changed; any field not listed here is refused. Changing `language`, `country`, `promotedProducts` or `topics` makes Growwer categorise the project and work out its target keywords again, in the background.
     # @param id [String] 
-    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
     # @param update_project_request [UpdateProjectRequest] 
     # @param [Hash] opts the optional parameters
     # @return [Project]
@@ -325,7 +325,7 @@ module Growwer
     # Edit a project
     # Changes only the fields you send. &#x60;rootUrl&#x60; cannot be changed; any field not listed here is refused. Changing &#x60;language&#x60;, &#x60;country&#x60;, &#x60;promotedProducts&#x60; or &#x60;topics&#x60; makes Growwer categorise the project and work out its target keywords again, in the background.
     # @param id [String] 
-    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
     # @param update_project_request [UpdateProjectRequest] 
     # @param [Hash] opts the optional parameters
     # @return [Array<(Project, Integer, Hash)>] Project data, response status code and response headers

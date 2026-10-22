@@ -1,7 +1,7 @@
 """
     Growwer API
 
-    The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601. 
+    The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters without spaces) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601. 
 
     The version of the OpenAPI document: 1
     Contact: support@growwer.com
@@ -50,7 +50,7 @@ class OrdersApi:
     def approve_order(
         self,
         id: UUID,
-        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.")],
+        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -70,7 +70,7 @@ class OrdersApi:
 
         :param id: (required)
         :type id: UUID
-        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`. (required)
         :type idempotency_key: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
@@ -129,7 +129,7 @@ class OrdersApi:
     def approve_order_with_http_info(
         self,
         id: UUID,
-        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.")],
+        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -149,7 +149,7 @@ class OrdersApi:
 
         :param id: (required)
         :type id: UUID
-        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`. (required)
         :type idempotency_key: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
@@ -208,7 +208,7 @@ class OrdersApi:
     def approve_order_without_preload_content(
         self,
         id: UUID,
-        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.")],
+        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -228,7 +228,7 @@ class OrdersApi:
 
         :param id: (required)
         :type id: UUID
-        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`. (required)
         :type idempotency_key: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
@@ -350,7 +350,7 @@ class OrdersApi:
     def approve_order_draft(
         self,
         id: UUID,
-        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.")],
+        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -370,7 +370,7 @@ class OrdersApi:
 
         :param id: (required)
         :type id: UUID
-        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`. (required)
         :type idempotency_key: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
@@ -429,7 +429,7 @@ class OrdersApi:
     def approve_order_draft_with_http_info(
         self,
         id: UUID,
-        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.")],
+        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -449,7 +449,7 @@ class OrdersApi:
 
         :param id: (required)
         :type id: UUID
-        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`. (required)
         :type idempotency_key: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
@@ -508,7 +508,7 @@ class OrdersApi:
     def approve_order_draft_without_preload_content(
         self,
         id: UUID,
-        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.")],
+        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -528,7 +528,7 @@ class OrdersApi:
 
         :param id: (required)
         :type id: UUID
-        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`. (required)
         :type idempotency_key: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
@@ -650,7 +650,7 @@ class OrdersApi:
     def cancel_order(
         self,
         id: UUID,
-        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.")],
+        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.")],
         order_action_reason: OrderActionReason,
         _request_timeout: Union[
             None,
@@ -671,7 +671,7 @@ class OrdersApi:
 
         :param id: (required)
         :type id: UUID
-        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`. (required)
         :type idempotency_key: str
         :param order_action_reason: (required)
         :type order_action_reason: OrderActionReason
@@ -734,7 +734,7 @@ class OrdersApi:
     def cancel_order_with_http_info(
         self,
         id: UUID,
-        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.")],
+        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.")],
         order_action_reason: OrderActionReason,
         _request_timeout: Union[
             None,
@@ -755,7 +755,7 @@ class OrdersApi:
 
         :param id: (required)
         :type id: UUID
-        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`. (required)
         :type idempotency_key: str
         :param order_action_reason: (required)
         :type order_action_reason: OrderActionReason
@@ -818,7 +818,7 @@ class OrdersApi:
     def cancel_order_without_preload_content(
         self,
         id: UUID,
-        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.")],
+        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.")],
         order_action_reason: OrderActionReason,
         _request_timeout: Union[
             None,
@@ -839,7 +839,7 @@ class OrdersApi:
 
         :param id: (required)
         :type id: UUID
-        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`. (required)
         :type idempotency_key: str
         :param order_action_reason: (required)
         :type order_action_reason: OrderActionReason
@@ -980,7 +980,7 @@ class OrdersApi:
     @validate_call
     def create_order(
         self,
-        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.")],
+        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.")],
         order_create_request: OrderCreateRequest,
         _request_timeout: Union[
             None,
@@ -999,7 +999,7 @@ class OrdersApi:
 
         Places an order on a media for one of your projects and pays its price from your wallet's available balance, as ordering on the web does. Estimate the order first (POST /orders/estimate) and send the price it answers as `expectedPrice`: the order is placed only at that price.  Placing the same order (same project, media, type and price) again within 5 seconds of one still in progress is refused with `duplicate_order`. Its `details.orderId` is the earlier order, or null when that order has finished or was deleted since.  A proposed draft (`proposedDraftFileId`, from POST /files) is used up when the order is placed. If the order is then refused because another request changed your balance, the media or its price, or placed the same order, the file is used up all the same and the refusal's message says so: upload it again before retrying.
 
-        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`. (required)
         :type idempotency_key: str
         :param order_create_request: (required)
         :type order_create_request: OrderCreateRequest
@@ -1060,7 +1060,7 @@ class OrdersApi:
     @validate_call
     def create_order_with_http_info(
         self,
-        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.")],
+        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.")],
         order_create_request: OrderCreateRequest,
         _request_timeout: Union[
             None,
@@ -1079,7 +1079,7 @@ class OrdersApi:
 
         Places an order on a media for one of your projects and pays its price from your wallet's available balance, as ordering on the web does. Estimate the order first (POST /orders/estimate) and send the price it answers as `expectedPrice`: the order is placed only at that price.  Placing the same order (same project, media, type and price) again within 5 seconds of one still in progress is refused with `duplicate_order`. Its `details.orderId` is the earlier order, or null when that order has finished or was deleted since.  A proposed draft (`proposedDraftFileId`, from POST /files) is used up when the order is placed. If the order is then refused because another request changed your balance, the media or its price, or placed the same order, the file is used up all the same and the refusal's message says so: upload it again before retrying.
 
-        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`. (required)
         :type idempotency_key: str
         :param order_create_request: (required)
         :type order_create_request: OrderCreateRequest
@@ -1140,7 +1140,7 @@ class OrdersApi:
     @validate_call
     def create_order_without_preload_content(
         self,
-        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.")],
+        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.")],
         order_create_request: OrderCreateRequest,
         _request_timeout: Union[
             None,
@@ -1159,7 +1159,7 @@ class OrdersApi:
 
         Places an order on a media for one of your projects and pays its price from your wallet's available balance, as ordering on the web does. Estimate the order first (POST /orders/estimate) and send the price it answers as `expectedPrice`: the order is placed only at that price.  Placing the same order (same project, media, type and price) again within 5 seconds of one still in progress is refused with `duplicate_order`. Its `details.orderId` is the earlier order, or null when that order has finished or was deleted since.  A proposed draft (`proposedDraftFileId`, from POST /files) is used up when the order is placed. If the order is then refused because another request changed your balance, the media or its price, or placed the same order, the file is used up all the same and the refusal's message says so: upload it again before retrying.
 
-        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`. (required)
         :type idempotency_key: str
         :param order_create_request: (required)
         :type order_create_request: OrderCreateRequest
@@ -2817,7 +2817,7 @@ class OrdersApi:
     def request_order_draft_update(
         self,
         id: UUID,
-        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.")],
+        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.")],
         order_action_reason: OrderActionReason,
         _request_timeout: Union[
             None,
@@ -2838,7 +2838,7 @@ class OrdersApi:
 
         :param id: (required)
         :type id: UUID
-        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`. (required)
         :type idempotency_key: str
         :param order_action_reason: (required)
         :type order_action_reason: OrderActionReason
@@ -2901,7 +2901,7 @@ class OrdersApi:
     def request_order_draft_update_with_http_info(
         self,
         id: UUID,
-        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.")],
+        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.")],
         order_action_reason: OrderActionReason,
         _request_timeout: Union[
             None,
@@ -2922,7 +2922,7 @@ class OrdersApi:
 
         :param id: (required)
         :type id: UUID
-        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`. (required)
         :type idempotency_key: str
         :param order_action_reason: (required)
         :type order_action_reason: OrderActionReason
@@ -2985,7 +2985,7 @@ class OrdersApi:
     def request_order_draft_update_without_preload_content(
         self,
         id: UUID,
-        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.")],
+        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.")],
         order_action_reason: OrderActionReason,
         _request_timeout: Union[
             None,
@@ -3006,7 +3006,7 @@ class OrdersApi:
 
         :param id: (required)
         :type id: UUID
-        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`. (required)
         :type idempotency_key: str
         :param order_action_reason: (required)
         :type order_action_reason: OrderActionReason
@@ -3148,7 +3148,7 @@ class OrdersApi:
     def request_order_update(
         self,
         id: UUID,
-        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.")],
+        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.")],
         order_action_reason: OrderActionReason,
         _request_timeout: Union[
             None,
@@ -3169,7 +3169,7 @@ class OrdersApi:
 
         :param id: (required)
         :type id: UUID
-        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`. (required)
         :type idempotency_key: str
         :param order_action_reason: (required)
         :type order_action_reason: OrderActionReason
@@ -3232,7 +3232,7 @@ class OrdersApi:
     def request_order_update_with_http_info(
         self,
         id: UUID,
-        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.")],
+        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.")],
         order_action_reason: OrderActionReason,
         _request_timeout: Union[
             None,
@@ -3253,7 +3253,7 @@ class OrdersApi:
 
         :param id: (required)
         :type id: UUID
-        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`. (required)
         :type idempotency_key: str
         :param order_action_reason: (required)
         :type order_action_reason: OrderActionReason
@@ -3316,7 +3316,7 @@ class OrdersApi:
     def request_order_update_without_preload_content(
         self,
         id: UUID,
-        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.")],
+        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.")],
         order_action_reason: OrderActionReason,
         _request_timeout: Union[
             None,
@@ -3337,7 +3337,7 @@ class OrdersApi:
 
         :param id: (required)
         :type id: UUID
-        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`. (required)
         :type idempotency_key: str
         :param order_action_reason: (required)
         :type order_action_reason: OrderActionReason

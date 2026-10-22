@@ -103,6 +103,8 @@ func TestGetMeCallsProductionWithTheBearerKey(t *testing.T) {
 	equal(t, "currency", me.Buyer.Balance.Available.Currency, "EUR")
 	equal(t, "holidayEndDate set", me.Seller.HolidayEndDate.Get() == nil, true)
 	equal(t, "eligible", me.Catalogue.Eligible, true)
+	equal(t, "dailyCap", me.Catalogue.DailyCap, int32(5000))
+	equal(t, "remainingToday set", me.Catalogue.RemainingToday.Get() == nil, true)
 }
 
 func TestTheBaseUrlIsOverridable(t *testing.T) {

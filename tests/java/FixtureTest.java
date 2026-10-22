@@ -97,6 +97,8 @@ public class FixtureTest {
         equal("currency", me.getBuyer().getBalance().getAvailable().getCurrency(), "EUR");
         equal("holidayEndDate", me.getSeller().getHolidayEndDate(), null);
         equal("eligible", me.getCatalogue().getEligible(), true);
+        equal("dailyCap", me.getCatalogue().getDailyCap(), 5000);
+        equal("remainingToday", me.getCatalogue().getRemainingToday(), null);
     }
 
     void theBaseUrlIsOverridable() throws Exception {

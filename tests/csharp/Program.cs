@@ -103,6 +103,8 @@ internal static class Program
         Equal("currency", me.Buyer.Balance.Available.Currency, "EUR");
         Equal("holidayEndDate", me.Seller.HolidayEndDate, null);
         Equal("eligible", me.Catalogue.Eligible, true);
+        Equal("dailyCap", me.Catalogue.DailyCap, 5000);
+        Equal("remainingToday", me.Catalogue.RemainingToday, null);
     }
 
     private static void TheBaseUrlIsOverridable()

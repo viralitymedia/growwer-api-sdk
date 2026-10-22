@@ -66,6 +66,8 @@ RSpec.describe 'Growwer fixtures' do
     expect(me.buyer.balance.available.currency).to eq('EUR')
     expect(me.seller.holiday_end_date).to be_nil
     expect(me.catalogue.eligible).to be(true)
+    expect(me.catalogue.daily_cap).to eq(5000)
+    expect(me.catalogue.remaining_today).to be_nil
   end
 
   it 'lets the base URL be overridden' do

@@ -69,6 +69,8 @@ const tests: Array<[string, () => Promise<void>]> = [
     assert.equal(me.buyer.balance.available.currency, 'EUR');
     assert.equal(me.seller.holidayEndDate, null);
     assert.equal(me.catalogue.eligible, true);
+    assert.equal(me.catalogue.dailyCap, 5000);
+    assert.equal(me.catalogue.remainingToday, null);
   }],
 
   ['the base URL is overridable', async () => {

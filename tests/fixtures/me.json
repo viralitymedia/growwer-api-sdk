@@ -19,6 +19,6 @@
     "onHoliday": false,
     "holidayEndDate": null
   },
-  "catalogue": {"eligible": true},
+  "catalogue": {"eligible": true, "dailyCap": 5000, "remainingToday": null},
   "managedService": {"active": false}
 }

@@ -75,6 +75,8 @@ class FixtureTest(unittest.TestCase):
         self.assertEqual(me.buyer.balance.available.currency, "EUR")
         self.assertIsNone(me.seller.holiday_end_date)
         self.assertTrue(me.catalogue.eligible)
+        self.assertEqual(me.catalogue.daily_cap, 5000)
+        self.assertIsNone(me.catalogue.remaining_today)
 
     def test_base_url_is_overridable(self):
         client = ApiClient(Configuration(host="https://sandbox.example", access_token="test-key"))

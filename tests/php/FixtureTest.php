@@ -78,6 +78,8 @@ final class FixtureTest extends TestCase
         self::assertSame('EUR', $me->getBuyer()->getBalance()->getAvailable()->getCurrency());
         self::assertNull($me->getSeller()->getHolidayEndDate());
         self::assertTrue($me->getCatalogue()->getEligible());
+        self::assertSame(5000, $me->getCatalogue()->getDailyCap());
+        self::assertNull($me->getCatalogue()->getRemainingToday());
     }
 
     public function testTheBaseUrlIsOverridable(): void

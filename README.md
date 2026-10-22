@@ -175,8 +175,9 @@ var me = new AccountApi(config).GetMe();
 ## Changes in 1.0.2
 
 **Four API classes are renamed, and code that imports the old names breaks**, although the version
-is a patch. The contract now groups its operations by role (general, buyer, seller), and each
-generated class is named after its group. The operations, their methods and their models are
+is a patch. The contract now groups its operations by role (general, buyer, seller). Each
+generated class is still named after its tag, and the tags that were ambiguous now name the role.
+The operations, their methods and their models are
 unchanged; only the class that holds them moved:
 
 | Before | 1.0.2 | Operations |
@@ -292,8 +293,8 @@ def with_backoff(call, attempts=3):
 ```
 
 Retry only `rate_limit_exceeded` automatically. Other refusals answer 429 too, and retrying them
-does not help: `file_limit_reached` and `catalogue_daily_cap_reached` wait for a file to expire or
-for the next UTC day, and retrying `too_many_failed_authentications` with the same key only keeps it
+does not help: `file_limit_reached` waits for a file to expire, `catalogue_daily_cap_reached` and
+`managed_service_request_limit_reached` wait for the next UTC day, and retrying `too_many_failed_authentications` with the same key only keeps it
 refused. Branch on `code` for those.
 
 Failed authentications are counted per address and presented key: **10 failures in 15 minutes**
@@ -513,9 +514,9 @@ A `vX.Y.Z` tag runs [`release.yml`](.github/workflows/release.yml). It checks th
 npm, PyPI, Maven Central, NuGet and RubyGems, and pushes the `go/vX.Y.Z` tag the Go module proxy
 resolves. Packagist picks the tag up through its webhook.
 
-**No release happens before the committed contract matches production.** The API it describes
-reaches production with the monolith's customer API slices 5, 6 and 7a. Once those are deployed,
-`./generate.sh --sync` against production must leave no diff; only then is the first tag pushed.
+**No release happens before the committed contract matches production.** Before each tag,
+`./generate.sh --sync` against production must leave no diff; `release.yml` only checks the
+committed clients against the committed contract.
 
 An owner sets the registries up once, before the first tag:
 

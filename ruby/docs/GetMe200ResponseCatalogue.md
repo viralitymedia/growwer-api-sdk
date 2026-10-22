@@ -4,7 +4,9 @@
 
 | Name | Type | Description | Notes |
 | ---- | ---- | ----------- | ----- |
-| **eligible** | **Boolean** | Whether the catalogue operations (tag Catalogue: searching a project&#39;s medias, flash offers and media details) are open to you. They are open to accounts with recent completed orders, as buyer or as seller; until then they answer 403 &#x60;catalogue_requires_recent_order&#x60;. A media you have ordered is always readable with GET /medias/{id}. |  |
+| **eligible** | **Boolean** | Whether you have the full daily cap of the catalogue operations (tag Catalogue: searching a project&#39;s medias, flash offers and media details). It is open to accounts with recent completed orders, as buyer or as seller; until then the catalogue answers within a smaller daily trial quota, which rises to the full cap after a completed order. A media you have ordered is always readable with GET /medias/{id} and counts against neither. |  |
+| **daily_cap** | **Integer** | How many distinct medias the catalogue operations show you per UTC day: the full cap when &#x60;eligible&#x60; is true, the trial quota otherwise. 0 means the catalogue answers 403 &#x60;catalogue_requires_recent_order&#x60; until you have a recent completed order. |  |
+| **remaining_today** | **Integer** | How many new distinct medias still fit in &#x60;dailyCap&#x60; today (UTC). Medias you have already seen today are free. Null when the count cannot be read right now; the catalogue operations then answer 503 until it can. |  |
 
 ## Example
 
@@ -12,7 +14,9 @@
 require 'growwer'
 
 instance = Growwer::GetMe200ResponseCatalogue.new(
-  eligible: null
+  eligible: null,
+  daily_cap: null,
+  remaining_today: null
 )
 ```
 

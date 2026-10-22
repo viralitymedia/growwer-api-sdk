@@ -1,4 +1,4 @@
-# @growwer/api@1.0.1
+# @growwer/api@1.0.2
 
 A TypeScript SDK client for the tool.growwer.com API.
 
@@ -51,12 +51,22 @@ All URIs are relative to *https://tool.growwer.com*
 | ----- | ------ | ------------ | -------------
 *AccountApi* | [**getMe**](docs/AccountApi.md#getme) | **GET** /api/v1/me | Your account
 *AccountApi* | [**getVocabulary**](docs/AccountApi.md#getvocabulary) | **GET** /api/v1/vocabulary | Codes and names
-*AccountApi* | [**putSellerHoliday**](docs/AccountApi.md#putsellerholidayoperation) | **PUT** /api/v1/seller/holiday | Set your holiday
-*BuyerMoneyApi* | [**downloadBuyerTransactionDocument**](docs/BuyerMoneyApi.md#downloadbuyertransactiondocument) | **GET** /api/v1/wallets/buyer/transactions/{id}/document | Download the document of a wallet movement
-*BuyerMoneyApi* | [**getBuyerWallet**](docs/BuyerMoneyApi.md#getbuyerwallet) | **GET** /api/v1/wallets/buyer | Get your buyer wallet
-*BuyerMoneyApi* | [**getInvoicePdf**](docs/BuyerMoneyApi.md#getinvoicepdf) | **GET** /api/v1/invoices/{id}/pdf | Download an invoice
-*BuyerMoneyApi* | [**listBuyerTransactions**](docs/BuyerMoneyApi.md#listbuyertransactions) | **GET** /api/v1/wallets/buyer/transactions | List your buyer wallet movements
-*BuyerMoneyApi* | [**listInvoices**](docs/BuyerMoneyApi.md#listinvoices) | **GET** /api/v1/invoices | List your invoices
+*BuyerOrdersApi* | [**approveOrder**](docs/BuyerOrdersApi.md#approveorder) | **POST** /api/v1/orders/{id}/approve | Approve an order\&#39;s delivery
+*BuyerOrdersApi* | [**approveOrderDraft**](docs/BuyerOrdersApi.md#approveorderdraft) | **POST** /api/v1/orders/{id}/approve-draft | Approve a draft
+*BuyerOrdersApi* | [**cancelOrder**](docs/BuyerOrdersApi.md#cancelorder) | **POST** /api/v1/orders/{id}/cancel | Cancel an order
+*BuyerOrdersApi* | [**createOrder**](docs/BuyerOrdersApi.md#createorder) | **POST** /api/v1/orders | Place an order
+*BuyerOrdersApi* | [**downloadOrderBriefing**](docs/BuyerOrdersApi.md#downloadorderbriefing) | **GET** /api/v1/orders/{id}/briefing | Download the draft you attached to an order
+*BuyerOrdersApi* | [**downloadOrderDraft**](docs/BuyerOrdersApi.md#downloadorderdraft) | **GET** /api/v1/orders/{id}/draft | Download the draft of an order
+*BuyerOrdersApi* | [**estimateOrder**](docs/BuyerOrdersApi.md#estimateorder) | **POST** /api/v1/orders/estimate | Estimate an order
+*BuyerOrdersApi* | [**getOrder**](docs/BuyerOrdersApi.md#getorder) | **GET** /api/v1/orders/{id} | Get an order
+*BuyerOrdersApi* | [**listOrders**](docs/BuyerOrdersApi.md#listorders) | **GET** /api/v1/orders | List your orders
+*BuyerOrdersApi* | [**requestOrderDraftUpdate**](docs/BuyerOrdersApi.md#requestorderdraftupdate) | **POST** /api/v1/orders/{id}/request-draft-update | Request changes to a draft
+*BuyerOrdersApi* | [**requestOrderUpdate**](docs/BuyerOrdersApi.md#requestorderupdate) | **POST** /api/v1/orders/{id}/request-update | Request changes to a delivery
+*BuyerWalletApi* | [**downloadBuyerTransactionDocument**](docs/BuyerWalletApi.md#downloadbuyertransactiondocument) | **GET** /api/v1/wallets/buyer/transactions/{id}/document | Download the document of a wallet movement
+*BuyerWalletApi* | [**getBuyerWallet**](docs/BuyerWalletApi.md#getbuyerwallet) | **GET** /api/v1/wallets/buyer | Get your buyer wallet
+*BuyerWalletApi* | [**getInvoicePdf**](docs/BuyerWalletApi.md#getinvoicepdf) | **GET** /api/v1/invoices/{id}/pdf | Download an invoice
+*BuyerWalletApi* | [**listBuyerTransactions**](docs/BuyerWalletApi.md#listbuyertransactions) | **GET** /api/v1/wallets/buyer/transactions | List your buyer wallet movements
+*BuyerWalletApi* | [**listInvoices**](docs/BuyerWalletApi.md#listinvoices) | **GET** /api/v1/invoices | List your invoices
 *CatalogueApi* | [**discardMedia**](docs/CatalogueApi.md#discardmedia) | **PUT** /api/v1/projects/{id}/discards/{mediaId} | Discard a media for a project
 *CatalogueApi* | [**favouriteMedia**](docs/CatalogueApi.md#favouritemedia) | **PUT** /api/v1/projects/{id}/favourites/{mediaId} | Add a media to the favourites of a project
 *CatalogueApi* | [**getCatalogueMedia**](docs/CatalogueApi.md#getcataloguemedia) | **GET** /api/v1/medias/{id} | Get a media
@@ -74,17 +84,6 @@ All URIs are relative to *https://tool.growwer.com*
 *ManagedServicesApi* | [**requestManagedServiceCampaign**](docs/ManagedServicesApi.md#requestmanagedservicecampaign) | **POST** /api/v1/managed-service/campaign-requests | Request a new campaign
 *ManagedServicesApi* | [**requestManagedServiceInfo**](docs/ManagedServicesApi.md#requestmanagedserviceinfo) | **POST** /api/v1/managed-service/info-requests | Ask about the managed service
 *ManagedServicesApi* | [**reviewManagedServiceProposals**](docs/ManagedServicesApi.md#reviewmanagedserviceproposals) | **POST** /api/v1/managed-service/campaigns/{id}/proposals/review | Accept or reject proposals
-*OrdersApi* | [**approveOrder**](docs/OrdersApi.md#approveorder) | **POST** /api/v1/orders/{id}/approve | Approve an order\&#39;s delivery
-*OrdersApi* | [**approveOrderDraft**](docs/OrdersApi.md#approveorderdraft) | **POST** /api/v1/orders/{id}/approve-draft | Approve a draft
-*OrdersApi* | [**cancelOrder**](docs/OrdersApi.md#cancelorder) | **POST** /api/v1/orders/{id}/cancel | Cancel an order
-*OrdersApi* | [**createOrder**](docs/OrdersApi.md#createorder) | **POST** /api/v1/orders | Place an order
-*OrdersApi* | [**downloadOrderBriefing**](docs/OrdersApi.md#downloadorderbriefing) | **GET** /api/v1/orders/{id}/briefing | Download the draft you attached to an order
-*OrdersApi* | [**downloadOrderDraft**](docs/OrdersApi.md#downloadorderdraft) | **GET** /api/v1/orders/{id}/draft | Download the draft of an order
-*OrdersApi* | [**estimateOrder**](docs/OrdersApi.md#estimateorder) | **POST** /api/v1/orders/estimate | Estimate an order
-*OrdersApi* | [**getOrder**](docs/OrdersApi.md#getorder) | **GET** /api/v1/orders/{id} | Get an order
-*OrdersApi* | [**listOrders**](docs/OrdersApi.md#listorders) | **GET** /api/v1/orders | List your orders
-*OrdersApi* | [**requestOrderDraftUpdate**](docs/OrdersApi.md#requestorderdraftupdate) | **POST** /api/v1/orders/{id}/request-draft-update | Request changes to a draft
-*OrdersApi* | [**requestOrderUpdate**](docs/OrdersApi.md#requestorderupdate) | **POST** /api/v1/orders/{id}/request-update | Request changes to a delivery
 *ProjectsApi* | [**createProject**](docs/ProjectsApi.md#createprojectoperation) | **POST** /api/v1/projects | Create a project
 *ProjectsApi* | [**deleteProject**](docs/ProjectsApi.md#deleteproject) | **DELETE** /api/v1/projects/{id} | Delete a project
 *ProjectsApi* | [**getProject**](docs/ProjectsApi.md#getproject) | **GET** /api/v1/projects/{id} | Get a project
@@ -94,15 +93,11 @@ All URIs are relative to *https://tool.growwer.com*
 *SavedFiltersApi* | [**createSavedFilter**](docs/SavedFiltersApi.md#createsavedfilteroperation) | **POST** /api/v1/projects/{id}/saved-filters | Save a filter
 *SavedFiltersApi* | [**deleteSavedFilter**](docs/SavedFiltersApi.md#deletesavedfilter) | **DELETE** /api/v1/projects/{id}/saved-filters/{filterId} | Delete a saved filter
 *SavedFiltersApi* | [**listSavedFilters**](docs/SavedFiltersApi.md#listsavedfilters) | **GET** /api/v1/projects/{id}/saved-filters | List the saved filters of a project
+*SellerAccountApi* | [**putSellerHoliday**](docs/SellerAccountApi.md#putsellerholidayoperation) | **PUT** /api/v1/seller/holiday | Set your holiday
 *SellerMediasApi* | [**applySellerMediaCompetitiveFees**](docs/SellerMediasApi.md#applysellermediacompetitivefees) | **POST** /api/v1/seller/medias/{id}/apply-competitive-fees | Set the competitive fees Growwer suggests
 *SellerMediasApi* | [**getSellerMedia**](docs/SellerMediasApi.md#getsellermedia) | **GET** /api/v1/seller/medias/{id} | Get a media you sell on
 *SellerMediasApi* | [**listSellerMedias**](docs/SellerMediasApi.md#listsellermedias) | **GET** /api/v1/seller/medias | List the medias you sell on
 *SellerMediasApi* | [**updateSellerMedia**](docs/SellerMediasApi.md#updatesellermediaoperation) | **PATCH** /api/v1/seller/medias/{id} | Edit the fees of a media you sell on
-*SellerMoneyApi* | [**downloadSellerTransactionDocument**](docs/SellerMoneyApi.md#downloadsellertransactiondocument) | **GET** /api/v1/wallets/seller/transactions/{id}/document | Download the document of a seller wallet movement
-*SellerMoneyApi* | [**downloadWithdrawalInvoice**](docs/SellerMoneyApi.md#downloadwithdrawalinvoice) | **GET** /api/v1/withdrawals/{id}/invoice | Download the invoice of a withdrawal
-*SellerMoneyApi* | [**getSellerWallet**](docs/SellerMoneyApi.md#getsellerwallet) | **GET** /api/v1/wallets/seller | Get your seller wallet
-*SellerMoneyApi* | [**listSellerTransactions**](docs/SellerMoneyApi.md#listsellertransactions) | **GET** /api/v1/wallets/seller/transactions | List your seller wallet movements
-*SellerMoneyApi* | [**listWithdrawals**](docs/SellerMoneyApi.md#listwithdrawals) | **GET** /api/v1/withdrawals | List your withdrawals
 *SellerOrdersApi* | [**acceptSellerOrder**](docs/SellerOrdersApi.md#acceptsellerorder) | **POST** /api/v1/seller/orders/{id}/accept | Accept an order
 *SellerOrdersApi* | [**deliverSellerOrder**](docs/SellerOrdersApi.md#deliversellerorder) | **POST** /api/v1/seller/orders/{id}/deliver | Deliver an order
 *SellerOrdersApi* | [**deliverSellerOrderDraft**](docs/SellerOrdersApi.md#deliversellerorderdraft) | **POST** /api/v1/seller/orders/{id}/deliver-draft | Deliver a draft
@@ -115,6 +110,11 @@ All URIs are relative to *https://tool.growwer.com*
 *SellerOrdersApi* | [**refuteSellerOrderDraftUpdate**](docs/SellerOrdersApi.md#refutesellerorderdraftupdate) | **POST** /api/v1/seller/orders/{id}/refute-draft-update | Refuse a draft update
 *SellerOrdersApi* | [**refuteSellerOrderUpdate**](docs/SellerOrdersApi.md#refutesellerorderupdate) | **POST** /api/v1/seller/orders/{id}/refute-update | Refuse an update
 *SellerOrdersApi* | [**rejectSellerOrder**](docs/SellerOrdersApi.md#rejectsellerorder) | **POST** /api/v1/seller/orders/{id}/reject | Reject an order
+*SellerWalletApi* | [**downloadSellerTransactionDocument**](docs/SellerWalletApi.md#downloadsellertransactiondocument) | **GET** /api/v1/wallets/seller/transactions/{id}/document | Download the document of a seller wallet movement
+*SellerWalletApi* | [**downloadWithdrawalInvoice**](docs/SellerWalletApi.md#downloadwithdrawalinvoice) | **GET** /api/v1/withdrawals/{id}/invoice | Download the invoice of a withdrawal
+*SellerWalletApi* | [**getSellerWallet**](docs/SellerWalletApi.md#getsellerwallet) | **GET** /api/v1/wallets/seller | Get your seller wallet
+*SellerWalletApi* | [**listSellerTransactions**](docs/SellerWalletApi.md#listsellertransactions) | **GET** /api/v1/wallets/seller/transactions | List your seller wallet movements
+*SellerWalletApi* | [**listWithdrawals**](docs/SellerWalletApi.md#listwithdrawals) | **GET** /api/v1/withdrawals | List your withdrawals
 
 
 ### Models
@@ -249,7 +249,7 @@ and is automatically generated by the
 [OpenAPI Generator](https://openapi-generator.tech) project:
 
 - API version: `1`
-- Package version: `1.0.1`
+- Package version: `1.0.2`
 - Generator version: `7.24.0`
 - Build package: `org.openapitools.codegen.languages.TypeScriptFetchClientCodegen`
 

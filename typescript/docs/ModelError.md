@@ -20,7 +20,7 @@ import type { ModelError } from '@growwer/api'
 const example = {
   "code": unauthorized,
   "message": null,
-  "requestId": null,
+  "requestId": 9b2f6c1e-4d7a-4e3b-8a5f-2c1d0e9f7a64,
   "details": null,
 } satisfies ModelError
 

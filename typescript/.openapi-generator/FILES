@@ -3,7 +3,8 @@
 README.md
 docs/AccountApi.md
 docs/Balance.md
-docs/BuyerMoneyApi.md
+docs/BuyerOrdersApi.md
+docs/BuyerWalletApi.md
 docs/CatalogueApi.md
 docs/CatalogueMedia.md
 docs/CatalogueMediaFlashOffer.md
@@ -77,7 +78,6 @@ docs/OrderMedia.md
 docs/OrderProject.md
 docs/OrderStateHistoryInner.md
 docs/OrderStateHistoryInnerReason.md
-docs/OrdersApi.md
 docs/PostOrderBriefing.md
 docs/PostOrderBriefingRequest.md
 docs/Project.md
@@ -91,6 +91,7 @@ docs/RequestMediasRequest.md
 docs/SavedFilter.md
 docs/SavedFilterNotifications.md
 docs/SavedFiltersApi.md
+docs/SellerAccountApi.md
 docs/SellerFees.md
 docs/SellerFeesOrNull.md
 docs/SellerMedia.md
@@ -100,7 +101,6 @@ docs/SellerMediaLinkAdditionOfferPricingOptionsInner.md
 docs/SellerMediaPostOffer.md
 docs/SellerMediaPostOfferPricingOptionsInner.md
 docs/SellerMediasApi.md
-docs/SellerMoneyApi.md
 docs/SellerOrder.md
 docs/SellerOrderBriefing.md
 docs/SellerOrderChannel.md
@@ -114,6 +114,7 @@ docs/SellerOrderRejectionReason.md
 docs/SellerOrdersApi.md
 docs/SellerPostOrderBriefing.md
 docs/SellerTransaction.md
+docs/SellerWalletApi.md
 docs/Transaction.md
 docs/UpdateProjectRequest.md
 docs/UpdateSellerMediaRequest.md
@@ -126,16 +127,17 @@ docs/UploadFile201Response.md
 docs/Withdrawal.md
 package.json
 src/apis/AccountApi.ts
-src/apis/BuyerMoneyApi.ts
+src/apis/BuyerOrdersApi.ts
+src/apis/BuyerWalletApi.ts
 src/apis/CatalogueApi.ts
 src/apis/FilesApi.ts
 src/apis/ManagedServicesApi.ts
-src/apis/OrdersApi.ts
 src/apis/ProjectsApi.ts
 src/apis/SavedFiltersApi.ts
+src/apis/SellerAccountApi.ts
 src/apis/SellerMediasApi.ts
-src/apis/SellerMoneyApi.ts
 src/apis/SellerOrdersApi.ts
+src/apis/SellerWalletApi.ts
 src/apis/index.ts
 src/index.ts
 src/models/Balance.ts

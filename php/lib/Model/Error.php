@@ -387,7 +387,7 @@ class Error implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets request_id
      *
-     * @param string $request_id The X-Request-Id of the call. Quote it when reporting a problem.
+     * @param string $request_id UUID v4 generated per request, or the `X-Request-Id` you sent. Quote it when reporting a problem.
      *
      * @return self
      */

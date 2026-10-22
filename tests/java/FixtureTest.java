@@ -1,8 +1,8 @@
 import com.growwer.api.ApiClient;
 import com.growwer.api.ApiException;
 import com.growwer.api.api.AccountApi;
+import com.growwer.api.api.BuyerOrdersApi;
 import com.growwer.api.api.CatalogueApi;
-import com.growwer.api.api.OrdersApi;
 import com.growwer.api.api.SellerMediasApi;
 import com.growwer.api.model.CatalogueMedia;
 import com.growwer.api.model.CatalogueOfferOrNull;
@@ -97,6 +97,8 @@ public class FixtureTest {
         equal("currency", me.getBuyer().getBalance().getAvailable().getCurrency(), "EUR");
         equal("holidayEndDate", me.getSeller().getHolidayEndDate(), null);
         equal("eligible", me.getCatalogue().getEligible(), true);
+        equal("dailyCap", me.getCatalogue().getDailyCap(), 5000);
+        equal("remainingToday", me.getCatalogue().getRemainingToday(), null);
     }
 
     void theBaseUrlIsOverridable() throws Exception {
@@ -108,7 +110,7 @@ public class FixtureTest {
     }
 
     void listOrdersReadsItemsAndTotalWithBothOrderTypes() throws Exception {
-        ListOrders200Response page = new OrdersApi(answer(fixture("orders-page.json")))
+        ListOrders200Response page = new BuyerOrdersApi(answer(fixture("orders-page.json")))
             .listOrders(null, null, null, null, null, 2, null);
 
         equal("limit", sent().url().queryParameter("limit"), "2");
@@ -144,7 +146,7 @@ public class FixtureTest {
     }
 
     void anOrderWithFieldsThisClientDoesNotKnowStillDeserialises() throws Exception {
-        Order order = new OrdersApi(answer(fixture("order-with-unknown-field.json"))).getOrder(ORDER_ID);
+        Order order = new BuyerOrdersApi(answer(fixture("order-with-unknown-field.json"))).getOrder(ORDER_ID);
 
         equal("path", sent().url().encodedPath(), "/api/v1/orders/" + ORDER_ID);
         equal("id", order.getId(), ORDER_ID);
@@ -157,7 +159,7 @@ public class FixtureTest {
     }
 
     void aLinkAdditionOrderWithFieldsThisClientDoesNotKnowStillDeserialises() throws Exception {
-        Order order = new OrdersApi(answer(fixture("link-addition-order-with-unknown-field.json"))).getOrder(ORDER_ID);
+        Order order = new BuyerOrdersApi(answer(fixture("link-addition-order-with-unknown-field.json"))).getOrder(ORDER_ID);
 
         equal("type", order.getType().getValue(), "link_addition");
         equal("briefing type", order.getBriefing().getActualInstance().getClass(), LinkAdditionOrderBriefing.class);
@@ -247,7 +249,7 @@ public class FixtureTest {
 
     void aBinaryDownloadReturnsTheExactBytes() throws Exception {
         byte[] body = fixture("briefing.bin");
-        File file = new OrdersApi(answer(200, body, "application/octet-stream",
+        File file = new BuyerOrdersApi(answer(200, body, "application/octet-stream",
             "Content-Disposition", "attachment; filename=\"briefing.docx\"")).downloadOrderBriefing(ORDER_ID);
 
         try {

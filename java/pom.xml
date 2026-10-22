@@ -5,7 +5,7 @@
     <artifactId>growwer-api</artifactId>
     <packaging>jar</packaging>
     <name>growwer-api</name>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <url>https://github.com/viralitymedia/growwer-api-sdk</url>
     <description>Official client for the Growwer API: orders, projects, the media catalogue, seller medias and wallets.</description>
     <scm>

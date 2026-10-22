@@ -7,7 +7,8 @@ build.gradle
 build.sbt
 docs/AccountApi.md
 docs/Balance.md
-docs/BuyerMoneyApi.md
+docs/BuyerOrdersApi.md
+docs/BuyerWalletApi.md
 docs/CatalogueApi.md
 docs/CatalogueMedia.md
 docs/CatalogueMediaFlashOffer.md
@@ -81,7 +82,6 @@ docs/OrderMedia.md
 docs/OrderProject.md
 docs/OrderStateHistoryInner.md
 docs/OrderStateHistoryInnerReason.md
-docs/OrdersApi.md
 docs/PostOrderBriefing.md
 docs/PostOrderBriefingRequest.md
 docs/Project.md
@@ -95,6 +95,7 @@ docs/RequestMediasRequest.md
 docs/SavedFilter.md
 docs/SavedFilterNotifications.md
 docs/SavedFiltersApi.md
+docs/SellerAccountApi.md
 docs/SellerFees.md
 docs/SellerFeesOrNull.md
 docs/SellerMedia.md
@@ -104,7 +105,6 @@ docs/SellerMediaLinkAdditionOfferPricingOptionsInner.md
 docs/SellerMediaPostOffer.md
 docs/SellerMediaPostOfferPricingOptionsInner.md
 docs/SellerMediasApi.md
-docs/SellerMoneyApi.md
 docs/SellerOrder.md
 docs/SellerOrderBriefing.md
 docs/SellerOrderChannel.md
@@ -118,6 +118,7 @@ docs/SellerOrderRejectionReason.md
 docs/SellerOrdersApi.md
 docs/SellerPostOrderBriefing.md
 docs/SellerTransaction.md
+docs/SellerWalletApi.md
 docs/Transaction.md
 docs/UpdateProjectRequest.md
 docs/UpdateSellerMediaRequest.md
@@ -151,16 +152,17 @@ src/main/java/com/growwer/api/ServerConfiguration.java
 src/main/java/com/growwer/api/ServerVariable.java
 src/main/java/com/growwer/api/StringUtil.java
 src/main/java/com/growwer/api/api/AccountApi.java
-src/main/java/com/growwer/api/api/BuyerMoneyApi.java
+src/main/java/com/growwer/api/api/BuyerOrdersApi.java
+src/main/java/com/growwer/api/api/BuyerWalletApi.java
 src/main/java/com/growwer/api/api/CatalogueApi.java
 src/main/java/com/growwer/api/api/FilesApi.java
 src/main/java/com/growwer/api/api/ManagedServicesApi.java
-src/main/java/com/growwer/api/api/OrdersApi.java
 src/main/java/com/growwer/api/api/ProjectsApi.java
 src/main/java/com/growwer/api/api/SavedFiltersApi.java
+src/main/java/com/growwer/api/api/SellerAccountApi.java
 src/main/java/com/growwer/api/api/SellerMediasApi.java
-src/main/java/com/growwer/api/api/SellerMoneyApi.java
 src/main/java/com/growwer/api/api/SellerOrdersApi.java
+src/main/java/com/growwer/api/api/SellerWalletApi.java
 src/main/java/com/growwer/api/auth/ApiKeyAuth.java
 src/main/java/com/growwer/api/auth/Authentication.java
 src/main/java/com/growwer/api/auth/HttpBasicAuth.java

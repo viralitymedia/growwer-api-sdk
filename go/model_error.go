@@ -25,7 +25,7 @@ type Error struct {
 	Code string `json:"code"`
 	// A human-readable explanation. It may change.
 	Message string `json:"message"`
-	// The X-Request-Id of the call. Quote it when reporting a problem.
+	// UUID v4 generated per request, or the `X-Request-Id` you sent. Quote it when reporting a problem.
 	RequestId string `json:"requestId"`
 	// Extra data on some errors, such as the invalid fields of a validation_failed error.
 	Details map[string]interface{} `json:"details,omitempty"`

@@ -133,16 +133,17 @@ require 'growwer/models/withdrawal'
 
 # APIs
 require 'growwer/api/account_api'
-require 'growwer/api/buyer_money_api'
+require 'growwer/api/buyer_orders_api'
+require 'growwer/api/buyer_wallet_api'
 require 'growwer/api/catalogue_api'
 require 'growwer/api/files_api'
 require 'growwer/api/managed_services_api'
-require 'growwer/api/orders_api'
 require 'growwer/api/projects_api'
 require 'growwer/api/saved_filters_api'
+require 'growwer/api/seller_account_api'
 require 'growwer/api/seller_medias_api'
-require 'growwer/api/seller_money_api'
 require 'growwer/api/seller_orders_api'
+require 'growwer/api/seller_wallet_api'
 
 module Growwer
   class << self

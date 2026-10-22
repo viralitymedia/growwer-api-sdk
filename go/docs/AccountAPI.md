@@ -6,7 +6,6 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**GetMe**](AccountAPI.md#GetMe) | **Get** /api/v1/me | Your account
 [**GetVocabulary**](AccountAPI.md#GetVocabulary) | **Get** /api/v1/vocabulary | Codes and names
-[**PutSellerHoliday**](AccountAPI.md#PutSellerHoliday) | **Put** /api/v1/seller/holiday | Set your holiday
 
 
 
@@ -125,74 +124,6 @@ Other parameters are passed through a pointer to a apiGetVocabularyRequest struc
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
-[[Back to Model list]](../README.md#documentation-for-models)
-[[Back to README]](../README.md)
-
-
-## PutSellerHoliday
-
-> PutSellerHoliday200Response PutSellerHoliday(ctx).IdempotencyKey(idempotencyKey).PutSellerHolidayRequest(putSellerHolidayRequest).Execute()
-
-Set your holiday
-
-
-
-### Example
-
-```go
-package main
-
-import (
-	"context"
-	"fmt"
-	"os"
-	openapiclient "github.com/viralitymedia/growwer-api-sdk/go"
-)
-
-func main() {
-	idempotencyKey := "idempotencyKey_example" // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
-	putSellerHolidayRequest := *openapiclient.NewPutSellerHolidayRequest(false) // PutSellerHolidayRequest | 
-
-	configuration := openapiclient.NewConfiguration()
-	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AccountAPI.PutSellerHoliday(context.Background()).IdempotencyKey(idempotencyKey).PutSellerHolidayRequest(putSellerHolidayRequest).Execute()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `AccountAPI.PutSellerHoliday``: %v\n", err)
-		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
-	}
-	// response from `PutSellerHoliday`: PutSellerHoliday200Response
-	fmt.Fprintf(os.Stdout, "Response from `AccountAPI.PutSellerHoliday`: %v\n", resp)
-}
-```
-
-### Path Parameters
-
-
-
-### Other Parameters
-
-Other parameters are passed through a pointer to a apiPutSellerHolidayRequest struct via the builder pattern
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **idempotencyKey** | **string** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | 
- **putSellerHolidayRequest** | [**PutSellerHolidayRequest**](PutSellerHolidayRequest.md) |  | 
-
-### Return type
-
-[**PutSellerHoliday200Response**](PutSellerHoliday200Response.md)
-
-### Authorization
-
-[apiKey](../README.md#apiKey)
-
-### HTTP request headers
-
-- **Content-Type**: application/json
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)

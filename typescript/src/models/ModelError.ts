@@ -32,7 +32,7 @@ export interface ModelError {
      */
     message: string;
     /**
-     * The X-Request-Id of the call. Quote it when reporting a problem.
+     * UUID v4 generated per request, or the `X-Request-Id` you sent. Quote it when reporting a problem.
      * @type {string}
      * @memberof ModelError
      */

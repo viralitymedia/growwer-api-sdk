@@ -15,21 +15,22 @@
 """  # noqa: E501
 
 
-__version__ = "1.0.1"
+__version__ = "1.0.2"
 
 # Define package exports
 __all__ = [
     "AccountApi",
-    "BuyerMoneyApi",
+    "BuyerOrdersApi",
+    "BuyerWalletApi",
     "CatalogueApi",
     "FilesApi",
     "ManagedServicesApi",
-    "OrdersApi",
     "ProjectsApi",
     "SavedFiltersApi",
+    "SellerAccountApi",
     "SellerMediasApi",
-    "SellerMoneyApi",
     "SellerOrdersApi",
+    "SellerWalletApi",
     "ApiResponse",
     "ApiClient",
     "Configuration",
@@ -155,16 +156,17 @@ __all__ = [
 
 # import apis into sdk package
 from growwer.api.account_api import AccountApi as AccountApi
-from growwer.api.buyer_money_api import BuyerMoneyApi as BuyerMoneyApi
+from growwer.api.buyer_orders_api import BuyerOrdersApi as BuyerOrdersApi
+from growwer.api.buyer_wallet_api import BuyerWalletApi as BuyerWalletApi
 from growwer.api.catalogue_api import CatalogueApi as CatalogueApi
 from growwer.api.files_api import FilesApi as FilesApi
 from growwer.api.managed_services_api import ManagedServicesApi as ManagedServicesApi
-from growwer.api.orders_api import OrdersApi as OrdersApi
 from growwer.api.projects_api import ProjectsApi as ProjectsApi
 from growwer.api.saved_filters_api import SavedFiltersApi as SavedFiltersApi
+from growwer.api.seller_account_api import SellerAccountApi as SellerAccountApi
 from growwer.api.seller_medias_api import SellerMediasApi as SellerMediasApi
-from growwer.api.seller_money_api import SellerMoneyApi as SellerMoneyApi
 from growwer.api.seller_orders_api import SellerOrdersApi as SellerOrdersApi
+from growwer.api.seller_wallet_api import SellerWalletApi as SellerWalletApi
 
 # import ApiClient
 from growwer.api_response import ApiResponse as ApiResponse

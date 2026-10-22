@@ -9,7 +9,7 @@
 |------------ | ------------- | ------------- | -------------|
 |**code** | **String** | A stable, machine-readable error code. |  |
 |**message** | **String** | A human-readable explanation. It may change. |  |
-|**requestId** | **String** | The X-Request-Id of the call. Quote it when reporting a problem. |  |
+|**requestId** | **String** | UUID v4 generated per request, or the &#x60;X-Request-Id&#x60; you sent. Quote it when reporting a problem. |  |
 |**details** | **Map&lt;String, Object&gt;** | Extra data on some errors, such as the invalid fields of a validation_failed error. |  [optional] |
 
 

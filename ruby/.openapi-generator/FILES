@@ -8,7 +8,8 @@ README.md
 Rakefile
 docs/AccountApi.md
 docs/Balance.md
-docs/BuyerMoneyApi.md
+docs/BuyerOrdersApi.md
+docs/BuyerWalletApi.md
 docs/CatalogueApi.md
 docs/CatalogueMedia.md
 docs/CatalogueMediaFlashOffer.md
@@ -82,7 +83,6 @@ docs/OrderMedia.md
 docs/OrderProject.md
 docs/OrderStateHistoryInner.md
 docs/OrderStateHistoryInnerReason.md
-docs/OrdersApi.md
 docs/PostOrderBriefing.md
 docs/PostOrderBriefingRequest.md
 docs/Project.md
@@ -96,6 +96,7 @@ docs/RequestMediasRequest.md
 docs/SavedFilter.md
 docs/SavedFilterNotifications.md
 docs/SavedFiltersApi.md
+docs/SellerAccountApi.md
 docs/SellerFees.md
 docs/SellerFeesOrNull.md
 docs/SellerMedia.md
@@ -105,7 +106,6 @@ docs/SellerMediaLinkAdditionOfferPricingOptionsInner.md
 docs/SellerMediaPostOffer.md
 docs/SellerMediaPostOfferPricingOptionsInner.md
 docs/SellerMediasApi.md
-docs/SellerMoneyApi.md
 docs/SellerOrder.md
 docs/SellerOrderBriefing.md
 docs/SellerOrderChannel.md
@@ -119,6 +119,7 @@ docs/SellerOrderRejectionReason.md
 docs/SellerOrdersApi.md
 docs/SellerPostOrderBriefing.md
 docs/SellerTransaction.md
+docs/SellerWalletApi.md
 docs/Transaction.md
 docs/UpdateProjectRequest.md
 docs/UpdateSellerMediaRequest.md
@@ -133,16 +134,17 @@ git_push.sh
 growwer.gemspec
 lib/growwer.rb
 lib/growwer/api/account_api.rb
-lib/growwer/api/buyer_money_api.rb
+lib/growwer/api/buyer_orders_api.rb
+lib/growwer/api/buyer_wallet_api.rb
 lib/growwer/api/catalogue_api.rb
 lib/growwer/api/files_api.rb
 lib/growwer/api/managed_services_api.rb
-lib/growwer/api/orders_api.rb
 lib/growwer/api/projects_api.rb
 lib/growwer/api/saved_filters_api.rb
+lib/growwer/api/seller_account_api.rb
 lib/growwer/api/seller_medias_api.rb
-lib/growwer/api/seller_money_api.rb
 lib/growwer/api/seller_orders_api.rb
+lib/growwer/api/seller_wallet_api.rb
 lib/growwer/api_client.rb
 lib/growwer/api_error.rb
 lib/growwer/api_model_base.rb

@@ -66,6 +66,8 @@ RSpec.describe 'Growwer fixtures' do
     expect(me.buyer.balance.available.currency).to eq('EUR')
     expect(me.seller.holiday_end_date).to be_nil
     expect(me.catalogue.eligible).to be(true)
+    expect(me.catalogue.daily_cap).to eq(5000)
+    expect(me.catalogue.remaining_today).to be_nil
   end
 
   it 'lets the base URL be overridden' do
@@ -75,7 +77,7 @@ RSpec.describe 'Growwer fixtures' do
   end
 
   it 'reads items and total from listOrders, with both order types' do
-    page = Growwer::OrdersApi.new(answer(200, fixture('orders-page.json'))).list_orders(limit: 2)
+    page = Growwer::BuyerOrdersApi.new(answer(200, fixture('orders-page.json'))).list_orders(limit: 2)
 
     expect(sent.url.query).to include('limit=2')
     expect(page).to be_a(Growwer::ListOrders200Response)
@@ -108,7 +110,7 @@ RSpec.describe 'Growwer fixtures' do
   end
 
   it 'still deserialises an order with fields this client does not know' do
-    order = Growwer::OrdersApi.new(answer(200, fixture('order-with-unknown-field.json'))).get_order(ORDER_ID)
+    order = Growwer::BuyerOrdersApi.new(answer(200, fixture('order-with-unknown-field.json'))).get_order(ORDER_ID)
 
     expect(sent.url.path).to eq("/api/v1/orders/#{ORDER_ID}")
     expect(order.id).to eq(ORDER_ID)
@@ -121,7 +123,7 @@ RSpec.describe 'Growwer fixtures' do
   end
 
   it 'still deserialises a link addition order with fields this client does not know' do
-    order = Growwer::OrdersApi.new(answer(200, fixture('link-addition-order-with-unknown-field.json'))).get_order(ORDER_ID)
+    order = Growwer::BuyerOrdersApi.new(answer(200, fixture('link-addition-order-with-unknown-field.json'))).get_order(ORDER_ID)
 
     expect(order.type).to eq('link_addition')
     expect(order.briefing).to be_a(Growwer::LinkAdditionOrderBriefing)
@@ -210,7 +212,7 @@ RSpec.describe 'Growwer fixtures' do
                       'Content-Disposition' => 'attachment; filename="briefing.docx"' })
     client.config.return_binary_data = true
 
-    downloaded = Growwer::OrdersApi.new(client).download_order_briefing(ORDER_ID)
+    downloaded = Growwer::BuyerOrdersApi.new(client).download_order_briefing(ORDER_ID)
 
     expect(sent.url.path).to eq("/api/v1/orders/#{ORDER_ID}/briefing")
     expect(downloaded.b).to eq(body.b)

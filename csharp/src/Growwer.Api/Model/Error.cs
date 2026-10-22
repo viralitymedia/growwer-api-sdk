@@ -46,7 +46,7 @@ namespace Growwer.Api.Model
         /// </summary>
         /// <param name="code">A stable, machine-readable error code. (required).</param>
         /// <param name="message">A human-readable explanation. It may change. (required).</param>
-        /// <param name="requestId">The X-Request-Id of the call. Quote it when reporting a problem. (required).</param>
+        /// <param name="requestId">UUID v4 generated per request, or the &#x60;X-Request-Id&#x60; you sent. Quote it when reporting a problem. (required).</param>
         /// <param name="details">Extra data on some errors, such as the invalid fields of a validation_failed error..</param>
         public Error(string code = default, string message = default, string requestId = default, Dictionary<string, Object> details = default)
         {
@@ -90,9 +90,12 @@ namespace Growwer.Api.Model
         public string Message { get; set; }
 
         /// <summary>
-        /// The X-Request-Id of the call. Quote it when reporting a problem.
+        /// UUID v4 generated per request, or the &#x60;X-Request-Id&#x60; you sent. Quote it when reporting a problem.
         /// </summary>
-        /// <value>The X-Request-Id of the call. Quote it when reporting a problem.</value>
+        /// <value>UUID v4 generated per request, or the &#x60;X-Request-Id&#x60; you sent. Quote it when reporting a problem.</value>
+        /*
+        <example>9b2f6c1e-4d7a-4e3b-8a5f-2c1d0e9f7a64</example>
+        */
         [DataMember(Name = "requestId", IsRequired = true, EmitDefaultValue = true)]
         public string RequestId { get; set; }
 

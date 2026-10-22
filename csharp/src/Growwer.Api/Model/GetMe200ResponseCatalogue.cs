@@ -44,19 +44,42 @@ namespace Growwer.Api.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="GetMe200ResponseCatalogue" /> class.
         /// </summary>
-        /// <param name="eligible">Whether the catalogue operations (tag Catalogue: searching a project&#39;s medias, flash offers and media details) are open to you. They are open to accounts with recent completed orders, as buyer or as seller; until then they answer 403 &#x60;catalogue_requires_recent_order&#x60;. A media you have ordered is always readable with GET /medias/{id}. (required).</param>
-        public GetMe200ResponseCatalogue(bool eligible = default)
+        /// <param name="eligible">Whether you have the full daily cap of the catalogue operations (tag Catalogue: searching a project&#39;s medias, flash offers and media details). It is open to accounts with recent completed orders, as buyer or as seller; until then the catalogue answers within a smaller daily trial quota, which rises to the full cap after a completed order. A media you have ordered is always readable with GET /medias/{id} and counts against neither. (required).</param>
+        /// <param name="dailyCap">How many distinct medias the catalogue operations show you per UTC day: the full cap when &#x60;eligible&#x60; is true, the trial quota otherwise. 0 means the catalogue answers 403 &#x60;catalogue_requires_recent_order&#x60; until you have a recent completed order. (required).</param>
+        /// <param name="remainingToday">How many new distinct medias still fit in &#x60;dailyCap&#x60; today (UTC). Medias you have already seen today are free. Null when the count cannot be read right now; the catalogue operations then answer 503 until it can. (required).</param>
+        public GetMe200ResponseCatalogue(bool eligible = default, int dailyCap = default, int? remainingToday = default)
         {
             this.Eligible = eligible;
+            this.DailyCap = dailyCap;
+            // to ensure "remainingToday" is required (not null)
+            if (remainingToday == null)
+            {
+                throw new ArgumentNullException("remainingToday is a required property for GetMe200ResponseCatalogue and cannot be null");
+            }
+            this.RemainingToday = remainingToday;
             this.AdditionalProperties = new Dictionary<string, object>();
         }
 
         /// <summary>
-        /// Whether the catalogue operations (tag Catalogue: searching a project&#39;s medias, flash offers and media details) are open to you. They are open to accounts with recent completed orders, as buyer or as seller; until then they answer 403 &#x60;catalogue_requires_recent_order&#x60;. A media you have ordered is always readable with GET /medias/{id}.
+        /// Whether you have the full daily cap of the catalogue operations (tag Catalogue: searching a project&#39;s medias, flash offers and media details). It is open to accounts with recent completed orders, as buyer or as seller; until then the catalogue answers within a smaller daily trial quota, which rises to the full cap after a completed order. A media you have ordered is always readable with GET /medias/{id} and counts against neither.
         /// </summary>
-        /// <value>Whether the catalogue operations (tag Catalogue: searching a project&#39;s medias, flash offers and media details) are open to you. They are open to accounts with recent completed orders, as buyer or as seller; until then they answer 403 &#x60;catalogue_requires_recent_order&#x60;. A media you have ordered is always readable with GET /medias/{id}.</value>
+        /// <value>Whether you have the full daily cap of the catalogue operations (tag Catalogue: searching a project&#39;s medias, flash offers and media details). It is open to accounts with recent completed orders, as buyer or as seller; until then the catalogue answers within a smaller daily trial quota, which rises to the full cap after a completed order. A media you have ordered is always readable with GET /medias/{id} and counts against neither.</value>
         [DataMember(Name = "eligible", IsRequired = true, EmitDefaultValue = true)]
         public bool Eligible { get; set; }
+
+        /// <summary>
+        /// How many distinct medias the catalogue operations show you per UTC day: the full cap when &#x60;eligible&#x60; is true, the trial quota otherwise. 0 means the catalogue answers 403 &#x60;catalogue_requires_recent_order&#x60; until you have a recent completed order.
+        /// </summary>
+        /// <value>How many distinct medias the catalogue operations show you per UTC day: the full cap when &#x60;eligible&#x60; is true, the trial quota otherwise. 0 means the catalogue answers 403 &#x60;catalogue_requires_recent_order&#x60; until you have a recent completed order.</value>
+        [DataMember(Name = "dailyCap", IsRequired = true, EmitDefaultValue = true)]
+        public int DailyCap { get; set; }
+
+        /// <summary>
+        /// How many new distinct medias still fit in &#x60;dailyCap&#x60; today (UTC). Medias you have already seen today are free. Null when the count cannot be read right now; the catalogue operations then answer 503 until it can.
+        /// </summary>
+        /// <value>How many new distinct medias still fit in &#x60;dailyCap&#x60; today (UTC). Medias you have already seen today are free. Null when the count cannot be read right now; the catalogue operations then answer 503 until it can.</value>
+        [DataMember(Name = "remainingToday", IsRequired = true, EmitDefaultValue = true)]
+        public int? RemainingToday { get; set; }
 
         /// <summary>
         /// Gets or Sets additional properties
@@ -73,6 +96,8 @@ namespace Growwer.Api.Model
             StringBuilder sb = new StringBuilder();
             sb.Append("class GetMe200ResponseCatalogue {\n");
             sb.Append("  Eligible: ").Append(Eligible).Append("\n");
+            sb.Append("  DailyCap: ").Append(DailyCap).Append("\n");
+            sb.Append("  RemainingToday: ").Append(RemainingToday).Append("\n");
             sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
@@ -94,6 +119,18 @@ namespace Growwer.Api.Model
         /// <returns>Validation Result</returns>
         IEnumerable<ValidationResult> IValidatableObject.Validate(ValidationContext validationContext)
         {
+            // DailyCap (int) minimum
+            if (this.DailyCap < (int)0)
+            {
+                yield return new ValidationResult("Invalid value for DailyCap, must be a value greater than or equal to 0.", new [] { "DailyCap" });
+            }
+
+            // RemainingToday (int?) minimum
+            if (this.RemainingToday < (int?)0)
+            {
+                yield return new ValidationResult("Invalid value for RemainingToday, must be a value greater than or equal to 0.", new [] { "RemainingToday" });
+            }
+
             yield break;
         }
     }

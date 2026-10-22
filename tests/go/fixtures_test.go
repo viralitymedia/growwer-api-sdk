@@ -103,6 +103,8 @@ func TestGetMeCallsProductionWithTheBearerKey(t *testing.T) {
 	equal(t, "currency", me.Buyer.Balance.Available.Currency, "EUR")
 	equal(t, "holidayEndDate set", me.Seller.HolidayEndDate.Get() == nil, true)
 	equal(t, "eligible", me.Catalogue.Eligible, true)
+	equal(t, "dailyCap", me.Catalogue.DailyCap, int32(5000))
+	equal(t, "remainingToday set", me.Catalogue.RemainingToday.Get() == nil, true)
 }
 
 func TestTheBaseUrlIsOverridable(t *testing.T) {
@@ -118,7 +120,7 @@ func TestTheBaseUrlIsOverridable(t *testing.T) {
 func TestListOrdersReadsItemsAndTotalWithBothOrderTypes(t *testing.T) {
 	client, transport := answer(200, fixture(t, "orders-page.json"), nil)
 
-	page, _, err := client.OrdersAPI.ListOrders(authorised()).Limit(2).Execute()
+	page, _, err := client.BuyerOrdersAPI.ListOrders(authorised()).Limit(2).Execute()
 	check(t, err)
 
 	equal(t, "limit", sent(t, transport).URL.Query().Get("limit"), "2")
@@ -160,7 +162,7 @@ func TestListOrdersReadsItemsAndTotalWithBothOrderTypes(t *testing.T) {
 func TestAnOrderWithFieldsThisClientDoesNotKnowStillDeserialises(t *testing.T) {
 	client, transport := answer(200, fixture(t, "order-with-unknown-field.json"), nil)
 
-	order, _, err := client.OrdersAPI.GetOrder(authorised(), orderID).Execute()
+	order, _, err := client.BuyerOrdersAPI.GetOrder(authorised(), orderID).Execute()
 	check(t, err)
 
 	equal(t, "path", sent(t, transport).URL.Path, "/api/v1/orders/"+orderID)
@@ -178,7 +180,7 @@ func TestAnOrderWithFieldsThisClientDoesNotKnowStillDeserialises(t *testing.T) {
 func TestALinkAdditionOrderWithFieldsThisClientDoesNotKnowStillDeserialises(t *testing.T) {
 	client, _ := answer(200, fixture(t, "link-addition-order-with-unknown-field.json"), nil)
 
-	order, _, err := client.OrdersAPI.GetOrder(authorised(), orderID).Execute()
+	order, _, err := client.BuyerOrdersAPI.GetOrder(authorised(), orderID).Execute()
 	check(t, err)
 
 	equal(t, "type", order.Type, "link_addition")
@@ -293,7 +295,7 @@ func TestABinaryDownloadReturnsTheExactBytes(t *testing.T) {
 		"Content-Disposition": {`attachment; filename="briefing.docx"`},
 	})
 
-	file, _, err := client.OrdersAPI.DownloadOrderBriefing(authorised(), orderID).Execute()
+	file, _, err := client.BuyerOrdersAPI.DownloadOrderBriefing(authorised(), orderID).Execute()
 	check(t, err)
 	defer os.Remove(file.Name())
 	defer file.Close()

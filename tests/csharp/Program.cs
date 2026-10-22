@@ -103,6 +103,8 @@ internal static class Program
         Equal("currency", me.Buyer.Balance.Available.Currency, "EUR");
         Equal("holidayEndDate", me.Seller.HolidayEndDate, null);
         Equal("eligible", me.Catalogue.Eligible, true);
+        Equal("dailyCap", me.Catalogue.DailyCap, 5000);
+        Equal("remainingToday", me.Catalogue.RemainingToday, null);
     }
 
     private static void TheBaseUrlIsOverridable()
@@ -116,7 +118,7 @@ internal static class Program
 
     private static void ListOrdersReadsItemsAndTotalWithBothOrderTypes()
     {
-        ListOrders200Response page = new OrdersApi(Answer(Fixture("orders-page.json")), Key()).ListOrders(limit: 2);
+        ListOrders200Response page = new BuyerOrdersApi(Answer(Fixture("orders-page.json")), Key()).ListOrders(limit: 2);
 
         Equal("query", SentRequest().RequestUri.Query.Contains("limit=2"), true);
         Equal("total", page.Total, 42);
@@ -151,7 +153,7 @@ internal static class Program
 
     private static void AnOrderWithFieldsThisClientDoesNotKnowStillDeserialises()
     {
-        Order order = new OrdersApi(Answer(Fixture("order-with-unknown-field.json")), Key()).GetOrder(OrderId);
+        Order order = new BuyerOrdersApi(Answer(Fixture("order-with-unknown-field.json")), Key()).GetOrder(OrderId);
 
         Equal("path", SentRequest().RequestUri.AbsolutePath, "/api/v1/orders/" + OrderId);
         Equal("id", order.Id, OrderId);
@@ -165,7 +167,7 @@ internal static class Program
 
     private static void ALinkAdditionOrderWithFieldsThisClientDoesNotKnowStillDeserialises()
     {
-        Order order = new OrdersApi(Answer(Fixture("link-addition-order-with-unknown-field.json")), Key()).GetOrder(OrderId);
+        Order order = new BuyerOrdersApi(Answer(Fixture("link-addition-order-with-unknown-field.json")), Key()).GetOrder(OrderId);
 
         Equal("type", order.Type, Order.TypeEnum.LinkAddition);
         Equal("briefing type", order.Briefing.ActualInstance.GetType(), typeof(LinkAdditionOrderBriefing));
@@ -265,7 +267,7 @@ internal static class Program
     private static void ABinaryDownloadReturnsTheExactBytes()
     {
         byte[] body = Fixture("briefing.bin");
-        FileParameter file = new OrdersApi(Answer(HttpStatusCode.OK, body, "application/octet-stream",
+        FileParameter file = new BuyerOrdersApi(Answer(HttpStatusCode.OK, body, "application/octet-stream",
             "Content-Disposition", "attachment; filename=\"briefing.docx\""), Key()).DownloadOrderBriefing(OrderId);
 
         Equal("path", SentRequest().RequestUri.AbsolutePath, "/api/v1/orders/" + OrderId + "/briefing");

@@ -19,7 +19,8 @@ import re  # noqa: F401
 import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictBool
-from typing import Any, ClassVar, Dict, List
+from typing import Any, ClassVar, Dict, List, Optional
+from typing_extensions import Annotated
 from typing import Optional, Set
 from typing_extensions import Self
 from pydantic_core import to_jsonable_python
@@ -28,8 +29,10 @@ class GetMe200ResponseCatalogue(BaseModel):
     """
     GetMe200ResponseCatalogue
     """ # noqa: E501
-    eligible: StrictBool = Field(description="Whether the catalogue operations (tag Catalogue: searching a project's medias, flash offers and media details) are open to you. They are open to accounts with recent completed orders, as buyer or as seller; until then they answer 403 `catalogue_requires_recent_order`. A media you have ordered is always readable with GET /medias/{id}.")
-    __properties: ClassVar[List[str]] = ["eligible"]
+    eligible: StrictBool = Field(description="Whether you have the full daily cap of the catalogue operations (tag Catalogue: searching a project's medias, flash offers and media details). It is open to accounts with recent completed orders, as buyer or as seller; until then the catalogue answers within a smaller daily trial quota, which rises to the full cap after a completed order. A media you have ordered is always readable with GET /medias/{id} and counts against neither.")
+    daily_cap: Annotated[int, Field(strict=True, ge=0)] = Field(description="How many distinct medias the catalogue operations show you per UTC day: the full cap when `eligible` is true, the trial quota otherwise. 0 means the catalogue answers 403 `catalogue_requires_recent_order` until you have a recent completed order.", alias="dailyCap")
+    remaining_today: Optional[Annotated[int, Field(strict=True, ge=0)]] = Field(description="How many new distinct medias still fit in `dailyCap` today (UTC). Medias you have already seen today are free. Null when the count cannot be read right now; the catalogue operations then answer 503 until it can.", alias="remainingToday")
+    __properties: ClassVar[List[str]] = ["eligible", "dailyCap", "remainingToday"]
 
     model_config = ConfigDict(
         validate_by_name=True,
@@ -70,6 +73,11 @@ class GetMe200ResponseCatalogue(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # set to None if remaining_today (nullable) is None
+        # and model_fields_set contains the field
+        if self.remaining_today is None and "remaining_today" in self.model_fields_set:
+            _dict['remainingToday'] = None
+
         return _dict
 
     @classmethod
@@ -82,7 +90,9 @@ class GetMe200ResponseCatalogue(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "eligible": obj.get("eligible")
+            "eligible": obj.get("eligible"),
+            "dailyCap": obj.get("dailyCap"),
+            "remainingToday": obj.get("remainingToday")
         })
         return _obj
 

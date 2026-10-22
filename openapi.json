@@ -109,12 +109,25 @@
                     },
                     "catalogue": {
                       "required": [
-                        "eligible"
+                        "eligible",
+                        "dailyCap",
+                        "remainingToday"
                       ],
                       "properties": {
                         "eligible": {
-                          "description": "Whether the catalogue operations (tag Catalogue: searching a project's medias, flash offers and media details) are open to you. They are open to accounts with recent completed orders, as buyer or as seller; until then they answer 403 `catalogue_requires_recent_order`. A media you have ordered is always readable with GET /medias/{id}.",
+                          "description": "Whether you have the full daily cap of the catalogue operations (tag Catalogue: searching a project's medias, flash offers and media details). It is open to accounts with recent completed orders, as buyer or as seller; until then the catalogue answers within a smaller daily trial quota, which rises to the full cap after a completed order. A media you have ordered is always readable with GET /medias/{id} and counts against neither.",
                           "type": "boolean"
+                        },
+                        "dailyCap": {
+                          "description": "How many distinct medias the catalogue operations show you per UTC day: the full cap when `eligible` is true, the trial quota otherwise. 0 means the catalogue answers 403 `catalogue_requires_recent_order` until you have a recent completed order.",
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "remainingToday": {
+                          "description": "How many new distinct medias still fit in `dailyCap` today (UTC). Medias you have already seen today are free. Null when the count cannot be read right now; the catalogue operations then answer 503 until it can.",
+                          "type": "integer",
+                          "nullable": true,
+                          "minimum": 0
                         }
                       },
                       "type": "object"
@@ -831,7 +844,7 @@
           "Catalogue"
         ],
         "summary": "Get a media",
-        "description": "One media of the catalogue: an active, public media. A media you have ordered is always readable, even if it has since left the catalogue, and is open to every account. Otherwise the catalogue is open to accounts with recent completed orders (see `catalogue.eligible` on GET /me), and the media counts towards the distinct medias the account may see per day (UTC). For the media's state in one of your projects, search the project with GET /projects/{id}/medias.",
+        "description": "One media of the catalogue: an active, public media. A media you have ordered is always readable, even if it has since left the catalogue, and is open to every account. Otherwise the media counts towards the distinct medias the account may see per day (UTC): the full daily cap for accounts with recent completed orders, a smaller trial quota for other accounts (see `catalogue.eligible`, `catalogue.dailyCap` and `catalogue.remainingToday` on GET /me). For the media's state in one of your projects, search the project with GET /projects/{id}/medias.",
         "operationId": "getCatalogueMedia",
         "parameters": [
           {
@@ -1174,7 +1187,7 @@
           "Catalogue"
         ],
         "summary": "Search the catalogue for a project",
-        "description": "The medias the catalogue offers for one of your projects, as the web lists them, with each media's state in the project. Filter with the parameters below, which all combine, or apply one of your saved filters with `savedFilterId` alone. The catalogue is open to accounts with recent completed orders (see `catalogue.eligible` on GET /me), and each account can see a limited number of distinct medias per day (UTC) across the catalogue operations; medias seen again the same day are free.",
+        "description": "The medias the catalogue offers for one of your projects, as the web lists them, with each media's state in the project. Filter with the parameters below, which all combine, or apply one of your saved filters with `savedFilterId` alone. Each account can see a limited number of distinct medias per day (UTC) across the catalogue operations: the full daily cap for accounts with recent completed orders, as buyer or as seller, and a smaller trial quota for other accounts, which rises to the full cap after a completed order (see `catalogue.eligible`, `catalogue.dailyCap` and `catalogue.remainingToday` on GET /me). Medias seen again the same day are free.",
         "operationId": "searchProjectMedias",
         "parameters": [
           {
@@ -1387,7 +1400,7 @@
           "Files"
         ],
         "summary": "Upload a file",
-        "description": "Uploads a document (odt, doc, docx or txt, up to 8 MB) for a later write to reference by its `id`. A file belongs to you, can be used by one write, and expires 24 hours after it was uploaded; an expired or used file is answered like an unknown one.",
+        "description": "Uploads a document (odt, doc, docx or txt, up to 8 MB) for a later write to reference by its `id`. A file belongs to you, can be used by one write, and expires 24 hours after it was uploaded; an expired or used file is answered like an unknown one.\n\nYou may hold 20 files that no write has used yet and that have not expired. Past them it answers 429 `file_limit_reached`, with `details.limit` the number you may hold and `Retry-After` the seconds until the first of them expires; using one of them in a write frees its place at once. A file refused as invalid (422) is refused before they are counted, and a refused upload stores nothing.",
         "operationId": "uploadFile",
         "parameters": [
           {
@@ -1485,7 +1498,7 @@
     "/api/v1/invoices/{id}/pdf": {
       "get": {
         "tags": [
-          "Buyer money"
+          "Buyer wallet"
         ],
         "summary": "Download an invoice",
         "description": "The PDF of one of your invoices.",
@@ -1534,7 +1547,7 @@
     "/api/v1/invoices": {
       "get": {
         "tags": [
-          "Buyer money"
+          "Buyer wallet"
         ],
         "summary": "List your invoices",
         "description": "The invoices of your top-ups, newest first.",
@@ -2239,7 +2252,7 @@
     "/api/v1/orders/{id}/approve": {
       "post": {
         "tags": [
-          "Orders"
+          "Buyer orders"
         ],
         "summary": "Approve an order's delivery",
         "description": "Approves the delivery of an order whose `pendingAction` is yours to review the delivery, as the web does. The order finishes and the seller is paid. It takes no body.",
@@ -2313,7 +2326,7 @@
     "/api/v1/orders/{id}/approve-draft": {
       "post": {
         "tags": [
-          "Orders"
+          "Buyer orders"
         ],
         "summary": "Approve a draft",
         "description": "Approves the draft of a post order whose `pendingAction` is yours to review the draft (GET /orders/{id}/draft downloads it), as the web does. The seller then publishes it. It takes no body.",
@@ -2387,7 +2400,7 @@
     "/api/v1/orders/{id}/cancel": {
       "post": {
         "tags": [
-          "Orders"
+          "Buyer orders"
         ],
         "summary": "Cancel an order",
         "description": "Cancels an order the seller has not accepted yet (`state` `pending_acceptance`), as the web does. Its price returns to your wallet's available balance, and the seller is told your reason.",
@@ -2474,7 +2487,7 @@
     "/api/v1/orders": {
       "get": {
         "tags": [
-          "Orders"
+          "Buyer orders"
         ],
         "summary": "List your orders",
         "description": "The orders you bought, newest first by default. To follow your orders, poll with `sort=updatedAt` and `updatedSince` set to the `updatedAt` of the last order you saw: an order moves to the end of that list each time it changes state.",
@@ -2606,7 +2619,7 @@
       },
       "post": {
         "tags": [
-          "Orders"
+          "Buyer orders"
         ],
         "summary": "Place an order",
         "description": "Places an order on a media for one of your projects and pays its price from your wallet's available balance, as ordering on the web does. Estimate the order first (POST /orders/estimate) and send the price it answers as `expectedPrice`: the order is placed only at that price.\n\nPlacing the same order (same project, media, type and price) again within 5 seconds of one still in progress is refused with `duplicate_order`. Its `details.orderId` is the earlier order, or null when that order has finished or was deleted since.\n\nA proposed draft (`proposedDraftFileId`, from POST /files) is used up when the order is placed. If the order is then refused because another request changed your balance, the media or its price, or placed the same order, the file is used up all the same and the refusal's message says so: upload it again before retrying.",
@@ -2706,7 +2719,7 @@
     "/api/v1/orders/{id}/briefing": {
       "get": {
         "tags": [
-          "Orders"
+          "Buyer orders"
         ],
         "summary": "Download the draft you attached to an order",
         "description": "The file you attached to the briefing of a post order. 404 when the order has none (`briefing.hasProposedDraft` is false) or the file cannot be read.",
@@ -2755,7 +2768,7 @@
     "/api/v1/orders/{id}/draft": {
       "get": {
         "tags": [
-          "Orders"
+          "Buyer orders"
         ],
         "summary": "Download the draft of an order",
         "description": "The file of the current draft of a post order. 404 when the order has no draft file (`draft.hasFile` is false) or the file cannot be read.",
@@ -2804,7 +2817,7 @@
     "/api/v1/orders/estimate": {
       "post": {
         "tags": [
-          "Orders"
+          "Buyer orders"
         ],
         "summary": "Estimate an order",
         "description": "Checks and prices the order POST /orders would place with the same body, without `expectedPrice`, and compares the price with your wallet's available balance. Nothing is placed, charged or used up, so a read-only key may call it and it takes no Idempotency-Key. Send the `price` it answers as `expectedPrice` when you place the order.\n\nThe estimate is refused for the same reasons as the order itself, except a balance that does not cover the price: that is answered here with `sufficientBalance: false` and the `missing` amount.",
@@ -2888,7 +2901,7 @@
     "/api/v1/orders/{id}": {
       "get": {
         "tags": [
-          "Orders"
+          "Buyer orders"
         ],
         "summary": "Get an order",
         "description": "One order you bought, with its briefing, its draft and its state history.",
@@ -2936,7 +2949,7 @@
     "/api/v1/orders/{id}/request-draft-update": {
       "post": {
         "tags": [
-          "Orders"
+          "Buyer orders"
         ],
         "summary": "Request changes to a draft",
         "description": "Asks the seller to change the draft of a post order whose `pendingAction` is yours to review the draft, as the web does. The seller is told your reason.",
@@ -3023,7 +3036,7 @@
     "/api/v1/orders/{id}/request-update": {
       "post": {
         "tags": [
-          "Orders"
+          "Buyer orders"
         ],
         "summary": "Request changes to a delivery",
         "description": "Asks the seller to change the delivery of an order whose `pendingAction` is yours to review the delivery, as the web does. The seller is told your reason.",
@@ -3554,7 +3567,7 @@
     "/api/v1/seller/holiday": {
       "put": {
         "tags": [
-          "Account"
+          "Seller account"
         ],
         "summary": "Set your holiday",
         "description": "Starts, changes or ends your holiday, as the holiday settings of your profile page do. While you are on holiday your medias take no orders. `endDate` is the day your holiday ends, at 00:00 of that day in Growwer's server time, and must be later than now; leave it out, or send null, for a holiday you end yourself. Ending the holiday takes no `endDate`.\n\nA holiday that already is as you ask is answered 200 without a change. A restricted seller account stays on holiday until the restriction is lifted, so any change is refused. Your holiday is also in GET /me.",
@@ -4146,7 +4159,7 @@
     "/api/v1/wallets/seller/transactions/{id}/document": {
       "get": {
         "tags": [
-          "Seller money"
+          "Seller wallet"
         ],
         "summary": "Download the document of a seller wallet movement",
         "description": "The document Growwer attached to a movement of your seller wallet. 404 when the movement has none (`hasDocument` is false) or the file cannot be read.",
@@ -4195,7 +4208,7 @@
     "/api/v1/withdrawals/{id}/invoice": {
       "get": {
         "tags": [
-          "Seller money"
+          "Seller wallet"
         ],
         "summary": "Download the invoice of a withdrawal",
         "description": "The invoice you uploaded for one of your withdrawals, named `withdrawal-{id}-invoice.pdf`. 404 when the withdrawal has none (`hasInvoice` is false); 503 `storage_unavailable` when the file cannot be read right now.",
@@ -4244,7 +4257,7 @@
     "/api/v1/wallets/seller": {
       "get": {
         "tags": [
-          "Seller money"
+          "Seller wallet"
         ],
         "summary": "Get your seller wallet",
         "description": "What your sales have earned: the balance you can withdraw now and what is held until orders settle. `restricted` is true while your seller account is restricted; the reason is not published here, and support can tell you more.",
@@ -4291,7 +4304,7 @@
     "/api/v1/wallets/seller/transactions": {
       "get": {
         "tags": [
-          "Seller money"
+          "Seller wallet"
         ],
         "summary": "List your seller wallet movements",
         "description": "Every movement of your seller wallet, newest first: earnings from orders, withdrawals and manual corrections. An earning names its order (`orderId`) and a withdrawal its request (`withdrawalId`).",
@@ -4368,7 +4381,7 @@
     "/api/v1/withdrawals": {
       "get": {
         "tags": [
-          "Seller money"
+          "Seller wallet"
         ],
         "summary": "List your withdrawals",
         "description": "The withdrawals you requested from your seller wallet, newest first. Requesting a withdrawal is not available through the API; use the seller wallet page.",
@@ -5422,7 +5435,7 @@
     "/api/v1/wallets/buyer/transactions/{id}/document": {
       "get": {
         "tags": [
-          "Buyer money"
+          "Buyer wallet"
         ],
         "summary": "Download the document of a wallet movement",
         "description": "The document Growwer attached to a movement of your buyer wallet. 404 when the movement has none (`hasDocument` is false) or the file cannot be read.",
@@ -5471,7 +5484,7 @@
     "/api/v1/wallets/buyer": {
       "get": {
         "tags": [
-          "Buyer money"
+          "Buyer wallet"
         ],
         "summary": "Get your buyer wallet",
         "description": "The balance you buy with, and the page where you top it up.",
@@ -5519,7 +5532,7 @@
     "/api/v1/wallets/buyer/transactions": {
       "get": {
         "tags": [
-          "Buyer money"
+          "Buyer wallet"
         ],
         "summary": "List your buyer wallet movements",
         "description": "Every movement of your buyer wallet, newest first: top-ups, order debits and their refunds, gifts and manual corrections.",
@@ -5613,8 +5626,9 @@
             "type": "string"
           },
           "requestId": {
-            "description": "The X-Request-Id of the call. Quote it when reporting a problem.",
-            "type": "string"
+            "description": "UUID v4 generated per request, or the `X-Request-Id` you sent. Quote it when reporting a problem.",
+            "type": "string",
+            "example": "9b2f6c1e-4d7a-4e3b-8a5f-2c1d0e9f7a64"
           },
           "details": {
             "description": "Extra data on some errors, such as the invalid fields of a validation_failed error.",
@@ -8166,7 +8180,7 @@
         }
       },
       "CatalogueForbidden": {
-        "description": "The catalogue is open to accounts with recent completed orders, as buyer or as seller, and this account has none (code `catalogue_requires_recent_order`). GET /me reports `catalogue.eligible`.",
+        "description": "The catalogue is open to accounts with recent completed orders, as buyer or as seller, and to other accounts within a daily trial quota; this account has no such order and the trial quota is off (code `catalogue_requires_recent_order`). GET /me reports `catalogue.eligible` and `catalogue.dailyCap`.",
         "content": {
           "application/json": {
             "schema": {
@@ -8176,7 +8190,7 @@
         }
       },
       "TooManyRequests": {
-        "description": "Over the rate limit (code `rate_limit_exceeded`), or too many failed authentications from this address (code `too_many_failed_authentications`). On the catalogue operations, also when the response would take the account beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining` says how many new medias still fit today, `Retry-After` is the time to the next UTC midnight, and medias already seen today stay readable. On the managed service requests, also when you sent as many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`): `Retry-After` is the time to the next UTC midnight.",
+        "description": "Over the rate limit (code `rate_limit_exceeded`), or too many failed authentications (code `too_many_failed_authentications`): with this key from this address, or from this address with any key; a valid key is never refused for it. On the catalogue operations, also when the response would take the account beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining` says how many new medias still fit today, `details.limit` is the daily cap that applies and `details.tier` is `full`, or `trial` for an account without a recent completed order, whose quota rises to the full cap after one; `Retry-After` is the time to the next UTC midnight, and medias already seen today stay readable. On the managed service requests, also when you sent as many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`): `Retry-After` is the time to the next UTC midnight.",
         "headers": {
           "Retry-After": {
             "$ref": "#/components/headers/RetryAfter"
@@ -8255,7 +8269,7 @@
             "example": {
               "code": "validation_failed",
               "message": "The request is not valid. See details for each field.",
-              "requestId": "3f2a9c1e7b4d4e0a",
+              "requestId": "9b2f6c1e-4d7a-4e3b-8a5f-2c1d0e9f7a64",
               "details": {
                 "fields": {
                   "promotedProducts": [
@@ -8647,47 +8661,80 @@
   "tags": [
     {
       "name": "Account",
-      "description": "Account"
-    },
-    {
-      "name": "Saved filters",
-      "description": "Saved filters"
-    },
-    {
-      "name": "Catalogue",
-      "description": "Catalogue"
+      "description": "Your profile, balances and catalogue quota, and the codes and names the API uses."
     },
     {
       "name": "Files",
-      "description": "Files"
-    },
-    {
-      "name": "Buyer money",
-      "description": "Buyer money"
-    },
-    {
-      "name": "Managed services",
-      "description": "Managed services"
-    },
-    {
-      "name": "Orders",
-      "description": "Orders"
+      "description": "Upload the documents that a later write, such as an order's briefing, references."
     },
     {
       "name": "Projects",
-      "description": "Projects"
+      "description": "Create, edit and delete the projects you buy for."
+    },
+    {
+      "name": "Catalogue",
+      "description": "Search the medias of a project, its flash offers, favourites and discards."
+    },
+    {
+      "name": "Saved filters",
+      "description": "Save catalogue searches of a project and count their medias."
+    },
+    {
+      "name": "Buyer orders",
+      "description": "Estimate, place and follow the orders you buy, and act on them."
+    },
+    {
+      "name": "Buyer wallet",
+      "description": "Your buyer balance, its movements and documents, and your invoices."
+    },
+    {
+      "name": "Managed services",
+      "description": "Your managed service campaigns, their proposals, and requests to Growwer."
+    },
+    {
+      "name": "Seller account",
+      "description": "Your seller holiday, during which your medias take no orders."
     },
     {
       "name": "Seller medias",
-      "description": "Seller medias"
-    },
-    {
-      "name": "Seller money",
-      "description": "Seller money"
+      "description": "The medias you sell on and their fees."
     },
     {
       "name": "Seller orders",
-      "description": "Seller orders"
+      "description": "The orders placed on your medias, and accepting, delivering or refusing them."
+    },
+    {
+      "name": "Seller wallet",
+      "description": "Your seller balance, its movements and documents, and your withdrawals."
+    }
+  ],
+  "x-tagGroups": [
+    {
+      "name": "General",
+      "tags": [
+        "Account",
+        "Files"
+      ]
+    },
+    {
+      "name": "Buyer",
+      "tags": [
+        "Projects",
+        "Catalogue",
+        "Saved filters",
+        "Buyer orders",
+        "Buyer wallet",
+        "Managed services"
+      ]
+    },
+    {
+      "name": "Seller",
+      "tags": [
+        "Seller account",
+        "Seller medias",
+        "Seller orders",
+        "Seller wallet"
+      ]
     }
   ]
 }

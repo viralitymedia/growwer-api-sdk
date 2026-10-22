@@ -52,7 +52,9 @@ type APIClient struct {
 
 	AccountAPI *AccountAPIService
 
-	BuyerMoneyAPI *BuyerMoneyAPIService
+	BuyerOrdersAPI *BuyerOrdersAPIService
+
+	BuyerWalletAPI *BuyerWalletAPIService
 
 	CatalogueAPI *CatalogueAPIService
 
@@ -60,17 +62,17 @@ type APIClient struct {
 
 	ManagedServicesAPI *ManagedServicesAPIService
 
-	OrdersAPI *OrdersAPIService
-
 	ProjectsAPI *ProjectsAPIService
 
 	SavedFiltersAPI *SavedFiltersAPIService
 
+	SellerAccountAPI *SellerAccountAPIService
+
 	SellerMediasAPI *SellerMediasAPIService
 
-	SellerMoneyAPI *SellerMoneyAPIService
-
 	SellerOrdersAPI *SellerOrdersAPIService
+
+	SellerWalletAPI *SellerWalletAPIService
 }
 
 type service struct {
@@ -90,16 +92,17 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 
 	// API Services
 	c.AccountAPI = (*AccountAPIService)(&c.common)
-	c.BuyerMoneyAPI = (*BuyerMoneyAPIService)(&c.common)
+	c.BuyerOrdersAPI = (*BuyerOrdersAPIService)(&c.common)
+	c.BuyerWalletAPI = (*BuyerWalletAPIService)(&c.common)
 	c.CatalogueAPI = (*CatalogueAPIService)(&c.common)
 	c.FilesAPI = (*FilesAPIService)(&c.common)
 	c.ManagedServicesAPI = (*ManagedServicesAPIService)(&c.common)
-	c.OrdersAPI = (*OrdersAPIService)(&c.common)
 	c.ProjectsAPI = (*ProjectsAPIService)(&c.common)
 	c.SavedFiltersAPI = (*SavedFiltersAPIService)(&c.common)
+	c.SellerAccountAPI = (*SellerAccountAPIService)(&c.common)
 	c.SellerMediasAPI = (*SellerMediasAPIService)(&c.common)
-	c.SellerMoneyAPI = (*SellerMoneyAPIService)(&c.common)
 	c.SellerOrdersAPI = (*SellerOrdersAPIService)(&c.common)
+	c.SellerWalletAPI = (*SellerWalletAPIService)(&c.common)
 
 	return c
 }

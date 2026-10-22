@@ -41,8 +41,8 @@ Send it as a bearer token on every request: `Authorization: Bearer <key>`.
 
 ## First call
 
-`getMe` returns the account the key belongs to: its wallet balances, its seller status and whether
-the catalogue is open to it. It is the quickest way to confirm a key works.
+`getMe` returns the account the key belongs to: its wallet balances, its seller status and its
+daily catalogue quota. It is the quickest way to confirm a key works.
 
 Every client already points at `https://tool.growwer.com`. The examples show where to change that,
 for instance to call another host.
@@ -54,7 +54,7 @@ for instance to call another host.
 import os
 
 from growwer import ApiClient, Configuration
-from growwer.api import AccountApi, OrdersApi
+from growwer.api import AccountApi, BuyerOrdersApi
 
 config = Configuration(
     host="https://tool.growwer.com",  # optional: this is the default
@@ -65,7 +65,7 @@ with ApiClient(config) as client:
     me = AccountApi(client).get_me()
     print(me.email, me.buyer.balance.available.amount, me.buyer.balance.available.currency)
 
-    page = OrdersApi(client).list_orders(limit=100)
+    page = BuyerOrdersApi(client).list_orders(limit=100)
     print(f"{len(page.items)} of {page.total} orders")
 ```
 </details>
@@ -74,7 +74,7 @@ with ApiClient(config) as client:
 <summary><strong>TypeScript</strong></summary>
 
 ```ts
-import { Configuration, AccountApi, OrdersApi } from "@growwer/api"
+import { Configuration, AccountApi, BuyerOrdersApi } from "@growwer/api"
 
 const config = new Configuration({
   basePath: "https://tool.growwer.com", // optional: this is the default
@@ -84,7 +84,7 @@ const config = new Configuration({
 const me = await new AccountApi(config).getMe()
 console.log(me.email, me.buyer.balance.available.amount)
 
-const page = await new OrdersApi(config).listOrders({ limit: 100 })
+const page = await new BuyerOrdersApi(config).listOrders({ limit: 100 })
 console.log(`${page.items.length} of ${page.total} orders`)
 ```
 </details>
@@ -172,6 +172,38 @@ var me = new AccountApi(config).GetMe();
 ```
 </details>
 
+## Changes in 1.0.2
+
+**Four API classes are renamed, and code that imports the old names breaks**, although the version
+is a patch. The contract now groups its operations by role (general, buyer, seller). Each
+generated class is still named after its tag, and the tags that were ambiguous now name the role.
+The operations, their methods and their models are
+unchanged; only the class that holds them moved:
+
+| Before | 1.0.2 | Operations |
+|---|---|---|
+| `OrdersApi` | `BuyerOrdersApi` | `listOrders`, `getOrder`, `estimateOrder`, `createOrder`, `cancelOrder`, `approveOrder`, `approveOrderDraft`, `requestOrderUpdate`, `requestOrderDraftUpdate`, `downloadOrderBriefing`, `downloadOrderDraft` |
+| `BuyerMoneyApi` | `BuyerWalletApi` | `getBuyerWallet`, `listBuyerTransactions`, `downloadBuyerTransactionDocument`, `listInvoices`, `getInvoicePdf` |
+| `SellerMoneyApi` | `SellerWalletApi` | `getSellerWallet`, `listSellerTransactions`, `downloadSellerTransactionDocument`, `listWithdrawals`, `downloadWithdrawalInvoice` |
+| `AccountApi` (one operation) | `SellerAccountApi` (new) | `putSellerHoliday`; the rest of `AccountApi` stays |
+
+The names follow each language's casing: `client.BuyerOrdersAPI` in Go, `Growwer::BuyerOrdersApi` in
+Ruby, `BuyerOrdersApi` everywhere else, with the Python module `growwer.api.buyer_orders_api`.
+
+Also in this release:
+
+- **Python 3.10 or later** is required, and the dependency floors rise for security fixes:
+  `urllib3 >= 2.8.0`, and for development `pytest >= 9.0.3` and `filelock >= 3.20.3`.
+- **Catalogue trial quota.** An account without a recent completed order reads the catalogue within
+  a daily trial quota instead of `403 catalogue_requires_recent_order`, and `GET /me` adds
+  `catalogue.dailyCap` and `catalogue.remainingToday`. `429 catalogue_daily_cap_reached` adds
+  `details.limit` and `details.tier`. See [The catalogue](#the-catalogue).
+- **Failed authentications are throttled per key and address**, under a per-address ceiling, so one
+  bad key no longer blocks the other keys from its address. See [Rate limits](#rate-limits).
+- **At most 20 pending uploads**, past which `uploadFile` answers `429 file_limit_reached`. See
+  [Uploaded files](#uploaded-files).
+- `requestId` is documented as a UUID v4 generated per request, or the `X-Request-Id` you sent.
+
 ## Conventions
 
 These hold in every language. The per-language docs cover the signatures; this is what the
@@ -254,15 +286,25 @@ def with_backoff(call, attempts=3):
         try:
             return call()
         except ApiException as error:
-            if error.status != 429 or attempt == attempts - 1:
+            code = getattr(error.data, "code", None)
+            if error.status != 429 or code != "rate_limit_exceeded" or attempt == attempts - 1:
                 raise
             time.sleep(int(error.headers.get("Retry-After", "1")))
 ```
 
-Repeated failed authentications from one address are refused with
-`429 too_many_failed_authentications` until the window refills. When the rate limiter itself cannot
-be reached, the API refuses the call with `503 rate_limit_unavailable` rather than serving it
-unmetered; retry later.
+Retry only `rate_limit_exceeded` automatically. Other refusals answer 429 too, and retrying them
+does not help: `file_limit_reached` waits for a file to expire, `catalogue_daily_cap_reached` and
+`managed_service_request_limit_reached` wait for the next UTC day, and retrying `too_many_failed_authentications` with the same key only keeps it
+refused. Branch on `code` for those.
+
+Failed authentications are counted per address and presented key: **10 failures in 15 minutes**
+with one key from one address refuse that key from that address with
+`429 too_many_failed_authentications` and a `Retry-After` header, so one bad key does not lock out
+the other keys used from the same address. An address also has a ceiling of **300 failed
+authentications in 15 minutes** across all keys, past which every further failure from it answers
+that 429 instead of 401. A valid key always passes. When the rate limiter itself cannot be reached,
+the API refuses the call with `503 rate_limit_unavailable` rather than serving it unmetered; retry
+later.
 
 ### Writes are idempotent
 
@@ -316,6 +358,15 @@ finished or was deleted since.
 Estimate an order first (`estimateOrder`) and send the price it answers as `expectedPrice`: the
 order is placed only at that price.
 
+### Uploaded files
+
+A file uploaded with `uploadFile` can be used by one write and expires 24 hours after its upload.
+You may hold at most **20 pending files**: uploaded, not yet used by a write and not expired.
+Another upload past them answers `429 file_limit_reached`, with `details.limit` the number you may
+hold and `Retry-After` the seconds until the oldest of them expires. Use one of your pending files
+in a write, which frees its place at once, or wait. A file refused as invalid (`422`) is refused
+before the files are counted, and a refused upload stores nothing.
+
 ### Paging
 
 Listings take `limit` (default 20, maximum 100) and `offset`, and answer `{items, total}`. A limit
@@ -338,15 +389,27 @@ carries its offset, and its `+` must be sent as `%2B`.
 
 ### The catalogue
 
-The catalogue operations (searching a project's medias, flash offers, media details) are open to
-accounts with recent completed orders, as buyer or as seller. Until then they answer
-`403 catalogue_requires_recent_order`; `GET /me` reports `catalogue.eligible`. A media you have
-ordered is always readable with `GET /medias/{id}`.
+The catalogue operations (searching a project's medias, flash offers, media details) show each
+account a limited number of distinct medias per UTC day; medias seen again the same day are free.
+Accounts with recent completed orders, as buyer or as seller, get the full daily cap of **5,000**.
+Other accounts get a trial quota of **100** distinct medias per UTC day instead of a refusal, and
+it rises to the full cap after a completed order. A media you have ordered is always readable with
+`GET /medias/{id}` and counts against neither.
 
-Each account may see a limited number of distinct medias per UTC day through the catalogue. A
-response that would go beyond it answers `429 catalogue_daily_cap_reached`: `details.remaining`
-says how many new medias still fit today, `Retry-After` is the time to the next UTC midnight, and
-medias already seen today stay readable.
+`GET /me` reports where you stand:
+
+- `catalogue.eligible`: whether you have the full cap.
+- `catalogue.dailyCap`: the distinct medias you may see per UTC day, the full cap or the trial
+  quota.
+- `catalogue.remainingToday`: how many new medias still fit today, or null when the count cannot be
+  read right now; the catalogue operations then answer 503 until it can.
+
+A response that would go beyond the cap answers `429 catalogue_daily_cap_reached`:
+`details.remaining` says how many new medias still fit today, `details.limit` is the daily cap that
+applied and `details.tier` is `full` or `trial`; `Retry-After` is the time to the next UTC midnight,
+and medias already seen today stay readable. `403 catalogue_requires_recent_order` is left only for
+when the trial quota is turned off (`catalogue.dailyCap` is 0) and the account has no recent
+completed order.
 
 The managed service requests are capped per UTC day too, at 5 of each kind:
 `429 managed_service_request_limit_reached`, with `Retry-After` the time to the next UTC midnight.
@@ -451,9 +514,9 @@ A `vX.Y.Z` tag runs [`release.yml`](.github/workflows/release.yml). It checks th
 npm, PyPI, Maven Central, NuGet and RubyGems, and pushes the `go/vX.Y.Z` tag the Go module proxy
 resolves. Packagist picks the tag up through its webhook.
 
-**No release happens before the committed contract matches production.** The API it describes
-reaches production with the monolith's customer API slices 5, 6 and 7a. Once those are deployed,
-`./generate.sh --sync` against production must leave no diff; only then is the first tag pushed.
+**No release happens before the committed contract matches production.** Before each tag,
+`./generate.sh --sync` against production must leave no diff; `release.yml` only checks the
+committed clients against the committed contract.
 
 An owner sets the registries up once, before the first tag:
 

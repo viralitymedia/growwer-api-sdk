@@ -7,6 +7,8 @@
 Name | Type
 ------------ | -------------
 `eligible` | boolean
+`dailyCap` | number
+`remainingToday` | number
 
 ## Example
 
@@ -16,6 +18,8 @@ import type { GetMe200ResponseCatalogue } from '@growwer/api'
 // TODO: Update the object below with actual values
 const example = {
   "eligible": null,
+  "dailyCap": null,
+  "remainingToday": null,
 } satisfies GetMe200ResponseCatalogue
 
 console.log(example)

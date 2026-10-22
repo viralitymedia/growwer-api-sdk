@@ -23,21 +23,6 @@ import {
     GetVocabulary200ResponseFromJSON,
     GetVocabulary200ResponseToJSON,
 } from '../models/GetVocabulary200Response';
-import {
-    type PutSellerHoliday200Response,
-    PutSellerHoliday200ResponseFromJSON,
-    PutSellerHoliday200ResponseToJSON,
-} from '../models/PutSellerHoliday200Response';
-import {
-    type PutSellerHolidayRequest,
-    PutSellerHolidayRequestFromJSON,
-    PutSellerHolidayRequestToJSON,
-} from '../models/PutSellerHolidayRequest';
-
-export interface PutSellerHolidayOperationRequest {
-    idempotencyKey: string;
-    putSellerHolidayRequest: PutSellerHolidayRequest;
-}
 
 /**
  * AccountApi - interface
@@ -89,32 +74,6 @@ export interface AccountApiInterface {
      * Codes and names
      */
     getVocabulary(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetVocabulary200Response>;
-
-    /**
-     * Creates request options for putSellerHoliday without sending the request
-     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
-     * @param {PutSellerHolidayRequest} putSellerHolidayRequest 
-     * @throws {RequiredError}
-     * @memberof AccountApiInterface
-     */
-    putSellerHolidayRequestOpts(requestParameters: PutSellerHolidayOperationRequest): Promise<runtime.RequestOpts>;
-
-    /**
-     * Starts, changes or ends your holiday, as the holiday settings of your profile page do. While you are on holiday your medias take no orders. `endDate` is the day your holiday ends, at 00:00 of that day in Growwer\'s server time, and must be later than now; leave it out, or send null, for a holiday you end yourself. Ending the holiday takes no `endDate`.  A holiday that already is as you ask is answered 200 without a change. A restricted seller account stays on holiday until the restriction is lifted, so any change is refused. Your holiday is also in GET /me.
-     * @summary Set your holiday
-     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
-     * @param {PutSellerHolidayRequest} putSellerHolidayRequest 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AccountApiInterface
-     */
-    putSellerHolidayRaw(requestParameters: PutSellerHolidayOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PutSellerHoliday200Response>>;
-
-    /**
-     * Starts, changes or ends your holiday, as the holiday settings of your profile page do. While you are on holiday your medias take no orders. `endDate` is the day your holiday ends, at 00:00 of that day in Growwer\'s server time, and must be later than now; leave it out, or send null, for a holiday you end yourself. Ending the holiday takes no `endDate`.  A holiday that already is as you ask is answered 200 without a change. A restricted seller account stays on holiday until the restriction is lifted, so any change is refused. Your holiday is also in GET /me.
-     * Set your holiday
-     */
-    putSellerHoliday(requestParameters: PutSellerHolidayOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PutSellerHoliday200Response>;
 
 }
 
@@ -214,74 +173,6 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
      */
     async getVocabulary(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetVocabulary200Response> {
         const response = await this.getVocabularyRaw(initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Creates request options for putSellerHoliday without sending the request
-     */
-    async putSellerHolidayRequestOpts(requestParameters: PutSellerHolidayOperationRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['idempotencyKey'] == null) {
-            throw new runtime.RequiredError(
-                'idempotencyKey',
-                'Required parameter "idempotencyKey" was null or undefined when calling putSellerHoliday().'
-            );
-        }
-
-        if (requestParameters['putSellerHolidayRequest'] == null) {
-            throw new runtime.RequiredError(
-                'putSellerHolidayRequest',
-                'Required parameter "putSellerHolidayRequest" was null or undefined when calling putSellerHoliday().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (requestParameters['idempotencyKey'] != null) {
-            headerParameters['Idempotency-Key'] = String(requestParameters['idempotencyKey']);
-        }
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("apiKey", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-
-        let urlPath = `/api/v1/seller/holiday`;
-
-        return {
-            path: urlPath,
-            method: 'PUT',
-            headers: headerParameters,
-            query: queryParameters,
-            body: PutSellerHolidayRequestToJSON(requestParameters['putSellerHolidayRequest']),
-        };
-    }
-
-    /**
-     * Starts, changes or ends your holiday, as the holiday settings of your profile page do. While you are on holiday your medias take no orders. `endDate` is the day your holiday ends, at 00:00 of that day in Growwer\'s server time, and must be later than now; leave it out, or send null, for a holiday you end yourself. Ending the holiday takes no `endDate`.  A holiday that already is as you ask is answered 200 without a change. A restricted seller account stays on holiday until the restriction is lifted, so any change is refused. Your holiday is also in GET /me.
-     * Set your holiday
-     */
-    async putSellerHolidayRaw(requestParameters: PutSellerHolidayOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PutSellerHoliday200Response>> {
-        const requestOptions = await this.putSellerHolidayRequestOpts(requestParameters);
-        const response = await this.request(requestOptions, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => PutSellerHoliday200ResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Starts, changes or ends your holiday, as the holiday settings of your profile page do. While you are on holiday your medias take no orders. `endDate` is the day your holiday ends, at 00:00 of that day in Growwer\'s server time, and must be later than now; leave it out, or send null, for a holiday you end yourself. Ending the holiday takes no `endDate`.  A holiday that already is as you ask is answered 200 without a change. A restricted seller account stays on holiday until the restriction is lifted, so any change is refused. Your holiday is also in GET /me.
-     * Set your holiday
-     */
-    async putSellerHoliday(requestParameters: PutSellerHolidayOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PutSellerHoliday200Response> {
-        const response = await this.putSellerHolidayRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

@@ -17,7 +17,7 @@
     {
       "dir": "python",
       "generator": "python",
-      "label": "Python 3.9+",
+      "label": "Python 3.10+",
       "testStubDir": "test",
       "config": {
         "packageName": "growwer",

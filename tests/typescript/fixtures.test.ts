@@ -210,7 +210,7 @@ const tests: Array<[string, () => Promise<void>]> = [
     const api = new CatalogueApi(answer(sent, 429, fixture('error.json'), {
       'Content-Type': 'application/json',
       'Retry-After': '3600',
-      'X-Request-Id': '4f1c2a9e8b7d6c5e',
+      'X-Request-Id': '0b8f6c2e-4a1d-4f3b-9c7e-5d2a8e1f6b34',
     }));
 
     const error = await api.getCatalogueMedia({ id: MEDIA_ID }).then(
@@ -222,10 +222,10 @@ const tests: Array<[string, () => Promise<void>]> = [
     const response = (error as ResponseError).response;
     assert.equal(response.status, 429);
     assert.equal(response.headers.get('Retry-After'), '3600');
-    assert.equal(response.headers.get('X-Request-Id'), '4f1c2a9e8b7d6c5e');
+    assert.equal(response.headers.get('X-Request-Id'), '0b8f6c2e-4a1d-4f3b-9c7e-5d2a8e1f6b34');
     const envelope = ModelErrorFromJSON(await response.json());
     assert.equal(envelope.code, 'catalogue_daily_cap_reached');
-    assert.equal(envelope.requestId, '4f1c2a9e8b7d6c5e');
+    assert.equal(envelope.requestId, '0b8f6c2e-4a1d-4f3b-9c7e-5d2a8e1f6b34');
     assert.deepEqual(envelope.details, { remaining: 0 });
   }],
 

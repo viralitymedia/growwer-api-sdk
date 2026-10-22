@@ -350,7 +350,8 @@ for name in sorted(listed(previous_list) - listed(current_list)):
     # These three manifests carry author, description or keyword text the generator writes from
     # its own templates with no option to replace it, so the packages would be published as the
     # work of OpenAPI Generator. Corrected here from sdks.json, before the PHP root manifest is
-    # derived from php/composer.json.
+    # derived from php/composer.json. The Python manifests also get their dependency floors raised
+    # past the releases with open advisories, which no generator option sets either.
     python3 scripts/package-metadata.py "${target}"
   fi
 

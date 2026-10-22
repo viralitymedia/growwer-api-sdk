@@ -12,7 +12,7 @@ contract, one generator run, one version: a change to the API reaches all seven 
 
 | Language | Package | Version | Directory |
 |---|---|---|---|
-| Python 3.9+ | `growwer` | [![PyPI](https://img.shields.io/pypi/v/growwer?label=pypi&color=informational)](https://pypi.org/project/growwer/) | [`python/`](python/) |
+| Python 3.10+ | `growwer` | [![PyPI](https://img.shields.io/pypi/v/growwer?label=pypi&color=informational)](https://pypi.org/project/growwer/) | [`python/`](python/) |
 | TypeScript (Node 18+, browsers) | `@growwer/api` | [![npm](https://img.shields.io/npm/v/%40growwer%2Fapi?label=npm&color=informational)](https://www.npmjs.com/package/@growwer/api) | [`typescript/`](typescript/) |
 | PHP 8.1+ | `growwer/growwer-api-sdk` | [![Packagist](https://img.shields.io/packagist/v/growwer/growwer-api-sdk?label=packagist&color=informational)](https://packagist.org/packages/growwer/growwer-api-sdk) | [`php/`](php/) |
 | Go 1.23+ | `github.com/viralitymedia/growwer-api-sdk/go` | [![Go module](https://img.shields.io/github/v/tag/viralitymedia/growwer-api-sdk?filter=go%2F*&label=go&color=informational)](https://pkg.go.dev/github.com/viralitymedia/growwer-api-sdk/go) | [`go/`](go/) |
@@ -186,7 +186,7 @@ that id in `requestId`. Quote it when you report a problem and it identifies you
 {
   "code": "insufficient_balance",
   "message": "The available balance of your wallet does not cover the price of this order. Nothing was charged. Add funds to your wallet and retry.",
-  "requestId": "4f1c2a9e8b7d6c5e",
+  "requestId": "0b8f6c2e-4a1d-4f3b-9c7e-5d2a8e1f6b34",
   "details": {
     "required": { "amount": 9000, "currency": "EUR" },
     "available": { "amount": 2500, "currency": "EUR" },
@@ -431,7 +431,9 @@ would be discarded on the next run:
 - **Package metadata.** Left alone, the Python, TypeScript and PHP manifests name OpenAPI Generator
   as their author and carry its description and keywords. They are rewritten from
   [`sdks.json`](sdks.json) by [`scripts/package-metadata.py`](scripts/package-metadata.py), which
-  also sets the PHP package name.
+  also sets the PHP package name and raises the Python dependency floors (Python, urllib3, pytest
+  and filelock) past the releases with open advisories, since Dependabot cannot update a project
+  with neither a lockfile nor a pinned version.
 
 The two template fixes fail the run when they find nothing left to correct, so a generator upgrade
 that makes one obsolete removes it rather than leaving a silent no-op.

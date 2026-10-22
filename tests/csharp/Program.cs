@@ -243,7 +243,7 @@ internal static class Program
     private static void TheErrorEnvelopeIsReadableFromTheException()
     {
         var api = new CatalogueApi(Answer(HttpStatusCode.TooManyRequests, Fixture("error.json"), "application/json",
-            "Retry-After", "3600", "X-Request-Id", "4f1c2a9e8b7d6c5e"), Key());
+            "Retry-After", "3600", "X-Request-Id", "0b8f6c2e-4a1d-4f3b-9c7e-5d2a8e1f6b34"), Key());
 
         try
         {
@@ -254,10 +254,10 @@ internal static class Program
         {
             Equal("status", exception.ErrorCode, 429);
             Equal("Retry-After", Header(exception.Headers, "Retry-After"), "3600");
-            Equal("X-Request-Id", Header(exception.Headers, "X-Request-Id"), "4f1c2a9e8b7d6c5e");
+            Equal("X-Request-Id", Header(exception.Headers, "X-Request-Id"), "0b8f6c2e-4a1d-4f3b-9c7e-5d2a8e1f6b34");
             Error envelope = JsonConvert.DeserializeObject<Error>((string)exception.ErrorContent);
             Equal("code", envelope.Code, "catalogue_daily_cap_reached");
-            Equal("requestId", envelope.RequestId, "4f1c2a9e8b7d6c5e");
+            Equal("requestId", envelope.RequestId, "0b8f6c2e-4a1d-4f3b-9c7e-5d2a8e1f6b34");
             Equal("details", Convert.ToInt32(envelope.Details["remaining"]), 0);
         }
     }

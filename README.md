@@ -186,7 +186,7 @@ that id in `requestId`. Quote it when you report a problem and it identifies you
 {
   "code": "insufficient_balance",
   "message": "The available balance of your wallet does not cover the price of this order. Nothing was charged. Add funds to your wallet and retry.",
-  "requestId": "4f1c2a9e8b7d6c5e",
+  "requestId": "0b8f6c2e-4a1d-4f3b-9c7e-5d2a8e1f6b34",
   "details": {
     "required": { "amount": 9000, "currency": "EUR" },
     "available": { "amount": 2500, "currency": "EUR" },

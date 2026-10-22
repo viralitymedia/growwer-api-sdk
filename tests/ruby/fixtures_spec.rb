@@ -189,16 +189,16 @@ RSpec.describe 'Growwer fixtures' do
   it 'makes the error envelope readable from the ApiError' do
     api = Growwer::CatalogueApi.new(
       answer(429, fixture('error.json'),
-             { 'Content-Type' => 'application/json', 'Retry-After' => '3600', 'X-Request-Id' => '4f1c2a9e8b7d6c5e' })
+             { 'Content-Type' => 'application/json', 'Retry-After' => '3600', 'X-Request-Id' => '0b8f6c2e-4a1d-4f3b-9c7e-5d2a8e1f6b34' })
     )
 
     expect { api.get_catalogue_media(MEDIA_ID) }.to raise_error(Growwer::ApiError) do |error|
       expect(error.code).to eq(429)
       expect(error.response_headers['Retry-After']).to eq('3600')
-      expect(error.response_headers['X-Request-Id']).to eq('4f1c2a9e8b7d6c5e')
+      expect(error.response_headers['X-Request-Id']).to eq('0b8f6c2e-4a1d-4f3b-9c7e-5d2a8e1f6b34')
       envelope = Growwer::Error.build_from_hash(JSON.parse(error.response_body))
       expect(envelope.code).to eq('catalogue_daily_cap_reached')
-      expect(envelope.request_id).to eq('4f1c2a9e8b7d6c5e')
+      expect(envelope.request_id).to eq('0b8f6c2e-4a1d-4f3b-9c7e-5d2a8e1f6b34')
       expect(envelope.details).to eq('remaining' => 0)
     end
   end

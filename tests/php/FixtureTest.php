@@ -219,7 +219,7 @@ final class FixtureTest extends TestCase
         $api = new CatalogueApi(...$this->answer(429, self::fixture('error.json'), [
             'Content-Type' => 'application/json',
             'Retry-After' => '3600',
-            'X-Request-Id' => '4f1c2a9e8b7d6c5e',
+            'X-Request-Id' => '0b8f6c2e-4a1d-4f3b-9c7e-5d2a8e1f6b34',
         ]));
 
         try {
@@ -228,11 +228,11 @@ final class FixtureTest extends TestCase
         } catch (ApiException $exception) {
             self::assertSame(429, $exception->getCode());
             self::assertSame(['3600'], $exception->getResponseHeaders()['Retry-After']);
-            self::assertSame(['4f1c2a9e8b7d6c5e'], $exception->getResponseHeaders()['X-Request-Id']);
+            self::assertSame(['0b8f6c2e-4a1d-4f3b-9c7e-5d2a8e1f6b34'], $exception->getResponseHeaders()['X-Request-Id']);
             $error = $exception->getResponseObject();
             self::assertInstanceOf(Error::class, $error);
             self::assertSame('catalogue_daily_cap_reached', $error->getCode());
-            self::assertSame('4f1c2a9e8b7d6c5e', $error->getRequestId());
+            self::assertSame('0b8f6c2e-4a1d-4f3b-9c7e-5d2a8e1f6b34', $error->getRequestId());
             self::assertEquals(['remaining' => 0], (array) $error->getDetails());
         }
     }

@@ -196,7 +196,7 @@ class FixtureTest(unittest.TestCase):
 
     def test_error_envelope_is_readable_from_the_exception(self):
         api = CatalogueApi(
-            self.client(429, fixture("error.json"), headers={"Retry-After": "3600", "X-Request-Id": "4f1c2a9e8b7d6c5e"})
+            self.client(429, fixture("error.json"), headers={"Retry-After": "3600", "X-Request-Id": "0b8f6c2e-4a1d-4f3b-9c7e-5d2a8e1f6b34"})
         )
 
         with self.assertRaises(ApiException) as raised:
@@ -205,10 +205,10 @@ class FixtureTest(unittest.TestCase):
         error = raised.exception
         self.assertEqual(error.status, 429)
         self.assertEqual(error.headers["Retry-After"], "3600")
-        self.assertEqual(error.headers["X-Request-Id"], "4f1c2a9e8b7d6c5e")
+        self.assertEqual(error.headers["X-Request-Id"], "0b8f6c2e-4a1d-4f3b-9c7e-5d2a8e1f6b34")
         self.assertIsInstance(error.data, Error)
         self.assertEqual(error.data.code, "catalogue_daily_cap_reached")
-        self.assertEqual(error.data.request_id, "4f1c2a9e8b7d6c5e")
+        self.assertEqual(error.data.request_id, "0b8f6c2e-4a1d-4f3b-9c7e-5d2a8e1f6b34")
         self.assertEqual(error.data.details, {"remaining": 0})
         self.assertEqual(json.loads(error.body)["code"], "catalogue_daily_cap_reached")
 

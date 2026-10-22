@@ -228,7 +228,7 @@ public class FixtureTest {
 
     void theErrorEnvelopeIsReadableFromTheException() throws Exception {
         CatalogueApi api = new CatalogueApi(answer(429, fixture("error.json"), "application/json",
-            "Retry-After", "3600", "X-Request-Id", "4f1c2a9e8b7d6c5e"));
+            "Retry-After", "3600", "X-Request-Id", "0b8f6c2e-4a1d-4f3b-9c7e-5d2a8e1f6b34"));
 
         try {
             api.getCatalogueMedia(MEDIA_ID);
@@ -237,10 +237,10 @@ public class FixtureTest {
             equal("status", exception.getCode(), 429);
             Map<String, List<String>> headers = exception.getResponseHeaders();
             equal("Retry-After", headers.get("Retry-After"), List.of("3600"));
-            equal("X-Request-Id", headers.get("X-Request-Id"), List.of("4f1c2a9e8b7d6c5e"));
+            equal("X-Request-Id", headers.get("X-Request-Id"), List.of("0b8f6c2e-4a1d-4f3b-9c7e-5d2a8e1f6b34"));
             com.growwer.api.model.Error envelope = com.growwer.api.model.Error.fromJson(exception.getResponseBody());
             equal("code", envelope.getCode(), "catalogue_daily_cap_reached");
-            equal("requestId", envelope.getRequestId(), "4f1c2a9e8b7d6c5e");
+            equal("requestId", envelope.getRequestId(), "0b8f6c2e-4a1d-4f3b-9c7e-5d2a8e1f6b34");
             equal("details", ((Number) envelope.getDetails().get("remaining")).intValue(), 0);
         }
     }

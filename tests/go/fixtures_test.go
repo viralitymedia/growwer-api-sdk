@@ -264,7 +264,7 @@ func TestTheErrorEnvelopeIsReadableFromTheError(t *testing.T) {
 	client, _ := answer(429, fixture(t, "error.json"), http.Header{
 		"Content-Type": {"application/json"},
 		"Retry-After":  {"3600"},
-		"X-Request-Id": {"4f1c2a9e8b7d6c5e"},
+		"X-Request-Id": {"0b8f6c2e-4a1d-4f3b-9c7e-5d2a8e1f6b34"},
 	})
 
 	_, response, err := client.CatalogueAPI.GetCatalogueMedia(authorised(), mediaID).Execute()
@@ -275,13 +275,13 @@ func TestTheErrorEnvelopeIsReadableFromTheError(t *testing.T) {
 	}
 	equal(t, "status", response.StatusCode, 429)
 	equal(t, "Retry-After", response.Header.Get("Retry-After"), "3600")
-	equal(t, "X-Request-Id", response.Header.Get("X-Request-Id"), "4f1c2a9e8b7d6c5e")
+	equal(t, "X-Request-Id", response.Header.Get("X-Request-Id"), "0b8f6c2e-4a1d-4f3b-9c7e-5d2a8e1f6b34")
 	envelope, ok := apiError.Model().(growwer.Error)
 	if !ok {
 		t.Fatalf("model = %#v, want a growwer.Error", apiError.Model())
 	}
 	equal(t, "code", envelope.Code, "catalogue_daily_cap_reached")
-	equal(t, "requestId", envelope.RequestId, "4f1c2a9e8b7d6c5e")
+	equal(t, "requestId", envelope.RequestId, "0b8f6c2e-4a1d-4f3b-9c7e-5d2a8e1f6b34")
 	equal(t, "details", envelope.Details, map[string]interface{}{"remaining": float64(0)})
 	equal(t, "body has code", strings.Contains(string(apiError.Body()), "catalogue_daily_cap_reached"), true)
 }

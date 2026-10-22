@@ -55,6 +55,16 @@ public class GetMe200ResponseCatalogue {
   @javax.annotation.Nonnull
   private Boolean eligible;
 
+  public static final String SERIALIZED_NAME_DAILY_CAP = "dailyCap";
+  @SerializedName(SERIALIZED_NAME_DAILY_CAP)
+  @javax.annotation.Nonnull
+  private Integer dailyCap;
+
+  public static final String SERIALIZED_NAME_REMAINING_TODAY = "remainingToday";
+  @SerializedName(SERIALIZED_NAME_REMAINING_TODAY)
+  @javax.annotation.Nullable
+  private Integer remainingToday;
+
   public GetMe200ResponseCatalogue() {
   }
 
@@ -64,7 +74,7 @@ public class GetMe200ResponseCatalogue {
   }
 
   /**
-   * Whether the catalogue operations (tag Catalogue: searching a project&#39;s medias, flash offers and media details) are open to you. They are open to accounts with recent completed orders, as buyer or as seller; until then they answer 403 &#x60;catalogue_requires_recent_order&#x60;. A media you have ordered is always readable with GET /medias/{id}.
+   * Whether you have the full daily cap of the catalogue operations (tag Catalogue: searching a project&#39;s medias, flash offers and media details). It is open to accounts with recent completed orders, as buyer or as seller; until then the catalogue answers within a smaller daily trial quota, which rises to the full cap after a completed order. A media you have ordered is always readable with GET /medias/{id} and counts against neither.
    * @return eligible
    */
   @javax.annotation.Nonnull
@@ -74,6 +84,46 @@ public class GetMe200ResponseCatalogue {
 
   public void setEligible(@javax.annotation.Nonnull Boolean eligible) {
     this.eligible = eligible;
+  }
+
+
+  public GetMe200ResponseCatalogue dailyCap(@javax.annotation.Nonnull Integer dailyCap) {
+    this.dailyCap = dailyCap;
+    return this;
+  }
+
+  /**
+   * How many distinct medias the catalogue operations show you per UTC day: the full cap when &#x60;eligible&#x60; is true, the trial quota otherwise. 0 means the catalogue answers 403 &#x60;catalogue_requires_recent_order&#x60; until you have a recent completed order.
+   * minimum: 0
+   * @return dailyCap
+   */
+  @javax.annotation.Nonnull
+  public Integer getDailyCap() {
+    return dailyCap;
+  }
+
+  public void setDailyCap(@javax.annotation.Nonnull Integer dailyCap) {
+    this.dailyCap = dailyCap;
+  }
+
+
+  public GetMe200ResponseCatalogue remainingToday(@javax.annotation.Nullable Integer remainingToday) {
+    this.remainingToday = remainingToday;
+    return this;
+  }
+
+  /**
+   * How many new distinct medias still fit in &#x60;dailyCap&#x60; today (UTC). Medias you have already seen today are free. Null when the count cannot be read right now; the catalogue operations then answer 503 until it can.
+   * minimum: 0
+   * @return remainingToday
+   */
+  @javax.annotation.Nullable
+  public Integer getRemainingToday() {
+    return remainingToday;
+  }
+
+  public void setRemainingToday(@javax.annotation.Nullable Integer remainingToday) {
+    this.remainingToday = remainingToday;
   }
 
   /**
@@ -131,13 +181,15 @@ public class GetMe200ResponseCatalogue {
       return false;
     }
     GetMe200ResponseCatalogue getMe200ResponseCatalogue = (GetMe200ResponseCatalogue) o;
-    return Objects.equals(this.eligible, getMe200ResponseCatalogue.eligible)&&
+    return Objects.equals(this.eligible, getMe200ResponseCatalogue.eligible) &&
+        Objects.equals(this.dailyCap, getMe200ResponseCatalogue.dailyCap) &&
+        Objects.equals(this.remainingToday, getMe200ResponseCatalogue.remainingToday)&&
         Objects.equals(this.additionalProperties, getMe200ResponseCatalogue.additionalProperties);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(eligible, additionalProperties);
+    return Objects.hash(eligible, dailyCap, remainingToday, additionalProperties);
   }
 
   @Override
@@ -145,6 +197,8 @@ public class GetMe200ResponseCatalogue {
     StringBuilder sb = new StringBuilder();
     sb.append("class GetMe200ResponseCatalogue {\n");
     sb.append("    eligible: ").append(toIndentedString(eligible)).append("\n");
+    sb.append("    dailyCap: ").append(toIndentedString(dailyCap)).append("\n");
+    sb.append("    remainingToday: ").append(toIndentedString(remainingToday)).append("\n");
     sb.append("    additionalProperties: ").append(toIndentedString(additionalProperties)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -164,10 +218,10 @@ public class GetMe200ResponseCatalogue {
 
   static {
     // a set of all properties/fields (JSON key names)
-    openapiFields = new HashSet<String>(Arrays.asList("eligible"));
+    openapiFields = new HashSet<String>(Arrays.asList("eligible", "dailyCap", "remainingToday"));
 
     // a set of required properties/fields (JSON key names)
-    openapiRequiredFields = new HashSet<String>(Arrays.asList("eligible"));
+    openapiRequiredFields = new HashSet<String>(Arrays.asList("eligible", "dailyCap", "remainingToday"));
   }
 
   /**

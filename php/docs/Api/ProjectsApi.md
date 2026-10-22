@@ -1,6 +1,6 @@
 # Growwer\Api\ProjectsApi
 
-Projects
+Create, edit and delete the projects you buy for.
 
 All URIs are relative to https://tool.growwer.com, except if the operation defines another base path.
 

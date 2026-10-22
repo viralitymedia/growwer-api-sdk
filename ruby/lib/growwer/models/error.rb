@@ -21,7 +21,7 @@ module Growwer
     # A human-readable explanation. It may change.
     attr_accessor :message
 
-    # The X-Request-Id of the call. Quote it when reporting a problem.
+    # UUID v4 generated per request, or the `X-Request-Id` you sent. Quote it when reporting a problem.
     attr_accessor :request_id
 
     # Extra data on some errors, such as the invalid fields of a validation_failed error.

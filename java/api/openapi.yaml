@@ -43,28 +43,33 @@ servers:
 security:
 - apiKey: []
 tags:
-- description: Account
+- description: "Your profile, balances and catalogue quota, and the codes and names\
+    \ the API uses."
   name: Account
-- description: Saved filters
-  name: Saved filters
-- description: Catalogue
-  name: Catalogue
-- description: Files
+- description: "Upload the documents that a later write, such as an order's briefing,\
+    \ references."
   name: Files
-- description: Buyer money
-  name: Buyer money
-- description: Managed services
-  name: Managed services
-- description: Orders
-  name: Orders
-- description: Projects
+- description: "Create, edit and delete the projects you buy for."
   name: Projects
-- description: Seller medias
+- description: "Search the medias of a project, its flash offers, favourites and discards."
+  name: Catalogue
+- description: Save catalogue searches of a project and count their medias.
+  name: Saved filters
+- description: "Estimate, place and follow the orders you buy, and act on them."
+  name: Buyer orders
+- description: "Your buyer balance, its movements and documents, and your invoices."
+  name: Buyer wallet
+- description: "Your managed service campaigns, their proposals, and requests to Growwer."
+  name: Managed services
+- description: "Your seller holiday, during which your medias take no orders."
+  name: Seller account
+- description: The medias you sell on and their fees.
   name: Seller medias
-- description: Seller money
-  name: Seller money
-- description: Seller orders
+- description: "The orders placed on your medias, and accepting, delivering or refusing\
+    \ them."
   name: Seller orders
+- description: "Your seller balance, its movements and documents, and your withdrawals."
+  name: Seller wallet
 paths:
   /api/v1/me:
     get:
@@ -92,14 +97,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -150,14 +160,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -244,14 +259,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -319,14 +339,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -437,7 +462,7 @@ paths:
               example:
                 code: validation_failed
                 message: The request is not valid. See details for each field.
-                requestId: 3f2a9c1e7b4d4e0a
+                requestId: 9b2f6c1e-4d7a-4e3b-8a5f-2c1d0e9f7a64
                 details:
                   fields:
                     promotedProducts:
@@ -452,14 +477,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -568,14 +598,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -684,14 +719,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -800,14 +840,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -916,14 +961,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -1032,14 +1082,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -1069,10 +1124,11 @@ paths:
     get:
       description: "One media of the catalogue: an active, public media. A media you\
         \ have ordered is always readable, even if it has since left the catalogue,\
-        \ and is open to every account. Otherwise the catalogue is open to accounts\
-        \ with recent completed orders (see `catalogue.eligible` on GET /me), and\
-        \ the media counts towards the distinct medias the account may see per day\
-        \ (UTC). For the media's state in one of your projects, search the project\
+        \ and is open to every account. Otherwise the media counts towards the distinct\
+        \ medias the account may see per day (UTC): the full daily cap for accounts\
+        \ with recent completed orders, a smaller trial quota for other accounts (see\
+        \ `catalogue.eligible`, `catalogue.dailyCap` and `catalogue.remainingToday`\
+        \ on GET /me). For the media's state in one of your projects, search the project\
         \ with GET /projects/{id}/medias."
       operationId: getCatalogueMedia
       parameters:
@@ -1105,8 +1161,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "The catalogue is open to accounts with recent completed orders,\
-            \ as buyer or as seller, and this account has none (code `catalogue_requires_recent_order`).\
-            \ GET /me reports `catalogue.eligible`."
+            \ as buyer or as seller, and to other accounts within a daily trial quota;\
+            \ this account has no such order and the trial quota is off (code `catalogue_requires_recent_order`).\
+            \ GET /me reports `catalogue.eligible` and `catalogue.dailyCap`."
         "404":
           content:
             application/json:
@@ -1119,14 +1176,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -1522,8 +1584,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "The catalogue is open to accounts with recent completed orders,\
-            \ as buyer or as seller, and this account has none (code `catalogue_requires_recent_order`).\
-            \ GET /me reports `catalogue.eligible`."
+            \ as buyer or as seller, and to other accounts within a daily trial quota;\
+            \ this account has no such order and the trial quota is off (code `catalogue_requires_recent_order`).\
+            \ GET /me reports `catalogue.eligible` and `catalogue.dailyCap`."
         "404":
           content:
             application/json:
@@ -1536,7 +1599,7 @@ paths:
               example:
                 code: validation_failed
                 message: The request is not valid. See details for each field.
-                requestId: 3f2a9c1e7b4d4e0a
+                requestId: 9b2f6c1e-4d7a-4e3b-8a5f-2c1d0e9f7a64
                 details:
                   fields:
                     promotedProducts:
@@ -1551,14 +1614,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -1673,7 +1741,7 @@ paths:
               example:
                 code: validation_failed
                 message: The request is not valid. See details for each field.
-                requestId: 3f2a9c1e7b4d4e0a
+                requestId: 9b2f6c1e-4d7a-4e3b-8a5f-2c1d0e9f7a64
                 details:
                   fields:
                     promotedProducts:
@@ -1688,14 +1756,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -1727,10 +1800,12 @@ paths:
       description: "The medias the catalogue offers for one of your projects, as the\
         \ web lists them, with each media's state in the project. Filter with the\
         \ parameters below, which all combine, or apply one of your saved filters\
-        \ with `savedFilterId` alone. The catalogue is open to accounts with recent\
-        \ completed orders (see `catalogue.eligible` on GET /me), and each account\
-        \ can see a limited number of distinct medias per day (UTC) across the catalogue\
-        \ operations; medias seen again the same day are free."
+        \ with `savedFilterId` alone. Each account can see a limited number of distinct\
+        \ medias per day (UTC) across the catalogue operations: the full daily cap\
+        \ for accounts with recent completed orders, as buyer or as seller, and a\
+        \ smaller trial quota for other accounts, which rises to the full cap after\
+        \ a completed order (see `catalogue.eligible`, `catalogue.dailyCap` and `catalogue.remainingToday`\
+        \ on GET /me). Medias seen again the same day are free."
       operationId: searchProjectMedias
       parameters:
       - description: The project.
@@ -2116,8 +2191,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "The catalogue is open to accounts with recent completed orders,\
-            \ as buyer or as seller, and this account has none (code `catalogue_requires_recent_order`).\
-            \ GET /me reports `catalogue.eligible`."
+            \ as buyer or as seller, and to other accounts within a daily trial quota;\
+            \ this account has no such order and the trial quota is off (code `catalogue_requires_recent_order`).\
+            \ GET /me reports `catalogue.eligible` and `catalogue.dailyCap`."
         "404":
           content:
             application/json:
@@ -2138,14 +2214,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -2173,10 +2254,10 @@ paths:
       - application/json
   /api/v1/files:
     post:
-      description: "Uploads a document (odt, doc, docx or txt, up to 8 MB) for a later\
-        \ write to reference by its `id`. A file belongs to you, can be used by one\
-        \ write, and expires 24 hours after it was uploaded; an expired or used file\
-        \ is answered like an unknown one."
+      description: |-
+        Uploads a document (odt, doc, docx or txt, up to 8 MB) for a later write to reference by its `id`. A file belongs to you, can be used by one write, and expires 24 hours after it was uploaded; an expired or used file is answered like an unknown one.
+
+        You may hold 20 files that no write has used yet and that have not expired. Past them it answers 429 `file_limit_reached`, with `details.limit` the number you may hold and `Retry-After` the seconds until the first of them expires; using one of them in a write frees its place at once. A file refused as invalid (422) is refused before they are counted, and a refused upload stores nothing.
       operationId: uploadFile
       parameters:
       - description: "A new key for each write, reused only to retry that same write.\
@@ -2249,14 +2330,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -2323,14 +2409,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -2353,7 +2444,7 @@ paths:
               $ref: "#/components/headers/RetryAfter"
       summary: Download an invoice
       tags:
-      - Buyer money
+      - Buyer wallet
       x-accepts:
       - application/json
       - application/pdf
@@ -2403,7 +2494,7 @@ paths:
               example:
                 code: validation_failed
                 message: The request is not valid. See details for each field.
-                requestId: 3f2a9c1e7b4d4e0a
+                requestId: 9b2f6c1e-4d7a-4e3b-8a5f-2c1d0e9f7a64
                 details:
                   fields:
                     promotedProducts:
@@ -2418,14 +2509,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -2448,7 +2544,7 @@ paths:
               $ref: "#/components/headers/RetryAfter"
       summary: List your invoices
       tags:
-      - Buyer money
+      - Buyer wallet
       x-accepts:
       - application/json
   /api/v1/managed-service/campaigns/{id}/proposals/estimate:
@@ -2513,7 +2609,7 @@ paths:
               example:
                 code: validation_failed
                 message: The request is not valid. See details for each field.
-                requestId: 3f2a9c1e7b4d4e0a
+                requestId: 9b2f6c1e-4d7a-4e3b-8a5f-2c1d0e9f7a64
                 details:
                   fields:
                     promotedProducts:
@@ -2528,14 +2624,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -2600,14 +2701,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -2688,7 +2794,7 @@ paths:
               example:
                 code: validation_failed
                 message: The request is not valid. See details for each field.
-                requestId: 3f2a9c1e7b4d4e0a
+                requestId: 9b2f6c1e-4d7a-4e3b-8a5f-2c1d0e9f7a64
                 details:
                   fields:
                     promotedProducts:
@@ -2703,14 +2809,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -2785,7 +2896,7 @@ paths:
               example:
                 code: validation_failed
                 message: The request is not valid. See details for each field.
-                requestId: 3f2a9c1e7b4d4e0a
+                requestId: 9b2f6c1e-4d7a-4e3b-8a5f-2c1d0e9f7a64
                 details:
                   fields:
                     promotedProducts:
@@ -2800,14 +2911,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -2904,7 +3020,7 @@ paths:
               example:
                 code: validation_failed
                 message: The request is not valid. See details for each field.
-                requestId: 3f2a9c1e7b4d4e0a
+                requestId: 9b2f6c1e-4d7a-4e3b-8a5f-2c1d0e9f7a64
                 details:
                   fields:
                     promotedProducts:
@@ -2919,14 +3035,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -3020,7 +3141,7 @@ paths:
               example:
                 code: validation_failed
                 message: The request is not valid. See details for each field.
-                requestId: 3f2a9c1e7b4d4e0a
+                requestId: 9b2f6c1e-4d7a-4e3b-8a5f-2c1d0e9f7a64
                 details:
                   fields:
                     promotedProducts:
@@ -3035,14 +3156,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -3137,7 +3263,7 @@ paths:
               example:
                 code: validation_failed
                 message: The request is not valid. See details for each field.
-                requestId: 3f2a9c1e7b4d4e0a
+                requestId: 9b2f6c1e-4d7a-4e3b-8a5f-2c1d0e9f7a64
                 details:
                   fields:
                     promotedProducts:
@@ -3152,14 +3278,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -3277,14 +3408,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -3386,14 +3522,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -3416,7 +3557,7 @@ paths:
               $ref: "#/components/headers/RetryAfter"
       summary: Approve an order's delivery
       tags:
-      - Orders
+      - Buyer orders
       x-accepts:
       - application/json
   /api/v1/orders/{id}/approve-draft:
@@ -3494,14 +3635,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -3524,7 +3670,7 @@ paths:
               $ref: "#/components/headers/RetryAfter"
       summary: Approve a draft
       tags:
-      - Orders
+      - Buyer orders
       x-accepts:
       - application/json
   /api/v1/orders/{id}/cancel:
@@ -3609,7 +3755,7 @@ paths:
               example:
                 code: validation_failed
                 message: The request is not valid. See details for each field.
-                requestId: 3f2a9c1e7b4d4e0a
+                requestId: 9b2f6c1e-4d7a-4e3b-8a5f-2c1d0e9f7a64
                 details:
                   fields:
                     promotedProducts:
@@ -3624,14 +3770,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -3654,7 +3805,7 @@ paths:
               $ref: "#/components/headers/RetryAfter"
       summary: Cancel an order
       tags:
-      - Orders
+      - Buyer orders
       x-content-type: application/json
       x-accepts:
       - application/json
@@ -3764,7 +3915,7 @@ paths:
               example:
                 code: validation_failed
                 message: The request is not valid. See details for each field.
-                requestId: 3f2a9c1e7b4d4e0a
+                requestId: 9b2f6c1e-4d7a-4e3b-8a5f-2c1d0e9f7a64
                 details:
                   fields:
                     promotedProducts:
@@ -3779,14 +3930,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -3809,7 +3965,7 @@ paths:
               $ref: "#/components/headers/RetryAfter"
       summary: List your orders
       tags:
-      - Orders
+      - Buyer orders
       x-accepts:
       - application/json
     post:
@@ -3910,14 +4066,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -3940,7 +4101,7 @@ paths:
               $ref: "#/components/headers/RetryAfter"
       summary: Place an order
       tags:
-      - Orders
+      - Buyer orders
       x-content-type: application/json
       x-accepts:
       - application/json
@@ -3986,14 +4147,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -4016,7 +4182,7 @@ paths:
               $ref: "#/components/headers/RetryAfter"
       summary: Download the draft you attached to an order
       tags:
-      - Orders
+      - Buyer orders
       x-accepts:
       - application/json
       - application/octet-stream
@@ -4061,14 +4227,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -4091,7 +4262,7 @@ paths:
               $ref: "#/components/headers/RetryAfter"
       summary: Download the draft of an order
       tags:
-      - Orders
+      - Buyer orders
       x-accepts:
       - application/json
       - application/octet-stream
@@ -4160,14 +4331,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -4190,7 +4366,7 @@ paths:
               $ref: "#/components/headers/RetryAfter"
       summary: Estimate an order
       tags:
-      - Orders
+      - Buyer orders
       x-content-type: application/json
       x-accepts:
       - application/json
@@ -4234,14 +4410,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -4264,7 +4445,7 @@ paths:
               $ref: "#/components/headers/RetryAfter"
       summary: Get an order
       tags:
-      - Orders
+      - Buyer orders
       x-accepts:
       - application/json
   /api/v1/orders/{id}/request-draft-update:
@@ -4347,7 +4528,7 @@ paths:
               example:
                 code: validation_failed
                 message: The request is not valid. See details for each field.
-                requestId: 3f2a9c1e7b4d4e0a
+                requestId: 9b2f6c1e-4d7a-4e3b-8a5f-2c1d0e9f7a64
                 details:
                   fields:
                     promotedProducts:
@@ -4362,14 +4543,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -4392,7 +4578,7 @@ paths:
               $ref: "#/components/headers/RetryAfter"
       summary: Request changes to a draft
       tags:
-      - Orders
+      - Buyer orders
       x-content-type: application/json
       x-accepts:
       - application/json
@@ -4477,7 +4663,7 @@ paths:
               example:
                 code: validation_failed
                 message: The request is not valid. See details for each field.
-                requestId: 3f2a9c1e7b4d4e0a
+                requestId: 9b2f6c1e-4d7a-4e3b-8a5f-2c1d0e9f7a64
                 details:
                   fields:
                     promotedProducts:
@@ -4492,14 +4678,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -4522,7 +4713,7 @@ paths:
               $ref: "#/components/headers/RetryAfter"
       summary: Request changes to a delivery
       tags:
-      - Orders
+      - Buyer orders
       x-content-type: application/json
       x-accepts:
       - application/json
@@ -4572,7 +4763,7 @@ paths:
               example:
                 code: validation_failed
                 message: The request is not valid. See details for each field.
-                requestId: 3f2a9c1e7b4d4e0a
+                requestId: 9b2f6c1e-4d7a-4e3b-8a5f-2c1d0e9f7a64
                 details:
                   fields:
                     promotedProducts:
@@ -4587,14 +4778,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -4700,7 +4896,7 @@ paths:
               example:
                 code: validation_failed
                 message: The request is not valid. See details for each field.
-                requestId: 3f2a9c1e7b4d4e0a
+                requestId: 9b2f6c1e-4d7a-4e3b-8a5f-2c1d0e9f7a64
                 details:
                   fields:
                     promotedProducts:
@@ -4715,14 +4911,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -4820,14 +5021,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -4892,14 +5098,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -5008,7 +5219,7 @@ paths:
               example:
                 code: validation_failed
                 message: The request is not valid. See details for each field.
-                requestId: 3f2a9c1e7b4d4e0a
+                requestId: 9b2f6c1e-4d7a-4e3b-8a5f-2c1d0e9f7a64
                 details:
                   fields:
                     promotedProducts:
@@ -5023,14 +5234,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -5132,14 +5348,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -5162,7 +5383,7 @@ paths:
               $ref: "#/components/headers/RetryAfter"
       summary: Set your holiday
       tags:
-      - Account
+      - Seller account
       x-content-type: application/json
       x-accepts:
       - application/json
@@ -5251,14 +5472,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -5325,14 +5551,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -5475,14 +5706,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -5585,7 +5821,7 @@ paths:
               example:
                 code: validation_failed
                 message: The request is not valid. See details for each field.
-                requestId: 3f2a9c1e7b4d4e0a
+                requestId: 9b2f6c1e-4d7a-4e3b-8a5f-2c1d0e9f7a64
                 details:
                   fields:
                     promotedProducts:
@@ -5600,14 +5836,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -5675,14 +5916,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -5705,7 +5951,7 @@ paths:
               $ref: "#/components/headers/RetryAfter"
       summary: Download the document of a seller wallet movement
       tags:
-      - Seller money
+      - Seller wallet
       x-accepts:
       - application/json
       - application/octet-stream
@@ -5751,14 +5997,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -5781,7 +6032,7 @@ paths:
               $ref: "#/components/headers/RetryAfter"
       summary: Download the invoice of a withdrawal
       tags:
-      - Seller money
+      - Seller wallet
       x-accepts:
       - application/json
       - application/octet-stream
@@ -5812,14 +6063,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -5842,7 +6098,7 @@ paths:
               $ref: "#/components/headers/RetryAfter"
       summary: Get your seller wallet
       tags:
-      - Seller money
+      - Seller wallet
       x-accepts:
       - application/json
   /api/v1/wallets/seller/transactions:
@@ -5893,7 +6149,7 @@ paths:
               example:
                 code: validation_failed
                 message: The request is not valid. See details for each field.
-                requestId: 3f2a9c1e7b4d4e0a
+                requestId: 9b2f6c1e-4d7a-4e3b-8a5f-2c1d0e9f7a64
                 details:
                   fields:
                     promotedProducts:
@@ -5908,14 +6164,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -5938,7 +6199,7 @@ paths:
               $ref: "#/components/headers/RetryAfter"
       summary: List your seller wallet movements
       tags:
-      - Seller money
+      - Seller wallet
       x-accepts:
       - application/json
   /api/v1/withdrawals:
@@ -5999,7 +6260,7 @@ paths:
               example:
                 code: validation_failed
                 message: The request is not valid. See details for each field.
-                requestId: 3f2a9c1e7b4d4e0a
+                requestId: 9b2f6c1e-4d7a-4e3b-8a5f-2c1d0e9f7a64
                 details:
                   fields:
                     promotedProducts:
@@ -6014,14 +6275,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -6044,7 +6310,7 @@ paths:
               $ref: "#/components/headers/RetryAfter"
       summary: List your withdrawals
       tags:
-      - Seller money
+      - Seller wallet
       x-accepts:
       - application/json
   /api/v1/seller/orders/{id}/accept:
@@ -6124,14 +6390,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -6242,7 +6513,7 @@ paths:
               example:
                 code: validation_failed
                 message: The request is not valid. See details for each field.
-                requestId: 3f2a9c1e7b4d4e0a
+                requestId: 9b2f6c1e-4d7a-4e3b-8a5f-2c1d0e9f7a64
                 details:
                   fields:
                     promotedProducts:
@@ -6257,14 +6528,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -6384,14 +6660,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -6510,14 +6791,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -6629,7 +6915,7 @@ paths:
               example:
                 code: validation_failed
                 message: The request is not valid. See details for each field.
-                requestId: 3f2a9c1e7b4d4e0a
+                requestId: 9b2f6c1e-4d7a-4e3b-8a5f-2c1d0e9f7a64
                 details:
                   fields:
                     promotedProducts:
@@ -6644,14 +6930,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -6720,14 +7011,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -6796,14 +7092,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -6871,14 +7172,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -7001,7 +7307,7 @@ paths:
               example:
                 code: validation_failed
                 message: The request is not valid. See details for each field.
-                requestId: 3f2a9c1e7b4d4e0a
+                requestId: 9b2f6c1e-4d7a-4e3b-8a5f-2c1d0e9f7a64
                 details:
                   fields:
                     promotedProducts:
@@ -7016,14 +7322,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -7133,7 +7444,7 @@ paths:
               example:
                 code: validation_failed
                 message: The request is not valid. See details for each field.
-                requestId: 3f2a9c1e7b4d4e0a
+                requestId: 9b2f6c1e-4d7a-4e3b-8a5f-2c1d0e9f7a64
                 details:
                   fields:
                     promotedProducts:
@@ -7148,14 +7459,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -7264,7 +7580,7 @@ paths:
               example:
                 code: validation_failed
                 message: The request is not valid. See details for each field.
-                requestId: 3f2a9c1e7b4d4e0a
+                requestId: 9b2f6c1e-4d7a-4e3b-8a5f-2c1d0e9f7a64
                 details:
                   fields:
                     promotedProducts:
@@ -7279,14 +7595,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -7395,7 +7716,7 @@ paths:
               example:
                 code: validation_failed
                 message: The request is not valid. See details for each field.
-                requestId: 3f2a9c1e7b4d4e0a
+                requestId: 9b2f6c1e-4d7a-4e3b-8a5f-2c1d0e9f7a64
                 details:
                   fields:
                     promotedProducts:
@@ -7410,14 +7731,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -7486,14 +7812,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -7516,7 +7847,7 @@ paths:
               $ref: "#/components/headers/RetryAfter"
       summary: Download the document of a wallet movement
       tags:
-      - Buyer money
+      - Buyer wallet
       x-accepts:
       - application/json
       - application/octet-stream
@@ -7544,14 +7875,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -7574,7 +7910,7 @@ paths:
               $ref: "#/components/headers/RetryAfter"
       summary: Get your buyer wallet
       tags:
-      - Buyer money
+      - Buyer wallet
       x-accepts:
       - application/json
   /api/v1/wallets/buyer/transactions:
@@ -7624,7 +7960,7 @@ paths:
               example:
                 code: validation_failed
                 message: The request is not valid. See details for each field.
-                requestId: 3f2a9c1e7b4d4e0a
+                requestId: 9b2f6c1e-4d7a-4e3b-8a5f-2c1d0e9f7a64
                 details:
                   fields:
                     promotedProducts:
@@ -7639,14 +7975,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-            \ failed authentications from this address (code `too_many_failed_authentications`).\
-            \ On the catalogue operations, also when the response would take the account\
-            \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-            \ `details.remaining` says how many new medias still fit today, `Retry-After`\
-            \ is the time to the next UTC midnight, and medias already seen today\
-            \ stay readable. On the managed service requests, also when you sent as\
-            \ many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
-            \ `Retry-After` is the time to the next UTC midnight."
+            \ failed authentications (code `too_many_failed_authentications`): with\
+            \ this key from this address, or from this address with any key; a valid\
+            \ key is never refused for it. On the catalogue operations, also when\
+            \ the response would take the account beyond the distinct medias it may\
+            \ see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining`\
+            \ says how many new medias still fit today, `details.limit` is the daily\
+            \ cap that applies and `details.tier` is `full`, or `trial` for an account\
+            \ without a recent completed order, whose quota rises to the full cap\
+            \ after one; `Retry-After` is the time to the next UTC midnight, and medias\
+            \ already seen today stay readable. On the managed service requests, also\
+            \ when you sent as many requests of that kind as you may per UTC day (code\
+            \ `managed_service_request_limit_reached`): `Retry-After` is the time\
+            \ to the next UTC midnight."
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
@@ -7669,7 +8010,7 @@ paths:
               $ref: "#/components/headers/RetryAfter"
       summary: List your buyer wallet movements
       tags:
-      - Buyer money
+      - Buyer wallet
       x-accepts:
       - application/json
 components:
@@ -8086,18 +8427,23 @@ components:
           schema:
             $ref: "#/components/schemas/Error"
       description: "The catalogue is open to accounts with recent completed orders,\
-        \ as buyer or as seller, and this account has none (code `catalogue_requires_recent_order`).\
-        \ GET /me reports `catalogue.eligible`."
+        \ as buyer or as seller, and to other accounts within a daily trial quota;\
+        \ this account has no such order and the trial quota is off (code `catalogue_requires_recent_order`).\
+        \ GET /me reports `catalogue.eligible` and `catalogue.dailyCap`."
     TooManyRequests:
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/Error"
       description: "Over the rate limit (code `rate_limit_exceeded`), or too many\
-        \ failed authentications from this address (code `too_many_failed_authentications`).\
-        \ On the catalogue operations, also when the response would take the account\
-        \ beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`):\
-        \ `details.remaining` says how many new medias still fit today, `Retry-After`\
+        \ failed authentications (code `too_many_failed_authentications`): with this\
+        \ key from this address, or from this address with any key; a valid key is\
+        \ never refused for it. On the catalogue operations, also when the response\
+        \ would take the account beyond the distinct medias it may see per UTC day\
+        \ (code `catalogue_daily_cap_reached`): `details.remaining` says how many\
+        \ new medias still fit today, `details.limit` is the daily cap that applies\
+        \ and `details.tier` is `full`, or `trial` for an account without a recent\
+        \ completed order, whose quota rises to the full cap after one; `Retry-After`\
         \ is the time to the next UTC midnight, and medias already seen today stay\
         \ readable. On the managed service requests, also when you sent as many requests\
         \ of that kind as you may per UTC day (code `managed_service_request_limit_reached`):\
@@ -8150,7 +8496,7 @@ components:
           example:
             code: validation_failed
             message: The request is not valid. See details for each field.
-            requestId: 3f2a9c1e7b4d4e0a
+            requestId: 9b2f6c1e-4d7a-4e3b-8a5f-2c1d0e9f7a64
             details:
               fields:
                 promotedProducts:
@@ -8164,7 +8510,7 @@ components:
       example:
         code: unauthorized
         message: message
-        requestId: requestId
+        requestId: 9b2f6c1e-4d7a-4e3b-8a5f-2c1d0e9f7a64
         details:
           key: ""
       properties:
@@ -8176,7 +8522,9 @@ components:
           description: A human-readable explanation. It may change.
           type: string
         requestId:
-          description: The X-Request-Id of the call. Quote it when reporting a problem.
+          description: "UUID v4 generated per request, or the `X-Request-Id` you sent.\
+            \ Quote it when reporting a problem."
+          example: 9b2f6c1e-4d7a-4e3b-8a5f-2c1d0e9f7a64
           type: string
         details:
           additionalProperties: true
@@ -10211,16 +10559,37 @@ components:
     getMe_200_response_catalogue:
       example:
         eligible: true
+        dailyCap: 0
+        remainingToday: 0
       properties:
         eligible:
-          description: "Whether the catalogue operations (tag Catalogue: searching\
-            \ a project's medias, flash offers and media details) are open to you.\
-            \ They are open to accounts with recent completed orders, as buyer or\
-            \ as seller; until then they answer 403 `catalogue_requires_recent_order`.\
-            \ A media you have ordered is always readable with GET /medias/{id}."
+          description: "Whether you have the full daily cap of the catalogue operations\
+            \ (tag Catalogue: searching a project's medias, flash offers and media\
+            \ details). It is open to accounts with recent completed orders, as buyer\
+            \ or as seller; until then the catalogue answers within a smaller daily\
+            \ trial quota, which rises to the full cap after a completed order. A\
+            \ media you have ordered is always readable with GET /medias/{id} and\
+            \ counts against neither."
           type: boolean
+        dailyCap:
+          description: "How many distinct medias the catalogue operations show you\
+            \ per UTC day: the full cap when `eligible` is true, the trial quota otherwise.\
+            \ 0 means the catalogue answers 403 `catalogue_requires_recent_order`\
+            \ until you have a recent completed order."
+          minimum: 0
+          type: integer
+        remainingToday:
+          description: How many new distinct medias still fit in `dailyCap` today
+            (UTC). Medias you have already seen today are free. Null when the count
+            cannot be read right now; the catalogue operations then answer 503 until
+            it can.
+          minimum: 0
+          nullable: true
+          type: integer
       required:
+      - dailyCap
       - eligible
+      - remainingToday
       type: object
     getMe_200_response_managedService:
       example:
@@ -10255,6 +10624,8 @@ components:
           holidayEndDate: 2000-01-23
         catalogue:
           eligible: true
+          dailyCap: 0
+          remainingToday: 0
         managedService:
           active: true
       properties:
@@ -12187,4 +12558,23 @@ components:
       description: An API key from your profile page.
       scheme: bearer
       type: http
+x-tagGroups:
+- name: General
+  tags:
+  - Account
+  - Files
+- name: Buyer
+  tags:
+  - Projects
+  - Catalogue
+  - Saved filters
+  - Buyer orders
+  - Buyer wallet
+  - Managed services
+- name: Seller
+  tags:
+  - Seller account
+  - Seller medias
+  - Seller orders
+  - Seller wallet
 

@@ -82,7 +82,7 @@ namespace Growwer.Api.Api
         /// Get a media
         /// </summary>
         /// <remarks>
-        /// One media of the catalogue: an active, public media. A media you have ordered is always readable, even if it has since left the catalogue, and is open to every account. Otherwise the catalogue is open to accounts with recent completed orders (see &#x60;catalogue.eligible&#x60; on GET /me), and the media counts towards the distinct medias the account may see per day (UTC). For the media&#39;s state in one of your projects, search the project with GET /projects/{id}/medias.
+        /// One media of the catalogue: an active, public media. A media you have ordered is always readable, even if it has since left the catalogue, and is open to every account. Otherwise the media counts towards the distinct medias the account may see per day (UTC): the full daily cap for accounts with recent completed orders, a smaller trial quota for other accounts (see &#x60;catalogue.eligible&#x60;, &#x60;catalogue.dailyCap&#x60; and &#x60;catalogue.remainingToday&#x60; on GET /me). For the media&#39;s state in one of your projects, search the project with GET /projects/{id}/medias.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id">The media.</param>
@@ -93,7 +93,7 @@ namespace Growwer.Api.Api
         /// Get a media
         /// </summary>
         /// <remarks>
-        /// One media of the catalogue: an active, public media. A media you have ordered is always readable, even if it has since left the catalogue, and is open to every account. Otherwise the catalogue is open to accounts with recent completed orders (see &#x60;catalogue.eligible&#x60; on GET /me), and the media counts towards the distinct medias the account may see per day (UTC). For the media&#39;s state in one of your projects, search the project with GET /projects/{id}/medias.
+        /// One media of the catalogue: an active, public media. A media you have ordered is always readable, even if it has since left the catalogue, and is open to every account. Otherwise the media counts towards the distinct medias the account may see per day (UTC): the full daily cap for accounts with recent completed orders, a smaller trial quota for other accounts (see &#x60;catalogue.eligible&#x60;, &#x60;catalogue.dailyCap&#x60; and &#x60;catalogue.remainingToday&#x60; on GET /me). For the media&#39;s state in one of your projects, search the project with GET /projects/{id}/medias.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id">The media.</param>
@@ -219,7 +219,7 @@ namespace Growwer.Api.Api
         /// Search the catalogue for a project
         /// </summary>
         /// <remarks>
-        /// The medias the catalogue offers for one of your projects, as the web lists them, with each media&#39;s state in the project. Filter with the parameters below, which all combine, or apply one of your saved filters with &#x60;savedFilterId&#x60; alone. The catalogue is open to accounts with recent completed orders (see &#x60;catalogue.eligible&#x60; on GET /me), and each account can see a limited number of distinct medias per day (UTC) across the catalogue operations; medias seen again the same day are free.
+        /// The medias the catalogue offers for one of your projects, as the web lists them, with each media&#39;s state in the project. Filter with the parameters below, which all combine, or apply one of your saved filters with &#x60;savedFilterId&#x60; alone. Each account can see a limited number of distinct medias per day (UTC) across the catalogue operations: the full daily cap for accounts with recent completed orders, as buyer or as seller, and a smaller trial quota for other accounts, which rises to the full cap after a completed order (see &#x60;catalogue.eligible&#x60;, &#x60;catalogue.dailyCap&#x60; and &#x60;catalogue.remainingToday&#x60; on GET /me). Medias seen again the same day are free.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id">The project.</param>
@@ -267,7 +267,7 @@ namespace Growwer.Api.Api
         /// Search the catalogue for a project
         /// </summary>
         /// <remarks>
-        /// The medias the catalogue offers for one of your projects, as the web lists them, with each media&#39;s state in the project. Filter with the parameters below, which all combine, or apply one of your saved filters with &#x60;savedFilterId&#x60; alone. The catalogue is open to accounts with recent completed orders (see &#x60;catalogue.eligible&#x60; on GET /me), and each account can see a limited number of distinct medias per day (UTC) across the catalogue operations; medias seen again the same day are free.
+        /// The medias the catalogue offers for one of your projects, as the web lists them, with each media&#39;s state in the project. Filter with the parameters below, which all combine, or apply one of your saved filters with &#x60;savedFilterId&#x60; alone. Each account can see a limited number of distinct medias per day (UTC) across the catalogue operations: the full daily cap for accounts with recent completed orders, as buyer or as seller, and a smaller trial quota for other accounts, which rises to the full cap after a completed order (see &#x60;catalogue.eligible&#x60;, &#x60;catalogue.dailyCap&#x60; and &#x60;catalogue.remainingToday&#x60; on GET /me). Medias seen again the same day are free.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id">The project.</param>
@@ -427,7 +427,7 @@ namespace Growwer.Api.Api
         /// Get a media
         /// </summary>
         /// <remarks>
-        /// One media of the catalogue: an active, public media. A media you have ordered is always readable, even if it has since left the catalogue, and is open to every account. Otherwise the catalogue is open to accounts with recent completed orders (see &#x60;catalogue.eligible&#x60; on GET /me), and the media counts towards the distinct medias the account may see per day (UTC). For the media&#39;s state in one of your projects, search the project with GET /projects/{id}/medias.
+        /// One media of the catalogue: an active, public media. A media you have ordered is always readable, even if it has since left the catalogue, and is open to every account. Otherwise the media counts towards the distinct medias the account may see per day (UTC): the full daily cap for accounts with recent completed orders, a smaller trial quota for other accounts (see &#x60;catalogue.eligible&#x60;, &#x60;catalogue.dailyCap&#x60; and &#x60;catalogue.remainingToday&#x60; on GET /me). For the media&#39;s state in one of your projects, search the project with GET /projects/{id}/medias.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id">The media.</param>
@@ -439,7 +439,7 @@ namespace Growwer.Api.Api
         /// Get a media
         /// </summary>
         /// <remarks>
-        /// One media of the catalogue: an active, public media. A media you have ordered is always readable, even if it has since left the catalogue, and is open to every account. Otherwise the catalogue is open to accounts with recent completed orders (see &#x60;catalogue.eligible&#x60; on GET /me), and the media counts towards the distinct medias the account may see per day (UTC). For the media&#39;s state in one of your projects, search the project with GET /projects/{id}/medias.
+        /// One media of the catalogue: an active, public media. A media you have ordered is always readable, even if it has since left the catalogue, and is open to every account. Otherwise the media counts towards the distinct medias the account may see per day (UTC): the full daily cap for accounts with recent completed orders, a smaller trial quota for other accounts (see &#x60;catalogue.eligible&#x60;, &#x60;catalogue.dailyCap&#x60; and &#x60;catalogue.remainingToday&#x60; on GET /me). For the media&#39;s state in one of your projects, search the project with GET /projects/{id}/medias.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id">The media.</param>
@@ -570,7 +570,7 @@ namespace Growwer.Api.Api
         /// Search the catalogue for a project
         /// </summary>
         /// <remarks>
-        /// The medias the catalogue offers for one of your projects, as the web lists them, with each media&#39;s state in the project. Filter with the parameters below, which all combine, or apply one of your saved filters with &#x60;savedFilterId&#x60; alone. The catalogue is open to accounts with recent completed orders (see &#x60;catalogue.eligible&#x60; on GET /me), and each account can see a limited number of distinct medias per day (UTC) across the catalogue operations; medias seen again the same day are free.
+        /// The medias the catalogue offers for one of your projects, as the web lists them, with each media&#39;s state in the project. Filter with the parameters below, which all combine, or apply one of your saved filters with &#x60;savedFilterId&#x60; alone. Each account can see a limited number of distinct medias per day (UTC) across the catalogue operations: the full daily cap for accounts with recent completed orders, as buyer or as seller, and a smaller trial quota for other accounts, which rises to the full cap after a completed order (see &#x60;catalogue.eligible&#x60;, &#x60;catalogue.dailyCap&#x60; and &#x60;catalogue.remainingToday&#x60; on GET /me). Medias seen again the same day are free.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id">The project.</param>
@@ -619,7 +619,7 @@ namespace Growwer.Api.Api
         /// Search the catalogue for a project
         /// </summary>
         /// <remarks>
-        /// The medias the catalogue offers for one of your projects, as the web lists them, with each media&#39;s state in the project. Filter with the parameters below, which all combine, or apply one of your saved filters with &#x60;savedFilterId&#x60; alone. The catalogue is open to accounts with recent completed orders (see &#x60;catalogue.eligible&#x60; on GET /me), and each account can see a limited number of distinct medias per day (UTC) across the catalogue operations; medias seen again the same day are free.
+        /// The medias the catalogue offers for one of your projects, as the web lists them, with each media&#39;s state in the project. Filter with the parameters below, which all combine, or apply one of your saved filters with &#x60;savedFilterId&#x60; alone. Each account can see a limited number of distinct medias per day (UTC) across the catalogue operations: the full daily cap for accounts with recent completed orders, as buyer or as seller, and a smaller trial quota for other accounts, which rises to the full cap after a completed order (see &#x60;catalogue.eligible&#x60;, &#x60;catalogue.dailyCap&#x60; and &#x60;catalogue.remainingToday&#x60; on GET /me). Medias seen again the same day are free.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id">The project.</param>
@@ -1205,7 +1205,7 @@ namespace Growwer.Api.Api
         }
 
         /// <summary>
-        /// Get a media One media of the catalogue: an active, public media. A media you have ordered is always readable, even if it has since left the catalogue, and is open to every account. Otherwise the catalogue is open to accounts with recent completed orders (see &#x60;catalogue.eligible&#x60; on GET /me), and the media counts towards the distinct medias the account may see per day (UTC). For the media&#39;s state in one of your projects, search the project with GET /projects/{id}/medias.
+        /// Get a media One media of the catalogue: an active, public media. A media you have ordered is always readable, even if it has since left the catalogue, and is open to every account. Otherwise the media counts towards the distinct medias the account may see per day (UTC): the full daily cap for accounts with recent completed orders, a smaller trial quota for other accounts (see &#x60;catalogue.eligible&#x60;, &#x60;catalogue.dailyCap&#x60; and &#x60;catalogue.remainingToday&#x60; on GET /me). For the media&#39;s state in one of your projects, search the project with GET /projects/{id}/medias.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id">The media.</param>
@@ -1217,7 +1217,7 @@ namespace Growwer.Api.Api
         }
 
         /// <summary>
-        /// Get a media One media of the catalogue: an active, public media. A media you have ordered is always readable, even if it has since left the catalogue, and is open to every account. Otherwise the catalogue is open to accounts with recent completed orders (see &#x60;catalogue.eligible&#x60; on GET /me), and the media counts towards the distinct medias the account may see per day (UTC). For the media&#39;s state in one of your projects, search the project with GET /projects/{id}/medias.
+        /// Get a media One media of the catalogue: an active, public media. A media you have ordered is always readable, even if it has since left the catalogue, and is open to every account. Otherwise the media counts towards the distinct medias the account may see per day (UTC): the full daily cap for accounts with recent completed orders, a smaller trial quota for other accounts (see &#x60;catalogue.eligible&#x60;, &#x60;catalogue.dailyCap&#x60; and &#x60;catalogue.remainingToday&#x60; on GET /me). For the media&#39;s state in one of your projects, search the project with GET /projects/{id}/medias.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id">The media.</param>
@@ -1262,7 +1262,7 @@ namespace Growwer.Api.Api
         }
 
         /// <summary>
-        /// Get a media One media of the catalogue: an active, public media. A media you have ordered is always readable, even if it has since left the catalogue, and is open to every account. Otherwise the catalogue is open to accounts with recent completed orders (see &#x60;catalogue.eligible&#x60; on GET /me), and the media counts towards the distinct medias the account may see per day (UTC). For the media&#39;s state in one of your projects, search the project with GET /projects/{id}/medias.
+        /// Get a media One media of the catalogue: an active, public media. A media you have ordered is always readable, even if it has since left the catalogue, and is open to every account. Otherwise the media counts towards the distinct medias the account may see per day (UTC): the full daily cap for accounts with recent completed orders, a smaller trial quota for other accounts (see &#x60;catalogue.eligible&#x60;, &#x60;catalogue.dailyCap&#x60; and &#x60;catalogue.remainingToday&#x60; on GET /me). For the media&#39;s state in one of your projects, search the project with GET /projects/{id}/medias.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id">The media.</param>
@@ -1275,7 +1275,7 @@ namespace Growwer.Api.Api
         }
 
         /// <summary>
-        /// Get a media One media of the catalogue: an active, public media. A media you have ordered is always readable, even if it has since left the catalogue, and is open to every account. Otherwise the catalogue is open to accounts with recent completed orders (see &#x60;catalogue.eligible&#x60; on GET /me), and the media counts towards the distinct medias the account may see per day (UTC). For the media&#39;s state in one of your projects, search the project with GET /projects/{id}/medias.
+        /// Get a media One media of the catalogue: an active, public media. A media you have ordered is always readable, even if it has since left the catalogue, and is open to every account. Otherwise the media counts towards the distinct medias the account may see per day (UTC): the full daily cap for accounts with recent completed orders, a smaller trial quota for other accounts (see &#x60;catalogue.eligible&#x60;, &#x60;catalogue.dailyCap&#x60; and &#x60;catalogue.remainingToday&#x60; on GET /me). For the media&#39;s state in one of your projects, search the project with GET /projects/{id}/medias.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id">The media.</param>
@@ -2012,7 +2012,7 @@ namespace Growwer.Api.Api
         }
 
         /// <summary>
-        /// Search the catalogue for a project The medias the catalogue offers for one of your projects, as the web lists them, with each media&#39;s state in the project. Filter with the parameters below, which all combine, or apply one of your saved filters with &#x60;savedFilterId&#x60; alone. The catalogue is open to accounts with recent completed orders (see &#x60;catalogue.eligible&#x60; on GET /me), and each account can see a limited number of distinct medias per day (UTC) across the catalogue operations; medias seen again the same day are free.
+        /// Search the catalogue for a project The medias the catalogue offers for one of your projects, as the web lists them, with each media&#39;s state in the project. Filter with the parameters below, which all combine, or apply one of your saved filters with &#x60;savedFilterId&#x60; alone. Each account can see a limited number of distinct medias per day (UTC) across the catalogue operations: the full daily cap for accounts with recent completed orders, as buyer or as seller, and a smaller trial quota for other accounts, which rises to the full cap after a completed order (see &#x60;catalogue.eligible&#x60;, &#x60;catalogue.dailyCap&#x60; and &#x60;catalogue.remainingToday&#x60; on GET /me). Medias seen again the same day are free.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id">The project.</param>
@@ -2061,7 +2061,7 @@ namespace Growwer.Api.Api
         }
 
         /// <summary>
-        /// Search the catalogue for a project The medias the catalogue offers for one of your projects, as the web lists them, with each media&#39;s state in the project. Filter with the parameters below, which all combine, or apply one of your saved filters with &#x60;savedFilterId&#x60; alone. The catalogue is open to accounts with recent completed orders (see &#x60;catalogue.eligible&#x60; on GET /me), and each account can see a limited number of distinct medias per day (UTC) across the catalogue operations; medias seen again the same day are free.
+        /// Search the catalogue for a project The medias the catalogue offers for one of your projects, as the web lists them, with each media&#39;s state in the project. Filter with the parameters below, which all combine, or apply one of your saved filters with &#x60;savedFilterId&#x60; alone. Each account can see a limited number of distinct medias per day (UTC) across the catalogue operations: the full daily cap for accounts with recent completed orders, as buyer or as seller, and a smaller trial quota for other accounts, which rises to the full cap after a completed order (see &#x60;catalogue.eligible&#x60;, &#x60;catalogue.dailyCap&#x60; and &#x60;catalogue.remainingToday&#x60; on GET /me). Medias seen again the same day are free.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id">The project.</param>
@@ -2291,7 +2291,7 @@ namespace Growwer.Api.Api
         }
 
         /// <summary>
-        /// Search the catalogue for a project The medias the catalogue offers for one of your projects, as the web lists them, with each media&#39;s state in the project. Filter with the parameters below, which all combine, or apply one of your saved filters with &#x60;savedFilterId&#x60; alone. The catalogue is open to accounts with recent completed orders (see &#x60;catalogue.eligible&#x60; on GET /me), and each account can see a limited number of distinct medias per day (UTC) across the catalogue operations; medias seen again the same day are free.
+        /// Search the catalogue for a project The medias the catalogue offers for one of your projects, as the web lists them, with each media&#39;s state in the project. Filter with the parameters below, which all combine, or apply one of your saved filters with &#x60;savedFilterId&#x60; alone. Each account can see a limited number of distinct medias per day (UTC) across the catalogue operations: the full daily cap for accounts with recent completed orders, as buyer or as seller, and a smaller trial quota for other accounts, which rises to the full cap after a completed order (see &#x60;catalogue.eligible&#x60;, &#x60;catalogue.dailyCap&#x60; and &#x60;catalogue.remainingToday&#x60; on GET /me). Medias seen again the same day are free.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id">The project.</param>
@@ -2341,7 +2341,7 @@ namespace Growwer.Api.Api
         }
 
         /// <summary>
-        /// Search the catalogue for a project The medias the catalogue offers for one of your projects, as the web lists them, with each media&#39;s state in the project. Filter with the parameters below, which all combine, or apply one of your saved filters with &#x60;savedFilterId&#x60; alone. The catalogue is open to accounts with recent completed orders (see &#x60;catalogue.eligible&#x60; on GET /me), and each account can see a limited number of distinct medias per day (UTC) across the catalogue operations; medias seen again the same day are free.
+        /// Search the catalogue for a project The medias the catalogue offers for one of your projects, as the web lists them, with each media&#39;s state in the project. Filter with the parameters below, which all combine, or apply one of your saved filters with &#x60;savedFilterId&#x60; alone. Each account can see a limited number of distinct medias per day (UTC) across the catalogue operations: the full daily cap for accounts with recent completed orders, as buyer or as seller, and a smaller trial quota for other accounts, which rises to the full cap after a completed order (see &#x60;catalogue.eligible&#x60;, &#x60;catalogue.dailyCap&#x60; and &#x60;catalogue.remainingToday&#x60; on GET /me). Medias seen again the same day are free.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id">The project.</param>

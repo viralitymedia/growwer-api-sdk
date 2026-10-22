@@ -1,6 +1,6 @@
 # Growwer\Api\FilesApi
 
-Files
+Upload the documents that a later write, such as an order&#39;s briefing, references.
 
 All URIs are relative to https://tool.growwer.com, except if the operation defines another base path.
 
@@ -17,7 +17,7 @@ uploadFile($idempotency_key, $file): \Growwer\Api\Model\UploadFile201Response
 
 Upload a file
 
-Uploads a document (odt, doc, docx or txt, up to 8 MB) for a later write to reference by its `id`. A file belongs to you, can be used by one write, and expires 24 hours after it was uploaded; an expired or used file is answered like an unknown one.
+Uploads a document (odt, doc, docx or txt, up to 8 MB) for a later write to reference by its `id`. A file belongs to you, can be used by one write, and expires 24 hours after it was uploaded; an expired or used file is answered like an unknown one.  You may hold 20 files that no write has used yet and that have not expired. Past them it answers 429 `file_limit_reached`, with `details.limit` the number you may hold and `Retry-After` the seconds until the first of them expires; using one of them in a write frees its place at once. A file refused as invalid (422) is refused before they are counted, and a refused upload stores nothing.
 
 ### Example
 

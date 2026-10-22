@@ -122,12 +122,22 @@ Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *AccountApi* | [**get_me**](docs/AccountApi.md#get_me) | **GET** /api/v1/me | Your account
 *AccountApi* | [**get_vocabulary**](docs/AccountApi.md#get_vocabulary) | **GET** /api/v1/vocabulary | Codes and names
-*AccountApi* | [**put_seller_holiday**](docs/AccountApi.md#put_seller_holiday) | **PUT** /api/v1/seller/holiday | Set your holiday
-*BuyerMoneyApi* | [**download_buyer_transaction_document**](docs/BuyerMoneyApi.md#download_buyer_transaction_document) | **GET** /api/v1/wallets/buyer/transactions/{id}/document | Download the document of a wallet movement
-*BuyerMoneyApi* | [**get_buyer_wallet**](docs/BuyerMoneyApi.md#get_buyer_wallet) | **GET** /api/v1/wallets/buyer | Get your buyer wallet
-*BuyerMoneyApi* | [**get_invoice_pdf**](docs/BuyerMoneyApi.md#get_invoice_pdf) | **GET** /api/v1/invoices/{id}/pdf | Download an invoice
-*BuyerMoneyApi* | [**list_buyer_transactions**](docs/BuyerMoneyApi.md#list_buyer_transactions) | **GET** /api/v1/wallets/buyer/transactions | List your buyer wallet movements
-*BuyerMoneyApi* | [**list_invoices**](docs/BuyerMoneyApi.md#list_invoices) | **GET** /api/v1/invoices | List your invoices
+*BuyerOrdersApi* | [**approve_order**](docs/BuyerOrdersApi.md#approve_order) | **POST** /api/v1/orders/{id}/approve | Approve an order&#39;s delivery
+*BuyerOrdersApi* | [**approve_order_draft**](docs/BuyerOrdersApi.md#approve_order_draft) | **POST** /api/v1/orders/{id}/approve-draft | Approve a draft
+*BuyerOrdersApi* | [**cancel_order**](docs/BuyerOrdersApi.md#cancel_order) | **POST** /api/v1/orders/{id}/cancel | Cancel an order
+*BuyerOrdersApi* | [**create_order**](docs/BuyerOrdersApi.md#create_order) | **POST** /api/v1/orders | Place an order
+*BuyerOrdersApi* | [**download_order_briefing**](docs/BuyerOrdersApi.md#download_order_briefing) | **GET** /api/v1/orders/{id}/briefing | Download the draft you attached to an order
+*BuyerOrdersApi* | [**download_order_draft**](docs/BuyerOrdersApi.md#download_order_draft) | **GET** /api/v1/orders/{id}/draft | Download the draft of an order
+*BuyerOrdersApi* | [**estimate_order**](docs/BuyerOrdersApi.md#estimate_order) | **POST** /api/v1/orders/estimate | Estimate an order
+*BuyerOrdersApi* | [**get_order**](docs/BuyerOrdersApi.md#get_order) | **GET** /api/v1/orders/{id} | Get an order
+*BuyerOrdersApi* | [**list_orders**](docs/BuyerOrdersApi.md#list_orders) | **GET** /api/v1/orders | List your orders
+*BuyerOrdersApi* | [**request_order_draft_update**](docs/BuyerOrdersApi.md#request_order_draft_update) | **POST** /api/v1/orders/{id}/request-draft-update | Request changes to a draft
+*BuyerOrdersApi* | [**request_order_update**](docs/BuyerOrdersApi.md#request_order_update) | **POST** /api/v1/orders/{id}/request-update | Request changes to a delivery
+*BuyerWalletApi* | [**download_buyer_transaction_document**](docs/BuyerWalletApi.md#download_buyer_transaction_document) | **GET** /api/v1/wallets/buyer/transactions/{id}/document | Download the document of a wallet movement
+*BuyerWalletApi* | [**get_buyer_wallet**](docs/BuyerWalletApi.md#get_buyer_wallet) | **GET** /api/v1/wallets/buyer | Get your buyer wallet
+*BuyerWalletApi* | [**get_invoice_pdf**](docs/BuyerWalletApi.md#get_invoice_pdf) | **GET** /api/v1/invoices/{id}/pdf | Download an invoice
+*BuyerWalletApi* | [**list_buyer_transactions**](docs/BuyerWalletApi.md#list_buyer_transactions) | **GET** /api/v1/wallets/buyer/transactions | List your buyer wallet movements
+*BuyerWalletApi* | [**list_invoices**](docs/BuyerWalletApi.md#list_invoices) | **GET** /api/v1/invoices | List your invoices
 *CatalogueApi* | [**discard_media**](docs/CatalogueApi.md#discard_media) | **PUT** /api/v1/projects/{id}/discards/{mediaId} | Discard a media for a project
 *CatalogueApi* | [**favourite_media**](docs/CatalogueApi.md#favourite_media) | **PUT** /api/v1/projects/{id}/favourites/{mediaId} | Add a media to the favourites of a project
 *CatalogueApi* | [**get_catalogue_media**](docs/CatalogueApi.md#get_catalogue_media) | **GET** /api/v1/medias/{id} | Get a media
@@ -145,17 +155,6 @@ Class | Method | HTTP request | Description
 *ManagedServicesApi* | [**request_managed_service_campaign**](docs/ManagedServicesApi.md#request_managed_service_campaign) | **POST** /api/v1/managed-service/campaign-requests | Request a new campaign
 *ManagedServicesApi* | [**request_managed_service_info**](docs/ManagedServicesApi.md#request_managed_service_info) | **POST** /api/v1/managed-service/info-requests | Ask about the managed service
 *ManagedServicesApi* | [**review_managed_service_proposals**](docs/ManagedServicesApi.md#review_managed_service_proposals) | **POST** /api/v1/managed-service/campaigns/{id}/proposals/review | Accept or reject proposals
-*OrdersApi* | [**approve_order**](docs/OrdersApi.md#approve_order) | **POST** /api/v1/orders/{id}/approve | Approve an order&#39;s delivery
-*OrdersApi* | [**approve_order_draft**](docs/OrdersApi.md#approve_order_draft) | **POST** /api/v1/orders/{id}/approve-draft | Approve a draft
-*OrdersApi* | [**cancel_order**](docs/OrdersApi.md#cancel_order) | **POST** /api/v1/orders/{id}/cancel | Cancel an order
-*OrdersApi* | [**create_order**](docs/OrdersApi.md#create_order) | **POST** /api/v1/orders | Place an order
-*OrdersApi* | [**download_order_briefing**](docs/OrdersApi.md#download_order_briefing) | **GET** /api/v1/orders/{id}/briefing | Download the draft you attached to an order
-*OrdersApi* | [**download_order_draft**](docs/OrdersApi.md#download_order_draft) | **GET** /api/v1/orders/{id}/draft | Download the draft of an order
-*OrdersApi* | [**estimate_order**](docs/OrdersApi.md#estimate_order) | **POST** /api/v1/orders/estimate | Estimate an order
-*OrdersApi* | [**get_order**](docs/OrdersApi.md#get_order) | **GET** /api/v1/orders/{id} | Get an order
-*OrdersApi* | [**list_orders**](docs/OrdersApi.md#list_orders) | **GET** /api/v1/orders | List your orders
-*OrdersApi* | [**request_order_draft_update**](docs/OrdersApi.md#request_order_draft_update) | **POST** /api/v1/orders/{id}/request-draft-update | Request changes to a draft
-*OrdersApi* | [**request_order_update**](docs/OrdersApi.md#request_order_update) | **POST** /api/v1/orders/{id}/request-update | Request changes to a delivery
 *ProjectsApi* | [**create_project**](docs/ProjectsApi.md#create_project) | **POST** /api/v1/projects | Create a project
 *ProjectsApi* | [**delete_project**](docs/ProjectsApi.md#delete_project) | **DELETE** /api/v1/projects/{id} | Delete a project
 *ProjectsApi* | [**get_project**](docs/ProjectsApi.md#get_project) | **GET** /api/v1/projects/{id} | Get a project
@@ -165,15 +164,11 @@ Class | Method | HTTP request | Description
 *SavedFiltersApi* | [**create_saved_filter**](docs/SavedFiltersApi.md#create_saved_filter) | **POST** /api/v1/projects/{id}/saved-filters | Save a filter
 *SavedFiltersApi* | [**delete_saved_filter**](docs/SavedFiltersApi.md#delete_saved_filter) | **DELETE** /api/v1/projects/{id}/saved-filters/{filterId} | Delete a saved filter
 *SavedFiltersApi* | [**list_saved_filters**](docs/SavedFiltersApi.md#list_saved_filters) | **GET** /api/v1/projects/{id}/saved-filters | List the saved filters of a project
+*SellerAccountApi* | [**put_seller_holiday**](docs/SellerAccountApi.md#put_seller_holiday) | **PUT** /api/v1/seller/holiday | Set your holiday
 *SellerMediasApi* | [**apply_seller_media_competitive_fees**](docs/SellerMediasApi.md#apply_seller_media_competitive_fees) | **POST** /api/v1/seller/medias/{id}/apply-competitive-fees | Set the competitive fees Growwer suggests
 *SellerMediasApi* | [**get_seller_media**](docs/SellerMediasApi.md#get_seller_media) | **GET** /api/v1/seller/medias/{id} | Get a media you sell on
 *SellerMediasApi* | [**list_seller_medias**](docs/SellerMediasApi.md#list_seller_medias) | **GET** /api/v1/seller/medias | List the medias you sell on
 *SellerMediasApi* | [**update_seller_media**](docs/SellerMediasApi.md#update_seller_media) | **PATCH** /api/v1/seller/medias/{id} | Edit the fees of a media you sell on
-*SellerMoneyApi* | [**download_seller_transaction_document**](docs/SellerMoneyApi.md#download_seller_transaction_document) | **GET** /api/v1/wallets/seller/transactions/{id}/document | Download the document of a seller wallet movement
-*SellerMoneyApi* | [**download_withdrawal_invoice**](docs/SellerMoneyApi.md#download_withdrawal_invoice) | **GET** /api/v1/withdrawals/{id}/invoice | Download the invoice of a withdrawal
-*SellerMoneyApi* | [**get_seller_wallet**](docs/SellerMoneyApi.md#get_seller_wallet) | **GET** /api/v1/wallets/seller | Get your seller wallet
-*SellerMoneyApi* | [**list_seller_transactions**](docs/SellerMoneyApi.md#list_seller_transactions) | **GET** /api/v1/wallets/seller/transactions | List your seller wallet movements
-*SellerMoneyApi* | [**list_withdrawals**](docs/SellerMoneyApi.md#list_withdrawals) | **GET** /api/v1/withdrawals | List your withdrawals
 *SellerOrdersApi* | [**accept_seller_order**](docs/SellerOrdersApi.md#accept_seller_order) | **POST** /api/v1/seller/orders/{id}/accept | Accept an order
 *SellerOrdersApi* | [**deliver_seller_order**](docs/SellerOrdersApi.md#deliver_seller_order) | **POST** /api/v1/seller/orders/{id}/deliver | Deliver an order
 *SellerOrdersApi* | [**deliver_seller_order_draft**](docs/SellerOrdersApi.md#deliver_seller_order_draft) | **POST** /api/v1/seller/orders/{id}/deliver-draft | Deliver a draft
@@ -186,6 +181,11 @@ Class | Method | HTTP request | Description
 *SellerOrdersApi* | [**refute_seller_order_draft_update**](docs/SellerOrdersApi.md#refute_seller_order_draft_update) | **POST** /api/v1/seller/orders/{id}/refute-draft-update | Refuse a draft update
 *SellerOrdersApi* | [**refute_seller_order_update**](docs/SellerOrdersApi.md#refute_seller_order_update) | **POST** /api/v1/seller/orders/{id}/refute-update | Refuse an update
 *SellerOrdersApi* | [**reject_seller_order**](docs/SellerOrdersApi.md#reject_seller_order) | **POST** /api/v1/seller/orders/{id}/reject | Reject an order
+*SellerWalletApi* | [**download_seller_transaction_document**](docs/SellerWalletApi.md#download_seller_transaction_document) | **GET** /api/v1/wallets/seller/transactions/{id}/document | Download the document of a seller wallet movement
+*SellerWalletApi* | [**download_withdrawal_invoice**](docs/SellerWalletApi.md#download_withdrawal_invoice) | **GET** /api/v1/withdrawals/{id}/invoice | Download the invoice of a withdrawal
+*SellerWalletApi* | [**get_seller_wallet**](docs/SellerWalletApi.md#get_seller_wallet) | **GET** /api/v1/wallets/seller | Get your seller wallet
+*SellerWalletApi* | [**list_seller_transactions**](docs/SellerWalletApi.md#list_seller_transactions) | **GET** /api/v1/wallets/seller/transactions | List your seller wallet movements
+*SellerWalletApi* | [**list_withdrawals**](docs/SellerWalletApi.md#list_withdrawals) | **GET** /api/v1/withdrawals | List your withdrawals
 
 
 ## Documentation For Models

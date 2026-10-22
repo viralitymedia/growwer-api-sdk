@@ -220,7 +220,7 @@ export interface CatalogueApiInterface {
     getCatalogueMediaRequestOpts(requestParameters: GetCatalogueMediaRequest): Promise<runtime.RequestOpts>;
 
     /**
-     * One media of the catalogue: an active, public media. A media you have ordered is always readable, even if it has since left the catalogue, and is open to every account. Otherwise the catalogue is open to accounts with recent completed orders (see `catalogue.eligible` on GET /me), and the media counts towards the distinct medias the account may see per day (UTC). For the media\'s state in one of your projects, search the project with GET /projects/{id}/medias.
+     * One media of the catalogue: an active, public media. A media you have ordered is always readable, even if it has since left the catalogue, and is open to every account. Otherwise the media counts towards the distinct medias the account may see per day (UTC): the full daily cap for accounts with recent completed orders, a smaller trial quota for other accounts (see `catalogue.eligible`, `catalogue.dailyCap` and `catalogue.remainingToday` on GET /me). For the media\'s state in one of your projects, search the project with GET /projects/{id}/medias.
      * @summary Get a media
      * @param {string} id The media.
      * @param {*} [options] Override http request option.
@@ -230,7 +230,7 @@ export interface CatalogueApiInterface {
     getCatalogueMediaRaw(requestParameters: GetCatalogueMediaRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CatalogueMedia>>;
 
     /**
-     * One media of the catalogue: an active, public media. A media you have ordered is always readable, even if it has since left the catalogue, and is open to every account. Otherwise the catalogue is open to accounts with recent completed orders (see `catalogue.eligible` on GET /me), and the media counts towards the distinct medias the account may see per day (UTC). For the media\'s state in one of your projects, search the project with GET /projects/{id}/medias.
+     * One media of the catalogue: an active, public media. A media you have ordered is always readable, even if it has since left the catalogue, and is open to every account. Otherwise the media counts towards the distinct medias the account may see per day (UTC): the full daily cap for accounts with recent completed orders, a smaller trial quota for other accounts (see `catalogue.eligible`, `catalogue.dailyCap` and `catalogue.remainingToday` on GET /me). For the media\'s state in one of your projects, search the project with GET /projects/{id}/medias.
      * Get a media
      */
     getCatalogueMedia(requestParameters: GetCatalogueMediaRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CatalogueMedia>;
@@ -403,7 +403,7 @@ export interface CatalogueApiInterface {
     searchProjectMediasRequestOpts(requestParameters: SearchProjectMediasRequest): Promise<runtime.RequestOpts>;
 
     /**
-     * The medias the catalogue offers for one of your projects, as the web lists them, with each media\'s state in the project. Filter with the parameters below, which all combine, or apply one of your saved filters with `savedFilterId` alone. The catalogue is open to accounts with recent completed orders (see `catalogue.eligible` on GET /me), and each account can see a limited number of distinct medias per day (UTC) across the catalogue operations; medias seen again the same day are free.
+     * The medias the catalogue offers for one of your projects, as the web lists them, with each media\'s state in the project. Filter with the parameters below, which all combine, or apply one of your saved filters with `savedFilterId` alone. Each account can see a limited number of distinct medias per day (UTC) across the catalogue operations: the full daily cap for accounts with recent completed orders, as buyer or as seller, and a smaller trial quota for other accounts, which rises to the full cap after a completed order (see `catalogue.eligible`, `catalogue.dailyCap` and `catalogue.remainingToday` on GET /me). Medias seen again the same day are free.
      * @summary Search the catalogue for a project
      * @param {string} id The project.
      * @param {'all' | 'recommended' | 'favourite' | 'discarded' | 'requested' | 'bought'} [source] Which of the project\&#39;s medias to search: &#x60;all&#x60; (the default), &#x60;recommended&#x60; (those Growwer recommends for the project), or those you marked &#x60;favourite&#x60;, &#x60;discarded&#x60; or &#x60;requested&#x60;, or &#x60;bought&#x60; for the project. Do not combine it with the parameter of the same state.
@@ -450,7 +450,7 @@ export interface CatalogueApiInterface {
     searchProjectMediasRaw(requestParameters: SearchProjectMediasRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListFlashOffers200Response>>;
 
     /**
-     * The medias the catalogue offers for one of your projects, as the web lists them, with each media\'s state in the project. Filter with the parameters below, which all combine, or apply one of your saved filters with `savedFilterId` alone. The catalogue is open to accounts with recent completed orders (see `catalogue.eligible` on GET /me), and each account can see a limited number of distinct medias per day (UTC) across the catalogue operations; medias seen again the same day are free.
+     * The medias the catalogue offers for one of your projects, as the web lists them, with each media\'s state in the project. Filter with the parameters below, which all combine, or apply one of your saved filters with `savedFilterId` alone. Each account can see a limited number of distinct medias per day (UTC) across the catalogue operations: the full daily cap for accounts with recent completed orders, as buyer or as seller, and a smaller trial quota for other accounts, which rises to the full cap after a completed order (see `catalogue.eligible`, `catalogue.dailyCap` and `catalogue.remainingToday` on GET /me). Medias seen again the same day are free.
      * Search the catalogue for a project
      */
     searchProjectMedias(requestParameters: SearchProjectMediasRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListFlashOffers200Response>;
@@ -700,7 +700,7 @@ export class CatalogueApi extends runtime.BaseAPI implements CatalogueApiInterfa
     }
 
     /**
-     * One media of the catalogue: an active, public media. A media you have ordered is always readable, even if it has since left the catalogue, and is open to every account. Otherwise the catalogue is open to accounts with recent completed orders (see `catalogue.eligible` on GET /me), and the media counts towards the distinct medias the account may see per day (UTC). For the media\'s state in one of your projects, search the project with GET /projects/{id}/medias.
+     * One media of the catalogue: an active, public media. A media you have ordered is always readable, even if it has since left the catalogue, and is open to every account. Otherwise the media counts towards the distinct medias the account may see per day (UTC): the full daily cap for accounts with recent completed orders, a smaller trial quota for other accounts (see `catalogue.eligible`, `catalogue.dailyCap` and `catalogue.remainingToday` on GET /me). For the media\'s state in one of your projects, search the project with GET /projects/{id}/medias.
      * Get a media
      */
     async getCatalogueMediaRaw(requestParameters: GetCatalogueMediaRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CatalogueMedia>> {
@@ -711,7 +711,7 @@ export class CatalogueApi extends runtime.BaseAPI implements CatalogueApiInterfa
     }
 
     /**
-     * One media of the catalogue: an active, public media. A media you have ordered is always readable, even if it has since left the catalogue, and is open to every account. Otherwise the catalogue is open to accounts with recent completed orders (see `catalogue.eligible` on GET /me), and the media counts towards the distinct medias the account may see per day (UTC). For the media\'s state in one of your projects, search the project with GET /projects/{id}/medias.
+     * One media of the catalogue: an active, public media. A media you have ordered is always readable, even if it has since left the catalogue, and is open to every account. Otherwise the media counts towards the distinct medias the account may see per day (UTC): the full daily cap for accounts with recent completed orders, a smaller trial quota for other accounts (see `catalogue.eligible`, `catalogue.dailyCap` and `catalogue.remainingToday` on GET /me). For the media\'s state in one of your projects, search the project with GET /projects/{id}/medias.
      * Get a media
      */
     async getCatalogueMedia(requestParameters: GetCatalogueMediaRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CatalogueMedia> {
@@ -1177,7 +1177,7 @@ export class CatalogueApi extends runtime.BaseAPI implements CatalogueApiInterfa
     }
 
     /**
-     * The medias the catalogue offers for one of your projects, as the web lists them, with each media\'s state in the project. Filter with the parameters below, which all combine, or apply one of your saved filters with `savedFilterId` alone. The catalogue is open to accounts with recent completed orders (see `catalogue.eligible` on GET /me), and each account can see a limited number of distinct medias per day (UTC) across the catalogue operations; medias seen again the same day are free.
+     * The medias the catalogue offers for one of your projects, as the web lists them, with each media\'s state in the project. Filter with the parameters below, which all combine, or apply one of your saved filters with `savedFilterId` alone. Each account can see a limited number of distinct medias per day (UTC) across the catalogue operations: the full daily cap for accounts with recent completed orders, as buyer or as seller, and a smaller trial quota for other accounts, which rises to the full cap after a completed order (see `catalogue.eligible`, `catalogue.dailyCap` and `catalogue.remainingToday` on GET /me). Medias seen again the same day are free.
      * Search the catalogue for a project
      */
     async searchProjectMediasRaw(requestParameters: SearchProjectMediasRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListFlashOffers200Response>> {
@@ -1188,7 +1188,7 @@ export class CatalogueApi extends runtime.BaseAPI implements CatalogueApiInterfa
     }
 
     /**
-     * The medias the catalogue offers for one of your projects, as the web lists them, with each media\'s state in the project. Filter with the parameters below, which all combine, or apply one of your saved filters with `savedFilterId` alone. The catalogue is open to accounts with recent completed orders (see `catalogue.eligible` on GET /me), and each account can see a limited number of distinct medias per day (UTC) across the catalogue operations; medias seen again the same day are free.
+     * The medias the catalogue offers for one of your projects, as the web lists them, with each media\'s state in the project. Filter with the parameters below, which all combine, or apply one of your saved filters with `savedFilterId` alone. Each account can see a limited number of distinct medias per day (UTC) across the catalogue operations: the full daily cap for accounts with recent completed orders, as buyer or as seller, and a smaller trial quota for other accounts, which rises to the full cap after a completed order (see `catalogue.eligible`, `catalogue.dailyCap` and `catalogue.remainingToday` on GET /me). Medias seen again the same day are free.
      * Search the catalogue for a project
      */
     async searchProjectMedias(requestParameters: SearchProjectMediasRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListFlashOffers200Response> {

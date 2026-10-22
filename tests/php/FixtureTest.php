@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Growwer\Api\Fixtures;
 
 use Growwer\Api\Api\AccountApi;
+use Growwer\Api\Api\BuyerOrdersApi;
 use Growwer\Api\Api\CatalogueApi;
-use Growwer\Api\Api\OrdersApi;
 use Growwer\Api\Api\SellerMediasApi;
 use Growwer\Api\ApiException;
 use Growwer\Api\Configuration;
@@ -90,7 +90,7 @@ final class FixtureTest extends TestCase
 
     public function testListOrdersReadsItemsAndTotalWithBothOrderTypes(): void
     {
-        $page = (new OrdersApi(...$this->answer(200, self::fixture('orders-page.json'))))->listOrders(limit: 2);
+        $page = (new BuyerOrdersApi(...$this->answer(200, self::fixture('orders-page.json'))))->listOrders(limit: 2);
 
         self::assertStringContainsString('limit=2', $this->sent()->getUri()->getQuery());
         self::assertInstanceOf(ListOrders200Response::class, $page);
@@ -123,7 +123,7 @@ final class FixtureTest extends TestCase
 
     public function testAnOrderWithFieldsThisClientDoesNotKnowStillDeserialises(): void
     {
-        $order = (new OrdersApi(...$this->answer(200, self::fixture('order-with-unknown-field.json'))))
+        $order = (new BuyerOrdersApi(...$this->answer(200, self::fixture('order-with-unknown-field.json'))))
             ->getOrder(self::ORDER_ID);
 
         self::assertStringEndsWith('/api/v1/orders/' . self::ORDER_ID, (string) $this->sent()->getUri());
@@ -138,7 +138,7 @@ final class FixtureTest extends TestCase
 
     public function testALinkAdditionOrderWithFieldsThisClientDoesNotKnowStillDeserialises(): void
     {
-        $order = (new OrdersApi(...$this->answer(200, self::fixture('link-addition-order-with-unknown-field.json'))))
+        $order = (new BuyerOrdersApi(...$this->answer(200, self::fixture('link-addition-order-with-unknown-field.json'))))
             ->getOrder(self::ORDER_ID);
 
         self::assertSame('link_addition', $order->getType());
@@ -240,7 +240,7 @@ final class FixtureTest extends TestCase
     public function testABinaryDownloadReturnsTheExactBytes(): void
     {
         $body = self::fixture('briefing.bin');
-        $file = (new OrdersApi(...$this->answer(200, $body, [
+        $file = (new BuyerOrdersApi(...$this->answer(200, $body, [
             'Content-Type' => 'application/octet-stream',
             'Content-Disposition' => 'attachment; filename="briefing.docx"',
         ])))->downloadOrderBriefing(self::ORDER_ID);

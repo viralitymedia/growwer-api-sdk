@@ -20,7 +20,7 @@ module Growwer
       @api_client = api_client
     end
     # Upload a file
-    # Uploads a document (odt, doc, docx or txt, up to 8 MB) for a later write to reference by its `id`. A file belongs to you, can be used by one write, and expires 24 hours after it was uploaded; an expired or used file is answered like an unknown one.
+    # Uploads a document (odt, doc, docx or txt, up to 8 MB) for a later write to reference by its `id`. A file belongs to you, can be used by one write, and expires 24 hours after it was uploaded; an expired or used file is answered like an unknown one.  You may hold 20 files that no write has used yet and that have not expired. Past them it answers 429 `file_limit_reached`, with `details.limit` the number you may hold and `Retry-After` the seconds until the first of them expires; using one of them in a write frees its place at once. A file refused as invalid (422) is refused before they are counted, and a refused upload stores nothing.
     # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
     # @param file [File] 
     # @param [Hash] opts the optional parameters
@@ -31,7 +31,7 @@ module Growwer
     end
 
     # Upload a file
-    # Uploads a document (odt, doc, docx or txt, up to 8 MB) for a later write to reference by its &#x60;id&#x60;. A file belongs to you, can be used by one write, and expires 24 hours after it was uploaded; an expired or used file is answered like an unknown one.
+    # Uploads a document (odt, doc, docx or txt, up to 8 MB) for a later write to reference by its &#x60;id&#x60;. A file belongs to you, can be used by one write, and expires 24 hours after it was uploaded; an expired or used file is answered like an unknown one.  You may hold 20 files that no write has used yet and that have not expired. Past them it answers 429 &#x60;file_limit_reached&#x60;, with &#x60;details.limit&#x60; the number you may hold and &#x60;Retry-After&#x60; the seconds until the first of them expires; using one of them in a write frees its place at once. A file refused as invalid (422) is refused before they are counted, and a refused upload stores nothing.
     # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
     # @param file [File] 
     # @param [Hash] opts the optional parameters

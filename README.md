@@ -54,7 +54,7 @@ for instance to call another host.
 import os
 
 from growwer import ApiClient, Configuration
-from growwer.api import AccountApi, OrdersApi
+from growwer.api import AccountApi, BuyerOrdersApi
 
 config = Configuration(
     host="https://tool.growwer.com",  # optional: this is the default
@@ -65,7 +65,7 @@ with ApiClient(config) as client:
     me = AccountApi(client).get_me()
     print(me.email, me.buyer.balance.available.amount, me.buyer.balance.available.currency)
 
-    page = OrdersApi(client).list_orders(limit=100)
+    page = BuyerOrdersApi(client).list_orders(limit=100)
     print(f"{len(page.items)} of {page.total} orders")
 ```
 </details>
@@ -74,7 +74,7 @@ with ApiClient(config) as client:
 <summary><strong>TypeScript</strong></summary>
 
 ```ts
-import { Configuration, AccountApi, OrdersApi } from "@growwer/api"
+import { Configuration, AccountApi, BuyerOrdersApi } from "@growwer/api"
 
 const config = new Configuration({
   basePath: "https://tool.growwer.com", // optional: this is the default
@@ -84,7 +84,7 @@ const config = new Configuration({
 const me = await new AccountApi(config).getMe()
 console.log(me.email, me.buyer.balance.available.amount)
 
-const page = await new OrdersApi(config).listOrders({ limit: 100 })
+const page = await new BuyerOrdersApi(config).listOrders({ limit: 100 })
 console.log(`${page.items.length} of ${page.total} orders`)
 ```
 </details>

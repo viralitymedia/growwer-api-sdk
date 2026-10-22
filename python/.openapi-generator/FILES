@@ -5,7 +5,8 @@
 README.md
 docs/AccountApi.md
 docs/Balance.md
-docs/BuyerMoneyApi.md
+docs/BuyerOrdersApi.md
+docs/BuyerWalletApi.md
 docs/CatalogueApi.md
 docs/CatalogueMedia.md
 docs/CatalogueMediaFlashOffer.md
@@ -79,7 +80,6 @@ docs/OrderMedia.md
 docs/OrderProject.md
 docs/OrderStateHistoryInner.md
 docs/OrderStateHistoryInnerReason.md
-docs/OrdersApi.md
 docs/PostOrderBriefing.md
 docs/PostOrderBriefingRequest.md
 docs/Project.md
@@ -93,6 +93,7 @@ docs/RequestMediasRequest.md
 docs/SavedFilter.md
 docs/SavedFilterNotifications.md
 docs/SavedFiltersApi.md
+docs/SellerAccountApi.md
 docs/SellerFees.md
 docs/SellerFeesOrNull.md
 docs/SellerMedia.md
@@ -102,7 +103,6 @@ docs/SellerMediaLinkAdditionOfferPricingOptionsInner.md
 docs/SellerMediaPostOffer.md
 docs/SellerMediaPostOfferPricingOptionsInner.md
 docs/SellerMediasApi.md
-docs/SellerMoneyApi.md
 docs/SellerOrder.md
 docs/SellerOrderBriefing.md
 docs/SellerOrderChannel.md
@@ -116,6 +116,7 @@ docs/SellerOrderRejectionReason.md
 docs/SellerOrdersApi.md
 docs/SellerPostOrderBriefing.md
 docs/SellerTransaction.md
+docs/SellerWalletApi.md
 docs/Transaction.md
 docs/UpdateProjectRequest.md
 docs/UpdateSellerMediaRequest.md
@@ -130,16 +131,17 @@ git_push.sh
 growwer/__init__.py
 growwer/api/__init__.py
 growwer/api/account_api.py
-growwer/api/buyer_money_api.py
+growwer/api/buyer_orders_api.py
+growwer/api/buyer_wallet_api.py
 growwer/api/catalogue_api.py
 growwer/api/files_api.py
 growwer/api/managed_services_api.py
-growwer/api/orders_api.py
 growwer/api/projects_api.py
 growwer/api/saved_filters_api.py
+growwer/api/seller_account_api.py
 growwer/api/seller_medias_api.py
-growwer/api/seller_money_api.py
 growwer/api/seller_orders_api.py
+growwer/api/seller_wallet_api.py
 growwer/api_client.py
 growwer/api_response.py
 growwer/configuration.py
@@ -265,4 +267,8 @@ setup.cfg
 setup.py
 test-requirements.txt
 test/__init__.py
+test/test_buyer_orders_api.py
+test/test_buyer_wallet_api.py
+test/test_seller_account_api.py
+test/test_seller_wallet_api.py
 tox.ini

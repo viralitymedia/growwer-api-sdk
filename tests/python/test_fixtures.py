@@ -13,7 +13,7 @@ import uuid
 import urllib3
 
 from growwer import ApiClient, Configuration
-from growwer.api import AccountApi, CatalogueApi, OrdersApi, SellerMediasApi
+from growwer.api import AccountApi, BuyerOrdersApi, CatalogueApi, SellerMediasApi
 from growwer.exceptions import ApiException
 from growwer.models import (
     CatalogueMedia,
@@ -86,7 +86,7 @@ class FixtureTest(unittest.TestCase):
         self.assertEqual(self.sent()[1], "https://sandbox.example/api/v1/me")
 
     def test_list_orders_reads_items_and_total_with_both_order_types(self):
-        page = OrdersApi(self.client(200, fixture("orders-page.json"))).list_orders(limit=2)
+        page = BuyerOrdersApi(self.client(200, fixture("orders-page.json"))).list_orders(limit=2)
 
         self.assertIn("limit=2", self.sent()[1])
         self.assertIsInstance(page, ListOrders200Response)
@@ -118,7 +118,7 @@ class FixtureTest(unittest.TestCase):
         self.assertIsNone(link_addition.state_history[1].reason.additional_info)
 
     def test_order_with_fields_this_client_does_not_know_still_deserialises(self):
-        order = OrdersApi(self.client(200, fixture("order-with-unknown-field.json"))).get_order(ORDER_ID)
+        order = BuyerOrdersApi(self.client(200, fixture("order-with-unknown-field.json"))).get_order(ORDER_ID)
 
         self.assertTrue(self.sent()[1].endswith(f"/api/v1/orders/{ORDER_ID}"))
         self.assertEqual(order.id, ORDER_ID)
@@ -130,7 +130,7 @@ class FixtureTest(unittest.TestCase):
         self.assertEqual(order.briefing.actual_instance.links[0].type, "dofollow")
 
     def test_link_addition_order_with_fields_this_client_does_not_know_still_deserialises(self):
-        order = OrdersApi(
+        order = BuyerOrdersApi(
             self.client(200, fixture("link-addition-order-with-unknown-field.json"))
         ).get_order(ORDER_ID)
 
@@ -214,7 +214,7 @@ class FixtureTest(unittest.TestCase):
 
     def test_binary_download_returns_the_exact_bytes(self):
         body = fixture("briefing.bin")
-        api = OrdersApi(
+        api = BuyerOrdersApi(
             self.client(
                 200,
                 body,

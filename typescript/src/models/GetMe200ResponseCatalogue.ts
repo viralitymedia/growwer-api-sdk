@@ -20,11 +20,23 @@ import { mapValues } from '../runtime';
  */
 export interface GetMe200ResponseCatalogue {
     /**
-     * Whether the catalogue operations (tag Catalogue: searching a project's medias, flash offers and media details) are open to you. They are open to accounts with recent completed orders, as buyer or as seller; until then they answer 403 `catalogue_requires_recent_order`. A media you have ordered is always readable with GET /medias/{id}.
+     * Whether you have the full daily cap of the catalogue operations (tag Catalogue: searching a project's medias, flash offers and media details). It is open to accounts with recent completed orders, as buyer or as seller; until then the catalogue answers within a smaller daily trial quota, which rises to the full cap after a completed order. A media you have ordered is always readable with GET /medias/{id} and counts against neither.
      * @type {boolean}
      * @memberof GetMe200ResponseCatalogue
      */
     eligible: boolean;
+    /**
+     * How many distinct medias the catalogue operations show you per UTC day: the full cap when `eligible` is true, the trial quota otherwise. 0 means the catalogue answers 403 `catalogue_requires_recent_order` until you have a recent completed order.
+     * @type {number}
+     * @memberof GetMe200ResponseCatalogue
+     */
+    dailyCap: number;
+    /**
+     * How many new distinct medias still fit in `dailyCap` today (UTC). Medias you have already seen today are free. Null when the count cannot be read right now; the catalogue operations then answer 503 until it can.
+     * @type {number}
+     * @memberof GetMe200ResponseCatalogue
+     */
+    remainingToday: number | null;
 }
 
 /**
@@ -32,6 +44,8 @@ export interface GetMe200ResponseCatalogue {
  */
 export function instanceOfGetMe200ResponseCatalogue(value: object): value is GetMe200ResponseCatalogue {
     if (!('eligible' in value) || value['eligible'] === undefined) return false;
+    if (!('dailyCap' in value) || value['dailyCap'] === undefined) return false;
+    if (!('remainingToday' in value) || value['remainingToday'] === undefined) return false;
     return true;
 }
 
@@ -46,6 +60,8 @@ export function GetMe200ResponseCatalogueFromJSONTyped(json: any, ignoreDiscrimi
     return {
         
         'eligible': json['eligible'],
+        'dailyCap': json['dailyCap'],
+        'remainingToday': json['remainingToday'],
     };
 }
 
@@ -61,6 +77,8 @@ export function GetMe200ResponseCatalogueToJSONTyped(value?: GetMe200ResponseCat
     return {
         
         'eligible': value['eligible'],
+        'dailyCap': value['dailyCap'],
+        'remainingToday': value['remainingToday'],
     };
 }
 

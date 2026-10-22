@@ -6,10 +6,10 @@
 
 import {
   AccountApi,
+  BuyerOrdersApi,
   CatalogueApi,
   Configuration,
   ModelErrorFromJSON,
-  OrdersApi,
   ResponseError,
   SellerMediasApi,
 } from '../../typescript/dist';
@@ -81,7 +81,7 @@ const tests: Array<[string, () => Promise<void>]> = [
 
   ['listOrders reads items and total, with both order types', async () => {
     const sent: Sent[] = [];
-    const page = await new OrdersApi(answer(sent, 200, fixture('orders-page.json'))).listOrders({ limit: 2 });
+    const page = await new BuyerOrdersApi(answer(sent, 200, fixture('orders-page.json'))).listOrders({ limit: 2 });
 
     assert.ok(sent[0].url.includes('limit=2'), sent[0].url);
     assert.equal(page.total, 42);
@@ -116,7 +116,7 @@ const tests: Array<[string, () => Promise<void>]> = [
 
   ['an order with fields this client does not know still deserialises', async () => {
     const sent: Sent[] = [];
-    const order = await new OrdersApi(answer(sent, 200, fixture('order-with-unknown-field.json')))
+    const order = await new BuyerOrdersApi(answer(sent, 200, fixture('order-with-unknown-field.json')))
       .getOrder({ id: ORDER_ID });
 
     assert.ok(sent[0].url.endsWith(`/api/v1/orders/${ORDER_ID}`), sent[0].url);
@@ -134,7 +134,7 @@ const tests: Array<[string, () => Promise<void>]> = [
 
   ['a link addition order with fields this client does not know still deserialises', async () => {
     const sent: Sent[] = [];
-    const order = await new OrdersApi(answer(sent, 200, fixture('link-addition-order-with-unknown-field.json')))
+    const order = await new BuyerOrdersApi(answer(sent, 200, fixture('link-addition-order-with-unknown-field.json')))
       .getOrder({ id: ORDER_ID });
 
     assert.equal(order.type, 'link_addition');
@@ -232,7 +232,7 @@ const tests: Array<[string, () => Promise<void>]> = [
   ['a binary download returns the exact bytes', async () => {
     const sent: Sent[] = [];
     const body = fixture('briefing.bin');
-    const blob = await new OrdersApi(answer(sent, 200, body, {
+    const blob = await new BuyerOrdersApi(answer(sent, 200, body, {
       'Content-Type': 'application/octet-stream',
       'Content-Disposition': 'attachment; filename="briefing.docx"',
     })).downloadOrderBriefing({ id: ORDER_ID });

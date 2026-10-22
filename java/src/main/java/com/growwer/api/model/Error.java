@@ -119,7 +119,7 @@ public class Error {
   }
 
   /**
-   * The X-Request-Id of the call. Quote it when reporting a problem.
+   * UUID v4 generated per request, or the &#x60;X-Request-Id&#x60; you sent. Quote it when reporting a problem.
    * @return requestId
    */
   @javax.annotation.Nonnull

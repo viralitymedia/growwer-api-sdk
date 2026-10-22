@@ -58,7 +58,9 @@ class GetMe200ResponseCatalogue implements ModelInterface, ArrayAccess, \JsonSer
      * @var string[]
      */
     protected static $openAPITypes = [
-        'eligible' => 'bool'
+        'eligible' => 'bool',
+        'daily_cap' => 'int',
+        'remaining_today' => 'int'
     ];
 
     /**
@@ -69,7 +71,9 @@ class GetMe200ResponseCatalogue implements ModelInterface, ArrayAccess, \JsonSer
      * @psalm-var array<string, string|null>
      */
     protected static $openAPIFormats = [
-        'eligible' => null
+        'eligible' => null,
+        'daily_cap' => null,
+        'remaining_today' => null
     ];
 
     /**
@@ -78,7 +82,9 @@ class GetMe200ResponseCatalogue implements ModelInterface, ArrayAccess, \JsonSer
      * @var boolean[]
      */
     protected static array $openAPINullables = [
-        'eligible' => false
+        'eligible' => false,
+        'daily_cap' => false,
+        'remaining_today' => true
     ];
 
     /**
@@ -167,7 +173,9 @@ class GetMe200ResponseCatalogue implements ModelInterface, ArrayAccess, \JsonSer
      * @var string[]
      */
     protected static $attributeMap = [
-        'eligible' => 'eligible'
+        'eligible' => 'eligible',
+        'daily_cap' => 'dailyCap',
+        'remaining_today' => 'remainingToday'
     ];
 
     /**
@@ -176,7 +184,9 @@ class GetMe200ResponseCatalogue implements ModelInterface, ArrayAccess, \JsonSer
      * @var string[]
      */
     protected static $setters = [
-        'eligible' => 'setEligible'
+        'eligible' => 'setEligible',
+        'daily_cap' => 'setDailyCap',
+        'remaining_today' => 'setRemainingToday'
     ];
 
     /**
@@ -185,7 +195,9 @@ class GetMe200ResponseCatalogue implements ModelInterface, ArrayAccess, \JsonSer
      * @var string[]
      */
     protected static $getters = [
-        'eligible' => 'getEligible'
+        'eligible' => 'getEligible',
+        'daily_cap' => 'getDailyCap',
+        'remaining_today' => 'getRemainingToday'
     ];
 
     /**
@@ -246,6 +258,8 @@ class GetMe200ResponseCatalogue implements ModelInterface, ArrayAccess, \JsonSer
     public function __construct(?array $data = null)
     {
         $this->setIfExists('eligible', $data ?? [], null);
+        $this->setIfExists('daily_cap', $data ?? [], null);
+        $this->setIfExists('remaining_today', $data ?? [], null);
     }
 
     /**
@@ -278,6 +292,20 @@ class GetMe200ResponseCatalogue implements ModelInterface, ArrayAccess, \JsonSer
         if ($this->container['eligible'] === null) {
             $invalidProperties[] = "'eligible' can't be null";
         }
+        if ($this->container['daily_cap'] === null) {
+            $invalidProperties[] = "'daily_cap' can't be null";
+        }
+        if (($this->container['daily_cap'] < 0)) {
+            $invalidProperties[] = "invalid value for 'daily_cap', must be bigger than or equal to 0.";
+        }
+
+        if ($this->container['remaining_today'] === null && !$this->isNullableSetToNull('remaining_today')) {
+            $invalidProperties[] = "'remaining_today' is required";
+        }
+        if (!is_null($this->container['remaining_today']) && ($this->container['remaining_today'] < 0)) {
+            $invalidProperties[] = "invalid value for 'remaining_today', must be bigger than or equal to 0.";
+        }
+
         return $invalidProperties;
     }
 
@@ -306,7 +334,7 @@ class GetMe200ResponseCatalogue implements ModelInterface, ArrayAccess, \JsonSer
     /**
      * Sets eligible
      *
-     * @param bool $eligible Whether the catalogue operations (tag Catalogue: searching a project's medias, flash offers and media details) are open to you. They are open to accounts with recent completed orders, as buyer or as seller; until then they answer 403 `catalogue_requires_recent_order`. A media you have ordered is always readable with GET /medias/{id}.
+     * @param bool $eligible Whether you have the full daily cap of the catalogue operations (tag Catalogue: searching a project's medias, flash offers and media details). It is open to accounts with recent completed orders, as buyer or as seller; until then the catalogue answers within a smaller daily trial quota, which rises to the full cap after a completed order. A media you have ordered is always readable with GET /medias/{id} and counts against neither.
      *
      * @return self
      */
@@ -316,6 +344,75 @@ class GetMe200ResponseCatalogue implements ModelInterface, ArrayAccess, \JsonSer
             throw new \InvalidArgumentException('non-nullable eligible cannot be null');
         }
         $this->container['eligible'] = $eligible;
+
+        return $this;
+    }
+
+    /**
+     * Gets daily_cap
+     *
+     * @return int
+     */
+    public function getDailyCap()
+    {
+        return $this->container['daily_cap'];
+    }
+
+    /**
+     * Sets daily_cap
+     *
+     * @param int $daily_cap How many distinct medias the catalogue operations show you per UTC day: the full cap when `eligible` is true, the trial quota otherwise. 0 means the catalogue answers 403 `catalogue_requires_recent_order` until you have a recent completed order.
+     *
+     * @return self
+     */
+    public function setDailyCap($daily_cap)
+    {
+        if (is_null($daily_cap)) {
+            throw new \InvalidArgumentException('non-nullable daily_cap cannot be null');
+        }
+        if (($daily_cap < 0)) {
+            throw new \InvalidArgumentException('invalid value for $daily_cap when calling GetMe200ResponseCatalogue., must be bigger than or equal to 0.');
+        }
+
+        $this->container['daily_cap'] = $daily_cap;
+
+        return $this;
+    }
+
+    /**
+     * Gets remaining_today
+     *
+     * @return int|null
+     */
+    public function getRemainingToday()
+    {
+        return $this->container['remaining_today'];
+    }
+
+    /**
+     * Sets remaining_today
+     *
+     * @param int|null $remaining_today How many new distinct medias still fit in `dailyCap` today (UTC). Medias you have already seen today are free. Null when the count cannot be read right now; the catalogue operations then answer 503 until it can.
+     *
+     * @return self
+     */
+    public function setRemainingToday($remaining_today)
+    {
+        if (is_null($remaining_today)) {
+            array_push($this->openAPINullablesSetToNull, 'remaining_today');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('remaining_today', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        if (!is_null($remaining_today) && ($remaining_today < 0)) {
+            throw new \InvalidArgumentException('invalid value for $remaining_today when calling GetMe200ResponseCatalogue., must be bigger than or equal to 0.');
+        }
+
+        $this->container['remaining_today'] = $remaining_today;
 
         return $this;
     }

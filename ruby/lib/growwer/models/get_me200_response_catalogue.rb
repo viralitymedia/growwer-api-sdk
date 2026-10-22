@@ -15,13 +15,21 @@ require 'time'
 
 module Growwer
   class GetMe200ResponseCatalogue < ApiModelBase
-    # Whether the catalogue operations (tag Catalogue: searching a project's medias, flash offers and media details) are open to you. They are open to accounts with recent completed orders, as buyer or as seller; until then they answer 403 `catalogue_requires_recent_order`. A media you have ordered is always readable with GET /medias/{id}.
+    # Whether you have the full daily cap of the catalogue operations (tag Catalogue: searching a project's medias, flash offers and media details). It is open to accounts with recent completed orders, as buyer or as seller; until then the catalogue answers within a smaller daily trial quota, which rises to the full cap after a completed order. A media you have ordered is always readable with GET /medias/{id} and counts against neither.
     attr_accessor :eligible
+
+    # How many distinct medias the catalogue operations show you per UTC day: the full cap when `eligible` is true, the trial quota otherwise. 0 means the catalogue answers 403 `catalogue_requires_recent_order` until you have a recent completed order.
+    attr_accessor :daily_cap
+
+    # How many new distinct medias still fit in `dailyCap` today (UTC). Medias you have already seen today are free. Null when the count cannot be read right now; the catalogue operations then answer 503 until it can.
+    attr_accessor :remaining_today
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
-        :'eligible' => :'eligible'
+        :'eligible' => :'eligible',
+        :'daily_cap' => :'dailyCap',
+        :'remaining_today' => :'remainingToday'
       }
     end
 
@@ -38,13 +46,16 @@ module Growwer
     # Attribute type mapping.
     def self.openapi_types
       {
-        :'eligible' => :'Boolean'
+        :'eligible' => :'Boolean',
+        :'daily_cap' => :'Integer',
+        :'remaining_today' => :'Integer'
       }
     end
 
     # List of attributes with nullable: true
     def self.openapi_nullable
       Set.new([
+        :'remaining_today'
       ])
     end
 
@@ -69,6 +80,18 @@ module Growwer
       else
         self.eligible = nil
       end
+
+      if attributes.key?(:'daily_cap')
+        self.daily_cap = attributes[:'daily_cap']
+      else
+        self.daily_cap = nil
+      end
+
+      if attributes.key?(:'remaining_today')
+        self.remaining_today = attributes[:'remaining_today']
+      else
+        self.remaining_today = nil
+      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -80,6 +103,18 @@ module Growwer
         invalid_properties.push('invalid value for "eligible", eligible cannot be nil.')
       end
 
+      if @daily_cap.nil?
+        invalid_properties.push('invalid value for "daily_cap", daily_cap cannot be nil.')
+      end
+
+      if @daily_cap < 0
+        invalid_properties.push('invalid value for "daily_cap", must be greater than or equal to 0.')
+      end
+
+      if @remaining_today < 0
+        invalid_properties.push('invalid value for "remaining_today", must be greater than or equal to 0.')
+      end
+
       invalid_properties
     end
 
@@ -88,6 +123,9 @@ module Growwer
     def valid?
       warn '[DEPRECATED] the `valid?` method is obsolete'
       return false if @eligible.nil?
+      return false if @daily_cap.nil?
+      return false if @daily_cap < 0
+      return false if @remaining_today < 0
       true
     end
 
@@ -101,12 +139,38 @@ module Growwer
       @eligible = eligible
     end
 
+    # Custom attribute writer method with validation
+    # @param [Object] daily_cap Value to be assigned
+    def daily_cap=(daily_cap)
+      if daily_cap.nil?
+        fail ArgumentError, 'daily_cap cannot be nil'
+      end
+
+      if daily_cap < 0
+        fail ArgumentError, 'invalid value for "daily_cap", must be greater than or equal to 0.'
+      end
+
+      @daily_cap = daily_cap
+    end
+
+    # Custom attribute writer method with validation
+    # @param [Object] remaining_today Value to be assigned
+    def remaining_today=(remaining_today)
+      if !remaining_today.nil? && remaining_today < 0
+        fail ArgumentError, 'invalid value for "remaining_today", must be greater than or equal to 0.'
+      end
+
+      @remaining_today = remaining_today
+    end
+
     # Checks equality by comparing each attribute.
     # @param [Object] Object to be compared
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
-          eligible == o.eligible
+          eligible == o.eligible &&
+          daily_cap == o.daily_cap &&
+          remaining_today == o.remaining_today
     end
 
     # @see the `==` method
@@ -118,7 +182,7 @@ module Growwer
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [eligible].hash
+      [eligible, daily_cap, remaining_today].hash
     end
 
     # Builds the object from hash

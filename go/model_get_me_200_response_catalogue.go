@@ -21,8 +21,12 @@ var _ MappedNullable = &GetMe200ResponseCatalogue{}
 
 // GetMe200ResponseCatalogue struct for GetMe200ResponseCatalogue
 type GetMe200ResponseCatalogue struct {
-	// Whether the catalogue operations (tag Catalogue: searching a project's medias, flash offers and media details) are open to you. They are open to accounts with recent completed orders, as buyer or as seller; until then they answer 403 `catalogue_requires_recent_order`. A media you have ordered is always readable with GET /medias/{id}.
+	// Whether you have the full daily cap of the catalogue operations (tag Catalogue: searching a project's medias, flash offers and media details). It is open to accounts with recent completed orders, as buyer or as seller; until then the catalogue answers within a smaller daily trial quota, which rises to the full cap after a completed order. A media you have ordered is always readable with GET /medias/{id} and counts against neither.
 	Eligible bool `json:"eligible"`
+	// How many distinct medias the catalogue operations show you per UTC day: the full cap when `eligible` is true, the trial quota otherwise. 0 means the catalogue answers 403 `catalogue_requires_recent_order` until you have a recent completed order.
+	DailyCap int32 `json:"dailyCap"`
+	// How many new distinct medias still fit in `dailyCap` today (UTC). Medias you have already seen today are free. Null when the count cannot be read right now; the catalogue operations then answer 503 until it can.
+	RemainingToday NullableInt32 `json:"remainingToday"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -32,9 +36,11 @@ type _GetMe200ResponseCatalogue GetMe200ResponseCatalogue
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGetMe200ResponseCatalogue(eligible bool) *GetMe200ResponseCatalogue {
+func NewGetMe200ResponseCatalogue(eligible bool, dailyCap int32, remainingToday NullableInt32) *GetMe200ResponseCatalogue {
 	this := GetMe200ResponseCatalogue{}
 	this.Eligible = eligible
+	this.DailyCap = dailyCap
+	this.RemainingToday = remainingToday
 	return &this
 }
 
@@ -70,6 +76,56 @@ func (o *GetMe200ResponseCatalogue) SetEligible(v bool) {
 	o.Eligible = v
 }
 
+// GetDailyCap returns the DailyCap field value
+func (o *GetMe200ResponseCatalogue) GetDailyCap() int32 {
+	if o == nil {
+		var ret int32
+		return ret
+	}
+
+	return o.DailyCap
+}
+
+// GetDailyCapOk returns a tuple with the DailyCap field value
+// and a boolean to check if the value has been set.
+func (o *GetMe200ResponseCatalogue) GetDailyCapOk() (*int32, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.DailyCap, true
+}
+
+// SetDailyCap sets field value
+func (o *GetMe200ResponseCatalogue) SetDailyCap(v int32) {
+	o.DailyCap = v
+}
+
+// GetRemainingToday returns the RemainingToday field value
+// If the value is explicit nil, the zero value for int32 will be returned
+func (o *GetMe200ResponseCatalogue) GetRemainingToday() int32 {
+	if o == nil || o.RemainingToday.Get() == nil {
+		var ret int32
+		return ret
+	}
+
+	return *o.RemainingToday.Get()
+}
+
+// GetRemainingTodayOk returns a tuple with the RemainingToday field value
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *GetMe200ResponseCatalogue) GetRemainingTodayOk() (*int32, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.RemainingToday.Get(), o.RemainingToday.IsSet()
+}
+
+// SetRemainingToday sets field value
+func (o *GetMe200ResponseCatalogue) SetRemainingToday(v int32) {
+	o.RemainingToday.Set(&v)
+}
+
 func (o GetMe200ResponseCatalogue) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -81,6 +137,8 @@ func (o GetMe200ResponseCatalogue) MarshalJSON() ([]byte, error) {
 func (o GetMe200ResponseCatalogue) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["eligible"] = o.Eligible
+	toSerialize["dailyCap"] = o.DailyCap
+	toSerialize["remainingToday"] = o.RemainingToday.Get()
 
 	for key, value := range o.AdditionalProperties {
 		toSerialize[key] = value
@@ -95,6 +153,8 @@ func (o *GetMe200ResponseCatalogue) UnmarshalJSON(data []byte) (err error) {
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
 		"eligible",
+		"dailyCap",
+		"remainingToday",
 	}
 
 	allProperties := make(map[string]interface{})
@@ -125,6 +185,8 @@ func (o *GetMe200ResponseCatalogue) UnmarshalJSON(data []byte) (err error) {
 
 	if err = json.Unmarshal(data, &additionalProperties); err == nil {
 		delete(additionalProperties, "eligible")
+		delete(additionalProperties, "dailyCap")
+		delete(additionalProperties, "remainingToday")
 		o.AdditionalProperties = additionalProperties
 	}
 

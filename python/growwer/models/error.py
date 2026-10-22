@@ -30,7 +30,7 @@ class Error(BaseModel):
     """ # noqa: E501
     code: StrictStr = Field(description="A stable, machine-readable error code.", json_schema_extra={"examples": ["unauthorized"]})
     message: StrictStr = Field(description="A human-readable explanation. It may change.")
-    request_id: StrictStr = Field(description="The X-Request-Id of the call. Quote it when reporting a problem.", alias="requestId")
+    request_id: StrictStr = Field(description="UUID v4 generated per request, or the `X-Request-Id` you sent. Quote it when reporting a problem.", alias="requestId", json_schema_extra={"examples": ["9b2f6c1e-4d7a-4e3b-8a5f-2c1d0e9f7a64"]})
     details: Optional[Dict[str, Any]] = Field(default=None, description="Extra data on some errors, such as the invalid fields of a validation_failed error.")
     __properties: ClassVar[List[str]] = ["code", "message", "requestId", "details"]
 

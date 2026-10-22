@@ -10,7 +10,7 @@ every GET operation; writes need a read and write key and an
 `Idempotency-Key` header.
 
 Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII
-characters) for each operation and reuse it only to retry that same
+characters without spaces) for each operation and reuse it only to retry that same
 operation. Keys belong to your account, not to one API key.
 - A successful write is stored for 30 days: a retry with the same key and
   the same request replays its response with `Idempotent-Replayed: true`

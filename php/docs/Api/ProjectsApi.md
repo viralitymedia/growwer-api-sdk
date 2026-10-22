@@ -40,7 +40,7 @@ $apiInstance = new Growwer\Api\Api\ProjectsApi(
     new GuzzleHttp\Client(),
     $config
 );
-$idempotency_key = 'idempotency_key_example'; // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+$idempotency_key = 'idempotency_key_example'; // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 $create_project_request = new \Growwer\Api\Model\CreateProjectRequest(); // \Growwer\Api\Model\CreateProjectRequest
 
 try {
@@ -55,7 +55,7 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **idempotency_key** | **string**| A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. | |
+| **idempotency_key** | **string**| A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | |
 | **create_project_request** | [**\Growwer\Api\Model\CreateProjectRequest**](../Model/CreateProjectRequest.md)|  | |
 
 ### Return type
@@ -103,7 +103,7 @@ $apiInstance = new Growwer\Api\Api\ProjectsApi(
     $config
 );
 $id = 'id_example'; // string
-$idempotency_key = 'idempotency_key_example'; // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+$idempotency_key = 'idempotency_key_example'; // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 
 try {
     $apiInstance->deleteProject($id, $idempotency_key);
@@ -117,7 +117,7 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **id** | **string**|  | |
-| **idempotency_key** | **string**| A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. | |
+| **idempotency_key** | **string**| A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | |
 
 ### Return type
 
@@ -286,7 +286,7 @@ $apiInstance = new Growwer\Api\Api\ProjectsApi(
     $config
 );
 $id = 'id_example'; // string
-$idempotency_key = 'idempotency_key_example'; // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+$idempotency_key = 'idempotency_key_example'; // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 $update_project_request = new \Growwer\Api\Model\UpdateProjectRequest(); // \Growwer\Api\Model\UpdateProjectRequest
 
 try {
@@ -302,7 +302,7 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **id** | **string**|  | |
-| **idempotency_key** | **string**| A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. | |
+| **idempotency_key** | **string**| A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | |
 | **update_project_request** | [**\Growwer\Api\Model\UpdateProjectRequest**](../Model/UpdateProjectRequest.md)|  | |
 
 ### Return type

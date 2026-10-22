@@ -152,7 +152,7 @@ $apiInstance = new Growwer\Api\Api\AccountApi(
     new GuzzleHttp\Client(),
     $config
 );
-$idempotency_key = 'idempotency_key_example'; // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+$idempotency_key = 'idempotency_key_example'; // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 $put_seller_holiday_request = new \Growwer\Api\Model\PutSellerHolidayRequest(); // \Growwer\Api\Model\PutSellerHolidayRequest
 
 try {
@@ -167,7 +167,7 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **idempotency_key** | **string**| A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. | |
+| **idempotency_key** | **string**| A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | |
 | **put_seller_holiday_request** | [**\Growwer\Api\Model\PutSellerHolidayRequest**](../Model/PutSellerHolidayRequest.md)|  | |
 
 ### Return type

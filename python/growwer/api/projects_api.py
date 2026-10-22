@@ -1,7 +1,7 @@
 """
     Growwer API
 
-    The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601. 
+    The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters without spaces) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601. 
 
     The version of the OpenAPI document: 1
     Contact: support@growwer.com
@@ -46,7 +46,7 @@ class ProjectsApi:
     @validate_call
     def create_project(
         self,
-        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.")],
+        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.")],
         create_project_request: CreateProjectRequest,
         _request_timeout: Union[
             None,
@@ -65,7 +65,7 @@ class ProjectsApi:
 
         Creates a project for a website, as the web's project creation does. Growwer then analyses it in the background to recommend media: the project is answered with `state: analyzing` and turns `finished` when the analysis ends. Analysis can take hours, and it never finishes when no medium matches the project, so poll GET /projects/{id} with backoff and use `createdAt` to decide when to stop.  Every value is validated as on the web: `topics`, `language` and `country` take the identifiers GET /vocabulary publishes.  Creating a project also categorises its website through an external service, as the web does. When that service fails the answer is 500, although the project may already be saved, and a retry under the same Idempotency-Key answers 409 `idempotency_outcome_unknown`. After either, list your projects (GET /projects) before retrying with a new key, or you may create a duplicate.
 
-        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`. (required)
         :type idempotency_key: str
         :param create_project_request: (required)
         :type create_project_request: CreateProjectRequest
@@ -125,7 +125,7 @@ class ProjectsApi:
     @validate_call
     def create_project_with_http_info(
         self,
-        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.")],
+        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.")],
         create_project_request: CreateProjectRequest,
         _request_timeout: Union[
             None,
@@ -144,7 +144,7 @@ class ProjectsApi:
 
         Creates a project for a website, as the web's project creation does. Growwer then analyses it in the background to recommend media: the project is answered with `state: analyzing` and turns `finished` when the analysis ends. Analysis can take hours, and it never finishes when no medium matches the project, so poll GET /projects/{id} with backoff and use `createdAt` to decide when to stop.  Every value is validated as on the web: `topics`, `language` and `country` take the identifiers GET /vocabulary publishes.  Creating a project also categorises its website through an external service, as the web does. When that service fails the answer is 500, although the project may already be saved, and a retry under the same Idempotency-Key answers 409 `idempotency_outcome_unknown`. After either, list your projects (GET /projects) before retrying with a new key, or you may create a duplicate.
 
-        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`. (required)
         :type idempotency_key: str
         :param create_project_request: (required)
         :type create_project_request: CreateProjectRequest
@@ -204,7 +204,7 @@ class ProjectsApi:
     @validate_call
     def create_project_without_preload_content(
         self,
-        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.")],
+        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.")],
         create_project_request: CreateProjectRequest,
         _request_timeout: Union[
             None,
@@ -223,7 +223,7 @@ class ProjectsApi:
 
         Creates a project for a website, as the web's project creation does. Growwer then analyses it in the background to recommend media: the project is answered with `state: analyzing` and turns `finished` when the analysis ends. Analysis can take hours, and it never finishes when no medium matches the project, so poll GET /projects/{id} with backoff and use `createdAt` to decide when to stop.  Every value is validated as on the web: `topics`, `language` and `country` take the identifiers GET /vocabulary publishes.  Creating a project also categorises its website through an external service, as the web does. When that service fails the answer is 500, although the project may already be saved, and a retry under the same Idempotency-Key answers 409 `idempotency_outcome_unknown`. After either, list your projects (GET /projects) before retrying with a new key, or you may create a duplicate.
 
-        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`. (required)
         :type idempotency_key: str
         :param create_project_request: (required)
         :type create_project_request: CreateProjectRequest
@@ -360,7 +360,7 @@ class ProjectsApi:
     def delete_project(
         self,
         id: UUID,
-        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.")],
+        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -380,7 +380,7 @@ class ProjectsApi:
 
         :param id: (required)
         :type id: UUID
-        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`. (required)
         :type idempotency_key: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
@@ -439,7 +439,7 @@ class ProjectsApi:
     def delete_project_with_http_info(
         self,
         id: UUID,
-        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.")],
+        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -459,7 +459,7 @@ class ProjectsApi:
 
         :param id: (required)
         :type id: UUID
-        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`. (required)
         :type idempotency_key: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
@@ -518,7 +518,7 @@ class ProjectsApi:
     def delete_project_without_preload_content(
         self,
         id: UUID,
-        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.")],
+        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -538,7 +538,7 @@ class ProjectsApi:
 
         :param id: (required)
         :type id: UUID
-        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`. (required)
         :type idempotency_key: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
@@ -1231,7 +1231,7 @@ class ProjectsApi:
     def update_project(
         self,
         id: UUID,
-        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.")],
+        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.")],
         update_project_request: UpdateProjectRequest,
         _request_timeout: Union[
             None,
@@ -1252,7 +1252,7 @@ class ProjectsApi:
 
         :param id: (required)
         :type id: UUID
-        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`. (required)
         :type idempotency_key: str
         :param update_project_request: (required)
         :type update_project_request: UpdateProjectRequest
@@ -1315,7 +1315,7 @@ class ProjectsApi:
     def update_project_with_http_info(
         self,
         id: UUID,
-        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.")],
+        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.")],
         update_project_request: UpdateProjectRequest,
         _request_timeout: Union[
             None,
@@ -1336,7 +1336,7 @@ class ProjectsApi:
 
         :param id: (required)
         :type id: UUID
-        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`. (required)
         :type idempotency_key: str
         :param update_project_request: (required)
         :type update_project_request: UpdateProjectRequest
@@ -1399,7 +1399,7 @@ class ProjectsApi:
     def update_project_without_preload_content(
         self,
         id: UUID,
-        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.")],
+        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.")],
         update_project_request: UpdateProjectRequest,
         _request_timeout: Union[
             None,
@@ -1420,7 +1420,7 @@ class ProjectsApi:
 
         :param id: (required)
         :type id: UUID
-        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`. (required)
         :type idempotency_key: str
         :param update_project_request: (required)
         :type update_project_request: UpdateProjectRequest

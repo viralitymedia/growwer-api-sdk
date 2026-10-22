@@ -1,6 +1,6 @@
 /*
  * Growwer API
- * The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601. 
+ * The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters without spaces) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601. 
  *
  * The version of the OpenAPI document: 1
  * Contact: support@growwer.com
@@ -79,7 +79,7 @@ public class ProjectsApi {
 
     /**
      * Build call for createProject
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param createProjectRequest  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
@@ -89,7 +89,7 @@ public class ProjectsApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> The project, created and being analysed. &#x60;Location&#x60; is its URL. </td><td>  * Location - The URL of the new project. <br>  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;), or you have reached the number of projects an account may have without a wallet deposit in the last year (code &#x60;project_limit_reached&#x60;). </td><td>  -  </td></tr>
         <tr><td> 409 </td><td> The &#x60;Idempotency-Key&#x60; was used for a different request (code &#x60;idempotency_key_reused&#x60;), its first request is still running (code &#x60;idempotency_request_in_progress&#x60;), or its first request failed and may have taken effect (code &#x60;idempotency_outcome_unknown&#x60;). </td><td>  -  </td></tr>
@@ -168,7 +168,7 @@ public class ProjectsApi {
     /**
      * Create a project
      * Creates a project for a website, as the web&#39;s project creation does. Growwer then analyses it in the background to recommend media: the project is answered with &#x60;state: analyzing&#x60; and turns &#x60;finished&#x60; when the analysis ends. Analysis can take hours, and it never finishes when no medium matches the project, so poll GET /projects/{id} with backoff and use &#x60;createdAt&#x60; to decide when to stop.  Every value is validated as on the web: &#x60;topics&#x60;, &#x60;language&#x60; and &#x60;country&#x60; take the identifiers GET /vocabulary publishes.  Creating a project also categorises its website through an external service, as the web does. When that service fails the answer is 500, although the project may already be saved, and a retry under the same Idempotency-Key answers 409 &#x60;idempotency_outcome_unknown&#x60;. After either, list your projects (GET /projects) before retrying with a new key, or you may create a duplicate.
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param createProjectRequest  (required)
      * @return Project
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -177,7 +177,7 @@ public class ProjectsApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> The project, created and being analysed. &#x60;Location&#x60; is its URL. </td><td>  * Location - The URL of the new project. <br>  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;), or you have reached the number of projects an account may have without a wallet deposit in the last year (code &#x60;project_limit_reached&#x60;). </td><td>  -  </td></tr>
         <tr><td> 409 </td><td> The &#x60;Idempotency-Key&#x60; was used for a different request (code &#x60;idempotency_key_reused&#x60;), its first request is still running (code &#x60;idempotency_request_in_progress&#x60;), or its first request failed and may have taken effect (code &#x60;idempotency_outcome_unknown&#x60;). </td><td>  -  </td></tr>
@@ -195,7 +195,7 @@ public class ProjectsApi {
     /**
      * Create a project
      * Creates a project for a website, as the web&#39;s project creation does. Growwer then analyses it in the background to recommend media: the project is answered with &#x60;state: analyzing&#x60; and turns &#x60;finished&#x60; when the analysis ends. Analysis can take hours, and it never finishes when no medium matches the project, so poll GET /projects/{id} with backoff and use &#x60;createdAt&#x60; to decide when to stop.  Every value is validated as on the web: &#x60;topics&#x60;, &#x60;language&#x60; and &#x60;country&#x60; take the identifiers GET /vocabulary publishes.  Creating a project also categorises its website through an external service, as the web does. When that service fails the answer is 500, although the project may already be saved, and a retry under the same Idempotency-Key answers 409 &#x60;idempotency_outcome_unknown&#x60;. After either, list your projects (GET /projects) before retrying with a new key, or you may create a duplicate.
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param createProjectRequest  (required)
      * @return ApiResponse&lt;Project&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -204,7 +204,7 @@ public class ProjectsApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> The project, created and being analysed. &#x60;Location&#x60; is its URL. </td><td>  * Location - The URL of the new project. <br>  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;), or you have reached the number of projects an account may have without a wallet deposit in the last year (code &#x60;project_limit_reached&#x60;). </td><td>  -  </td></tr>
         <tr><td> 409 </td><td> The &#x60;Idempotency-Key&#x60; was used for a different request (code &#x60;idempotency_key_reused&#x60;), its first request is still running (code &#x60;idempotency_request_in_progress&#x60;), or its first request failed and may have taken effect (code &#x60;idempotency_outcome_unknown&#x60;). </td><td>  -  </td></tr>
@@ -223,7 +223,7 @@ public class ProjectsApi {
     /**
      * Create a project (asynchronously)
      * Creates a project for a website, as the web&#39;s project creation does. Growwer then analyses it in the background to recommend media: the project is answered with &#x60;state: analyzing&#x60; and turns &#x60;finished&#x60; when the analysis ends. Analysis can take hours, and it never finishes when no medium matches the project, so poll GET /projects/{id} with backoff and use &#x60;createdAt&#x60; to decide when to stop.  Every value is validated as on the web: &#x60;topics&#x60;, &#x60;language&#x60; and &#x60;country&#x60; take the identifiers GET /vocabulary publishes.  Creating a project also categorises its website through an external service, as the web does. When that service fails the answer is 500, although the project may already be saved, and a retry under the same Idempotency-Key answers 409 &#x60;idempotency_outcome_unknown&#x60;. After either, list your projects (GET /projects) before retrying with a new key, or you may create a duplicate.
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param createProjectRequest  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
@@ -233,7 +233,7 @@ public class ProjectsApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> The project, created and being analysed. &#x60;Location&#x60; is its URL. </td><td>  * Location - The URL of the new project. <br>  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key is read-only (code &#x60;insufficient_capability&#x60;), or you have reached the number of projects an account may have without a wallet deposit in the last year (code &#x60;project_limit_reached&#x60;). </td><td>  -  </td></tr>
         <tr><td> 409 </td><td> The &#x60;Idempotency-Key&#x60; was used for a different request (code &#x60;idempotency_key_reused&#x60;), its first request is still running (code &#x60;idempotency_request_in_progress&#x60;), or its first request failed and may have taken effect (code &#x60;idempotency_outcome_unknown&#x60;). </td><td>  -  </td></tr>
@@ -253,7 +253,7 @@ public class ProjectsApi {
     /**
      * Build call for deleteProject
      * @param id  (required)
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -262,7 +262,7 @@ public class ProjectsApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 204 </td><td> The project was deleted. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key lacks the capability the operation needs (code &#x60;insufficient_capability&#x60;), or the account may not perform it (code &#x60;forbidden&#x60;). </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). </td><td>  -  </td></tr>
@@ -342,14 +342,14 @@ public class ProjectsApi {
      * Delete a project
      * Deletes one of your projects. A project with an order in progress cannot be deleted until its orders finish.
      * @param id  (required)
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 204 </td><td> The project was deleted. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key lacks the capability the operation needs (code &#x60;insufficient_capability&#x60;), or the account may not perform it (code &#x60;forbidden&#x60;). </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). </td><td>  -  </td></tr>
@@ -367,7 +367,7 @@ public class ProjectsApi {
      * Delete a project
      * Deletes one of your projects. A project with an order in progress cannot be deleted until its orders finish.
      * @param id  (required)
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @return ApiResponse&lt;Void&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
@@ -375,7 +375,7 @@ public class ProjectsApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 204 </td><td> The project was deleted. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key lacks the capability the operation needs (code &#x60;insufficient_capability&#x60;), or the account may not perform it (code &#x60;forbidden&#x60;). </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). </td><td>  -  </td></tr>
@@ -394,7 +394,7 @@ public class ProjectsApi {
      * Delete a project (asynchronously)
      * Deletes one of your projects. A project with an order in progress cannot be deleted until its orders finish.
      * @param id  (required)
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -403,7 +403,7 @@ public class ProjectsApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 204 </td><td> The project was deleted. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key lacks the capability the operation needs (code &#x60;insufficient_capability&#x60;), or the account may not perform it (code &#x60;forbidden&#x60;). </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). </td><td>  -  </td></tr>
@@ -722,7 +722,7 @@ public class ProjectsApi {
     /**
      * Build call for updateProject
      * @param id  (required)
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param updateProjectRequest  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
@@ -732,7 +732,7 @@ public class ProjectsApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> The project as edited. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key lacks the capability the operation needs (code &#x60;insufficient_capability&#x60;), or the account may not perform it (code &#x60;forbidden&#x60;). </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). </td><td>  -  </td></tr>
@@ -819,7 +819,7 @@ public class ProjectsApi {
      * Edit a project
      * Changes only the fields you send. &#x60;rootUrl&#x60; cannot be changed; any field not listed here is refused. Changing &#x60;language&#x60;, &#x60;country&#x60;, &#x60;promotedProducts&#x60; or &#x60;topics&#x60; makes Growwer categorise the project and work out its target keywords again, in the background.
      * @param id  (required)
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param updateProjectRequest  (required)
      * @return Project
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -828,7 +828,7 @@ public class ProjectsApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> The project as edited. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key lacks the capability the operation needs (code &#x60;insufficient_capability&#x60;), or the account may not perform it (code &#x60;forbidden&#x60;). </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). </td><td>  -  </td></tr>
@@ -848,7 +848,7 @@ public class ProjectsApi {
      * Edit a project
      * Changes only the fields you send. &#x60;rootUrl&#x60; cannot be changed; any field not listed here is refused. Changing &#x60;language&#x60;, &#x60;country&#x60;, &#x60;promotedProducts&#x60; or &#x60;topics&#x60; makes Growwer categorise the project and work out its target keywords again, in the background.
      * @param id  (required)
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param updateProjectRequest  (required)
      * @return ApiResponse&lt;Project&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -857,7 +857,7 @@ public class ProjectsApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> The project as edited. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key lacks the capability the operation needs (code &#x60;insufficient_capability&#x60;), or the account may not perform it (code &#x60;forbidden&#x60;). </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). </td><td>  -  </td></tr>
@@ -878,7 +878,7 @@ public class ProjectsApi {
      * Edit a project (asynchronously)
      * Changes only the fields you send. &#x60;rootUrl&#x60; cannot be changed; any field not listed here is refused. Changing &#x60;language&#x60;, &#x60;country&#x60;, &#x60;promotedProducts&#x60; or &#x60;topics&#x60; makes Growwer categorise the project and work out its target keywords again, in the background.
      * @param id  (required)
-     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param updateProjectRequest  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
@@ -888,7 +888,7 @@ public class ProjectsApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> The project as edited. </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The key lacks the capability the operation needs (code &#x60;insufficient_capability&#x60;), or the account may not perform it (code &#x60;forbidden&#x60;). </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). </td><td>  -  </td></tr>

@@ -12,7 +12,7 @@
 /**
  * Growwer API
  *
- * The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601.
+ * The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters without spaces) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601.
  *
  * The version of the OpenAPI document: 1
  * Contact: support@growwer.com
@@ -162,7 +162,7 @@ class OrdersApi
      * Approve an order&#39;s delivery
      *
      * @param  string $id id (required)
-     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['approveOrder'] to see the possible values for this operation
      *
      * @throws \Growwer\Api\ApiException on non-2xx response or if the response body is not in the expected format
@@ -181,7 +181,7 @@ class OrdersApi
      * Approve an order&#39;s delivery
      *
      * @param  string $id (required)
-     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['approveOrder'] to see the possible values for this operation
      *
      * @throws \Growwer\Api\ApiException on non-2xx response or if the response body is not in the expected format
@@ -379,7 +379,7 @@ class OrdersApi
      * Approve an order&#39;s delivery
      *
      * @param  string $id (required)
-     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['approveOrder'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
@@ -401,7 +401,7 @@ class OrdersApi
      * Approve an order&#39;s delivery
      *
      * @param  string $id (required)
-     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['approveOrder'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
@@ -452,7 +452,7 @@ class OrdersApi
      * Create request for operation 'approveOrder'
      *
      * @param  string $id (required)
-     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['approveOrder'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
@@ -565,7 +565,7 @@ class OrdersApi
      * Approve a draft
      *
      * @param  string $id id (required)
-     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['approveOrderDraft'] to see the possible values for this operation
      *
      * @throws \Growwer\Api\ApiException on non-2xx response or if the response body is not in the expected format
@@ -584,7 +584,7 @@ class OrdersApi
      * Approve a draft
      *
      * @param  string $id (required)
-     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['approveOrderDraft'] to see the possible values for this operation
      *
      * @throws \Growwer\Api\ApiException on non-2xx response or if the response body is not in the expected format
@@ -782,7 +782,7 @@ class OrdersApi
      * Approve a draft
      *
      * @param  string $id (required)
-     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['approveOrderDraft'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
@@ -804,7 +804,7 @@ class OrdersApi
      * Approve a draft
      *
      * @param  string $id (required)
-     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['approveOrderDraft'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
@@ -855,7 +855,7 @@ class OrdersApi
      * Create request for operation 'approveOrderDraft'
      *
      * @param  string $id (required)
-     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['approveOrderDraft'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
@@ -968,7 +968,7 @@ class OrdersApi
      * Cancel an order
      *
      * @param  string $id id (required)
-     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param  \Growwer\Api\Model\OrderActionReason $order_action_reason order_action_reason (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['cancelOrder'] to see the possible values for this operation
      *
@@ -988,7 +988,7 @@ class OrdersApi
      * Cancel an order
      *
      * @param  string $id (required)
-     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param  \Growwer\Api\Model\OrderActionReason $order_action_reason (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['cancelOrder'] to see the possible values for this operation
      *
@@ -1201,7 +1201,7 @@ class OrdersApi
      * Cancel an order
      *
      * @param  string $id (required)
-     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param  \Growwer\Api\Model\OrderActionReason $order_action_reason (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['cancelOrder'] to see the possible values for this operation
      *
@@ -1224,7 +1224,7 @@ class OrdersApi
      * Cancel an order
      *
      * @param  string $id (required)
-     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param  \Growwer\Api\Model\OrderActionReason $order_action_reason (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['cancelOrder'] to see the possible values for this operation
      *
@@ -1276,7 +1276,7 @@ class OrdersApi
      * Create request for operation 'cancelOrder'
      *
      * @param  string $id (required)
-     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param  \Growwer\Api\Model\OrderActionReason $order_action_reason (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['cancelOrder'] to see the possible values for this operation
      *
@@ -1403,7 +1403,7 @@ class OrdersApi
      *
      * Place an order
      *
-     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param  \Growwer\Api\Model\OrderCreateRequest $order_create_request order_create_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createOrder'] to see the possible values for this operation
      *
@@ -1422,7 +1422,7 @@ class OrdersApi
      *
      * Place an order
      *
-     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param  \Growwer\Api\Model\OrderCreateRequest $order_create_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createOrder'] to see the possible values for this operation
      *
@@ -1634,7 +1634,7 @@ class OrdersApi
      *
      * Place an order
      *
-     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param  \Growwer\Api\Model\OrderCreateRequest $order_create_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createOrder'] to see the possible values for this operation
      *
@@ -1656,7 +1656,7 @@ class OrdersApi
      *
      * Place an order
      *
-     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param  \Growwer\Api\Model\OrderCreateRequest $order_create_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createOrder'] to see the possible values for this operation
      *
@@ -1707,7 +1707,7 @@ class OrdersApi
     /**
      * Create request for operation 'createOrder'
      *
-     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param  \Growwer\Api\Model\OrderCreateRequest $order_create_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createOrder'] to see the possible values for this operation
      *
@@ -3679,7 +3679,7 @@ class OrdersApi
      * Request changes to a draft
      *
      * @param  string $id id (required)
-     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param  \Growwer\Api\Model\OrderActionReason $order_action_reason order_action_reason (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['requestOrderDraftUpdate'] to see the possible values for this operation
      *
@@ -3699,7 +3699,7 @@ class OrdersApi
      * Request changes to a draft
      *
      * @param  string $id (required)
-     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param  \Growwer\Api\Model\OrderActionReason $order_action_reason (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['requestOrderDraftUpdate'] to see the possible values for this operation
      *
@@ -3912,7 +3912,7 @@ class OrdersApi
      * Request changes to a draft
      *
      * @param  string $id (required)
-     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param  \Growwer\Api\Model\OrderActionReason $order_action_reason (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['requestOrderDraftUpdate'] to see the possible values for this operation
      *
@@ -3935,7 +3935,7 @@ class OrdersApi
      * Request changes to a draft
      *
      * @param  string $id (required)
-     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param  \Growwer\Api\Model\OrderActionReason $order_action_reason (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['requestOrderDraftUpdate'] to see the possible values for this operation
      *
@@ -3987,7 +3987,7 @@ class OrdersApi
      * Create request for operation 'requestOrderDraftUpdate'
      *
      * @param  string $id (required)
-     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param  \Growwer\Api\Model\OrderActionReason $order_action_reason (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['requestOrderDraftUpdate'] to see the possible values for this operation
      *
@@ -4115,7 +4115,7 @@ class OrdersApi
      * Request changes to a delivery
      *
      * @param  string $id id (required)
-     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param  \Growwer\Api\Model\OrderActionReason $order_action_reason order_action_reason (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['requestOrderUpdate'] to see the possible values for this operation
      *
@@ -4135,7 +4135,7 @@ class OrdersApi
      * Request changes to a delivery
      *
      * @param  string $id (required)
-     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param  \Growwer\Api\Model\OrderActionReason $order_action_reason (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['requestOrderUpdate'] to see the possible values for this operation
      *
@@ -4348,7 +4348,7 @@ class OrdersApi
      * Request changes to a delivery
      *
      * @param  string $id (required)
-     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param  \Growwer\Api\Model\OrderActionReason $order_action_reason (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['requestOrderUpdate'] to see the possible values for this operation
      *
@@ -4371,7 +4371,7 @@ class OrdersApi
      * Request changes to a delivery
      *
      * @param  string $id (required)
-     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param  \Growwer\Api\Model\OrderActionReason $order_action_reason (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['requestOrderUpdate'] to see the possible values for this operation
      *
@@ -4423,7 +4423,7 @@ class OrdersApi
      * Create request for operation 'requestOrderUpdate'
      *
      * @param  string $id (required)
-     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+     * @param  string $idempotency_key A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. (required)
      * @param  \Growwer\Api\Model\OrderActionReason $order_action_reason (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['requestOrderUpdate'] to see the possible values for this operation
      *

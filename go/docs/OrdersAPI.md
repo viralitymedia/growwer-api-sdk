@@ -40,7 +40,7 @@ import (
 
 func main() {
 	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | 
-	idempotencyKey := "idempotencyKey_example" // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+	idempotencyKey := "idempotencyKey_example" // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -70,7 +70,7 @@ Other parameters are passed through a pointer to a apiApproveOrderRequest struct
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **idempotencyKey** | **string** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. | 
+ **idempotencyKey** | **string** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | 
 
 ### Return type
 
@@ -112,7 +112,7 @@ import (
 
 func main() {
 	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | 
-	idempotencyKey := "idempotencyKey_example" // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+	idempotencyKey := "idempotencyKey_example" // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -142,7 +142,7 @@ Other parameters are passed through a pointer to a apiApproveOrderDraftRequest s
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **idempotencyKey** | **string** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. | 
+ **idempotencyKey** | **string** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | 
 
 ### Return type
 
@@ -184,7 +184,7 @@ import (
 
 func main() {
 	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | 
-	idempotencyKey := "idempotencyKey_example" // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+	idempotencyKey := "idempotencyKey_example" // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 	orderActionReason := *openapiclient.NewOrderActionReason("Reason_example") // OrderActionReason | 
 
 	configuration := openapiclient.NewConfiguration()
@@ -215,7 +215,7 @@ Other parameters are passed through a pointer to a apiCancelOrderRequest struct 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **idempotencyKey** | **string** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. | 
+ **idempotencyKey** | **string** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | 
  **orderActionReason** | [**OrderActionReason**](OrderActionReason.md) |  | 
 
 ### Return type
@@ -257,7 +257,7 @@ import (
 )
 
 func main() {
-	idempotencyKey := "idempotencyKey_example" // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+	idempotencyKey := "idempotencyKey_example" // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 	orderCreateRequest := *openapiclient.NewOrderCreateRequest("Type_example", "ProjectId_example", "MediaId_example", openapiclient.OrderEstimateRequest_briefing{LinkAdditionOrderBriefingRequest: openapiclient.NewLinkAdditionOrderBriefingRequest("LinkingFrom_example", *openapiclient.NewOrderLinkRequest("Type_example"))}, *openapiclient.NewMoney(int32(12500), "EUR")) // OrderCreateRequest | 
 
 	configuration := openapiclient.NewConfiguration()
@@ -283,7 +283,7 @@ Other parameters are passed through a pointer to a apiCreateOrderRequest struct 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **idempotencyKey** | **string** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. | 
+ **idempotencyKey** | **string** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | 
  **orderCreateRequest** | [**OrderCreateRequest**](OrderCreateRequest.md) |  | 
 
 ### Return type
@@ -681,7 +681,7 @@ import (
 
 func main() {
 	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | 
-	idempotencyKey := "idempotencyKey_example" // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+	idempotencyKey := "idempotencyKey_example" // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 	orderActionReason := *openapiclient.NewOrderActionReason("Reason_example") // OrderActionReason | 
 
 	configuration := openapiclient.NewConfiguration()
@@ -712,7 +712,7 @@ Other parameters are passed through a pointer to a apiRequestOrderDraftUpdateReq
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **idempotencyKey** | **string** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. | 
+ **idempotencyKey** | **string** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | 
  **orderActionReason** | [**OrderActionReason**](OrderActionReason.md) |  | 
 
 ### Return type
@@ -755,7 +755,7 @@ import (
 
 func main() {
 	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | 
-	idempotencyKey := "idempotencyKey_example" // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+	idempotencyKey := "idempotencyKey_example" // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 	orderActionReason := *openapiclient.NewOrderActionReason("Reason_example") // OrderActionReason | 
 
 	configuration := openapiclient.NewConfiguration()
@@ -786,7 +786,7 @@ Other parameters are passed through a pointer to a apiRequestOrderUpdateRequest 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **idempotencyKey** | **string** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. | 
+ **idempotencyKey** | **string** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | 
  **orderActionReason** | [**OrderActionReason**](OrderActionReason.md) |  | 
 
 ### Return type

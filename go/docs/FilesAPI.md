@@ -29,7 +29,7 @@ import (
 )
 
 func main() {
-	idempotencyKey := "idempotencyKey_example" // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+	idempotencyKey := "idempotencyKey_example" // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 	file := os.NewFile(1234, "some_file") // *os.File | 
 
 	configuration := openapiclient.NewConfiguration()
@@ -55,7 +55,7 @@ Other parameters are passed through a pointer to a apiUploadFileRequest struct v
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **idempotencyKey** | **string** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. | 
+ **idempotencyKey** | **string** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | 
  **file** | ***os.File** |  | 
 
 ### Return type

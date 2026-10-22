@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Growwer API
- * The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601. 
+ * The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters without spaces) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601. 
  *
  * The version of the OpenAPI document: 1
  * Contact: support@growwer.com
@@ -61,7 +61,7 @@ export interface SellerMediasApiInterface {
     /**
      * Creates request options for applySellerMediaCompetitiveFees without sending the request
      * @param {string} id 
-     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
      * @throws {RequiredError}
      * @memberof SellerMediasApiInterface
      */
@@ -71,7 +71,7 @@ export interface SellerMediasApiInterface {
      * Sets your post fees for the media to the competitive fees Growwer suggests, the `competitiveFees` of GET /seller/medias/{id}, as the button on the media edit page does. Each link type you offer gets the suggested fee on each side it already has a fee for; no link type gains a side it did not offer.  Two differences from the page: a side Growwer has no suggestion for keeps your fee (the page clears it), and the fixed fee the page falls back to when it cannot find a competitive one is never applied (the page applies it). When neither side has a suggestion, nothing changes and the answer is 409 `no_competitive_fees`. When your fees already are the suggested ones, or the suggestion is only for a side none of your link types offers, nothing changes and the answer is 200.  The fees set are your base fees: a running flash offer keeps discounting them. As with a fee edit, a change of the price may cancel the managed-service proposals accepted for the media whose price it changes. Send no body, or an empty object.
      * @summary Set the competitive fees Growwer suggests
      * @param {string} id 
-     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SellerMediasApiInterface
@@ -141,7 +141,7 @@ export interface SellerMediasApiInterface {
     /**
      * Creates request options for updateSellerMedia without sending the request
      * @param {string} id 
-     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
      * @param {UpdateSellerMediaRequest} updateSellerMediaRequest 
      * @throws {RequiredError}
      * @memberof SellerMediasApiInterface
@@ -152,7 +152,7 @@ export interface SellerMediasApiInterface {
      * Sets the fees of one of your medias, as the media edit page saves them. Send only the sections you change: a section you send replaces that section wholly, a section you leave out stays as it is.  - `postOffer.pricingOptions` lists every link type you offer for sponsored posts, at least one. A link type you leave out is no longer offered. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR. - `linkAdditionOffer.pricingOptions` lists the link types you offer for adding a link to an existing article; `null` or an empty list stops offering link additions. - `extraServices` is the full list of extra services you offer; an empty list removes them all.  The fees are your base fees, the ones GET /seller/medias/{id} returns: while a flash offer runs, its discount keeps applying on top of them, and `currentCost` shows the result. `currentCost` may be sent back as read and is ignored. Characteristics, topics and comments are not edited here.  As on the page, a change of the post offer\'s price may cancel the managed-service proposals accepted for the media whose price it changes, and raising the price above the best competitor\'s tells Growwer\'s support team. A restricted seller account may edit its fees.
      * @summary Edit the fees of a media you sell on
      * @param {string} id 
-     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+     * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
      * @param {UpdateSellerMediaRequest} updateSellerMediaRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}

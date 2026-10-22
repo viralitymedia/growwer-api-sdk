@@ -33,7 +33,7 @@ import (
 
 func main() {
 	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | 
-	idempotencyKey := "idempotencyKey_example" // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+	idempotencyKey := "idempotencyKey_example" // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -63,7 +63,7 @@ Other parameters are passed through a pointer to a apiApplySellerMediaCompetitiv
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **idempotencyKey** | **string** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. | 
+ **idempotencyKey** | **string** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | 
 
 ### Return type
 
@@ -247,7 +247,7 @@ import (
 
 func main() {
 	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | 
-	idempotencyKey := "idempotencyKey_example" // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+	idempotencyKey := "idempotencyKey_example" // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 	updateSellerMediaRequest := *openapiclient.NewUpdateSellerMediaRequest() // UpdateSellerMediaRequest | 
 
 	configuration := openapiclient.NewConfiguration()
@@ -278,7 +278,7 @@ Other parameters are passed through a pointer to a apiUpdateSellerMediaRequest s
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **idempotencyKey** | **string** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. | 
+ **idempotencyKey** | **string** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | 
  **updateSellerMediaRequest** | [**UpdateSellerMediaRequest**](UpdateSellerMediaRequest.md) |  | 
 
 ### Return type

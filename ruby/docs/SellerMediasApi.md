@@ -31,7 +31,7 @@ end
 
 api_instance = Growwer::SellerMediasApi.new
 id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # String | 
-idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 
 begin
   # Set the competitive fees Growwer suggests
@@ -65,7 +65,7 @@ end
 | Name | Type | Description | Notes |
 | ---- | ---- | ----------- | ----- |
 | **id** | **String** |  |  |
-| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. |  |
+| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. |  |
 
 ### Return type
 
@@ -248,7 +248,7 @@ end
 
 api_instance = Growwer::SellerMediasApi.new
 id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # String | 
-idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 update_seller_media_request = Growwer::UpdateSellerMediaRequest.new # UpdateSellerMediaRequest | 
 
 begin
@@ -283,7 +283,7 @@ end
 | Name | Type | Description | Notes |
 | ---- | ---- | ----------- | ----- |
 | **id** | **String** |  |  |
-| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. |  |
+| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. |  |
 | **update_seller_media_request** | [**UpdateSellerMediaRequest**](UpdateSellerMediaRequest.md) |  |  |
 
 ### Return type

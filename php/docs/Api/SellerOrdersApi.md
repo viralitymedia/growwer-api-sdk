@@ -48,7 +48,7 @@ $apiInstance = new Growwer\Api\Api\SellerOrdersApi(
     $config
 );
 $id = 'id_example'; // string
-$idempotency_key = 'idempotency_key_example'; // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+$idempotency_key = 'idempotency_key_example'; // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 
 try {
     $result = $apiInstance->acceptSellerOrder($id, $idempotency_key);
@@ -63,7 +63,7 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **id** | **string**|  | |
-| **idempotency_key** | **string**| A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. | |
+| **idempotency_key** | **string**| A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | |
 
 ### Return type
 
@@ -110,7 +110,7 @@ $apiInstance = new Growwer\Api\Api\SellerOrdersApi(
     $config
 );
 $id = 'id_example'; // string
-$idempotency_key = 'idempotency_key_example'; // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+$idempotency_key = 'idempotency_key_example'; // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 $seller_order_post_delivery = new \Growwer\Api\Model\SellerOrderPostDelivery(); // \Growwer\Api\Model\SellerOrderPostDelivery
 
 try {
@@ -126,7 +126,7 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **id** | **string**|  | |
-| **idempotency_key** | **string**| A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. | |
+| **idempotency_key** | **string**| A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | |
 | **seller_order_post_delivery** | [**\Growwer\Api\Model\SellerOrderPostDelivery**](../Model/SellerOrderPostDelivery.md)|  | [optional] |
 
 ### Return type
@@ -174,7 +174,7 @@ $apiInstance = new Growwer\Api\Api\SellerOrdersApi(
     $config
 );
 $id = 'id_example'; // string
-$idempotency_key = 'idempotency_key_example'; // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+$idempotency_key = 'idempotency_key_example'; // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 $seller_order_draft_file = new \Growwer\Api\Model\SellerOrderDraftFile(); // \Growwer\Api\Model\SellerOrderDraftFile
 
 try {
@@ -190,7 +190,7 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **id** | **string**|  | |
-| **idempotency_key** | **string**| A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. | |
+| **idempotency_key** | **string**| A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | |
 | **seller_order_draft_file** | [**\Growwer\Api\Model\SellerOrderDraftFile**](../Model/SellerOrderDraftFile.md)|  | |
 
 ### Return type
@@ -238,7 +238,7 @@ $apiInstance = new Growwer\Api\Api\SellerOrdersApi(
     $config
 );
 $id = 'id_example'; // string
-$idempotency_key = 'idempotency_key_example'; // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+$idempotency_key = 'idempotency_key_example'; // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 $seller_order_draft_file = new \Growwer\Api\Model\SellerOrderDraftFile(); // \Growwer\Api\Model\SellerOrderDraftFile
 
 try {
@@ -254,7 +254,7 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **id** | **string**|  | |
-| **idempotency_key** | **string**| A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. | |
+| **idempotency_key** | **string**| A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | |
 | **seller_order_draft_file** | [**\Growwer\Api\Model\SellerOrderDraftFile**](../Model/SellerOrderDraftFile.md)|  | |
 
 ### Return type
@@ -302,7 +302,7 @@ $apiInstance = new Growwer\Api\Api\SellerOrdersApi(
     $config
 );
 $id = 'id_example'; // string
-$idempotency_key = 'idempotency_key_example'; // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+$idempotency_key = 'idempotency_key_example'; // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 $seller_order_post_delivery = new \Growwer\Api\Model\SellerOrderPostDelivery(); // \Growwer\Api\Model\SellerOrderPostDelivery
 
 try {
@@ -318,7 +318,7 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **id** | **string**|  | |
-| **idempotency_key** | **string**| A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. | |
+| **idempotency_key** | **string**| A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | |
 | **seller_order_post_delivery** | [**\Growwer\Api\Model\SellerOrderPostDelivery**](../Model/SellerOrderPostDelivery.md)|  | [optional] |
 
 ### Return type
@@ -616,7 +616,7 @@ $apiInstance = new Growwer\Api\Api\SellerOrdersApi(
     $config
 );
 $id = 'id_example'; // string
-$idempotency_key = 'idempotency_key_example'; // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+$idempotency_key = 'idempotency_key_example'; // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 $seller_order_refutation = new \Growwer\Api\Model\SellerOrderRefutation(); // \Growwer\Api\Model\SellerOrderRefutation
 
 try {
@@ -632,7 +632,7 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **id** | **string**|  | |
-| **idempotency_key** | **string**| A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. | |
+| **idempotency_key** | **string**| A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | |
 | **seller_order_refutation** | [**\Growwer\Api\Model\SellerOrderRefutation**](../Model/SellerOrderRefutation.md)|  | |
 
 ### Return type
@@ -680,7 +680,7 @@ $apiInstance = new Growwer\Api\Api\SellerOrdersApi(
     $config
 );
 $id = 'id_example'; // string
-$idempotency_key = 'idempotency_key_example'; // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+$idempotency_key = 'idempotency_key_example'; // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 $seller_order_refutation = new \Growwer\Api\Model\SellerOrderRefutation(); // \Growwer\Api\Model\SellerOrderRefutation
 
 try {
@@ -696,7 +696,7 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **id** | **string**|  | |
-| **idempotency_key** | **string**| A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. | |
+| **idempotency_key** | **string**| A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | |
 | **seller_order_refutation** | [**\Growwer\Api\Model\SellerOrderRefutation**](../Model/SellerOrderRefutation.md)|  | |
 
 ### Return type
@@ -744,7 +744,7 @@ $apiInstance = new Growwer\Api\Api\SellerOrdersApi(
     $config
 );
 $id = 'id_example'; // string
-$idempotency_key = 'idempotency_key_example'; // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+$idempotency_key = 'idempotency_key_example'; // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 $seller_order_rejection = new \Growwer\Api\Model\SellerOrderRejection(); // \Growwer\Api\Model\SellerOrderRejection
 
 try {
@@ -760,7 +760,7 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **id** | **string**|  | |
-| **idempotency_key** | **string**| A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. | |
+| **idempotency_key** | **string**| A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | |
 | **seller_order_rejection** | [**\Growwer\Api\Model\SellerOrderRejection**](../Model/SellerOrderRejection.md)|  | |
 
 ### Return type

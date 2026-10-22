@@ -1,7 +1,7 @@
 """
     Growwer API
 
-    The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601. 
+    The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters without spaces) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601. 
 
     The version of the OpenAPI document: 1
     Contact: support@growwer.com
@@ -1559,7 +1559,7 @@ class ManagedServicesApi:
     @validate_call
     def request_managed_service_campaign(
         self,
-        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.")],
+        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.")],
         managed_service_request: ManagedServiceRequest,
         _request_timeout: Union[
             None,
@@ -1578,7 +1578,7 @@ class ManagedServicesApi:
 
         Asks your account manager for a new campaign, as the managed service page does: the team emails you to agree on it. For accounts with a managed service (GET /me `managedService.active`); without one, POST /managed-service/info-requests asks about the service.  You may send 5 such requests per UTC day through the API. Past them it answers 429 `managed_service_request_limit_reached`, with `Retry-After` the time to the next UTC midnight. A request that is refused (4xx) does not count; one that fails on the server (5xx) does, as it may have been sent.
 
-        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`. (required)
         :type idempotency_key: str
         :param managed_service_request: (required)
         :type managed_service_request: ManagedServiceRequest
@@ -1638,7 +1638,7 @@ class ManagedServicesApi:
     @validate_call
     def request_managed_service_campaign_with_http_info(
         self,
-        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.")],
+        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.")],
         managed_service_request: ManagedServiceRequest,
         _request_timeout: Union[
             None,
@@ -1657,7 +1657,7 @@ class ManagedServicesApi:
 
         Asks your account manager for a new campaign, as the managed service page does: the team emails you to agree on it. For accounts with a managed service (GET /me `managedService.active`); without one, POST /managed-service/info-requests asks about the service.  You may send 5 such requests per UTC day through the API. Past them it answers 429 `managed_service_request_limit_reached`, with `Retry-After` the time to the next UTC midnight. A request that is refused (4xx) does not count; one that fails on the server (5xx) does, as it may have been sent.
 
-        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`. (required)
         :type idempotency_key: str
         :param managed_service_request: (required)
         :type managed_service_request: ManagedServiceRequest
@@ -1717,7 +1717,7 @@ class ManagedServicesApi:
     @validate_call
     def request_managed_service_campaign_without_preload_content(
         self,
-        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.")],
+        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.")],
         managed_service_request: ManagedServiceRequest,
         _request_timeout: Union[
             None,
@@ -1736,7 +1736,7 @@ class ManagedServicesApi:
 
         Asks your account manager for a new campaign, as the managed service page does: the team emails you to agree on it. For accounts with a managed service (GET /me `managedService.active`); without one, POST /managed-service/info-requests asks about the service.  You may send 5 such requests per UTC day through the API. Past them it answers 429 `managed_service_request_limit_reached`, with `Retry-After` the time to the next UTC midnight. A request that is refused (4xx) does not count; one that fails on the server (5xx) does, as it may have been sent.
 
-        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`. (required)
         :type idempotency_key: str
         :param managed_service_request: (required)
         :type managed_service_request: ManagedServiceRequest
@@ -1872,7 +1872,7 @@ class ManagedServicesApi:
     @validate_call
     def request_managed_service_info(
         self,
-        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.")],
+        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.")],
         managed_service_request: ManagedServiceRequest,
         _request_timeout: Union[
             None,
@@ -1891,7 +1891,7 @@ class ManagedServicesApi:
 
         Asks the team about the managed service for your website, as the managed service landing page does: the team contacts you. For accounts without a managed service (GET /me `managedService.active`); with one, POST /managed-service/campaign-requests requests a new campaign.  You may send 5 such requests per UTC day through the API. Past them it answers 429 `managed_service_request_limit_reached`, with `Retry-After` the time to the next UTC midnight. A request that is refused (4xx) does not count; one that fails on the server (5xx) does, as it may have been sent.
 
-        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`. (required)
         :type idempotency_key: str
         :param managed_service_request: (required)
         :type managed_service_request: ManagedServiceRequest
@@ -1951,7 +1951,7 @@ class ManagedServicesApi:
     @validate_call
     def request_managed_service_info_with_http_info(
         self,
-        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.")],
+        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.")],
         managed_service_request: ManagedServiceRequest,
         _request_timeout: Union[
             None,
@@ -1970,7 +1970,7 @@ class ManagedServicesApi:
 
         Asks the team about the managed service for your website, as the managed service landing page does: the team contacts you. For accounts without a managed service (GET /me `managedService.active`); with one, POST /managed-service/campaign-requests requests a new campaign.  You may send 5 such requests per UTC day through the API. Past them it answers 429 `managed_service_request_limit_reached`, with `Retry-After` the time to the next UTC midnight. A request that is refused (4xx) does not count; one that fails on the server (5xx) does, as it may have been sent.
 
-        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`. (required)
         :type idempotency_key: str
         :param managed_service_request: (required)
         :type managed_service_request: ManagedServiceRequest
@@ -2030,7 +2030,7 @@ class ManagedServicesApi:
     @validate_call
     def request_managed_service_info_without_preload_content(
         self,
-        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.")],
+        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.")],
         managed_service_request: ManagedServiceRequest,
         _request_timeout: Union[
             None,
@@ -2049,7 +2049,7 @@ class ManagedServicesApi:
 
         Asks the team about the managed service for your website, as the managed service landing page does: the team contacts you. For accounts without a managed service (GET /me `managedService.active`); with one, POST /managed-service/campaign-requests requests a new campaign.  You may send 5 such requests per UTC day through the API. Past them it answers 429 `managed_service_request_limit_reached`, with `Retry-After` the time to the next UTC midnight. A request that is refused (4xx) does not count; one that fails on the server (5xx) does, as it may have been sent.
 
-        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`. (required)
         :type idempotency_key: str
         :param managed_service_request: (required)
         :type managed_service_request: ManagedServiceRequest
@@ -2186,7 +2186,7 @@ class ManagedServicesApi:
     def review_managed_service_proposals(
         self,
         id: UUID,
-        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.")],
+        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.")],
         managed_service_proposal_review_request: ManagedServiceProposalReviewRequest,
         _request_timeout: Union[
             None,
@@ -2207,7 +2207,7 @@ class ManagedServicesApi:
 
         :param id: (required)
         :type id: UUID
-        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`. (required)
         :type idempotency_key: str
         :param managed_service_proposal_review_request: (required)
         :type managed_service_proposal_review_request: ManagedServiceProposalReviewRequest
@@ -2270,7 +2270,7 @@ class ManagedServicesApi:
     def review_managed_service_proposals_with_http_info(
         self,
         id: UUID,
-        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.")],
+        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.")],
         managed_service_proposal_review_request: ManagedServiceProposalReviewRequest,
         _request_timeout: Union[
             None,
@@ -2291,7 +2291,7 @@ class ManagedServicesApi:
 
         :param id: (required)
         :type id: UUID
-        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`. (required)
         :type idempotency_key: str
         :param managed_service_proposal_review_request: (required)
         :type managed_service_proposal_review_request: ManagedServiceProposalReviewRequest
@@ -2354,7 +2354,7 @@ class ManagedServicesApi:
     def review_managed_service_proposals_without_preload_content(
         self,
         id: UUID,
-        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.")],
+        idempotency_key: Annotated[str, Field(strict=True, max_length=255, description="A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.")],
         managed_service_proposal_review_request: ManagedServiceProposalReviewRequest,
         _request_timeout: Union[
             None,
@@ -2375,7 +2375,7 @@ class ManagedServicesApi:
 
         :param id: (required)
         :type id: UUID
-        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. (required)
+        :param idempotency_key: A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`. (required)
         :type idempotency_key: str
         :param managed_service_proposal_review_request: (required)
         :type managed_service_proposal_review_request: ManagedServiceProposalReviewRequest

@@ -36,7 +36,7 @@ end
 api_instance = Growwer::CatalogueApi.new
 id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # String | The project.
 media_id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # String | The media.
-idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 
 begin
   # Discard a media for a project
@@ -70,7 +70,7 @@ end
 | ---- | ---- | ----------- | ----- |
 | **id** | **String** | The project. |  |
 | **media_id** | **String** | The media. |  |
-| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. |  |
+| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. |  |
 
 ### Return type
 
@@ -108,7 +108,7 @@ end
 api_instance = Growwer::CatalogueApi.new
 id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # String | The project.
 media_id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # String | The media.
-idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 
 begin
   # Add a media to the favourites of a project
@@ -142,7 +142,7 @@ end
 | ---- | ---- | ----------- | ----- |
 | **id** | **String** | The project. |  |
 | **media_id** | **String** | The media. |  |
-| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. |  |
+| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. |  |
 
 ### Return type
 
@@ -389,7 +389,7 @@ end
 
 api_instance = Growwer::CatalogueApi.new
 id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # String | The project.
-idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 request_medias_request = Growwer::RequestMediasRequest.new({domains: ['example.com']}) # RequestMediasRequest | 
 
 begin
@@ -424,7 +424,7 @@ end
 | Name | Type | Description | Notes |
 | ---- | ---- | ----------- | ----- |
 | **id** | **String** | The project. |  |
-| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. |  |
+| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. |  |
 | **request_medias_request** | [**RequestMediasRequest**](RequestMediasRequest.md) |  |  |
 
 ### Return type
@@ -608,7 +608,7 @@ end
 api_instance = Growwer::CatalogueApi.new
 id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # String | The project.
 media_id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # String | The media.
-idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 
 begin
   # Restore a discarded media for a project
@@ -642,7 +642,7 @@ end
 | ---- | ---- | ----------- | ----- |
 | **id** | **String** | The project. |  |
 | **media_id** | **String** | The media. |  |
-| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. |  |
+| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. |  |
 
 ### Return type
 
@@ -680,7 +680,7 @@ end
 api_instance = Growwer::CatalogueApi.new
 id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # String | The project.
 media_id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # String | The media.
-idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+idempotency_key = 'idempotency_key_example' # String | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 
 begin
   # Remove a media from the favourites of a project
@@ -714,7 +714,7 @@ end
 | ---- | ---- | ----------- | ----- |
 | **id** | **String** | The project. |  |
 | **media_id** | **String** | The media. |  |
-| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. |  |
+| **idempotency_key** | **String** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. |  |
 
 ### Return type
 

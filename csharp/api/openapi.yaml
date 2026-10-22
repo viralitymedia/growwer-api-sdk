@@ -11,7 +11,7 @@ info:
     `Idempotency-Key` header.
 
     Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII
-    characters) for each operation and reuse it only to retry that same
+    characters without spaces) for each operation and reuse it only to retry that same
     operation. Keys belong to your account, not to one API key.
     - A successful write is stored for 30 days: a retry with the same key and
       the same request replays its response with `Idempotent-Replayed: true`
@@ -362,7 +362,8 @@ paths:
           type: string
         style: simple
       - description: "A new key for each write, reused only to retry that same write.\
-          \ 1 to 255 printable ASCII characters."
+          \ 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other\
+          \ value answers 400 `invalid_idempotency_key`."
         explode: false
         in: header
         name: Idempotency-Key
@@ -390,8 +391,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "The write has no `Idempotency-Key` header (code `idempotency_key_required`),\
-            \ the header is not 1 to 255 printable ASCII characters (code `invalid_idempotency_key`),\
-            \ or the body is not a JSON object (code `invalid_json`)."
+            \ the header is not 1 to 255 printable ASCII characters without spaces\
+            \ (code `invalid_idempotency_key`), or the body is not a JSON object (code\
+            \ `invalid_json`)."
         "401":
           content:
             application/json:
@@ -498,7 +500,8 @@ paths:
           type: string
         style: simple
       - description: "A new key for each write, reused only to retry that same write.\
-          \ 1 to 255 printable ASCII characters."
+          \ 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other\
+          \ value answers 400 `invalid_idempotency_key`."
         explode: false
         in: header
         name: Idempotency-Key
@@ -516,8 +519,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "The write has no `Idempotency-Key` header (code `idempotency_key_required`),\
-            \ the header is not 1 to 255 printable ASCII characters (code `invalid_idempotency_key`),\
-            \ or the body is not a JSON object (code `invalid_json`)."
+            \ the header is not 1 to 255 printable ASCII characters without spaces\
+            \ (code `invalid_idempotency_key`), or the body is not a JSON object (code\
+            \ `invalid_json`)."
         "401":
           content:
             application/json:
@@ -610,7 +614,8 @@ paths:
           type: string
         style: simple
       - description: "A new key for each write, reused only to retry that same write.\
-          \ 1 to 255 printable ASCII characters."
+          \ 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other\
+          \ value answers 400 `invalid_idempotency_key`."
         explode: false
         in: header
         name: Idempotency-Key
@@ -628,8 +633,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "The write has no `Idempotency-Key` header (code `idempotency_key_required`),\
-            \ the header is not 1 to 255 printable ASCII characters (code `invalid_idempotency_key`),\
-            \ or the body is not a JSON object (code `invalid_json`)."
+            \ the header is not 1 to 255 printable ASCII characters without spaces\
+            \ (code `invalid_idempotency_key`), or the body is not a JSON object (code\
+            \ `invalid_json`)."
         "401":
           content:
             application/json:
@@ -722,7 +728,8 @@ paths:
           type: string
         style: simple
       - description: "A new key for each write, reused only to retry that same write.\
-          \ 1 to 255 printable ASCII characters."
+          \ 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other\
+          \ value answers 400 `invalid_idempotency_key`."
         explode: false
         in: header
         name: Idempotency-Key
@@ -740,8 +747,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "The write has no `Idempotency-Key` header (code `idempotency_key_required`),\
-            \ the header is not 1 to 255 printable ASCII characters (code `invalid_idempotency_key`),\
-            \ or the body is not a JSON object (code `invalid_json`)."
+            \ the header is not 1 to 255 printable ASCII characters without spaces\
+            \ (code `invalid_idempotency_key`), or the body is not a JSON object (code\
+            \ `invalid_json`)."
         "401":
           content:
             application/json:
@@ -834,7 +842,8 @@ paths:
           type: string
         style: simple
       - description: "A new key for each write, reused only to retry that same write.\
-          \ 1 to 255 printable ASCII characters."
+          \ 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other\
+          \ value answers 400 `invalid_idempotency_key`."
         explode: false
         in: header
         name: Idempotency-Key
@@ -852,8 +861,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "The write has no `Idempotency-Key` header (code `idempotency_key_required`),\
-            \ the header is not 1 to 255 printable ASCII characters (code `invalid_idempotency_key`),\
-            \ or the body is not a JSON object (code `invalid_json`)."
+            \ the header is not 1 to 255 printable ASCII characters without spaces\
+            \ (code `invalid_idempotency_key`), or the body is not a JSON object (code\
+            \ `invalid_json`)."
         "401":
           content:
             application/json:
@@ -946,7 +956,8 @@ paths:
           type: string
         style: simple
       - description: "A new key for each write, reused only to retry that same write.\
-          \ 1 to 255 printable ASCII characters."
+          \ 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other\
+          \ value answers 400 `invalid_idempotency_key`."
         explode: false
         in: header
         name: Idempotency-Key
@@ -964,8 +975,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "The write has no `Idempotency-Key` header (code `idempotency_key_required`),\
-            \ the header is not 1 to 255 printable ASCII characters (code `invalid_idempotency_key`),\
-            \ or the body is not a JSON object (code `invalid_json`)."
+            \ the header is not 1 to 255 printable ASCII characters without spaces\
+            \ (code `invalid_idempotency_key`), or the body is not a JSON object (code\
+            \ `invalid_json`)."
         "401":
           content:
             application/json:
@@ -1568,7 +1580,8 @@ paths:
           type: string
         style: simple
       - description: "A new key for each write, reused only to retry that same write.\
-          \ 1 to 255 printable ASCII characters."
+          \ 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other\
+          \ value answers 400 `invalid_idempotency_key`."
         explode: false
         in: header
         name: Idempotency-Key
@@ -1597,8 +1610,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "The write has no `Idempotency-Key` header (code `idempotency_key_required`),\
-            \ the header is not 1 to 255 printable ASCII characters (code `invalid_idempotency_key`),\
-            \ or the body is not a JSON object (code `invalid_json`)."
+            \ the header is not 1 to 255 printable ASCII characters without spaces\
+            \ (code `invalid_idempotency_key`), or the body is not a JSON object (code\
+            \ `invalid_json`)."
         "401":
           content:
             application/json:
@@ -2136,7 +2150,8 @@ paths:
       operationId: uploadFile
       parameters:
       - description: "A new key for each write, reused only to retry that same write.\
-          \ 1 to 255 printable ASCII characters."
+          \ 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other\
+          \ value answers 400 `invalid_idempotency_key`."
         explode: false
         in: header
         name: Idempotency-Key
@@ -2164,8 +2179,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "The write has no `Idempotency-Key` header (code `idempotency_key_required`),\
-            \ the header is not 1 to 255 printable ASCII characters (code `invalid_idempotency_key`),\
-            \ or the body is not a JSON object (code `invalid_json`)."
+            \ the header is not 1 to 255 printable ASCII characters without spaces\
+            \ (code `invalid_idempotency_key`), or the body is not a JSON object (code\
+            \ `invalid_json`)."
         "401":
           content:
             application/json:
@@ -2895,7 +2911,8 @@ paths:
       operationId: requestManagedServiceCampaign
       parameters:
       - description: "A new key for each write, reused only to retry that same write.\
-          \ 1 to 255 printable ASCII characters."
+          \ 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other\
+          \ value answers 400 `invalid_idempotency_key`."
         explode: false
         in: header
         name: Idempotency-Key
@@ -2923,8 +2940,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "The write has no `Idempotency-Key` header (code `idempotency_key_required`),\
-            \ the header is not 1 to 255 printable ASCII characters (code `invalid_idempotency_key`),\
-            \ or the body is not a JSON object (code `invalid_json`)."
+            \ the header is not 1 to 255 printable ASCII characters without spaces\
+            \ (code `invalid_idempotency_key`), or the body is not a JSON object (code\
+            \ `invalid_json`)."
         "401":
           content:
             application/json:
@@ -3007,7 +3025,8 @@ paths:
       operationId: requestManagedServiceInfo
       parameters:
       - description: "A new key for each write, reused only to retry that same write.\
-          \ 1 to 255 printable ASCII characters."
+          \ 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other\
+          \ value answers 400 `invalid_idempotency_key`."
         explode: false
         in: header
         name: Idempotency-Key
@@ -3035,8 +3054,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "The write has no `Idempotency-Key` header (code `idempotency_key_required`),\
-            \ the header is not 1 to 255 printable ASCII characters (code `invalid_idempotency_key`),\
-            \ or the body is not a JSON object (code `invalid_json`)."
+            \ the header is not 1 to 255 printable ASCII characters without spaces\
+            \ (code `invalid_idempotency_key`), or the body is not a JSON object (code\
+            \ `invalid_json`)."
         "401":
           content:
             application/json:
@@ -3127,7 +3147,8 @@ paths:
           type: string
         style: simple
       - description: "A new key for each write, reused only to retry that same write.\
-          \ 1 to 255 printable ASCII characters."
+          \ 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other\
+          \ value answers 400 `invalid_idempotency_key`."
         explode: false
         in: header
         name: Idempotency-Key
@@ -3155,8 +3176,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "The write has no `Idempotency-Key` header (code `idempotency_key_required`),\
-            \ the header is not 1 to 255 printable ASCII characters (code `invalid_idempotency_key`),\
-            \ or the body is not a JSON object (code `invalid_json`)."
+            \ the header is not 1 to 255 printable ASCII characters without spaces\
+            \ (code `invalid_idempotency_key`), or the body is not a JSON object (code\
+            \ `invalid_json`)."
         "401":
           content:
             application/json:
@@ -3246,7 +3268,8 @@ paths:
           type: string
         style: simple
       - description: "A new key for each write, reused only to retry that same write.\
-          \ 1 to 255 printable ASCII characters."
+          \ 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other\
+          \ value answers 400 `invalid_idempotency_key`."
         explode: false
         in: header
         name: Idempotency-Key
@@ -3268,8 +3291,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "The write has no `Idempotency-Key` header (code `idempotency_key_required`),\
-            \ the header is not 1 to 255 printable ASCII characters (code `invalid_idempotency_key`),\
-            \ or the body is not a JSON object (code `invalid_json`)."
+            \ the header is not 1 to 255 printable ASCII characters without spaces\
+            \ (code `invalid_idempotency_key`), or the body is not a JSON object (code\
+            \ `invalid_json`)."
         "401":
           content:
             application/json:
@@ -3350,7 +3374,8 @@ paths:
           type: string
         style: simple
       - description: "A new key for each write, reused only to retry that same write.\
-          \ 1 to 255 printable ASCII characters."
+          \ 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other\
+          \ value answers 400 `invalid_idempotency_key`."
         explode: false
         in: header
         name: Idempotency-Key
@@ -3372,8 +3397,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "The write has no `Idempotency-Key` header (code `idempotency_key_required`),\
-            \ the header is not 1 to 255 printable ASCII characters (code `invalid_idempotency_key`),\
-            \ or the body is not a JSON object (code `invalid_json`)."
+            \ the header is not 1 to 255 printable ASCII characters without spaces\
+            \ (code `invalid_idempotency_key`), or the body is not a JSON object (code\
+            \ `invalid_json`)."
         "401":
           content:
             application/json:
@@ -3454,7 +3480,8 @@ paths:
           type: string
         style: simple
       - description: "A new key for each write, reused only to retry that same write.\
-          \ 1 to 255 printable ASCII characters."
+          \ 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other\
+          \ value answers 400 `invalid_idempotency_key`."
         explode: false
         in: header
         name: Idempotency-Key
@@ -3482,8 +3509,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "The write has no `Idempotency-Key` header (code `idempotency_key_required`),\
-            \ the header is not 1 to 255 printable ASCII characters (code `invalid_idempotency_key`),\
-            \ or the body is not a JSON object (code `invalid_json`)."
+            \ the header is not 1 to 255 printable ASCII characters without spaces\
+            \ (code `invalid_idempotency_key`), or the body is not a JSON object (code\
+            \ `invalid_json`)."
         "401":
           content:
             application/json:
@@ -3726,7 +3754,8 @@ paths:
       operationId: createOrder
       parameters:
       - description: "A new key for each write, reused only to retry that same write.\
-          \ 1 to 255 printable ASCII characters."
+          \ 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other\
+          \ value answers 400 `invalid_idempotency_key`."
         explode: false
         in: header
         name: Idempotency-Key
@@ -3761,8 +3790,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "The write has no `Idempotency-Key` header (code `idempotency_key_required`),\
-            \ the header is not 1 to 255 printable ASCII characters (code `invalid_idempotency_key`),\
-            \ or the body is not a JSON object (code `invalid_json`)."
+            \ the header is not 1 to 255 printable ASCII characters without spaces\
+            \ (code `invalid_idempotency_key`), or the body is not a JSON object (code\
+            \ `invalid_json`)."
         "401":
           content:
             application/json:
@@ -4170,7 +4200,8 @@ paths:
           type: string
         style: simple
       - description: "A new key for each write, reused only to retry that same write.\
-          \ 1 to 255 printable ASCII characters."
+          \ 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other\
+          \ value answers 400 `invalid_idempotency_key`."
         explode: false
         in: header
         name: Idempotency-Key
@@ -4198,8 +4229,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "The write has no `Idempotency-Key` header (code `idempotency_key_required`),\
-            \ the header is not 1 to 255 printable ASCII characters (code `invalid_idempotency_key`),\
-            \ or the body is not a JSON object (code `invalid_json`)."
+            \ the header is not 1 to 255 printable ASCII characters without spaces\
+            \ (code `invalid_idempotency_key`), or the body is not a JSON object (code\
+            \ `invalid_json`)."
         "401":
           content:
             application/json:
@@ -4295,7 +4327,8 @@ paths:
           type: string
         style: simple
       - description: "A new key for each write, reused only to retry that same write.\
-          \ 1 to 255 printable ASCII characters."
+          \ 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other\
+          \ value answers 400 `invalid_idempotency_key`."
         explode: false
         in: header
         name: Idempotency-Key
@@ -4323,8 +4356,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "The write has no `Idempotency-Key` header (code `idempotency_key_required`),\
-            \ the header is not 1 to 255 printable ASCII characters (code `invalid_idempotency_key`),\
-            \ or the body is not a JSON object (code `invalid_json`)."
+            \ the header is not 1 to 255 printable ASCII characters without spaces\
+            \ (code `invalid_idempotency_key`), or the body is not a JSON object (code\
+            \ `invalid_json`)."
         "401":
           content:
             application/json:
@@ -4506,7 +4540,8 @@ paths:
       operationId: createProject
       parameters:
       - description: "A new key for each write, reused only to retry that same write.\
-          \ 1 to 255 printable ASCII characters."
+          \ 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other\
+          \ value answers 400 `invalid_idempotency_key`."
         explode: false
         in: header
         name: Idempotency-Key
@@ -4542,8 +4577,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "The write has no `Idempotency-Key` header (code `idempotency_key_required`),\
-            \ the header is not 1 to 255 printable ASCII characters (code `invalid_idempotency_key`),\
-            \ or the body is not a JSON object (code `invalid_json`)."
+            \ the header is not 1 to 255 printable ASCII characters without spaces\
+            \ (code `invalid_idempotency_key`), or the body is not a JSON object (code\
+            \ `invalid_json`)."
         "401":
           content:
             application/json:
@@ -4635,7 +4671,8 @@ paths:
           type: string
         style: simple
       - description: "A new key for each write, reused only to retry that same write.\
-          \ 1 to 255 printable ASCII characters."
+          \ 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other\
+          \ value answers 400 `invalid_idempotency_key`."
         explode: false
         in: header
         name: Idempotency-Key
@@ -4653,8 +4690,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "The write has no `Idempotency-Key` header (code `idempotency_key_required`),\
-            \ the header is not 1 to 255 printable ASCII characters (code `invalid_idempotency_key`),\
-            \ or the body is not a JSON object (code `invalid_json`)."
+            \ the header is not 1 to 255 printable ASCII characters without spaces\
+            \ (code `invalid_idempotency_key`), or the body is not a JSON object (code\
+            \ `invalid_json`)."
         "401":
           content:
             application/json:
@@ -4806,7 +4844,8 @@ paths:
           type: string
         style: simple
       - description: "A new key for each write, reused only to retry that same write.\
-          \ 1 to 255 printable ASCII characters."
+          \ 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other\
+          \ value answers 400 `invalid_idempotency_key`."
         explode: false
         in: header
         name: Idempotency-Key
@@ -4834,8 +4873,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "The write has no `Idempotency-Key` header (code `idempotency_key_required`),\
-            \ the header is not 1 to 255 printable ASCII characters (code `invalid_idempotency_key`),\
-            \ or the body is not a JSON object (code `invalid_json`)."
+            \ the header is not 1 to 255 printable ASCII characters without spaces\
+            \ (code `invalid_idempotency_key`), or the body is not a JSON object (code\
+            \ `invalid_json`)."
         "401":
           content:
             application/json:
@@ -4926,7 +4966,8 @@ paths:
       operationId: putSellerHoliday
       parameters:
       - description: "A new key for each write, reused only to retry that same write.\
-          \ 1 to 255 printable ASCII characters."
+          \ 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other\
+          \ value answers 400 `invalid_idempotency_key`."
         explode: false
         in: header
         name: Idempotency-Key
@@ -4954,8 +4995,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "The write has no `Idempotency-Key` header (code `idempotency_key_required`),\
-            \ the header is not 1 to 255 printable ASCII characters (code `invalid_idempotency_key`),\
-            \ or the body is not a JSON object (code `invalid_json`)."
+            \ the header is not 1 to 255 printable ASCII characters without spaces\
+            \ (code `invalid_idempotency_key`), or the body is not a JSON object (code\
+            \ `invalid_json`)."
         "401":
           content:
             application/json:
@@ -5040,7 +5082,8 @@ paths:
           type: string
         style: simple
       - description: "A new key for each write, reused only to retry that same write.\
-          \ 1 to 255 printable ASCII characters."
+          \ 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other\
+          \ value answers 400 `invalid_idempotency_key`."
         explode: false
         in: header
         name: Idempotency-Key
@@ -5062,8 +5105,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "The write has no `Idempotency-Key` header (code `idempotency_key_required`),\
-            \ the header is not 1 to 255 printable ASCII characters (code `invalid_idempotency_key`),\
-            \ or the body is not a JSON object (code `invalid_json`)."
+            \ the header is not 1 to 255 printable ASCII characters without spaces\
+            \ (code `invalid_idempotency_key`), or the body is not a JSON object (code\
+            \ `invalid_json`)."
         "401":
           content:
             application/json:
@@ -5229,7 +5273,8 @@ paths:
           type: string
         style: simple
       - description: "A new key for each write, reused only to retry that same write.\
-          \ 1 to 255 printable ASCII characters."
+          \ 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other\
+          \ value answers 400 `invalid_idempotency_key`."
         explode: false
         in: header
         name: Idempotency-Key
@@ -5280,8 +5325,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "The write has no `Idempotency-Key` header (code `idempotency_key_required`),\
-            \ the header is not 1 to 255 printable ASCII characters (code `invalid_idempotency_key`),\
-            \ or the body is not a JSON object (code `invalid_json`)."
+            \ the header is not 1 to 255 printable ASCII characters without spaces\
+            \ (code `invalid_idempotency_key`), or the body is not a JSON object (code\
+            \ `invalid_json`)."
         "401":
           content:
             application/json:
@@ -5894,7 +5940,8 @@ paths:
           type: string
         style: simple
       - description: "A new key for each write, reused only to retry that same write.\
-          \ 1 to 255 printable ASCII characters."
+          \ 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other\
+          \ value answers 400 `invalid_idempotency_key`."
         explode: false
         in: header
         name: Idempotency-Key
@@ -5916,8 +5963,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "The write has no `Idempotency-Key` header (code `idempotency_key_required`),\
-            \ the header is not 1 to 255 printable ASCII characters (code `invalid_idempotency_key`),\
-            \ or the body is not a JSON object (code `invalid_json`)."
+            \ the header is not 1 to 255 printable ASCII characters without spaces\
+            \ (code `invalid_idempotency_key`), or the body is not a JSON object (code\
+            \ `invalid_json`)."
         "401":
           content:
             application/json:
@@ -6003,7 +6051,8 @@ paths:
           type: string
         style: simple
       - description: "A new key for each write, reused only to retry that same write.\
-          \ 1 to 255 printable ASCII characters."
+          \ 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other\
+          \ value answers 400 `invalid_idempotency_key`."
         explode: false
         in: header
         name: Idempotency-Key
@@ -6031,8 +6080,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "The write has no `Idempotency-Key` header (code `idempotency_key_required`),\
-            \ the header is not 1 to 255 printable ASCII characters (code `invalid_idempotency_key`),\
-            \ or the body is not a JSON object (code `invalid_json`)."
+            \ the header is not 1 to 255 printable ASCII characters without spaces\
+            \ (code `invalid_idempotency_key`), or the body is not a JSON object (code\
+            \ `invalid_json`)."
         "401":
           content:
             application/json:
@@ -6131,7 +6181,8 @@ paths:
           type: string
         style: simple
       - description: "A new key for each write, reused only to retry that same write.\
-          \ 1 to 255 printable ASCII characters."
+          \ 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other\
+          \ value answers 400 `invalid_idempotency_key`."
         explode: false
         in: header
         name: Idempotency-Key
@@ -6159,8 +6210,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "The write has no `Idempotency-Key` header (code `idempotency_key_required`),\
-            \ the header is not 1 to 255 printable ASCII characters (code `invalid_idempotency_key`),\
-            \ or the body is not a JSON object (code `invalid_json`)."
+            \ the header is not 1 to 255 printable ASCII characters without spaces\
+            \ (code `invalid_idempotency_key`), or the body is not a JSON object (code\
+            \ `invalid_json`)."
         "401":
           content:
             application/json:
@@ -6252,7 +6304,8 @@ paths:
           type: string
         style: simple
       - description: "A new key for each write, reused only to retry that same write.\
-          \ 1 to 255 printable ASCII characters."
+          \ 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other\
+          \ value answers 400 `invalid_idempotency_key`."
         explode: false
         in: header
         name: Idempotency-Key
@@ -6280,8 +6333,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "The write has no `Idempotency-Key` header (code `idempotency_key_required`),\
-            \ the header is not 1 to 255 printable ASCII characters (code `invalid_idempotency_key`),\
-            \ or the body is not a JSON object (code `invalid_json`)."
+            \ the header is not 1 to 255 printable ASCII characters without spaces\
+            \ (code `invalid_idempotency_key`), or the body is not a JSON object (code\
+            \ `invalid_json`)."
         "401":
           content:
             application/json:
@@ -6375,7 +6429,8 @@ paths:
           type: string
         style: simple
       - description: "A new key for each write, reused only to retry that same write.\
-          \ 1 to 255 printable ASCII characters."
+          \ 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other\
+          \ value answers 400 `invalid_idempotency_key`."
         explode: false
         in: header
         name: Idempotency-Key
@@ -6403,8 +6458,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "The write has no `Idempotency-Key` header (code `idempotency_key_required`),\
-            \ the header is not 1 to 255 printable ASCII characters (code `invalid_idempotency_key`),\
-            \ or the body is not a JSON object (code `invalid_json`)."
+            \ the header is not 1 to 255 printable ASCII characters without spaces\
+            \ (code `invalid_idempotency_key`), or the body is not a JSON object (code\
+            \ `invalid_json`)."
         "401":
           content:
             application/json:
@@ -6863,7 +6919,8 @@ paths:
           type: string
         style: simple
       - description: "A new key for each write, reused only to retry that same write.\
-          \ 1 to 255 printable ASCII characters."
+          \ 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other\
+          \ value answers 400 `invalid_idempotency_key`."
         explode: false
         in: header
         name: Idempotency-Key
@@ -6891,8 +6948,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "The write has no `Idempotency-Key` header (code `idempotency_key_required`),\
-            \ the header is not 1 to 255 printable ASCII characters (code `invalid_idempotency_key`),\
-            \ or the body is not a JSON object (code `invalid_json`)."
+            \ the header is not 1 to 255 printable ASCII characters without spaces\
+            \ (code `invalid_idempotency_key`), or the body is not a JSON object (code\
+            \ `invalid_json`)."
         "401":
           content:
             application/json:
@@ -6990,7 +7048,8 @@ paths:
           type: string
         style: simple
       - description: "A new key for each write, reused only to retry that same write.\
-          \ 1 to 255 printable ASCII characters."
+          \ 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other\
+          \ value answers 400 `invalid_idempotency_key`."
         explode: false
         in: header
         name: Idempotency-Key
@@ -7018,8 +7077,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "The write has no `Idempotency-Key` header (code `idempotency_key_required`),\
-            \ the header is not 1 to 255 printable ASCII characters (code `invalid_idempotency_key`),\
-            \ or the body is not a JSON object (code `invalid_json`)."
+            \ the header is not 1 to 255 printable ASCII characters without spaces\
+            \ (code `invalid_idempotency_key`), or the body is not a JSON object (code\
+            \ `invalid_json`)."
         "401":
           content:
             application/json:
@@ -7116,7 +7176,8 @@ paths:
           type: string
         style: simple
       - description: "A new key for each write, reused only to retry that same write.\
-          \ 1 to 255 printable ASCII characters."
+          \ 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other\
+          \ value answers 400 `invalid_idempotency_key`."
         explode: false
         in: header
         name: Idempotency-Key
@@ -7144,8 +7205,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: "The write has no `Idempotency-Key` header (code `idempotency_key_required`),\
-            \ the header is not 1 to 255 printable ASCII characters (code `invalid_idempotency_key`),\
-            \ or the body is not a JSON object (code `invalid_json`)."
+            \ the header is not 1 to 255 printable ASCII characters without spaces\
+            \ (code `invalid_idempotency_key`), or the body is not a JSON object (code\
+            \ `invalid_json`)."
         "401":
           content:
             application/json:
@@ -7475,7 +7537,8 @@ components:
   parameters:
     IdempotencyKey:
       description: "A new key for each write, reused only to retry that same write.\
-        \ 1 to 255 printable ASCII characters."
+        \ 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other\
+        \ value answers 400 `invalid_idempotency_key`."
       explode: false
       in: header
       name: Idempotency-Key
@@ -7901,8 +7964,8 @@ components:
           schema:
             $ref: "#/components/schemas/Error"
       description: "The write has no `Idempotency-Key` header (code `idempotency_key_required`),\
-        \ the header is not 1 to 255 printable ASCII characters (code `invalid_idempotency_key`),\
-        \ or the body is not a JSON object (code `invalid_json`)."
+        \ the header is not 1 to 255 printable ASCII characters without spaces (code\
+        \ `invalid_idempotency_key`), or the body is not a JSON object (code `invalid_json`)."
     NotFound:
       content:
         application/json:

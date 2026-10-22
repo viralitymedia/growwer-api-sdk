@@ -45,7 +45,7 @@ $apiInstance = new Growwer\Api\Api\CatalogueApi(
 );
 $id = 'id_example'; // string | The project.
 $media_id = 'media_id_example'; // string | The media.
-$idempotency_key = 'idempotency_key_example'; // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+$idempotency_key = 'idempotency_key_example'; // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 
 try {
     $apiInstance->discardMedia($id, $media_id, $idempotency_key);
@@ -60,7 +60,7 @@ try {
 | ------------- | ------------- | ------------- | ------------- |
 | **id** | **string**| The project. | |
 | **media_id** | **string**| The media. | |
-| **idempotency_key** | **string**| A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. | |
+| **idempotency_key** | **string**| A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | |
 
 ### Return type
 
@@ -108,7 +108,7 @@ $apiInstance = new Growwer\Api\Api\CatalogueApi(
 );
 $id = 'id_example'; // string | The project.
 $media_id = 'media_id_example'; // string | The media.
-$idempotency_key = 'idempotency_key_example'; // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+$idempotency_key = 'idempotency_key_example'; // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 
 try {
     $apiInstance->favouriteMedia($id, $media_id, $idempotency_key);
@@ -123,7 +123,7 @@ try {
 | ------------- | ------------- | ------------- | ------------- |
 | **id** | **string**| The project. | |
 | **media_id** | **string**| The media. | |
-| **idempotency_key** | **string**| A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. | |
+| **idempotency_key** | **string**| A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | |
 
 ### Return type
 
@@ -360,7 +360,7 @@ $apiInstance = new Growwer\Api\Api\CatalogueApi(
     $config
 );
 $id = 'id_example'; // string | The project.
-$idempotency_key = 'idempotency_key_example'; // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+$idempotency_key = 'idempotency_key_example'; // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 $request_medias_request = new \Growwer\Api\Model\RequestMediasRequest(); // \Growwer\Api\Model\RequestMediasRequest
 
 try {
@@ -376,7 +376,7 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **id** | **string**| The project. | |
-| **idempotency_key** | **string**| A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. | |
+| **idempotency_key** | **string**| A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | |
 | **request_medias_request** | [**\Growwer\Api\Model\RequestMediasRequest**](../Model/RequestMediasRequest.md)|  | |
 
 ### Return type
@@ -559,7 +559,7 @@ $apiInstance = new Growwer\Api\Api\CatalogueApi(
 );
 $id = 'id_example'; // string | The project.
 $media_id = 'media_id_example'; // string | The media.
-$idempotency_key = 'idempotency_key_example'; // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+$idempotency_key = 'idempotency_key_example'; // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 
 try {
     $apiInstance->undiscardMedia($id, $media_id, $idempotency_key);
@@ -574,7 +574,7 @@ try {
 | ------------- | ------------- | ------------- | ------------- |
 | **id** | **string**| The project. | |
 | **media_id** | **string**| The media. | |
-| **idempotency_key** | **string**| A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. | |
+| **idempotency_key** | **string**| A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | |
 
 ### Return type
 
@@ -622,7 +622,7 @@ $apiInstance = new Growwer\Api\Api\CatalogueApi(
 );
 $id = 'id_example'; // string | The project.
 $media_id = 'media_id_example'; // string | The media.
-$idempotency_key = 'idempotency_key_example'; // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.
+$idempotency_key = 'idempotency_key_example'; // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
 
 try {
     $apiInstance->unfavouriteMedia($id, $media_id, $idempotency_key);
@@ -637,7 +637,7 @@ try {
 | ------------- | ------------- | ------------- | ------------- |
 | **id** | **string**| The project. | |
 | **media_id** | **string**| The media. | |
-| **idempotency_key** | **string**| A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters. | |
+| **idempotency_key** | **string**| A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | |
 
 ### Return type
 

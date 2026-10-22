@@ -1,7 +1,7 @@
 /*
  * Growwer API
  *
- * The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601. 
+ * The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters without spaces) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601. 
  *
  * The version of the OpenAPI document: 1
  * Contact: support@growwer.com
@@ -149,7 +149,7 @@ namespace Growwer.Api.Api
         /// Asks your account manager for a new campaign, as the managed service page does: the team emails you to agree on it. For accounts with a managed service (GET /me &#x60;managedService.active&#x60;); without one, POST /managed-service/info-requests asks about the service.  You may send 5 such requests per UTC day through the API. Past them it answers 429 &#x60;managed_service_request_limit_reached&#x60;, with &#x60;Retry-After&#x60; the time to the next UTC midnight. A request that is refused (4xx) does not count; one that fails on the server (5xx) does, as it may have been sent.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="managedServiceRequest"></param>
         /// <returns>ManagedServiceRequestSent</returns>
         ManagedServiceRequestSent RequestManagedServiceCampaign(string idempotencyKey, ManagedServiceRequest managedServiceRequest);
@@ -161,7 +161,7 @@ namespace Growwer.Api.Api
         /// Asks your account manager for a new campaign, as the managed service page does: the team emails you to agree on it. For accounts with a managed service (GET /me &#x60;managedService.active&#x60;); without one, POST /managed-service/info-requests asks about the service.  You may send 5 such requests per UTC day through the API. Past them it answers 429 &#x60;managed_service_request_limit_reached&#x60;, with &#x60;Retry-After&#x60; the time to the next UTC midnight. A request that is refused (4xx) does not count; one that fails on the server (5xx) does, as it may have been sent.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="managedServiceRequest"></param>
         /// <returns>ApiResponse of ManagedServiceRequestSent</returns>
         ApiResponse<ManagedServiceRequestSent> RequestManagedServiceCampaignWithHttpInfo(string idempotencyKey, ManagedServiceRequest managedServiceRequest);
@@ -172,7 +172,7 @@ namespace Growwer.Api.Api
         /// Asks the team about the managed service for your website, as the managed service landing page does: the team contacts you. For accounts without a managed service (GET /me &#x60;managedService.active&#x60;); with one, POST /managed-service/campaign-requests requests a new campaign.  You may send 5 such requests per UTC day through the API. Past them it answers 429 &#x60;managed_service_request_limit_reached&#x60;, with &#x60;Retry-After&#x60; the time to the next UTC midnight. A request that is refused (4xx) does not count; one that fails on the server (5xx) does, as it may have been sent.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="managedServiceRequest"></param>
         /// <returns>ManagedServiceRequestSent</returns>
         ManagedServiceRequestSent RequestManagedServiceInfo(string idempotencyKey, ManagedServiceRequest managedServiceRequest);
@@ -184,7 +184,7 @@ namespace Growwer.Api.Api
         /// Asks the team about the managed service for your website, as the managed service landing page does: the team contacts you. For accounts without a managed service (GET /me &#x60;managedService.active&#x60;); with one, POST /managed-service/campaign-requests requests a new campaign.  You may send 5 such requests per UTC day through the API. Past them it answers 429 &#x60;managed_service_request_limit_reached&#x60;, with &#x60;Retry-After&#x60; the time to the next UTC midnight. A request that is refused (4xx) does not count; one that fails on the server (5xx) does, as it may have been sent.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="managedServiceRequest"></param>
         /// <returns>ApiResponse of ManagedServiceRequestSent</returns>
         ApiResponse<ManagedServiceRequestSent> RequestManagedServiceInfoWithHttpInfo(string idempotencyKey, ManagedServiceRequest managedServiceRequest);
@@ -196,7 +196,7 @@ namespace Growwer.Api.Api
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="managedServiceProposalReviewRequest"></param>
         /// <returns>ManagedServiceProposalReview</returns>
         ManagedServiceProposalReview ReviewManagedServiceProposals(Guid id, string idempotencyKey, ManagedServiceProposalReviewRequest managedServiceProposalReviewRequest);
@@ -209,7 +209,7 @@ namespace Growwer.Api.Api
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="managedServiceProposalReviewRequest"></param>
         /// <returns>ApiResponse of ManagedServiceProposalReview</returns>
         ApiResponse<ManagedServiceProposalReview> ReviewManagedServiceProposalsWithHttpInfo(Guid id, string idempotencyKey, ManagedServiceProposalReviewRequest managedServiceProposalReviewRequest);
@@ -356,7 +356,7 @@ namespace Growwer.Api.Api
         /// Asks your account manager for a new campaign, as the managed service page does: the team emails you to agree on it. For accounts with a managed service (GET /me &#x60;managedService.active&#x60;); without one, POST /managed-service/info-requests asks about the service.  You may send 5 such requests per UTC day through the API. Past them it answers 429 &#x60;managed_service_request_limit_reached&#x60;, with &#x60;Retry-After&#x60; the time to the next UTC midnight. A request that is refused (4xx) does not count; one that fails on the server (5xx) does, as it may have been sent.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="managedServiceRequest"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ManagedServiceRequestSent</returns>
@@ -369,7 +369,7 @@ namespace Growwer.Api.Api
         /// Asks your account manager for a new campaign, as the managed service page does: the team emails you to agree on it. For accounts with a managed service (GET /me &#x60;managedService.active&#x60;); without one, POST /managed-service/info-requests asks about the service.  You may send 5 such requests per UTC day through the API. Past them it answers 429 &#x60;managed_service_request_limit_reached&#x60;, with &#x60;Retry-After&#x60; the time to the next UTC midnight. A request that is refused (4xx) does not count; one that fails on the server (5xx) does, as it may have been sent.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="managedServiceRequest"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (ManagedServiceRequestSent)</returns>
@@ -381,7 +381,7 @@ namespace Growwer.Api.Api
         /// Asks the team about the managed service for your website, as the managed service landing page does: the team contacts you. For accounts without a managed service (GET /me &#x60;managedService.active&#x60;); with one, POST /managed-service/campaign-requests requests a new campaign.  You may send 5 such requests per UTC day through the API. Past them it answers 429 &#x60;managed_service_request_limit_reached&#x60;, with &#x60;Retry-After&#x60; the time to the next UTC midnight. A request that is refused (4xx) does not count; one that fails on the server (5xx) does, as it may have been sent.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="managedServiceRequest"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ManagedServiceRequestSent</returns>
@@ -394,7 +394,7 @@ namespace Growwer.Api.Api
         /// Asks the team about the managed service for your website, as the managed service landing page does: the team contacts you. For accounts without a managed service (GET /me &#x60;managedService.active&#x60;); with one, POST /managed-service/campaign-requests requests a new campaign.  You may send 5 such requests per UTC day through the API. Past them it answers 429 &#x60;managed_service_request_limit_reached&#x60;, with &#x60;Retry-After&#x60; the time to the next UTC midnight. A request that is refused (4xx) does not count; one that fails on the server (5xx) does, as it may have been sent.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="managedServiceRequest"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (ManagedServiceRequestSent)</returns>
@@ -407,7 +407,7 @@ namespace Growwer.Api.Api
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="managedServiceProposalReviewRequest"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ManagedServiceProposalReview</returns>
@@ -421,7 +421,7 @@ namespace Growwer.Api.Api
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="managedServiceProposalReviewRequest"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (ManagedServiceProposalReview)</returns>
@@ -1314,7 +1314,7 @@ namespace Growwer.Api.Api
         /// Request a new campaign Asks your account manager for a new campaign, as the managed service page does: the team emails you to agree on it. For accounts with a managed service (GET /me &#x60;managedService.active&#x60;); without one, POST /managed-service/info-requests asks about the service.  You may send 5 such requests per UTC day through the API. Past them it answers 429 &#x60;managed_service_request_limit_reached&#x60;, with &#x60;Retry-After&#x60; the time to the next UTC midnight. A request that is refused (4xx) does not count; one that fails on the server (5xx) does, as it may have been sent.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="managedServiceRequest"></param>
         /// <returns>ManagedServiceRequestSent</returns>
         public ManagedServiceRequestSent RequestManagedServiceCampaign(string idempotencyKey, ManagedServiceRequest managedServiceRequest)
@@ -1327,7 +1327,7 @@ namespace Growwer.Api.Api
         /// Request a new campaign Asks your account manager for a new campaign, as the managed service page does: the team emails you to agree on it. For accounts with a managed service (GET /me &#x60;managedService.active&#x60;); without one, POST /managed-service/info-requests asks about the service.  You may send 5 such requests per UTC day through the API. Past them it answers 429 &#x60;managed_service_request_limit_reached&#x60;, with &#x60;Retry-After&#x60; the time to the next UTC midnight. A request that is refused (4xx) does not count; one that fails on the server (5xx) does, as it may have been sent.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="managedServiceRequest"></param>
         /// <returns>ApiResponse of ManagedServiceRequestSent</returns>
         public Growwer.Api.Client.ApiResponse<ManagedServiceRequestSent> RequestManagedServiceCampaignWithHttpInfo(string idempotencyKey, ManagedServiceRequest managedServiceRequest)
@@ -1383,7 +1383,7 @@ namespace Growwer.Api.Api
         /// Request a new campaign Asks your account manager for a new campaign, as the managed service page does: the team emails you to agree on it. For accounts with a managed service (GET /me &#x60;managedService.active&#x60;); without one, POST /managed-service/info-requests asks about the service.  You may send 5 such requests per UTC day through the API. Past them it answers 429 &#x60;managed_service_request_limit_reached&#x60;, with &#x60;Retry-After&#x60; the time to the next UTC midnight. A request that is refused (4xx) does not count; one that fails on the server (5xx) does, as it may have been sent.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="managedServiceRequest"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ManagedServiceRequestSent</returns>
@@ -1397,7 +1397,7 @@ namespace Growwer.Api.Api
         /// Request a new campaign Asks your account manager for a new campaign, as the managed service page does: the team emails you to agree on it. For accounts with a managed service (GET /me &#x60;managedService.active&#x60;); without one, POST /managed-service/info-requests asks about the service.  You may send 5 such requests per UTC day through the API. Past them it answers 429 &#x60;managed_service_request_limit_reached&#x60;, with &#x60;Retry-After&#x60; the time to the next UTC midnight. A request that is refused (4xx) does not count; one that fails on the server (5xx) does, as it may have been sent.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="managedServiceRequest"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (ManagedServiceRequestSent)</returns>
@@ -1457,7 +1457,7 @@ namespace Growwer.Api.Api
         /// Ask about the managed service Asks the team about the managed service for your website, as the managed service landing page does: the team contacts you. For accounts without a managed service (GET /me &#x60;managedService.active&#x60;); with one, POST /managed-service/campaign-requests requests a new campaign.  You may send 5 such requests per UTC day through the API. Past them it answers 429 &#x60;managed_service_request_limit_reached&#x60;, with &#x60;Retry-After&#x60; the time to the next UTC midnight. A request that is refused (4xx) does not count; one that fails on the server (5xx) does, as it may have been sent.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="managedServiceRequest"></param>
         /// <returns>ManagedServiceRequestSent</returns>
         public ManagedServiceRequestSent RequestManagedServiceInfo(string idempotencyKey, ManagedServiceRequest managedServiceRequest)
@@ -1470,7 +1470,7 @@ namespace Growwer.Api.Api
         /// Ask about the managed service Asks the team about the managed service for your website, as the managed service landing page does: the team contacts you. For accounts without a managed service (GET /me &#x60;managedService.active&#x60;); with one, POST /managed-service/campaign-requests requests a new campaign.  You may send 5 such requests per UTC day through the API. Past them it answers 429 &#x60;managed_service_request_limit_reached&#x60;, with &#x60;Retry-After&#x60; the time to the next UTC midnight. A request that is refused (4xx) does not count; one that fails on the server (5xx) does, as it may have been sent.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="managedServiceRequest"></param>
         /// <returns>ApiResponse of ManagedServiceRequestSent</returns>
         public Growwer.Api.Client.ApiResponse<ManagedServiceRequestSent> RequestManagedServiceInfoWithHttpInfo(string idempotencyKey, ManagedServiceRequest managedServiceRequest)
@@ -1526,7 +1526,7 @@ namespace Growwer.Api.Api
         /// Ask about the managed service Asks the team about the managed service for your website, as the managed service landing page does: the team contacts you. For accounts without a managed service (GET /me &#x60;managedService.active&#x60;); with one, POST /managed-service/campaign-requests requests a new campaign.  You may send 5 such requests per UTC day through the API. Past them it answers 429 &#x60;managed_service_request_limit_reached&#x60;, with &#x60;Retry-After&#x60; the time to the next UTC midnight. A request that is refused (4xx) does not count; one that fails on the server (5xx) does, as it may have been sent.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="managedServiceRequest"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ManagedServiceRequestSent</returns>
@@ -1540,7 +1540,7 @@ namespace Growwer.Api.Api
         /// Ask about the managed service Asks the team about the managed service for your website, as the managed service landing page does: the team contacts you. For accounts without a managed service (GET /me &#x60;managedService.active&#x60;); with one, POST /managed-service/campaign-requests requests a new campaign.  You may send 5 such requests per UTC day through the API. Past them it answers 429 &#x60;managed_service_request_limit_reached&#x60;, with &#x60;Retry-After&#x60; the time to the next UTC midnight. A request that is refused (4xx) does not count; one that fails on the server (5xx) does, as it may have been sent.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="managedServiceRequest"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (ManagedServiceRequestSent)</returns>
@@ -1601,7 +1601,7 @@ namespace Growwer.Api.Api
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="managedServiceProposalReviewRequest"></param>
         /// <returns>ManagedServiceProposalReview</returns>
         public ManagedServiceProposalReview ReviewManagedServiceProposals(Guid id, string idempotencyKey, ManagedServiceProposalReviewRequest managedServiceProposalReviewRequest)
@@ -1615,7 +1615,7 @@ namespace Growwer.Api.Api
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="managedServiceProposalReviewRequest"></param>
         /// <returns>ApiResponse of ManagedServiceProposalReview</returns>
         public Growwer.Api.Client.ApiResponse<ManagedServiceProposalReview> ReviewManagedServiceProposalsWithHttpInfo(Guid id, string idempotencyKey, ManagedServiceProposalReviewRequest managedServiceProposalReviewRequest)
@@ -1673,7 +1673,7 @@ namespace Growwer.Api.Api
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="managedServiceProposalReviewRequest"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ManagedServiceProposalReview</returns>
@@ -1688,7 +1688,7 @@ namespace Growwer.Api.Api
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
-        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters.</param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
         /// <param name="managedServiceProposalReviewRequest"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (ManagedServiceProposalReview)</returns>

@@ -86,7 +86,7 @@ public class ProjectCatalogueMediaAllOfProject {
   public static final String SERIALIZED_NAME_AI_KEYWORDS = "aiKeywords";
   @SerializedName(SERIALIZED_NAME_AI_KEYWORDS)
   @javax.annotation.Nonnull
-  private List<ProjectCatalogueMediaAllOfProjectAiKeywords> aiKeywords = new ArrayList<>();
+  private List<ProjectCatalogueMediaAllOfProjectAiKeywords> aiKeywords;
 
   public ProjectCatalogueMediaAllOfProject() {
   }

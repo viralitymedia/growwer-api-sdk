@@ -61,7 +61,7 @@ public class ManagedServiceProposalBriefing {
   public static final String SERIALIZED_NAME_LINKS = "links";
   @SerializedName(SERIALIZED_NAME_LINKS)
   @javax.annotation.Nonnull
-  private List<ManagedServiceProposalBriefingLinksInner> links = new ArrayList<>();
+  private List<ManagedServiceProposalBriefingLinksInner> links;
 
   public static final String SERIALIZED_NAME_ADDITIONAL_INFO = "additionalInfo";
   @SerializedName(SERIALIZED_NAME_ADDITIONAL_INFO)

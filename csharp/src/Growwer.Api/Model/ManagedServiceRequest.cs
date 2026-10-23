@@ -134,7 +134,12 @@ namespace Growwer.Api.Model
                 throw new ArgumentNullException("estimatedBudget is a required property for ManagedServiceRequest and cannot be null");
             }
             this.EstimatedBudget = estimatedBudget;
-            this.AdditionalInfo = additionalInfo;
+            // a null "additionalInfo" leaves AdditionalInfo unset, so it is not sent
+            this._AdditionalInfo = additionalInfo;
+            if (this.AdditionalInfo != null)
+            {
+                this._flagAdditionalInfo = true;
+            }
             this.AdditionalProperties = new Dictionary<string, object>();
         }
 
@@ -163,7 +168,27 @@ namespace Growwer.Api.Model
         /// Gets or Sets AdditionalInfo
         /// </summary>
         [DataMember(Name = "additionalInfo", EmitDefaultValue = true)]
-        public string AdditionalInfo { get; set; }
+        public string AdditionalInfo
+        {
+            get { return _AdditionalInfo; }
+            set
+            {
+                _AdditionalInfo = value;
+                _flagAdditionalInfo = true;
+            }
+        }
+        private string _AdditionalInfo;
+        private bool _flagAdditionalInfo;
+
+        /// <summary>
+        /// Returns true once AdditionalInfo has been set, so that a property left unset is left out of
+        /// the request rather than sent as null, which the API reads as a value.
+        /// </summary>
+        /// <returns>true once AdditionalInfo has been set (boolean)</returns>
+        public bool ShouldSerializeAdditionalInfo()
+        {
+            return _flagAdditionalInfo;
+        }
 
         /// <summary>
         /// Gets or Sets additional properties

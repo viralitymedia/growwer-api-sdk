@@ -393,6 +393,10 @@ for name in sorted(listed(previous_list) - listed(current_list)):
     # The csharp template ignores `nullable: true` on a required enum, so the null the contract
     # allows (Order.pendingAction) fails deserialisation. The `?` is added here after every run.
     python3 scripts/csharp-nullable-enums.py
+    # The same template marks an optional, nullable property to be written even when null, so an
+    # unset one is sent as null and a PATCH clears what the caller never touched. Each one becomes
+    # a property that is written only once something set it.
+    python3 scripts/csharp-optional-nullables.py
   fi
 
   if [[ "${target}" == "ruby" ]]; then

@@ -134,12 +134,12 @@ public class CreateSellerMediaRequest {
   public static final String SERIALIZED_NAME_TOPICS = "topics";
   @SerializedName(SERIALIZED_NAME_TOPICS)
   @javax.annotation.Nonnull
-  private Set<Integer> topics = new LinkedHashSet<>();
+  private Set<Integer> topics;
 
   public static final String SERIALIZED_NAME_BANNED_TOPICS = "bannedTopics";
   @SerializedName(SERIALIZED_NAME_BANNED_TOPICS)
   @javax.annotation.Nullable
-  private Set<Integer> bannedTopics = new LinkedHashSet<>();
+  private Set<Integer> bannedTopics;
 
   public static final String SERIALIZED_NAME_POST_OFFER = "postOffer";
   @SerializedName(SERIALIZED_NAME_POST_OFFER)
@@ -154,7 +154,7 @@ public class CreateSellerMediaRequest {
   public static final String SERIALIZED_NAME_EXTRA_SERVICES = "extraServices";
   @SerializedName(SERIALIZED_NAME_EXTRA_SERVICES)
   @javax.annotation.Nullable
-  private List<UpdateSellerMediaRequestExtraServicesInner> extraServices = new ArrayList<>();
+  private List<UpdateSellerMediaRequestExtraServicesInner> extraServices;
 
   public static final String SERIALIZED_NAME_ACCEPT_MEDIA_PUBLISHING_TERMS = "acceptMediaPublishingTerms";
   @SerializedName(SERIALIZED_NAME_ACCEPT_MEDIA_PUBLISHING_TERMS)

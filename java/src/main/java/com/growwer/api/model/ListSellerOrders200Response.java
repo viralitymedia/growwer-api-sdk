@@ -56,7 +56,7 @@ public class ListSellerOrders200Response {
   public static final String SERIALIZED_NAME_ITEMS = "items";
   @SerializedName(SERIALIZED_NAME_ITEMS)
   @javax.annotation.Nonnull
-  private List<SellerOrder> items = new ArrayList<>();
+  private List<SellerOrder> items;
 
   public static final String SERIALIZED_NAME_TOTAL = "total";
   @SerializedName(SERIALIZED_NAME_TOTAL)

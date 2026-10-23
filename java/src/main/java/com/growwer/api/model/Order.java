@@ -241,7 +241,7 @@ public class Order {
   public static final String SERIALIZED_NAME_STATE_HISTORY = "stateHistory";
   @SerializedName(SERIALIZED_NAME_STATE_HISTORY)
   @javax.annotation.Nonnull
-  private List<OrderStateHistoryInner> stateHistory = new ArrayList<>();
+  private List<OrderStateHistoryInner> stateHistory;
 
   public static final String SERIALIZED_NAME_CHANNEL = "channel";
   @SerializedName(SERIALIZED_NAME_CHANNEL)

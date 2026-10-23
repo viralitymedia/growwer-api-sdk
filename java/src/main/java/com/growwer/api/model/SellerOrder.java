@@ -206,7 +206,7 @@ public class SellerOrder {
   public static final String SERIALIZED_NAME_AVAILABLE_ACTIONS = "availableActions";
   @SerializedName(SERIALIZED_NAME_AVAILABLE_ACTIONS)
   @javax.annotation.Nonnull
-  private List<AvailableActionsEnum> availableActions = new ArrayList<>();
+  private List<AvailableActionsEnum> availableActions;
 
   public static final String SERIALIZED_NAME_EARNINGS = "earnings";
   @SerializedName(SERIALIZED_NAME_EARNINGS)
@@ -256,7 +256,7 @@ public class SellerOrder {
   public static final String SERIALIZED_NAME_STATE_HISTORY = "stateHistory";
   @SerializedName(SERIALIZED_NAME_STATE_HISTORY)
   @javax.annotation.Nonnull
-  private List<OrderStateHistoryInner> stateHistory = new ArrayList<>();
+  private List<OrderStateHistoryInner> stateHistory;
 
   public static final String SERIALIZED_NAME_CHANNEL = "channel";
   @SerializedName(SERIALIZED_NAME_CHANNEL)

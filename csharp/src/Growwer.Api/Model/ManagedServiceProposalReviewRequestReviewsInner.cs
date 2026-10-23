@@ -76,7 +76,12 @@ namespace Growwer.Api.Model
         {
             this.ProposalId = proposalId;
             this.Decision = decision;
-            this.Comment = comment;
+            // a null "comment" leaves Comment unset, so it is not sent
+            this._Comment = comment;
+            if (this.Comment != null)
+            {
+                this._flagComment = true;
+            }
             this.AdditionalProperties = new Dictionary<string, object>();
         }
 
@@ -91,7 +96,27 @@ namespace Growwer.Api.Model
         /// </summary>
         /// <value>Required to reject, at most 2000 characters once trimmed; the team reads it.</value>
         [DataMember(Name = "comment", EmitDefaultValue = true)]
-        public string Comment { get; set; }
+        public string Comment
+        {
+            get { return _Comment; }
+            set
+            {
+                _Comment = value;
+                _flagComment = true;
+            }
+        }
+        private string _Comment;
+        private bool _flagComment;
+
+        /// <summary>
+        /// Returns true once Comment has been set, so that a property left unset is left out of
+        /// the request rather than sent as null, which the API reads as a value.
+        /// </summary>
+        /// <returns>true once Comment has been set (boolean)</returns>
+        public bool ShouldSerializeComment()
+        {
+            return _flagComment;
+        }
 
         /// <summary>
         /// Gets or Sets additional properties

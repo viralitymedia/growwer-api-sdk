@@ -72,7 +72,8 @@
         "scmConnection": "scm:git:git://github.com/viralitymedia/growwer-api-sdk.git",
         "scmDeveloperConnection": "scm:git:ssh://git@github.com/viralitymedia/growwer-api-sdk.git",
         "scmUrl": "https://github.com/viralitymedia/growwer-api-sdk",
-        "disallowAdditionalPropertiesIfNotPresent": false
+        "disallowAdditionalPropertiesIfNotPresent": false,
+        "containerDefaultToNull": true
       }
     },
     {

@@ -120,7 +120,7 @@ public class UpdateProjectRequest {
   public static final String SERIALIZED_NAME_TOPICS = "topics";
   @SerializedName(SERIALIZED_NAME_TOPICS)
   @javax.annotation.Nullable
-  private List<Integer> topics = new ArrayList<>();
+  private List<Integer> topics;
 
   public static final String SERIALIZED_NAME_LANGUAGE = "language";
   @SerializedName(SERIALIZED_NAME_LANGUAGE)
@@ -135,12 +135,12 @@ public class UpdateProjectRequest {
   public static final String SERIALIZED_NAME_PROMOTED_PRODUCTS = "promotedProducts";
   @SerializedName(SERIALIZED_NAME_PROMOTED_PRODUCTS)
   @javax.annotation.Nullable
-  private List<String> promotedProducts = new ArrayList<>();
+  private List<String> promotedProducts;
 
   public static final String SERIALIZED_NAME_USER_KEYWORDS = "userKeywords";
   @SerializedName(SERIALIZED_NAME_USER_KEYWORDS)
   @javax.annotation.Nullable
-  private List<String> userKeywords = new ArrayList<>();
+  private List<String> userKeywords;
 
   public UpdateProjectRequest() {
   }

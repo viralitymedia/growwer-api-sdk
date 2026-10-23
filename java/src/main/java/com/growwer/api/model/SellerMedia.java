@@ -209,12 +209,12 @@ public class SellerMedia {
   public static final String SERIALIZED_NAME_TOPICS = "topics";
   @SerializedName(SERIALIZED_NAME_TOPICS)
   @javax.annotation.Nonnull
-  private List<Integer> topics = new ArrayList<>();
+  private List<Integer> topics;
 
   public static final String SERIALIZED_NAME_BANNED_TOPICS = "bannedTopics";
   @SerializedName(SERIALIZED_NAME_BANNED_TOPICS)
   @javax.annotation.Nonnull
-  private List<Integer> bannedTopics = new ArrayList<>();
+  private List<Integer> bannedTopics;
 
   public static final String SERIALIZED_NAME_PROVIDER_COMMENTS = "providerComments";
   @SerializedName(SERIALIZED_NAME_PROVIDER_COMMENTS)

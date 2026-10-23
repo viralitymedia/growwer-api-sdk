@@ -110,8 +110,18 @@ namespace Growwer.Api.Model
                 throw new ArgumentNullException("promotedProducts is a required property for CreateProjectRequest and cannot be null");
             }
             this.PromotedProducts = promotedProducts;
-            this.Name = name;
-            this.Country = country;
+            // a null "name" leaves Name unset, so it is not sent
+            this._Name = name;
+            if (this.Name != null)
+            {
+                this._flagName = true;
+            }
+            // a null "country" leaves Country unset, so it is not sent
+            this._Country = country;
+            if (this.Country != null)
+            {
+                this._flagCountry = true;
+            }
             this.UserKeywords = userKeywords;
             this.AdditionalProperties = new Dictionary<string, object>();
         }
@@ -120,7 +130,27 @@ namespace Growwer.Api.Model
         /// Gets or Sets Name
         /// </summary>
         [DataMember(Name = "name", EmitDefaultValue = true)]
-        public string Name { get; set; }
+        public string Name
+        {
+            get { return _Name; }
+            set
+            {
+                _Name = value;
+                _flagName = true;
+            }
+        }
+        private string _Name;
+        private bool _flagName;
+
+        /// <summary>
+        /// Returns true once Name has been set, so that a property left unset is left out of
+        /// the request rather than sent as null, which the API reads as a value.
+        /// </summary>
+        /// <returns>true once Name has been set (boolean)</returns>
+        public bool ShouldSerializeName()
+        {
+            return _flagName;
+        }
 
         /// <summary>
         /// Gets or Sets RootUrl
@@ -156,7 +186,27 @@ namespace Growwer.Api.Model
         <example>ES</example>
         */
         [DataMember(Name = "country", EmitDefaultValue = true)]
-        public string Country { get; set; }
+        public string Country
+        {
+            get { return _Country; }
+            set
+            {
+                _Country = value;
+                _flagCountry = true;
+            }
+        }
+        private string _Country;
+        private bool _flagCountry;
+
+        /// <summary>
+        /// Returns true once Country has been set, so that a property left unset is left out of
+        /// the request rather than sent as null, which the API reads as a value.
+        /// </summary>
+        /// <returns>true once Country has been set (boolean)</returns>
+        public bool ShouldSerializeCountry()
+        {
+            return _flagCountry;
+        }
 
         /// <summary>
         /// 5 to 10 products or services the campaign promotes.

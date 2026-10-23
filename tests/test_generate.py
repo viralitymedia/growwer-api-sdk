@@ -15,6 +15,7 @@ ROOT = Path(__file__).resolve().parent.parent
 # generators here do not write, so each copy of the entry point gets empty stand-ins for them.
 POST_PROCESSING_SCRIPTS = (
     "csharp-nullable-enums.py",
+    "csharp-optional-nullables.py",
     "go-oneof-unreachable.py",
     "java-pom-publish.py",
     "license.py",
@@ -692,6 +693,264 @@ class RubyOneOfUnknownKeysTest(unittest.TestCase):
     def test_the_committed_ruby_client_has_no_one_of_check_left(self):
         for path in (ROOT / "ruby/lib/growwer/models").glob("*.rb"):
             self.assertNotIn("data.keys - const.acceptable_attributes", path.read_text(encoding="utf-8"), path.name)
+
+
+class CSharpOptionalNullablesTest(unittest.TestCase):
+    """scripts/csharp-optional-nullables.py makes the C# client leave an optional, nullable request
+    property out of the body until it is set, instead of sending it as null."""
+
+    @staticmethod
+    def model(name, members):
+        """A C# model shaped like the generator's: (JSON name, type, EmitDefaultValue) per member."""
+        pascal = [json_name[:1].upper() + json_name[1:] for json_name, _, _ in members]
+        arguments = ", ".join(f"{kind} {json_name} = default" for json_name, kind, _ in members)
+        assignments = "".join(f"            this.{prop} = {json_name};\n" for prop, (json_name, _, _) in zip(pascal, members))
+        declarations = "".join(
+            "\n"
+            "        /// <summary>\n"
+            f"        /// Gets or Sets {prop}\n"
+            "        /// </summary>\n"
+            f"        [DataMember(Name = \"{json_name}\", EmitDefaultValue = {str(emit).lower()})]\n"
+            f"        public {kind} {prop} {{ get; set; }}\n"
+            for prop, (json_name, kind, emit) in zip(pascal, members)
+        )
+        return (
+            "namespace Growwer.Api.Model\n"
+            "{\n"
+            f"    public partial class {name}\n"
+            "    {\n"
+            f"        public {name}({arguments})\n"
+            "        {\n"
+            f"{assignments}"
+            "        }\n"
+            f"{declarations}"
+            "    }\n"
+            "}\n"
+        )
+
+    @staticmethod
+    def contract(body, schemas=None, media_type="application/json", responses=None):
+        operation = {"operationId": "updateProject", "requestBody": {"content": {media_type: {"schema": body}}}}
+        if responses is not None:
+            operation["responses"] = responses
+        return {"paths": {"/projects/{id}": {"patch": operation}}, "components": {"schemas": schemas or {}}}
+
+    def run_script(self, contract, models, mappings=None, runs=1):
+        with tempfile.TemporaryDirectory(prefix="growwer-csharp-nullables-test-") as directory:
+            root = Path(directory)
+            (root / "scripts").mkdir()
+            shutil.copyfile(ROOT / "scripts/csharp-optional-nullables.py", root / "scripts/csharp-optional-nullables.py")
+            (root / "openapi.json").write_text(json.dumps(contract))
+            (root / "sdks.json").write_text(json.dumps({"inlineSchemaNameMappings": mappings or {}}))
+            folder = root / "csharp/src/Growwer.Api/Model"
+            folder.mkdir(parents=True)
+            for name, text in models.items():
+                (folder / f"{name}.cs").write_text(text)
+            for _ in range(runs):
+                result = subprocess.run(
+                    [sys.executable, "scripts/csharp-optional-nullables.py"],
+                    cwd=root,
+                    capture_output=True,
+                    text=True,
+                    check=False,
+                )
+            return result, {path.stem: path.read_text() for path in folder.glob("*.cs")}
+
+    PROJECT_BODY = {
+        "type": "object",
+        "required": ["title"],
+        "properties": {
+            "title": {"type": "string", "nullable": True},
+            "language": {"type": "string"},
+            "country": {"type": "string", "nullable": True},
+        },
+    }
+    PROJECT_MEMBERS = [("title", "string", True), ("language", "string", False), ("country", "string", True)]
+
+    def test_an_optional_nullable_property_is_sent_only_once_set_and_nothing_else_changes(self):
+        result, models = self.run_script(
+            self.contract(self.PROJECT_BODY),
+            {"UpdateProjectRequest": self.model("UpdateProjectRequest", self.PROJECT_MEMBERS)},
+        )
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        original = self.model("UpdateProjectRequest", self.PROJECT_MEMBERS)
+        expected = original.replace(
+            "            this.Country = country;\n",
+            "            // a null \"country\" leaves Country unset, so it is not sent\n"
+            "            this._Country = country;\n"
+            "            if (this.Country != null)\n"
+            "            {\n"
+            "                this._flagCountry = true;\n"
+            "            }\n",
+        ).replace(
+            "        public string Country { get; set; }\n",
+            "        public string Country\n"
+            "        {\n"
+            "            get { return _Country; }\n"
+            "            set\n"
+            "            {\n"
+            "                _Country = value;\n"
+            "                _flagCountry = true;\n"
+            "            }\n"
+            "        }\n"
+            "        private string _Country;\n"
+            "        private bool _flagCountry;\n"
+            "\n"
+            "        /// <summary>\n"
+            "        /// Returns true once Country has been set, so that a property left unset is left out of\n"
+            "        /// the request rather than sent as null, which the API reads as a value.\n"
+            "        /// </summary>\n"
+            "        /// <returns>true once Country has been set (boolean)</returns>\n"
+            "        public bool ShouldSerializeCountry()\n"
+            "        {\n"
+            "            return _flagCountry;\n"
+            "        }\n",
+        )
+        self.assertNotEqual(original, expected)
+        self.assertEqual(expected, models["UpdateProjectRequest"])
+        self.assertIn("optional nullables: UpdateProjectRequest.Country", result.stdout)
+
+    def test_nested_inline_objects_array_items_references_and_pinned_names_are_followed(self):
+        body = {
+            "type": "object",
+            "properties": {
+                "linkAdditionOffer": {
+                    "type": "object",
+                    "nullable": True,
+                    "properties": {"fee": {"allOf": [{"$ref": "#/components/schemas/MoneyOrNull"}]}},
+                },
+                "options": {
+                    "type": "array",
+                    "items": {"type": "object", "properties": {"note": {"type": "string", "nullable": True}}},
+                },
+                "owner": {"$ref": "#/components/schemas/Owner"},
+                "pinned": {"type": "object", "properties": {"memo": {"type": "string", "nullable": True}}},
+            },
+        }
+        schemas = {
+            "MoneyOrNull": {"type": "object", "nullable": True, "properties": {"amount": {"type": "integer"}}},
+            "Owner": {"type": "object", "properties": {"email": {"type": "string", "nullable": True}}},
+            "Report": {"type": "object", "properties": {"comment": {"type": "string", "nullable": True}}},
+        }
+        responses = {"200": {"content": {"application/json": {"schema": {"$ref": "#/components/schemas/Report"}}}}}
+        models = {
+            "UpdateProjectRequest": self.model(
+                "UpdateProjectRequest",
+                [
+                    ("linkAdditionOffer", "UpdateProjectRequestLinkAdditionOffer", True),
+                    ("options", "List<UpdateProjectRequestOptionsInner>", False),
+                    ("owner", "Owner", False),
+                    ("pinned", "PinnedThing", False),
+                ],
+            ),
+            "UpdateProjectRequestLinkAdditionOffer": self.model(
+                "UpdateProjectRequestLinkAdditionOffer", [("fee", "MoneyOrNull", True)]
+            ),
+            "UpdateProjectRequestOptionsInner": self.model("UpdateProjectRequestOptionsInner", [("note", "string", True)]),
+            "Owner": self.model("Owner", [("email", "string", True)]),
+            "PinnedThing": self.model("PinnedThing", [("memo", "string", True)]),
+            "Report": self.model("Report", [("comment", "string", True)]),
+        }
+        result, patched = self.run_script(
+            self.contract(body, schemas, responses=responses),
+            models,
+            mappings={"updateProject_request_pinned": "PinnedThing"},
+        )
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        for name, prop in (
+            ("UpdateProjectRequest", "LinkAdditionOffer"),
+            ("UpdateProjectRequestLinkAdditionOffer", "Fee"),
+            ("UpdateProjectRequestOptionsInner", "Note"),
+            ("Owner", "Email"),
+            ("PinnedThing", "Memo"),
+        ):
+            with self.subTest(model=name):
+                self.assertIn(f"public bool ShouldSerialize{prop}()", patched[name])
+        for prop in ("Options", "Owner", "Pinned"):
+            self.assertNotIn(f"ShouldSerialize{prop}", patched["UpdateProjectRequest"])
+        self.assertEqual(models["Report"], patched["Report"])
+
+    def test_a_body_sent_as_form_fields_is_left_alone(self):
+        models = {"UpdateProjectRequest": self.model("UpdateProjectRequest", self.PROJECT_MEMBERS)}
+        result, patched = self.run_script(self.contract(self.PROJECT_BODY, media_type="multipart/form-data"), models)
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("remove scripts/csharp-optional-nullables.py", result.stderr)
+        self.assertEqual(models, patched)
+
+    def test_a_second_run_over_its_own_output_changes_nothing(self):
+        models = {"UpdateProjectRequest": self.model("UpdateProjectRequest", self.PROJECT_MEMBERS)}
+        once_result, once = self.run_script(self.contract(self.PROJECT_BODY), models)
+        twice_result, twice = self.run_script(self.contract(self.PROJECT_BODY), models, runs=2)
+        self.assertEqual(0, once_result.returncode, once_result.stderr)
+        self.assertEqual(0, twice_result.returncode, twice_result.stderr)
+        self.assertEqual(once, twice)
+        self.assertIn("optional nullables: already patched", twice_result.stdout)
+
+    def test_a_property_without_its_model_fails_the_run(self):
+        result, _ = self.run_script(self.contract(self.PROJECT_BODY), {})
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("no C# model UpdateProjectRequest.cs", result.stderr)
+        self.assertIn("inlineSchemaNameMappings", result.stderr)
+
+    def test_a_declaration_or_constructor_in_another_shape_fails_the_run_and_is_not_written(self):
+        regular = self.model("UpdateProjectRequest", self.PROJECT_MEMBERS)
+        cases = {
+            "no property to patch": (
+                regular.replace("public string Country { get; set; }", "public string Country { get; init; }"),
+                "no optional, nullable property declaration for country",
+            ),
+            "no constructor assignment": (
+                regular.replace("            this.Country = country;\n", ""),
+                "expected one constructor assignment to Country, found 0",
+            ),
+            "a ShouldSerialize method of its own": (
+                regular.replace("    }\n}\n", "        public bool ShouldSerializeCountry() { return true; }\n    }\n}\n"),
+                "Country already has a ShouldSerializeCountry method",
+            ),
+        }
+        for case, (text, message) in cases.items():
+            with self.subTest(case=case):
+                result, models = self.run_script(self.contract(self.PROJECT_BODY), {"UpdateProjectRequest": text})
+                self.assertNotEqual(0, result.returncode)
+                self.assertIn(message, result.stderr)
+                self.assertEqual(text, models["UpdateProjectRequest"])
+
+    def test_a_generator_that_already_leaves_these_properties_out_fails_the_run(self):
+        members = [("title", "string", True), ("language", "string", False), ("country", "string", False)]
+        models = {"UpdateProjectRequest": self.model("UpdateProjectRequest", members)}
+        result, patched = self.run_script(self.contract(self.PROJECT_BODY), models)
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("remove scripts/csharp-optional-nullables.py", result.stderr)
+        self.assertEqual(models, patched)
+
+    def test_an_inline_object_under_a_composition_fails_the_run(self):
+        for keyword in ("oneOf", "anyOf", "allOf"):
+            with self.subTest(keyword=keyword):
+                part = {"type": "object", "properties": {"note": {"type": "string", "nullable": True}}}
+                if keyword == "allOf":
+                    part = {"properties": {"inner": part}}
+                body = {"type": "object", keyword: [part]}
+                result, _ = self.run_script(self.contract(body), {})
+                self.assertNotEqual(0, result.returncode)
+                self.assertIn(f"an inline object under {keyword} is not supported", result.stderr)
+
+    def test_the_committed_csharp_client_leaves_no_optional_nullable_request_property_unpatched(self):
+        folder = ROOT / "csharp/src/Growwer.Api/Model"
+        models = {path.stem: path.read_text(encoding="utf-8") for path in folder.glob("*.cs")}
+        result, patched = self.run_script(
+            json.loads((ROOT / "openapi.json").read_text(encoding="utf-8")),
+            models,
+            mappings=json.loads((ROOT / "sdks.json").read_text(encoding="utf-8")).get("inlineSchemaNameMappings", {}),
+        )
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        self.assertIn("already patched", result.stdout)
+        self.assertEqual(models, patched)
+        for name, prop in (
+            ("UpdateProjectRequest", "Country"),
+            ("UpdateSellerMediaRequest", "LinkAdditionOffer"),
+            ("CreateSellerMediaRequest", "LinkAdditionOffer"),
+        ):
+            self.assertIn(f"public bool ShouldSerialize{prop}()", models[name], name)
 
 
 class PythonDependencyFloorsTest(unittest.TestCase):

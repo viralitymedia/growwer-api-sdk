@@ -56,7 +56,7 @@ public class UpdateSellerMediaRequestLinkAdditionOffer {
   public static final String SERIALIZED_NAME_PRICING_OPTIONS = "pricingOptions";
   @SerializedName(SERIALIZED_NAME_PRICING_OPTIONS)
   @javax.annotation.Nonnull
-  private List<UpdateSellerMediaRequestLinkAdditionOfferPricingOptionsInner> pricingOptions = new ArrayList<>();
+  private List<UpdateSellerMediaRequestLinkAdditionOfferPricingOptionsInner> pricingOptions;
 
   public UpdateSellerMediaRequestLinkAdditionOffer() {
   }

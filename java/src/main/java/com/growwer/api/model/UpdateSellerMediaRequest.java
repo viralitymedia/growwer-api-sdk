@@ -126,7 +126,7 @@ public class UpdateSellerMediaRequest {
   public static final String SERIALIZED_NAME_EXTRA_SERVICES = "extraServices";
   @SerializedName(SERIALIZED_NAME_EXTRA_SERVICES)
   @javax.annotation.Nullable
-  private List<UpdateSellerMediaRequestExtraServicesInner> extraServices = new ArrayList<>();
+  private List<UpdateSellerMediaRequestExtraServicesInner> extraServices;
 
   public UpdateSellerMediaRequest() {
   }

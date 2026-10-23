@@ -113,7 +113,12 @@ namespace Growwer.Api.Model
             this.AcceptMediaPublishingTerms = acceptMediaPublishingTerms;
             this.DeclareMediaOwnership = declareMediaOwnership;
             this.BannedTopics = bannedTopics;
-            this.LinkAdditionOffer = linkAdditionOffer;
+            // a null "linkAdditionOffer" leaves LinkAdditionOffer unset, so it is not sent
+            this._LinkAdditionOffer = linkAdditionOffer;
+            if (this.LinkAdditionOffer != null)
+            {
+                this._flagLinkAdditionOffer = true;
+            }
             this.ExtraServices = extraServices;
         }
 
@@ -170,7 +175,27 @@ namespace Growwer.Api.Model
         /// Gets or Sets LinkAdditionOffer
         /// </summary>
         [DataMember(Name = "linkAdditionOffer", EmitDefaultValue = true)]
-        public UpdateSellerMediaRequestLinkAdditionOffer LinkAdditionOffer { get; set; }
+        public UpdateSellerMediaRequestLinkAdditionOffer LinkAdditionOffer
+        {
+            get { return _LinkAdditionOffer; }
+            set
+            {
+                _LinkAdditionOffer = value;
+                _flagLinkAdditionOffer = true;
+            }
+        }
+        private UpdateSellerMediaRequestLinkAdditionOffer _LinkAdditionOffer;
+        private bool _flagLinkAdditionOffer;
+
+        /// <summary>
+        /// Returns true once LinkAdditionOffer has been set, so that a property left unset is left out of
+        /// the request rather than sent as null, which the API reads as a value.
+        /// </summary>
+        /// <returns>true once LinkAdditionOffer has been set (boolean)</returns>
+        public bool ShouldSerializeLinkAdditionOffer()
+        {
+            return _flagLinkAdditionOffer;
+        }
 
         /// <summary>
         /// Gets or Sets ExtraServices

@@ -16,6 +16,11 @@ import com.growwer.api.model.PostOrderBriefing;
 import com.growwer.api.model.SellerFeesOrNull;
 import com.growwer.api.model.SellerMedia;
 import com.growwer.api.model.SellerMediaPostOfferPricingOptionsInner;
+import com.growwer.api.model.UpdateSellerMediaRequest;
+import com.growwer.api.model.UpdateSellerMediaRequestPostOffer;
+import com.growwer.api.model.UpdateSellerMediaRequestPostOfferPricingOptionsInner;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -25,12 +30,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 import okhttp3.MediaType;
 import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import okio.Buffer;
 
 /**
  * Deserialises the shared response fixtures through the generated Java client, offline.
@@ -85,6 +92,12 @@ public class FixtureTest {
     private Request sent() {
         equal("requests sent", sent.size(), 1);
         return sent.get(0);
+    }
+
+    private JsonObject sentBody() throws Exception {
+        Buffer buffer = new Buffer();
+        sent().body().writeTo(buffer);
+        return JsonParser.parseString(buffer.readUtf8()).getAsJsonObject();
     }
 
     void getMeCallsProductionWithTheBearerKey() throws Exception {
@@ -228,6 +241,25 @@ public class FixtureTest {
         equal("feeWhenSellerDoesNotWritePost", fees.getFeeWhenSellerDoesNotWritePost(), null);
     }
 
+    // A PATCH sends only what the caller set: an empty list for a property left alone would clear the
+    // media's promoted networks or extra services.
+    void aPartialSellerMediaUpdateSendsOnlyThePropertiesSet() throws Exception {
+        UpdateSellerMediaRequest update = new UpdateSellerMediaRequest().postOffer(new UpdateSellerMediaRequestPostOffer()
+            .addPricingOptionsItem(new UpdateSellerMediaRequestPostOfferPricingOptionsInner()
+                .linkType(UpdateSellerMediaRequestPostOfferPricingOptionsInner.LinkTypeEnum.DOFOLLOW)
+                .feeWhenSellerWritesPost(new MoneyOrNull().amount(6000).currency("EUR"))));
+        new SellerMediasApi(answer(fixture("seller-media.json"))).updateSellerMedia(MEDIA_ID, "key-1", update);
+
+        equal("method", sent().method(), "PATCH");
+        JsonObject body = sentBody();
+        equal("request keys", body.keySet(), Set.of("postOffer"));
+        JsonObject postOffer = body.getAsJsonObject("postOffer");
+        equal("postOffer keys", postOffer.keySet(), Set.of("pricingOptions"));
+        JsonObject option = postOffer.getAsJsonArray("pricingOptions").get(0).getAsJsonObject();
+        equal("option keys", option.keySet(), Set.of("linkType", "feeWhenSellerWritesPost"));
+        equal("fee", option.getAsJsonObject("feeWhenSellerWritesPost").get("amount").getAsInt(), 6000);
+    }
+
     void theErrorEnvelopeIsReadableFromTheException() throws Exception {
         CatalogueApi api = new CatalogueApi(answer(429, fixture("error.json"), "application/json",
             "Retry-After", "3600", "X-Request-Id", "0b8f6c2e-4a1d-4f3b-9c7e-5d2a8e1f6b34"));
@@ -277,6 +309,7 @@ public class FixtureTest {
         cases.put("a catalogue media reads a null linkType beside present offers", test::aCatalogueMediaReadsANullLinkTypeBesidePresentOffers);
         cases.put("a seller media reads null competitiveFees", test::aSellerMediaReadsNullCompetitiveFees);
         cases.put("a seller media reads competitiveFees with one side null", test::aSellerMediaReadsCompetitiveFeesWithOneSideNull);
+        cases.put("a partial seller media update sends only the properties set", test::aPartialSellerMediaUpdateSendsOnlyThePropertiesSet);
         cases.put("the error envelope is readable from the ApiException", test::theErrorEnvelopeIsReadableFromTheException);
         cases.put("a binary download returns the exact bytes", test::aBinaryDownloadReturnsTheExactBytes);
         for (Map.Entry<String, Case> entry : cases.entrySet()) {

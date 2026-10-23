@@ -70,7 +70,7 @@ public class Error {
   public static final String SERIALIZED_NAME_DETAILS = "details";
   @SerializedName(SERIALIZED_NAME_DETAILS)
   @javax.annotation.Nullable
-  private Map<String, Object> details = new HashMap<>();
+  private Map<String, Object> details;
 
   public Error() {
   }

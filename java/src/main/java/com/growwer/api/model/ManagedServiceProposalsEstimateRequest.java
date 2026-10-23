@@ -56,7 +56,7 @@ public class ManagedServiceProposalsEstimateRequest {
   public static final String SERIALIZED_NAME_ACCEPT = "accept";
   @SerializedName(SERIALIZED_NAME_ACCEPT)
   @javax.annotation.Nullable
-  private List<UUID> accept = new ArrayList<>();
+  private List<UUID> accept;
 
   public ManagedServiceProposalsEstimateRequest() {
   }

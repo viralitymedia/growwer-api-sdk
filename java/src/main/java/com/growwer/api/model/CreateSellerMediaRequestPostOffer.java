@@ -58,7 +58,7 @@ public class CreateSellerMediaRequestPostOffer {
   public static final String SERIALIZED_NAME_PRICING_OPTIONS = "pricingOptions";
   @SerializedName(SERIALIZED_NAME_PRICING_OPTIONS)
   @javax.annotation.Nonnull
-  private List<UpdateSellerMediaRequestPostOfferPricingOptionsInner> pricingOptions = new ArrayList<>();
+  private List<UpdateSellerMediaRequestPostOfferPricingOptionsInner> pricingOptions;
 
   public static final String SERIALIZED_NAME_MAXIMUM_LINKS = "maximumLinks";
   @SerializedName(SERIALIZED_NAME_MAXIMUM_LINKS)
@@ -185,7 +185,7 @@ public class CreateSellerMediaRequestPostOffer {
   public static final String SERIALIZED_NAME_PROMOTED_SOCIAL_NETWORKS = "promotedSocialNetworks";
   @SerializedName(SERIALIZED_NAME_PROMOTED_SOCIAL_NETWORKS)
   @javax.annotation.Nullable
-  private Set<PromotedSocialNetworksEnum> promotedSocialNetworks = new LinkedHashSet<>();
+  private Set<PromotedSocialNetworksEnum> promotedSocialNetworks;
 
   public CreateSellerMediaRequestPostOffer() {
   }

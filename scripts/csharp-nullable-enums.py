@@ -9,10 +9,12 @@ to the property and its constructor parameter in each model that holds such a pr
 
 The models come from the contract: a component schema's own properties land in its class and in
 every schema that extends it through allOf; an inline object lands in a class named after its
-path (SavedFilter.notifications -> SavedFilterNotifications). A model that cannot be found fails
-the run rather than leaving one unpatched. When a generator upgrade declares these properties
-nullable itself, nothing is left to patch and this step fails, so it is removed then rather than
-kept as a silent no-op.
+path (SavedFilter.notifications -> SavedFilterNotifications), and one in a component's own allOf
+part in a class with "AllOf" after the component, whose array items take no "Inner"
+(ProjectCatalogueMedia.project.aiKeywords[] -> ProjectCatalogueMediaAllOfProjectAiKeywords). A
+model that cannot be found fails the run rather than leaving one unpatched. When a generator
+upgrade declares these properties nullable itself, nothing is left to patch and this step fails,
+so it is removed then rather than kept as a silent no-op.
 """
 
 import json

@@ -30,7 +30,7 @@ namespace Growwer.Api.Model
     /// <summary>
     /// UpdateSellerMediaRequestPostOfferPricingOptionsInner
     /// </summary>
-    [DataContract(Name = "updateSellerMedia_request_postOffer_pricingOptions_inner")]
+    [DataContract(Name = "UpdateSellerMediaRequestPostOfferPricingOptionsInner")]
     public partial class UpdateSellerMediaRequestPostOfferPricingOptionsInner : IValidatableObject
     {
         /// <summary>
@@ -81,8 +81,18 @@ namespace Growwer.Api.Model
         public UpdateSellerMediaRequestPostOfferPricingOptionsInner(LinkTypeEnum linkType = default, MoneyOrNull feeWhenSellerWritesPost = default, MoneyOrNull feeWhenSellerDoesNotWritePost = default)
         {
             this.LinkType = linkType;
-            this.FeeWhenSellerWritesPost = feeWhenSellerWritesPost;
-            this.FeeWhenSellerDoesNotWritePost = feeWhenSellerDoesNotWritePost;
+            // a null "feeWhenSellerWritesPost" leaves FeeWhenSellerWritesPost unset, so it is not sent
+            this._FeeWhenSellerWritesPost = feeWhenSellerWritesPost;
+            if (this.FeeWhenSellerWritesPost != null)
+            {
+                this._flagFeeWhenSellerWritesPost = true;
+            }
+            // a null "feeWhenSellerDoesNotWritePost" leaves FeeWhenSellerDoesNotWritePost unset, so it is not sent
+            this._FeeWhenSellerDoesNotWritePost = feeWhenSellerDoesNotWritePost;
+            if (this.FeeWhenSellerDoesNotWritePost != null)
+            {
+                this._flagFeeWhenSellerDoesNotWritePost = true;
+            }
             this.AdditionalProperties = new Dictionary<string, object>();
         }
 
@@ -91,14 +101,54 @@ namespace Growwer.Api.Model
         /// </summary>
         /// <value>What you are paid for a post you write; null or left out when you do not offer it.</value>
         [DataMember(Name = "feeWhenSellerWritesPost", EmitDefaultValue = true)]
-        public MoneyOrNull FeeWhenSellerWritesPost { get; set; }
+        public MoneyOrNull FeeWhenSellerWritesPost
+        {
+            get { return _FeeWhenSellerWritesPost; }
+            set
+            {
+                _FeeWhenSellerWritesPost = value;
+                _flagFeeWhenSellerWritesPost = true;
+            }
+        }
+        private MoneyOrNull _FeeWhenSellerWritesPost;
+        private bool _flagFeeWhenSellerWritesPost;
+
+        /// <summary>
+        /// Returns true once FeeWhenSellerWritesPost has been set, so that a property left unset is left out of
+        /// the request rather than sent as null, which the API reads as a value.
+        /// </summary>
+        /// <returns>true once FeeWhenSellerWritesPost has been set (boolean)</returns>
+        public bool ShouldSerializeFeeWhenSellerWritesPost()
+        {
+            return _flagFeeWhenSellerWritesPost;
+        }
 
         /// <summary>
         /// What you are paid for a post the buyer or Growwer writes; null or left out when you do not offer it.
         /// </summary>
         /// <value>What you are paid for a post the buyer or Growwer writes; null or left out when you do not offer it.</value>
         [DataMember(Name = "feeWhenSellerDoesNotWritePost", EmitDefaultValue = true)]
-        public MoneyOrNull FeeWhenSellerDoesNotWritePost { get; set; }
+        public MoneyOrNull FeeWhenSellerDoesNotWritePost
+        {
+            get { return _FeeWhenSellerDoesNotWritePost; }
+            set
+            {
+                _FeeWhenSellerDoesNotWritePost = value;
+                _flagFeeWhenSellerDoesNotWritePost = true;
+            }
+        }
+        private MoneyOrNull _FeeWhenSellerDoesNotWritePost;
+        private bool _flagFeeWhenSellerDoesNotWritePost;
+
+        /// <summary>
+        /// Returns true once FeeWhenSellerDoesNotWritePost has been set, so that a property left unset is left out of
+        /// the request rather than sent as null, which the API reads as a value.
+        /// </summary>
+        /// <returns>true once FeeWhenSellerDoesNotWritePost has been set (boolean)</returns>
+        public bool ShouldSerializeFeeWhenSellerDoesNotWritePost()
+        {
+            return _flagFeeWhenSellerDoesNotWritePost;
+        }
 
         /// <summary>
         /// Gets or Sets additional properties

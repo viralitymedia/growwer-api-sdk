@@ -138,7 +138,7 @@ public class ProjectCatalogueMedia {
   public static final String SERIALIZED_NAME_TOPICS = "topics";
   @SerializedName(SERIALIZED_NAME_TOPICS)
   @javax.annotation.Nonnull
-  private List<Integer> topics = new ArrayList<>();
+  private List<Integer> topics;
 
   public static final String SERIALIZED_NAME_METRICS = "metrics";
   @SerializedName(SERIALIZED_NAME_METRICS)

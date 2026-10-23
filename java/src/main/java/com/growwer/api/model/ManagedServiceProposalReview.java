@@ -62,7 +62,7 @@ public class ManagedServiceProposalReview {
   public static final String SERIALIZED_NAME_PROPOSALS = "proposals";
   @SerializedName(SERIALIZED_NAME_PROPOSALS)
   @javax.annotation.Nonnull
-  private List<ManagedServiceProposal> proposals = new ArrayList<>();
+  private List<ManagedServiceProposal> proposals;
 
   public ManagedServiceProposalReview() {
   }

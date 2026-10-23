@@ -147,9 +147,11 @@ Class | Method | HTTP request | Description
 *SavedFiltersApi* | [**listSavedFilters**](docs/Api/SavedFiltersApi.md#listsavedfilters) | **GET** /api/v1/projects/{id}/saved-filters | List the saved filters of a project
 *SellerAccountApi* | [**putSellerHoliday**](docs/Api/SellerAccountApi.md#putsellerholiday) | **PUT** /api/v1/seller/holiday | Set your holiday
 *SellerMediasApi* | [**applySellerMediaCompetitiveFees**](docs/Api/SellerMediasApi.md#applysellermediacompetitivefees) | **POST** /api/v1/seller/medias/{id}/apply-competitive-fees | Set the competitive fees Growwer suggests
+*SellerMediasApi* | [**createSellerMedia**](docs/Api/SellerMediasApi.md#createsellermedia) | **POST** /api/v1/seller/medias | Register a media you sell on
+*SellerMediasApi* | [**deleteSellerMedia**](docs/Api/SellerMediasApi.md#deletesellermedia) | **DELETE** /api/v1/seller/medias/{id} | Delete a media you sell on
 *SellerMediasApi* | [**getSellerMedia**](docs/Api/SellerMediasApi.md#getsellermedia) | **GET** /api/v1/seller/medias/{id} | Get a media you sell on
 *SellerMediasApi* | [**listSellerMedias**](docs/Api/SellerMediasApi.md#listsellermedias) | **GET** /api/v1/seller/medias | List the medias you sell on
-*SellerMediasApi* | [**updateSellerMedia**](docs/Api/SellerMediasApi.md#updatesellermedia) | **PATCH** /api/v1/seller/medias/{id} | Edit the fees of a media you sell on
+*SellerMediasApi* | [**updateSellerMedia**](docs/Api/SellerMediasApi.md#updatesellermedia) | **PATCH** /api/v1/seller/medias/{id} | Edit the offer of a media you sell on
 *SellerOrdersApi* | [**acceptSellerOrder**](docs/Api/SellerOrdersApi.md#acceptsellerorder) | **POST** /api/v1/seller/orders/{id}/accept | Accept an order
 *SellerOrdersApi* | [**deliverSellerOrder**](docs/Api/SellerOrdersApi.md#deliversellerorder) | **POST** /api/v1/seller/orders/{id}/deliver | Deliver an order
 *SellerOrdersApi* | [**deliverSellerOrderDraft**](docs/Api/SellerOrdersApi.md#deliversellerorderdraft) | **POST** /api/v1/seller/orders/{id}/deliver-draft | Deliver a draft
@@ -183,6 +185,8 @@ Class | Method | HTTP request | Description
 - [CountSavedFilterMedias200Response](docs/Model/CountSavedFilterMedias200Response.md)
 - [CreateProjectRequest](docs/Model/CreateProjectRequest.md)
 - [CreateSavedFilterRequest](docs/Model/CreateSavedFilterRequest.md)
+- [CreateSellerMediaRequest](docs/Model/CreateSellerMediaRequest.md)
+- [CreateSellerMediaRequestPostOffer](docs/Model/CreateSellerMediaRequestPostOffer.md)
 - [Error](docs/Model/Error.md)
 - [GetBuyerWallet200Response](docs/Model/GetBuyerWallet200Response.md)
 - [GetMe200Response](docs/Model/GetMe200Response.md)
@@ -246,6 +250,7 @@ Class | Method | HTTP request | Description
 - [Project](docs/Model/Project.md)
 - [ProjectCatalogueMedia](docs/Model/ProjectCatalogueMedia.md)
 - [ProjectCatalogueMediaAllOfProject](docs/Model/ProjectCatalogueMediaAllOfProject.md)
+- [ProjectCatalogueMediaAllOfProjectAiKeywords](docs/Model/ProjectCatalogueMediaAllOfProjectAiKeywords.md)
 - [PutSellerHoliday200Response](docs/Model/PutSellerHoliday200Response.md)
 - [PutSellerHolidayRequest](docs/Model/PutSellerHolidayRequest.md)
 - [RequestMedias201Response](docs/Model/RequestMedias201Response.md)

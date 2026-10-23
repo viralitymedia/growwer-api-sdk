@@ -23,6 +23,8 @@ docs/CodeName.md
 docs/CountSavedFilterMedias200Response.md
 docs/CreateProjectRequest.md
 docs/CreateSavedFilterRequest.md
+docs/CreateSellerMediaRequest.md
+docs/CreateSellerMediaRequestPostOffer.md
 docs/Error.md
 docs/FilesApi.md
 docs/GetBuyerWallet200Response.md
@@ -88,6 +90,7 @@ docs/PostOrderBriefingRequest.md
 docs/Project.md
 docs/ProjectCatalogueMedia.md
 docs/ProjectCatalogueMediaAllOfProject.md
+docs/ProjectCatalogueMediaAllOfProjectAiKeywords.md
 docs/ProjectsApi.md
 docs/PutSellerHoliday200Response.md
 docs/PutSellerHolidayRequest.md
@@ -162,6 +165,8 @@ lib/growwer/models/code_name.rb
 lib/growwer/models/count_saved_filter_medias200_response.rb
 lib/growwer/models/create_project_request.rb
 lib/growwer/models/create_saved_filter_request.rb
+lib/growwer/models/create_seller_media_request.rb
+lib/growwer/models/create_seller_media_request_post_offer.rb
 lib/growwer/models/error.rb
 lib/growwer/models/get_buyer_wallet200_response.rb
 lib/growwer/models/get_me200_response.rb
@@ -225,6 +230,7 @@ lib/growwer/models/post_order_briefing_request.rb
 lib/growwer/models/project.rb
 lib/growwer/models/project_catalogue_media.rb
 lib/growwer/models/project_catalogue_media_all_of_project.rb
+lib/growwer/models/project_catalogue_media_all_of_project_ai_keywords.rb
 lib/growwer/models/put_seller_holiday200_response.rb
 lib/growwer/models/put_seller_holiday_request.rb
 lib/growwer/models/request_medias201_response.rb

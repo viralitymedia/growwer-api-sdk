@@ -172,6 +172,70 @@ var me = new AccountApi(config).GetMe();
 ```
 </details>
 
+## Changes in 1.1.0
+
+**Some code written for 1.0.2 breaks** even though this is a minor version: constructor calls,
+a `SellerMedia` built by hand, and in Java and C# two runtime changes that come with the partial
+update fix below:
+
+- **Go:** `NewUpdateSellerMediaRequestPostOffer` now takes no arguments, because
+  `postOffer.pricingOptions` is optional in an update. Other constructors gain required parameters:
+  `NewSellerMedia` gains `typology`; `NewSellerMediaPostOffer` gains `maximumLinks`,
+  `advertisingLabellingPolicy` and `promotedSocialNetworks`; `NewProjectCatalogueMediaAllOfProject`
+  gains `aiKeywords`.
+- **C#:** the `UpdateSellerMediaRequest` constructor now takes `typology` first, so a positional call
+  no longer compiles; name the arguments. The `SellerMedia` constructor inserts `typology` after
+  `url`, and `SellerMediaPostOffer` inserts `maximumLinks`, `advertisingLabellingPolicy` and
+  `promotedSocialNetworks` before `extraServices`.
+- **C# nulls passed to a constructor:** a `null` passed as a constructor argument is no longer
+  sent, so `new UpdateSellerMediaRequest(postOffer: p, linkAdditionOffer: null)` now keeps link
+  additions and `new UpdateProjectRequest(name: null)` keeps the name. To send `null`, assign the
+  property: `LinkAdditionOffer = null`, `Name = null`.
+- **Java null lists and maps:** every list and map property now starts as `null` instead of an
+  empty container, so code that reads one without a null check, such as
+  `err.getDetails().isEmpty()` or `new UpdateProjectRequest().getTopics().add(12)`, throws a
+  `NullPointerException`. Use the `add...Item` methods, which create the list.
+- **Python and Ruby:** a `SellerMedia` or catalogue media built without the new required fields
+  (`typology`, the post offer's new fields, `project.aiKeywords`), as test mocks often are, now
+  fails validation. **TypeScript:** such an object literal no longer type-checks.
+
+What changes:
+
+- **Register and delete your medias.** `SellerMediasApi` adds `createSellerMedia`
+  (`POST /seller/medias`) and `deleteSellerMedia` (`DELETE /seller/medias/{id}`). A media
+  registered already is refused with `409 media_already_registered`, and those refusals count
+  toward a daily limit (`429 media_duplicate_limit_reached`). A delete is refused with
+  `409 media_has_active_orders`, listing `details.orderIds`, while any order on the media is not
+  finished. There is no batch operation: to register many medias, call `createSellerMedia` once
+  per media, each with its own `Idempotency-Key`.
+- **More of the offer is editable.** Seller medias add `typology` in `listSellerMedias`,
+  `getSellerMedia`, `createSellerMedia` and `updateSellerMedia`. They also add
+  `postOffer.maximumLinks`, `postOffer.advertisingLabellingPolicy` and
+  `postOffer.promotedSocialNetworks`. `updateSellerMedia` no longer requires
+  `postOffer.pricingOptions`, so a post offer update can change any of those fields alone.
+- **AI keywords in a project.** Each media of `searchProjectMedias` adds `project.aiKeywords`, the AI
+  keywords the web lists for the media in the project, each with its `source` (`googleAiOverview`,
+  `chatgpt`, `googleAiMode`, or `null`). An entry does not mean the engine cited the media.
+- **A partial update no longer erases what it leaves out.** Java's `updateSellerMedia` sent
+  `postOffer.promotedSocialNetworks` and `extraServices` as empty lists when they were not set,
+  which cleared them, and its `updateProject` sent empty `topics`, `promotedProducts` and
+  `userKeywords`, so a partial project update was refused with a 422. In C#, every request sent each optional, nullable property left unset as
+  `null`, which the API reads as a value. A project rename alone set the country to worldwide, and
+  a seller media update without `LinkAdditionOffer` stopped link additions. Both now send only what
+  was set, and C# still sends a `null` you assign (`Country = null`).
+- **Java models start with null lists and maps.** To fix the update above (`containerDefaultToNull`
+  in [`sdks.json`](sdks.json)), every list and map property in Java now starts as `null` instead
+  of an empty container, in responses and in the models you build. `Error.getDetails()` returns
+  `null` when an error carries no details, so check it before reading it; every other list in a
+  response is required, so the API always sends it. On a model you build, the `add...Item` methods
+  create the list, and a required list left unset is left out of the request rather than sent as
+  `[]`.
+- The request's sub-objects keep their 1.0.2 class names, which `createSellerMedia` reuses:
+  `UpdateSellerMediaRequestExtraServicesInner`, `UpdateSellerMediaRequestLinkAdditionOffer`,
+  `UpdateSellerMediaRequestLinkAdditionOfferPricingOptionsInner` and
+  `UpdateSellerMediaRequestPostOfferPricingOptionsInner`. See "Inline class names" under
+  [Regenerating](#regenerating).
+
 ## Changes in 1.0.2
 
 **Four API classes are renamed, and code that imports the old names breaks**, although the version
@@ -491,6 +555,20 @@ would be discarded on the next run:
   `nullable: true`, so the null the contract allows in a required enum such as `Order.pendingAction`
   would fail deserialisation. The `?` is added by
   [`scripts/csharp-nullable-enums.py`](scripts/csharp-nullable-enums.py).
+- **C#**'s model template also writes an optional, nullable property whenever it is null, so
+  every request would send each one left unset as `null`, which the API reads as a value. Each
+  optional, nullable property of a request body, read from the contract, gets a flag that its
+  setter raises and a `ShouldSerialize` method that Newtonsoft.Json consults; a constructor
+  argument raises the flag only when it is not null. This is done by
+  [`scripts/csharp-optional-nullables.py`](scripts/csharp-optional-nullables.py). The generator's
+  `conditionalSerialization` option would do the same, but it never marks a required constructor
+  argument as set, so it would drop every required property.
+- **Inline class names.** The generator gives identical inline schemas one class, named after the
+  first operation that uses it, so an operation added before one that already had the shape would
+  rename its class and break every client that names it. `inlineSchemaNameMappings` in
+  [`sdks.json`](sdks.json) pins the published name, keyed by the generator's operation-based name
+  (`createSellerMedia_request_linkAdditionOffer`), and is passed as
+  `--inline-schema-name-mappings`.
 - **Package metadata.** Left alone, the Python, TypeScript and PHP manifests name OpenAPI Generator
   as their author and carry its description and keywords. They are rewritten from
   [`sdks.json`](sdks.json) by [`scripts/package-metadata.py`](scripts/package-metadata.py), which
@@ -498,7 +576,7 @@ would be discarded on the next run:
   and filelock) past the releases with open advisories, since Dependabot cannot update a project
   with neither a lockfile nor a pinned version.
 
-The two template fixes fail the run when they find nothing left to correct, so a generator upgrade
+The template fixes fail the run when they find nothing left to correct, so a generator upgrade
 that makes one obsolete removes it rather than leaving a silent no-op.
 
 ## Contract

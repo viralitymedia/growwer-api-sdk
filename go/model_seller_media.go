@@ -26,6 +26,7 @@ type SellerMedia struct {
 	Domain string `json:"domain"`
 	// The media's root URL.
 	Url string `json:"url"`
+	Typology string `json:"typology"`
 	State string `json:"state"`
 	// How many times the media was deactivated for not publishing.
 	DeactivationStrikes int32 `json:"deactivationStrikes"`
@@ -60,11 +61,12 @@ type _SellerMedia SellerMedia
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewSellerMedia(id string, domain string, url string, state string, deactivationStrikes int32, country NullableString, language string, topics []int32, bannedTopics []int32, providerComments NullableString, publicationRate NullableInt32, averageDaysToPublication NullableInt32, numPublishedOrders int32, onHoliday bool, flashOffer NullableSellerMediaFlashOffer, postOffer SellerMediaPostOffer, linkAdditionOffer NullableSellerMediaLinkAdditionOffer, competitiveFees NullableSellerFeesOrNull, createdAt time.Time) *SellerMedia {
+func NewSellerMedia(id string, domain string, url string, typology string, state string, deactivationStrikes int32, country NullableString, language string, topics []int32, bannedTopics []int32, providerComments NullableString, publicationRate NullableInt32, averageDaysToPublication NullableInt32, numPublishedOrders int32, onHoliday bool, flashOffer NullableSellerMediaFlashOffer, postOffer SellerMediaPostOffer, linkAdditionOffer NullableSellerMediaLinkAdditionOffer, competitiveFees NullableSellerFeesOrNull, createdAt time.Time) *SellerMedia {
 	this := SellerMedia{}
 	this.Id = id
 	this.Domain = domain
 	this.Url = url
+	this.Typology = typology
 	this.State = state
 	this.DeactivationStrikes = deactivationStrikes
 	this.Country = country
@@ -162,6 +164,30 @@ func (o *SellerMedia) GetUrlOk() (*string, bool) {
 // SetUrl sets field value
 func (o *SellerMedia) SetUrl(v string) {
 	o.Url = v
+}
+
+// GetTypology returns the Typology field value
+func (o *SellerMedia) GetTypology() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.Typology
+}
+
+// GetTypologyOk returns a tuple with the Typology field value
+// and a boolean to check if the value has been set.
+func (o *SellerMedia) GetTypologyOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Typology, true
+}
+
+// SetTypology sets field value
+func (o *SellerMedia) SetTypology(v string) {
+	o.Typology = v
 }
 
 // GetState returns the State field value
@@ -575,6 +601,7 @@ func (o SellerMedia) ToMap() (map[string]interface{}, error) {
 	toSerialize["id"] = o.Id
 	toSerialize["domain"] = o.Domain
 	toSerialize["url"] = o.Url
+	toSerialize["typology"] = o.Typology
 	toSerialize["state"] = o.State
 	toSerialize["deactivationStrikes"] = o.DeactivationStrikes
 	toSerialize["country"] = o.Country.Get()
@@ -607,6 +634,7 @@ func (o *SellerMedia) UnmarshalJSON(data []byte) (err error) {
 		"id",
 		"domain",
 		"url",
+		"typology",
 		"state",
 		"deactivationStrikes",
 		"country",
@@ -655,6 +683,7 @@ func (o *SellerMedia) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "id")
 		delete(additionalProperties, "domain")
 		delete(additionalProperties, "url")
+		delete(additionalProperties, "typology")
 		delete(additionalProperties, "state")
 		delete(additionalProperties, "deactivationStrikes")
 		delete(additionalProperties, "country")

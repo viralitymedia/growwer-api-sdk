@@ -5,9 +5,11 @@ All URIs are relative to *https://tool.growwer.com*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**ApplySellerMediaCompetitiveFees**](SellerMediasAPI.md#ApplySellerMediaCompetitiveFees) | **Post** /api/v1/seller/medias/{id}/apply-competitive-fees | Set the competitive fees Growwer suggests
+[**CreateSellerMedia**](SellerMediasAPI.md#CreateSellerMedia) | **Post** /api/v1/seller/medias | Register a media you sell on
+[**DeleteSellerMedia**](SellerMediasAPI.md#DeleteSellerMedia) | **Delete** /api/v1/seller/medias/{id} | Delete a media you sell on
 [**GetSellerMedia**](SellerMediasAPI.md#GetSellerMedia) | **Get** /api/v1/seller/medias/{id} | Get a media you sell on
 [**ListSellerMedias**](SellerMediasAPI.md#ListSellerMedias) | **Get** /api/v1/seller/medias | List the medias you sell on
-[**UpdateSellerMedia**](SellerMediasAPI.md#UpdateSellerMedia) | **Patch** /api/v1/seller/medias/{id} | Edit the fees of a media you sell on
+[**UpdateSellerMedia**](SellerMediasAPI.md#UpdateSellerMedia) | **Patch** /api/v1/seller/medias/{id} | Edit the offer of a media you sell on
 
 
 
@@ -68,6 +70,144 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**SellerMedia**](SellerMedia.md)
+
+### Authorization
+
+[apiKey](../README.md#apiKey)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## CreateSellerMedia
+
+> SellerMedia CreateSellerMedia(ctx).IdempotencyKey(idempotencyKey).CreateSellerMediaRequest(createSellerMediaRequest).Execute()
+
+Register a media you sell on
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/viralitymedia/growwer-api-sdk/go"
+)
+
+func main() {
+	idempotencyKey := "idempotencyKey_example" // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
+	createSellerMediaRequest := *openapiclient.NewCreateSellerMediaRequest("https://www.example.com", "Typology_example", "ES", "es", []int32{int32(123)}, *openapiclient.NewCreateSellerMediaRequestPostOffer([]openapiclient.UpdateSellerMediaRequestPostOfferPricingOptionsInner{*openapiclient.NewUpdateSellerMediaRequestPostOfferPricingOptionsInner("LinkType_example")}, int32(123)), false, false) // CreateSellerMediaRequest | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.SellerMediasAPI.CreateSellerMedia(context.Background()).IdempotencyKey(idempotencyKey).CreateSellerMediaRequest(createSellerMediaRequest).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `SellerMediasAPI.CreateSellerMedia``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `CreateSellerMedia`: SellerMedia
+	fmt.Fprintf(os.Stdout, "Response from `SellerMediasAPI.CreateSellerMedia`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiCreateSellerMediaRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **idempotencyKey** | **string** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | 
+ **createSellerMediaRequest** | [**CreateSellerMediaRequest**](CreateSellerMediaRequest.md) |  | 
+
+### Return type
+
+[**SellerMedia**](SellerMedia.md)
+
+### Authorization
+
+[apiKey](../README.md#apiKey)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## DeleteSellerMedia
+
+> DeleteSellerMedia(ctx, id).IdempotencyKey(idempotencyKey).Execute()
+
+Delete a media you sell on
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/viralitymedia/growwer-api-sdk/go"
+)
+
+func main() {
+	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | 
+	idempotencyKey := "idempotencyKey_example" // string | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (`!` to `~`); any other value answers 400 `invalid_idempotency_key`.
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	r, err := apiClient.SellerMediasAPI.DeleteSellerMedia(context.Background(), id).IdempotencyKey(idempotencyKey).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `SellerMediasAPI.DeleteSellerMedia``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**id** | **string** |  | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiDeleteSellerMediaRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+ **idempotencyKey** | **string** | A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;. | 
+
+### Return type
+
+ (empty response body)
 
 ### Authorization
 
@@ -229,7 +369,7 @@ Name | Type | Description  | Notes
 
 > SellerMedia UpdateSellerMedia(ctx, id).IdempotencyKey(idempotencyKey).UpdateSellerMediaRequest(updateSellerMediaRequest).Execute()
 
-Edit the fees of a media you sell on
+Edit the offer of a media you sell on
 
 
 

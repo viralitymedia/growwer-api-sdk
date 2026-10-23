@@ -56,7 +56,7 @@ public class PostOrderBriefingRequest {
   public static final String SERIALIZED_NAME_LINKS = "links";
   @SerializedName(SERIALIZED_NAME_LINKS)
   @javax.annotation.Nonnull
-  private List<OrderLinkRequest> links = new ArrayList<>();
+  private List<OrderLinkRequest> links;
 
   /**
    * Gets or Sets extraServices
@@ -113,7 +113,7 @@ public class PostOrderBriefingRequest {
   public static final String SERIALIZED_NAME_EXTRA_SERVICES = "extraServices";
   @SerializedName(SERIALIZED_NAME_EXTRA_SERVICES)
   @javax.annotation.Nullable
-  private List<ExtraServicesEnum> extraServices = new ArrayList<>();
+  private List<ExtraServicesEnum> extraServices;
 
   public static final String SERIALIZED_NAME_TITLE = "title";
   @SerializedName(SERIALIZED_NAME_TITLE)

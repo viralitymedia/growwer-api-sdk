@@ -59,6 +59,9 @@ class SellerMediaPostOffer implements ModelInterface, ArrayAccess, \JsonSerializ
      */
     protected static $openAPITypes = [
         'pricing_options' => '\Growwer\Api\Model\SellerMediaPostOfferPricingOptionsInner[]',
+        'maximum_links' => 'int',
+        'advertising_labelling_policy' => 'string',
+        'promoted_social_networks' => 'string[]',
         'extra_services' => '\Growwer\Api\Model\UpdateSellerMediaRequestExtraServicesInner[]'
     ];
 
@@ -71,6 +74,9 @@ class SellerMediaPostOffer implements ModelInterface, ArrayAccess, \JsonSerializ
      */
     protected static $openAPIFormats = [
         'pricing_options' => null,
+        'maximum_links' => null,
+        'advertising_labelling_policy' => null,
+        'promoted_social_networks' => null,
         'extra_services' => null
     ];
 
@@ -81,6 +87,9 @@ class SellerMediaPostOffer implements ModelInterface, ArrayAccess, \JsonSerializ
      */
     protected static array $openAPINullables = [
         'pricing_options' => false,
+        'maximum_links' => false,
+        'advertising_labelling_policy' => false,
+        'promoted_social_networks' => false,
         'extra_services' => false
     ];
 
@@ -171,6 +180,9 @@ class SellerMediaPostOffer implements ModelInterface, ArrayAccess, \JsonSerializ
      */
     protected static $attributeMap = [
         'pricing_options' => 'pricingOptions',
+        'maximum_links' => 'maximumLinks',
+        'advertising_labelling_policy' => 'advertisingLabellingPolicy',
+        'promoted_social_networks' => 'promotedSocialNetworks',
         'extra_services' => 'extraServices'
     ];
 
@@ -181,6 +193,9 @@ class SellerMediaPostOffer implements ModelInterface, ArrayAccess, \JsonSerializ
      */
     protected static $setters = [
         'pricing_options' => 'setPricingOptions',
+        'maximum_links' => 'setMaximumLinks',
+        'advertising_labelling_policy' => 'setAdvertisingLabellingPolicy',
+        'promoted_social_networks' => 'setPromotedSocialNetworks',
         'extra_services' => 'setExtraServices'
     ];
 
@@ -191,6 +206,9 @@ class SellerMediaPostOffer implements ModelInterface, ArrayAccess, \JsonSerializ
      */
     protected static $getters = [
         'pricing_options' => 'getPricingOptions',
+        'maximum_links' => 'getMaximumLinks',
+        'advertising_labelling_policy' => 'getAdvertisingLabellingPolicy',
+        'promoted_social_networks' => 'getPromotedSocialNetworks',
         'extra_services' => 'getExtraServices'
     ];
 
@@ -235,6 +253,44 @@ class SellerMediaPostOffer implements ModelInterface, ArrayAccess, \JsonSerializ
         return self::$openAPIModelName;
     }
 
+    public const ADVERTISING_LABELLING_POLICY_ALWAYS = 'always';
+    public const ADVERTISING_LABELLING_POLICY_NEVER = 'never';
+    public const PROMOTED_SOCIAL_NETWORKS_TWITTER = 'twitter';
+    public const PROMOTED_SOCIAL_NETWORKS_INSTAGRAM = 'instagram';
+    public const PROMOTED_SOCIAL_NETWORKS_FACEBOOK = 'facebook';
+    public const PROMOTED_SOCIAL_NETWORKS_PINTEREST = 'pinterest';
+    public const PROMOTED_SOCIAL_NETWORKS_TUMBLR = 'tumblr';
+    public const PROMOTED_SOCIAL_NETWORKS_NEWSLETTER = 'newsletter';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public function getAdvertisingLabellingPolicyAllowableValues()
+    {
+        return [
+            self::ADVERTISING_LABELLING_POLICY_ALWAYS,
+            self::ADVERTISING_LABELLING_POLICY_NEVER,
+        ];
+    }
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public function getPromotedSocialNetworksAllowableValues()
+    {
+        return [
+            self::PROMOTED_SOCIAL_NETWORKS_TWITTER,
+            self::PROMOTED_SOCIAL_NETWORKS_INSTAGRAM,
+            self::PROMOTED_SOCIAL_NETWORKS_FACEBOOK,
+            self::PROMOTED_SOCIAL_NETWORKS_PINTEREST,
+            self::PROMOTED_SOCIAL_NETWORKS_TUMBLR,
+            self::PROMOTED_SOCIAL_NETWORKS_NEWSLETTER,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -252,6 +308,9 @@ class SellerMediaPostOffer implements ModelInterface, ArrayAccess, \JsonSerializ
     public function __construct(?array $data = null)
     {
         $this->setIfExists('pricing_options', $data ?? [], null);
+        $this->setIfExists('maximum_links', $data ?? [], null);
+        $this->setIfExists('advertising_labelling_policy', $data ?? [], null);
+        $this->setIfExists('promoted_social_networks', $data ?? [], null);
         $this->setIfExists('extra_services', $data ?? [], null);
     }
 
@@ -284,6 +343,24 @@ class SellerMediaPostOffer implements ModelInterface, ArrayAccess, \JsonSerializ
 
         if ($this->container['pricing_options'] === null) {
             $invalidProperties[] = "'pricing_options' can't be null";
+        }
+        if ($this->container['maximum_links'] === null) {
+            $invalidProperties[] = "'maximum_links' can't be null";
+        }
+        if ($this->container['advertising_labelling_policy'] === null) {
+            $invalidProperties[] = "'advertising_labelling_policy' can't be null";
+        }
+        $allowedValues = $this->getAdvertisingLabellingPolicyAllowableValues();
+        if (!is_null($this->container['advertising_labelling_policy']) && !in_array($this->container['advertising_labelling_policy'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'advertising_labelling_policy', must be one of '%s'",
+                $this->container['advertising_labelling_policy'],
+                implode("', '", $allowedValues)
+            );
+        }
+
+        if ($this->container['promoted_social_networks'] === null) {
+            $invalidProperties[] = "'promoted_social_networks' can't be null";
         }
         if ($this->container['extra_services'] === null) {
             $invalidProperties[] = "'extra_services' can't be null";
@@ -331,6 +408,106 @@ class SellerMediaPostOffer implements ModelInterface, ArrayAccess, \JsonSerializ
     }
 
     /**
+     * Gets maximum_links
+     *
+     * @return int
+     */
+    public function getMaximumLinks()
+    {
+        return $this->container['maximum_links'];
+    }
+
+    /**
+     * Sets maximum_links
+     *
+     * @param int $maximum_links How many links a sponsored post may hold, 1 to 4.
+     *
+     * @return self
+     */
+    public function setMaximumLinks($maximum_links)
+    {
+        if (is_null($maximum_links)) {
+            throw new \InvalidArgumentException('non-nullable maximum_links cannot be null');
+        }
+        $this->container['maximum_links'] = $maximum_links;
+
+        return $this;
+    }
+
+    /**
+     * Gets advertising_labelling_policy
+     *
+     * @return string
+     */
+    public function getAdvertisingLabellingPolicy()
+    {
+        return $this->container['advertising_labelling_policy'];
+    }
+
+    /**
+     * Sets advertising_labelling_policy
+     *
+     * @param string $advertising_labelling_policy Whether sponsored posts are labelled as advertising.
+     *
+     * @return self
+     */
+    public function setAdvertisingLabellingPolicy($advertising_labelling_policy)
+    {
+        if (is_null($advertising_labelling_policy)) {
+            throw new \InvalidArgumentException('non-nullable advertising_labelling_policy cannot be null');
+        }
+        $allowedValues = $this->getAdvertisingLabellingPolicyAllowableValues();
+        if (!in_array($advertising_labelling_policy, $allowedValues, true)) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    "Invalid value '%s' for 'advertising_labelling_policy', must be one of '%s'",
+                    $advertising_labelling_policy,
+                    implode("', '", $allowedValues)
+                )
+            );
+        }
+        $this->container['advertising_labelling_policy'] = $advertising_labelling_policy;
+
+        return $this;
+    }
+
+    /**
+     * Gets promoted_social_networks
+     *
+     * @return string[]
+     */
+    public function getPromotedSocialNetworks()
+    {
+        return $this->container['promoted_social_networks'];
+    }
+
+    /**
+     * Sets promoted_social_networks
+     *
+     * @param string[] $promoted_social_networks The social networks sponsored posts are promoted on.
+     *
+     * @return self
+     */
+    public function setPromotedSocialNetworks($promoted_social_networks)
+    {
+        if (is_null($promoted_social_networks)) {
+            throw new \InvalidArgumentException('non-nullable promoted_social_networks cannot be null');
+        }
+        $allowedValues = $this->getPromotedSocialNetworksAllowableValues();
+        if (array_diff($promoted_social_networks, $allowedValues)) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    "Invalid value for 'promoted_social_networks', must be one of '%s'",
+                    implode("', '", $allowedValues)
+                )
+            );
+        }
+        $this->container['promoted_social_networks'] = $promoted_social_networks;
+
+        return $this;
+    }
+
+    /**
      * Gets extra_services
      *
      * @return \Growwer\Api\Model\UpdateSellerMediaRequestExtraServicesInner[]
@@ -343,7 +520,7 @@ class SellerMediaPostOffer implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets extra_services
      *
-     * @param \Growwer\Api\Model\UpdateSellerMediaRequestExtraServicesInner[] $extra_services extra_services
+     * @param \Growwer\Api\Model\UpdateSellerMediaRequestExtraServicesInner[] $extra_services Read here, but PATCH /seller/medias/{id} and POST /seller/medias take it at the top level of the body.
      *
      * @return self
      */

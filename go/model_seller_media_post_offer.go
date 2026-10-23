@@ -23,6 +23,13 @@ var _ MappedNullable = &SellerMediaPostOffer{}
 type SellerMediaPostOffer struct {
 	// One entry per link type you offer.
 	PricingOptions []SellerMediaPostOfferPricingOptionsInner `json:"pricingOptions"`
+	// How many links a sponsored post may hold, 1 to 4.
+	MaximumLinks int32 `json:"maximumLinks"`
+	// Whether sponsored posts are labelled as advertising.
+	AdvertisingLabellingPolicy string `json:"advertisingLabellingPolicy"`
+	// The social networks sponsored posts are promoted on.
+	PromotedSocialNetworks []string `json:"promotedSocialNetworks"`
+	// Read here, but PATCH /seller/medias/{id} and POST /seller/medias take it at the top level of the body.
 	ExtraServices []UpdateSellerMediaRequestExtraServicesInner `json:"extraServices"`
 	AdditionalProperties map[string]interface{}
 }
@@ -33,9 +40,12 @@ type _SellerMediaPostOffer SellerMediaPostOffer
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewSellerMediaPostOffer(pricingOptions []SellerMediaPostOfferPricingOptionsInner, extraServices []UpdateSellerMediaRequestExtraServicesInner) *SellerMediaPostOffer {
+func NewSellerMediaPostOffer(pricingOptions []SellerMediaPostOfferPricingOptionsInner, maximumLinks int32, advertisingLabellingPolicy string, promotedSocialNetworks []string, extraServices []UpdateSellerMediaRequestExtraServicesInner) *SellerMediaPostOffer {
 	this := SellerMediaPostOffer{}
 	this.PricingOptions = pricingOptions
+	this.MaximumLinks = maximumLinks
+	this.AdvertisingLabellingPolicy = advertisingLabellingPolicy
+	this.PromotedSocialNetworks = promotedSocialNetworks
 	this.ExtraServices = extraServices
 	return &this
 }
@@ -70,6 +80,78 @@ func (o *SellerMediaPostOffer) GetPricingOptionsOk() ([]SellerMediaPostOfferPric
 // SetPricingOptions sets field value
 func (o *SellerMediaPostOffer) SetPricingOptions(v []SellerMediaPostOfferPricingOptionsInner) {
 	o.PricingOptions = v
+}
+
+// GetMaximumLinks returns the MaximumLinks field value
+func (o *SellerMediaPostOffer) GetMaximumLinks() int32 {
+	if o == nil {
+		var ret int32
+		return ret
+	}
+
+	return o.MaximumLinks
+}
+
+// GetMaximumLinksOk returns a tuple with the MaximumLinks field value
+// and a boolean to check if the value has been set.
+func (o *SellerMediaPostOffer) GetMaximumLinksOk() (*int32, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.MaximumLinks, true
+}
+
+// SetMaximumLinks sets field value
+func (o *SellerMediaPostOffer) SetMaximumLinks(v int32) {
+	o.MaximumLinks = v
+}
+
+// GetAdvertisingLabellingPolicy returns the AdvertisingLabellingPolicy field value
+func (o *SellerMediaPostOffer) GetAdvertisingLabellingPolicy() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.AdvertisingLabellingPolicy
+}
+
+// GetAdvertisingLabellingPolicyOk returns a tuple with the AdvertisingLabellingPolicy field value
+// and a boolean to check if the value has been set.
+func (o *SellerMediaPostOffer) GetAdvertisingLabellingPolicyOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.AdvertisingLabellingPolicy, true
+}
+
+// SetAdvertisingLabellingPolicy sets field value
+func (o *SellerMediaPostOffer) SetAdvertisingLabellingPolicy(v string) {
+	o.AdvertisingLabellingPolicy = v
+}
+
+// GetPromotedSocialNetworks returns the PromotedSocialNetworks field value
+func (o *SellerMediaPostOffer) GetPromotedSocialNetworks() []string {
+	if o == nil {
+		var ret []string
+		return ret
+	}
+
+	return o.PromotedSocialNetworks
+}
+
+// GetPromotedSocialNetworksOk returns a tuple with the PromotedSocialNetworks field value
+// and a boolean to check if the value has been set.
+func (o *SellerMediaPostOffer) GetPromotedSocialNetworksOk() ([]string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.PromotedSocialNetworks, true
+}
+
+// SetPromotedSocialNetworks sets field value
+func (o *SellerMediaPostOffer) SetPromotedSocialNetworks(v []string) {
+	o.PromotedSocialNetworks = v
 }
 
 // GetExtraServices returns the ExtraServices field value
@@ -107,6 +189,9 @@ func (o SellerMediaPostOffer) MarshalJSON() ([]byte, error) {
 func (o SellerMediaPostOffer) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["pricingOptions"] = o.PricingOptions
+	toSerialize["maximumLinks"] = o.MaximumLinks
+	toSerialize["advertisingLabellingPolicy"] = o.AdvertisingLabellingPolicy
+	toSerialize["promotedSocialNetworks"] = o.PromotedSocialNetworks
 	toSerialize["extraServices"] = o.ExtraServices
 
 	for key, value := range o.AdditionalProperties {
@@ -122,6 +207,9 @@ func (o *SellerMediaPostOffer) UnmarshalJSON(data []byte) (err error) {
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
 		"pricingOptions",
+		"maximumLinks",
+		"advertisingLabellingPolicy",
+		"promotedSocialNetworks",
 		"extraServices",
 	}
 
@@ -153,6 +241,9 @@ func (o *SellerMediaPostOffer) UnmarshalJSON(data []byte) (err error) {
 
 	if err = json.Unmarshal(data, &additionalProperties); err == nil {
 		delete(additionalProperties, "pricingOptions")
+		delete(additionalProperties, "maximumLinks")
+		delete(additionalProperties, "advertisingLabellingPolicy")
+		delete(additionalProperties, "promotedSocialNetworks")
 		delete(additionalProperties, "extraServices")
 		o.AdditionalProperties = additionalProperties
 	}

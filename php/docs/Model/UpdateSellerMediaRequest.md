@@ -4,6 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**typology** | **string** |  | [optional]
 **post_offer** | [**\Growwer\Api\Model\UpdateSellerMediaRequestPostOffer**](UpdateSellerMediaRequestPostOffer.md) |  | [optional]
 **link_addition_offer** | [**\Growwer\Api\Model\UpdateSellerMediaRequestLinkAdditionOffer**](UpdateSellerMediaRequestLinkAdditionOffer.md) |  | [optional]
 **extra_services** | [**\Growwer\Api\Model\UpdateSellerMediaRequestExtraServicesInner[]**](UpdateSellerMediaRequestExtraServicesInner.md) |  | [optional]

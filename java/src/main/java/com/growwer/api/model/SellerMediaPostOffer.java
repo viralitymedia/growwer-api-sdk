@@ -57,12 +57,139 @@ public class SellerMediaPostOffer {
   public static final String SERIALIZED_NAME_PRICING_OPTIONS = "pricingOptions";
   @SerializedName(SERIALIZED_NAME_PRICING_OPTIONS)
   @javax.annotation.Nonnull
-  private List<SellerMediaPostOfferPricingOptionsInner> pricingOptions = new ArrayList<>();
+  private List<SellerMediaPostOfferPricingOptionsInner> pricingOptions;
+
+  public static final String SERIALIZED_NAME_MAXIMUM_LINKS = "maximumLinks";
+  @SerializedName(SERIALIZED_NAME_MAXIMUM_LINKS)
+  @javax.annotation.Nonnull
+  private Integer maximumLinks;
+
+  /**
+   * Whether sponsored posts are labelled as advertising.
+   */
+  @JsonAdapter(AdvertisingLabellingPolicyEnum.Adapter.class)
+  public enum AdvertisingLabellingPolicyEnum {
+    ALWAYS("always"),
+    
+    NEVER("never");
+
+    private String value;
+
+    AdvertisingLabellingPolicyEnum(String value) {
+      this.value = value;
+    }
+
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    public static AdvertisingLabellingPolicyEnum fromValue(String value) {
+      for (AdvertisingLabellingPolicyEnum b : AdvertisingLabellingPolicyEnum.values()) {
+        if (b.value.equals(value)) {
+          return b;
+        }
+      }
+      throw new IllegalArgumentException("Unexpected value '" + value + "'");
+    }
+
+    public static class Adapter extends TypeAdapter<AdvertisingLabellingPolicyEnum> {
+      @Override
+      public void write(final JsonWriter jsonWriter, final AdvertisingLabellingPolicyEnum enumeration) throws IOException {
+        jsonWriter.value(enumeration.getValue());
+      }
+
+      @Override
+      public AdvertisingLabellingPolicyEnum read(final JsonReader jsonReader) throws IOException {
+        String value =  jsonReader.nextString();
+        return AdvertisingLabellingPolicyEnum.fromValue(value);
+      }
+    }
+
+    public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      String value = jsonElement.getAsString();
+      AdvertisingLabellingPolicyEnum.fromValue(value);
+    }
+  }
+
+  public static final String SERIALIZED_NAME_ADVERTISING_LABELLING_POLICY = "advertisingLabellingPolicy";
+  @SerializedName(SERIALIZED_NAME_ADVERTISING_LABELLING_POLICY)
+  @javax.annotation.Nonnull
+  private AdvertisingLabellingPolicyEnum advertisingLabellingPolicy;
+
+  /**
+   * Gets or Sets promotedSocialNetworks
+   */
+  @JsonAdapter(PromotedSocialNetworksEnum.Adapter.class)
+  public enum PromotedSocialNetworksEnum {
+    TWITTER("twitter"),
+    
+    INSTAGRAM("instagram"),
+    
+    FACEBOOK("facebook"),
+    
+    PINTEREST("pinterest"),
+    
+    TUMBLR("tumblr"),
+    
+    NEWSLETTER("newsletter");
+
+    private String value;
+
+    PromotedSocialNetworksEnum(String value) {
+      this.value = value;
+    }
+
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    public static PromotedSocialNetworksEnum fromValue(String value) {
+      for (PromotedSocialNetworksEnum b : PromotedSocialNetworksEnum.values()) {
+        if (b.value.equals(value)) {
+          return b;
+        }
+      }
+      throw new IllegalArgumentException("Unexpected value '" + value + "'");
+    }
+
+    public static class Adapter extends TypeAdapter<PromotedSocialNetworksEnum> {
+      @Override
+      public void write(final JsonWriter jsonWriter, final PromotedSocialNetworksEnum enumeration) throws IOException {
+        jsonWriter.value(enumeration.getValue());
+      }
+
+      @Override
+      public PromotedSocialNetworksEnum read(final JsonReader jsonReader) throws IOException {
+        String value =  jsonReader.nextString();
+        return PromotedSocialNetworksEnum.fromValue(value);
+      }
+    }
+
+    public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      String value = jsonElement.getAsString();
+      PromotedSocialNetworksEnum.fromValue(value);
+    }
+  }
+
+  public static final String SERIALIZED_NAME_PROMOTED_SOCIAL_NETWORKS = "promotedSocialNetworks";
+  @SerializedName(SERIALIZED_NAME_PROMOTED_SOCIAL_NETWORKS)
+  @javax.annotation.Nonnull
+  private List<PromotedSocialNetworksEnum> promotedSocialNetworks;
 
   public static final String SERIALIZED_NAME_EXTRA_SERVICES = "extraServices";
   @SerializedName(SERIALIZED_NAME_EXTRA_SERVICES)
   @javax.annotation.Nonnull
-  private List<UpdateSellerMediaRequestExtraServicesInner> extraServices = new ArrayList<>();
+  private List<UpdateSellerMediaRequestExtraServicesInner> extraServices;
 
   public SellerMediaPostOffer() {
   }
@@ -94,6 +221,71 @@ public class SellerMediaPostOffer {
   }
 
 
+  public SellerMediaPostOffer maximumLinks(@javax.annotation.Nonnull Integer maximumLinks) {
+    this.maximumLinks = maximumLinks;
+    return this;
+  }
+
+  /**
+   * How many links a sponsored post may hold, 1 to 4.
+   * @return maximumLinks
+   */
+  @javax.annotation.Nonnull
+  public Integer getMaximumLinks() {
+    return maximumLinks;
+  }
+
+  public void setMaximumLinks(@javax.annotation.Nonnull Integer maximumLinks) {
+    this.maximumLinks = maximumLinks;
+  }
+
+
+  public SellerMediaPostOffer advertisingLabellingPolicy(@javax.annotation.Nonnull AdvertisingLabellingPolicyEnum advertisingLabellingPolicy) {
+    this.advertisingLabellingPolicy = advertisingLabellingPolicy;
+    return this;
+  }
+
+  /**
+   * Whether sponsored posts are labelled as advertising.
+   * @return advertisingLabellingPolicy
+   */
+  @javax.annotation.Nonnull
+  public AdvertisingLabellingPolicyEnum getAdvertisingLabellingPolicy() {
+    return advertisingLabellingPolicy;
+  }
+
+  public void setAdvertisingLabellingPolicy(@javax.annotation.Nonnull AdvertisingLabellingPolicyEnum advertisingLabellingPolicy) {
+    this.advertisingLabellingPolicy = advertisingLabellingPolicy;
+  }
+
+
+  public SellerMediaPostOffer promotedSocialNetworks(@javax.annotation.Nonnull List<PromotedSocialNetworksEnum> promotedSocialNetworks) {
+    this.promotedSocialNetworks = promotedSocialNetworks;
+    return this;
+  }
+
+  public SellerMediaPostOffer addPromotedSocialNetworksItem(PromotedSocialNetworksEnum promotedSocialNetworksItem) {
+    if (this.promotedSocialNetworks == null) {
+      this.promotedSocialNetworks = new ArrayList<>();
+    }
+    this.promotedSocialNetworks.add(promotedSocialNetworksItem);
+    return this;
+  }
+
+  /**
+   * The social networks sponsored posts are promoted on.
+   * @return promotedSocialNetworks
+   */
+  @javax.annotation.Nonnull
+  public List<PromotedSocialNetworksEnum> getPromotedSocialNetworks() {
+    return promotedSocialNetworks;
+  }
+
+  public void setPromotedSocialNetworks(@javax.annotation.Nonnull List<PromotedSocialNetworksEnum> promotedSocialNetworks) {
+    this.promotedSocialNetworks = promotedSocialNetworks;
+  }
+
+
   public SellerMediaPostOffer extraServices(@javax.annotation.Nonnull List<UpdateSellerMediaRequestExtraServicesInner> extraServices) {
     this.extraServices = extraServices;
     return this;
@@ -108,7 +300,7 @@ public class SellerMediaPostOffer {
   }
 
   /**
-   * Get extraServices
+   * Read here, but PATCH /seller/medias/{id} and POST /seller/medias take it at the top level of the body.
    * @return extraServices
    */
   @javax.annotation.Nonnull
@@ -176,13 +368,16 @@ public class SellerMediaPostOffer {
     }
     SellerMediaPostOffer sellerMediaPostOffer = (SellerMediaPostOffer) o;
     return Objects.equals(this.pricingOptions, sellerMediaPostOffer.pricingOptions) &&
+        Objects.equals(this.maximumLinks, sellerMediaPostOffer.maximumLinks) &&
+        Objects.equals(this.advertisingLabellingPolicy, sellerMediaPostOffer.advertisingLabellingPolicy) &&
+        Objects.equals(this.promotedSocialNetworks, sellerMediaPostOffer.promotedSocialNetworks) &&
         Objects.equals(this.extraServices, sellerMediaPostOffer.extraServices)&&
         Objects.equals(this.additionalProperties, sellerMediaPostOffer.additionalProperties);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(pricingOptions, extraServices, additionalProperties);
+    return Objects.hash(pricingOptions, maximumLinks, advertisingLabellingPolicy, promotedSocialNetworks, extraServices, additionalProperties);
   }
 
   @Override
@@ -190,6 +385,9 @@ public class SellerMediaPostOffer {
     StringBuilder sb = new StringBuilder();
     sb.append("class SellerMediaPostOffer {\n");
     sb.append("    pricingOptions: ").append(toIndentedString(pricingOptions)).append("\n");
+    sb.append("    maximumLinks: ").append(toIndentedString(maximumLinks)).append("\n");
+    sb.append("    advertisingLabellingPolicy: ").append(toIndentedString(advertisingLabellingPolicy)).append("\n");
+    sb.append("    promotedSocialNetworks: ").append(toIndentedString(promotedSocialNetworks)).append("\n");
     sb.append("    extraServices: ").append(toIndentedString(extraServices)).append("\n");
     sb.append("    additionalProperties: ").append(toIndentedString(additionalProperties)).append("\n");
     sb.append("}");
@@ -210,10 +408,10 @@ public class SellerMediaPostOffer {
 
   static {
     // a set of all properties/fields (JSON key names)
-    openapiFields = new HashSet<String>(Arrays.asList("pricingOptions", "extraServices"));
+    openapiFields = new HashSet<String>(Arrays.asList("pricingOptions", "maximumLinks", "advertisingLabellingPolicy", "promotedSocialNetworks", "extraServices"));
 
     // a set of required properties/fields (JSON key names)
-    openapiRequiredFields = new HashSet<String>(Arrays.asList("pricingOptions", "extraServices"));
+    openapiRequiredFields = new HashSet<String>(Arrays.asList("pricingOptions", "maximumLinks", "advertisingLabellingPolicy", "promotedSocialNetworks", "extraServices"));
   }
 
   /**
@@ -245,6 +443,17 @@ public class SellerMediaPostOffer {
         for (int i = 0; i < jsonArraypricingOptions.size(); i++) {
           SellerMediaPostOfferPricingOptionsInner.validateJsonElement(jsonArraypricingOptions.get(i));
         }
+      }
+      if (!jsonObj.get("advertisingLabellingPolicy").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `advertisingLabellingPolicy` to be a primitive type in the JSON string but got `%s`", jsonObj.get("advertisingLabellingPolicy").toString()));
+      }
+      // validate the required field `advertisingLabellingPolicy`
+      AdvertisingLabellingPolicyEnum.validateJsonElement(jsonObj.get("advertisingLabellingPolicy"));
+      // ensure the required json array is present
+      if (jsonObj.get("promotedSocialNetworks") == null) {
+        throw new IllegalArgumentException("Expected the field `linkedContent` to be an array in the JSON string but got `null`");
+      } else if (!jsonObj.get("promotedSocialNetworks").isJsonArray()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `promotedSocialNetworks` to be an array in the JSON string but got `%s`", jsonObj.get("promotedSocialNetworks").toString()));
       }
       if (jsonObj.get("extraServices") != null) {
         if (!jsonObj.get("extraServices").isJsonArray()) {

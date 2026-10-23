@@ -74,6 +74,63 @@ public class SellerMedia {
   private String url;
 
   /**
+   * Gets or Sets typology
+   */
+  @JsonAdapter(TypologyEnum.Adapter.class)
+  public enum TypologyEnum {
+    BLOG("blog"),
+    
+    PRESS("press");
+
+    private String value;
+
+    TypologyEnum(String value) {
+      this.value = value;
+    }
+
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    public static TypologyEnum fromValue(String value) {
+      for (TypologyEnum b : TypologyEnum.values()) {
+        if (b.value.equals(value)) {
+          return b;
+        }
+      }
+      throw new IllegalArgumentException("Unexpected value '" + value + "'");
+    }
+
+    public static class Adapter extends TypeAdapter<TypologyEnum> {
+      @Override
+      public void write(final JsonWriter jsonWriter, final TypologyEnum enumeration) throws IOException {
+        jsonWriter.value(enumeration.getValue());
+      }
+
+      @Override
+      public TypologyEnum read(final JsonReader jsonReader) throws IOException {
+        String value =  jsonReader.nextString();
+        return TypologyEnum.fromValue(value);
+      }
+    }
+
+    public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      String value = jsonElement.getAsString();
+      TypologyEnum.fromValue(value);
+    }
+  }
+
+  public static final String SERIALIZED_NAME_TYPOLOGY = "typology";
+  @SerializedName(SERIALIZED_NAME_TYPOLOGY)
+  @javax.annotation.Nonnull
+  private TypologyEnum typology;
+
+  /**
    * Gets or Sets state
    */
   @JsonAdapter(StateEnum.Adapter.class)
@@ -152,12 +209,12 @@ public class SellerMedia {
   public static final String SERIALIZED_NAME_TOPICS = "topics";
   @SerializedName(SERIALIZED_NAME_TOPICS)
   @javax.annotation.Nonnull
-  private List<Integer> topics = new ArrayList<>();
+  private List<Integer> topics;
 
   public static final String SERIALIZED_NAME_BANNED_TOPICS = "bannedTopics";
   @SerializedName(SERIALIZED_NAME_BANNED_TOPICS)
   @javax.annotation.Nonnull
-  private List<Integer> bannedTopics = new ArrayList<>();
+  private List<Integer> bannedTopics;
 
   public static final String SERIALIZED_NAME_PROVIDER_COMMENTS = "providerComments";
   @SerializedName(SERIALIZED_NAME_PROVIDER_COMMENTS)
@@ -266,6 +323,25 @@ public class SellerMedia {
 
   public void setUrl(@javax.annotation.Nonnull String url) {
     this.url = url;
+  }
+
+
+  public SellerMedia typology(@javax.annotation.Nonnull TypologyEnum typology) {
+    this.typology = typology;
+    return this;
+  }
+
+  /**
+   * Get typology
+   * @return typology
+   */
+  @javax.annotation.Nonnull
+  public TypologyEnum getTypology() {
+    return typology;
+  }
+
+  public void setTypology(@javax.annotation.Nonnull TypologyEnum typology) {
+    this.typology = typology;
   }
 
 
@@ -646,6 +722,7 @@ public class SellerMedia {
     return Objects.equals(this.id, sellerMedia.id) &&
         Objects.equals(this.domain, sellerMedia.domain) &&
         Objects.equals(this.url, sellerMedia.url) &&
+        Objects.equals(this.typology, sellerMedia.typology) &&
         Objects.equals(this.state, sellerMedia.state) &&
         Objects.equals(this.deactivationStrikes, sellerMedia.deactivationStrikes) &&
         Objects.equals(this.country, sellerMedia.country) &&
@@ -667,7 +744,7 @@ public class SellerMedia {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, domain, url, state, deactivationStrikes, country, language, topics, bannedTopics, providerComments, publicationRate, averageDaysToPublication, numPublishedOrders, onHoliday, flashOffer, postOffer, linkAdditionOffer, competitiveFees, createdAt, additionalProperties);
+    return Objects.hash(id, domain, url, typology, state, deactivationStrikes, country, language, topics, bannedTopics, providerComments, publicationRate, averageDaysToPublication, numPublishedOrders, onHoliday, flashOffer, postOffer, linkAdditionOffer, competitiveFees, createdAt, additionalProperties);
   }
 
   @Override
@@ -677,6 +754,7 @@ public class SellerMedia {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    domain: ").append(toIndentedString(domain)).append("\n");
     sb.append("    url: ").append(toIndentedString(url)).append("\n");
+    sb.append("    typology: ").append(toIndentedString(typology)).append("\n");
     sb.append("    state: ").append(toIndentedString(state)).append("\n");
     sb.append("    deactivationStrikes: ").append(toIndentedString(deactivationStrikes)).append("\n");
     sb.append("    country: ").append(toIndentedString(country)).append("\n");
@@ -712,10 +790,10 @@ public class SellerMedia {
 
   static {
     // a set of all properties/fields (JSON key names)
-    openapiFields = new HashSet<String>(Arrays.asList("id", "domain", "url", "state", "deactivationStrikes", "country", "language", "topics", "bannedTopics", "providerComments", "publicationRate", "averageDaysToPublication", "numPublishedOrders", "onHoliday", "flashOffer", "postOffer", "linkAdditionOffer", "competitiveFees", "createdAt"));
+    openapiFields = new HashSet<String>(Arrays.asList("id", "domain", "url", "typology", "state", "deactivationStrikes", "country", "language", "topics", "bannedTopics", "providerComments", "publicationRate", "averageDaysToPublication", "numPublishedOrders", "onHoliday", "flashOffer", "postOffer", "linkAdditionOffer", "competitiveFees", "createdAt"));
 
     // a set of required properties/fields (JSON key names)
-    openapiRequiredFields = new HashSet<String>(Arrays.asList("id", "domain", "url", "state", "deactivationStrikes", "country", "language", "topics", "bannedTopics", "providerComments", "publicationRate", "averageDaysToPublication", "numPublishedOrders", "onHoliday", "flashOffer", "postOffer", "linkAdditionOffer", "competitiveFees", "createdAt"));
+    openapiRequiredFields = new HashSet<String>(Arrays.asList("id", "domain", "url", "typology", "state", "deactivationStrikes", "country", "language", "topics", "bannedTopics", "providerComments", "publicationRate", "averageDaysToPublication", "numPublishedOrders", "onHoliday", "flashOffer", "postOffer", "linkAdditionOffer", "competitiveFees", "createdAt"));
   }
 
   /**
@@ -747,6 +825,11 @@ public class SellerMedia {
       if (!jsonObj.get("url").isJsonPrimitive()) {
         throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `url` to be a primitive type in the JSON string but got `%s`", jsonObj.get("url").toString()));
       }
+      if (!jsonObj.get("typology").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `typology` to be a primitive type in the JSON string but got `%s`", jsonObj.get("typology").toString()));
+      }
+      // validate the required field `typology`
+      TypologyEnum.validateJsonElement(jsonObj.get("typology"));
       if (!jsonObj.get("state").isJsonPrimitive()) {
         throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `state` to be a primitive type in the JSON string but got `%s`", jsonObj.get("state").toString()));
       }

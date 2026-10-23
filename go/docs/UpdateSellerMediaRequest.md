@@ -4,6 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**Typology** | Pointer to **string** |  | [optional] 
 **PostOffer** | Pointer to [**UpdateSellerMediaRequestPostOffer**](UpdateSellerMediaRequestPostOffer.md) |  | [optional] 
 **LinkAdditionOffer** | Pointer to [**NullableUpdateSellerMediaRequestLinkAdditionOffer**](UpdateSellerMediaRequestLinkAdditionOffer.md) |  | [optional] 
 **ExtraServices** | Pointer to [**[]UpdateSellerMediaRequestExtraServicesInner**](UpdateSellerMediaRequestExtraServicesInner.md) |  | [optional] 
@@ -26,6 +27,31 @@ will change when the set of required properties is changed
 NewUpdateSellerMediaRequestWithDefaults instantiates a new UpdateSellerMediaRequest object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
+
+### GetTypology
+
+`func (o *UpdateSellerMediaRequest) GetTypology() string`
+
+GetTypology returns the Typology field if non-nil, zero value otherwise.
+
+### GetTypologyOk
+
+`func (o *UpdateSellerMediaRequest) GetTypologyOk() (*string, bool)`
+
+GetTypologyOk returns a tuple with the Typology field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetTypology
+
+`func (o *UpdateSellerMediaRequest) SetTypology(v string)`
+
+SetTypology sets Typology field to given value.
+
+### HasTypology
+
+`func (o *UpdateSellerMediaRequest) HasTypology() bool`
+
+HasTypology returns a boolean if a field has been set.
 
 ### GetPostOffer
 

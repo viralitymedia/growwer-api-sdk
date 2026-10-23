@@ -9,10 +9,12 @@ to the property and its constructor parameter in each model that holds such a pr
 
 The models come from the contract: a component schema's own properties land in its class and in
 every schema that extends it through allOf; an inline object lands in a class named after its
-path (SavedFilter.notifications -> SavedFilterNotifications). A model that cannot be found fails
-the run rather than leaving one unpatched. When a generator upgrade declares these properties
-nullable itself, nothing is left to patch and this step fails, so it is removed then rather than
-kept as a silent no-op.
+path (SavedFilter.notifications -> SavedFilterNotifications), and one in a component's own allOf
+part in a class with "AllOf" after the component, whose array items take no "Inner"
+(ProjectCatalogueMedia.project.aiKeywords[] -> ProjectCatalogueMediaAllOfProjectAiKeywords). A
+model that cannot be found fails the run rather than leaving one unpatched. When a generator
+upgrade declares these properties nullable itself, nothing is left to patch and this step fails,
+so it is removed then rather than kept as a silent no-op.
 """
 
 import json
@@ -40,7 +42,7 @@ def extensions(name):
     return found
 
 
-def nullable_required_enums(schema, owner, path):
+def nullable_required_enums(schema, owner, path, item_suffix="Inner"):
     """Yields (class name, property) for each required, nullable enum property under `schema`."""
     if not isinstance(schema, dict):
         return
@@ -53,10 +55,25 @@ def nullable_required_enums(schema, owner, path):
             for name in classes:
                 yield name, prop
         inner = path + prop[0].upper() + prop[1:]
-        yield from nullable_required_enums(definition, owner, inner)
-        yield from nullable_required_enums(definition.get("items"), owner, inner + "Inner")
+        yield from nullable_required_enums(definition, owner, inner, item_suffix)
+        yield from nullable_required_enums(definition.get("items"), owner, inner + item_suffix, item_suffix)
     for part in schema.get("allOf", []):
-        yield from nullable_required_enums(part, owner, path)
+        if path or "properties" not in part:
+            yield from nullable_required_enums(part, owner, path, item_suffix)
+            continue
+        # An inline object in a component's own allOf part is named with "AllOf" after the
+        # component, and the items of an array under it take no "Inner": ProjectCatalogueMedia's
+        # project.aiKeywords[] is ProjectCatalogueMediaAllOfProjectAiKeywords.
+        own_required = set(part.get("required", []))
+        for prop, definition in part["properties"].items():
+            if not isinstance(definition, dict):
+                continue
+            if definition.get("nullable") and "enum" in definition and prop in own_required:
+                for name in extensions(owner):
+                    yield name, prop
+            inner = "AllOf" + prop[0].upper() + prop[1:]
+            yield from nullable_required_enums(definition, owner, inner, "")
+            yield from nullable_required_enums(definition.get("items"), owner, inner, "")
 
 
 patched = []

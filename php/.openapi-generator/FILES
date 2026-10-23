@@ -28,6 +28,8 @@ docs/Model/CodeName.md
 docs/Model/CountSavedFilterMedias200Response.md
 docs/Model/CreateProjectRequest.md
 docs/Model/CreateSavedFilterRequest.md
+docs/Model/CreateSellerMediaRequest.md
+docs/Model/CreateSellerMediaRequestPostOffer.md
 docs/Model/Error.md
 docs/Model/GetBuyerWallet200Response.md
 docs/Model/GetMe200Response.md
@@ -91,6 +93,7 @@ docs/Model/PostOrderBriefingRequest.md
 docs/Model/Project.md
 docs/Model/ProjectCatalogueMedia.md
 docs/Model/ProjectCatalogueMediaAllOfProject.md
+docs/Model/ProjectCatalogueMediaAllOfProjectAiKeywords.md
 docs/Model/PutSellerHoliday200Response.md
 docs/Model/PutSellerHolidayRequest.md
 docs/Model/RequestMedias201Response.md
@@ -157,6 +160,8 @@ lib/Model/CodeName.php
 lib/Model/CountSavedFilterMedias200Response.php
 lib/Model/CreateProjectRequest.php
 lib/Model/CreateSavedFilterRequest.php
+lib/Model/CreateSellerMediaRequest.php
+lib/Model/CreateSellerMediaRequestPostOffer.php
 lib/Model/Error.php
 lib/Model/GetBuyerWallet200Response.php
 lib/Model/GetMe200Response.php
@@ -221,6 +226,7 @@ lib/Model/PostOrderBriefingRequest.php
 lib/Model/Project.php
 lib/Model/ProjectCatalogueMedia.php
 lib/Model/ProjectCatalogueMediaAllOfProject.php
+lib/Model/ProjectCatalogueMediaAllOfProjectAiKeywords.php
 lib/Model/PutSellerHoliday200Response.php
 lib/Model/PutSellerHolidayRequest.php
 lib/Model/RequestMedias201Response.php

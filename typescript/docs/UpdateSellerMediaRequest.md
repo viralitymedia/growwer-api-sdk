@@ -6,6 +6,7 @@
 
 Name | Type
 ------------ | -------------
+`typology` | string
 `postOffer` | [UpdateSellerMediaRequestPostOffer](UpdateSellerMediaRequestPostOffer.md)
 `linkAdditionOffer` | [UpdateSellerMediaRequestLinkAdditionOffer](UpdateSellerMediaRequestLinkAdditionOffer.md)
 `extraServices` | [Array&lt;UpdateSellerMediaRequestExtraServicesInner&gt;](UpdateSellerMediaRequestExtraServicesInner.md)
@@ -17,6 +18,7 @@ import type { UpdateSellerMediaRequest } from '@growwer/api'
 
 // TODO: Update the object below with actual values
 const example = {
+  "typology": null,
   "postOffer": null,
   "linkAdditionOffer": null,
   "extraServices": null,

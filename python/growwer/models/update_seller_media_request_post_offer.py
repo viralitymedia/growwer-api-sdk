@@ -18,8 +18,8 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field
-from typing import Any, ClassVar, Dict, List
+from pydantic import BaseModel, ConfigDict, Field, StrictStr, field_validator
+from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
 from growwer.models.update_seller_media_request_post_offer_pricing_options_inner import UpdateSellerMediaRequestPostOfferPricingOptionsInner
 from typing import Optional, Set
@@ -30,8 +30,32 @@ class UpdateSellerMediaRequestPostOffer(BaseModel):
     """
     UpdateSellerMediaRequestPostOffer
     """ # noqa: E501
-    pricing_options: Annotated[List[UpdateSellerMediaRequestPostOfferPricingOptionsInner], Field(min_length=1)] = Field(alias="pricingOptions")
-    __properties: ClassVar[List[str]] = ["pricingOptions"]
+    pricing_options: Optional[Annotated[List[UpdateSellerMediaRequestPostOfferPricingOptionsInner], Field(min_length=1)]] = Field(default=None, alias="pricingOptions")
+    maximum_links: Optional[Annotated[int, Field(le=4, strict=True, ge=1)]] = Field(default=None, alias="maximumLinks")
+    advertising_labelling_policy: Optional[StrictStr] = Field(default=None, alias="advertisingLabellingPolicy")
+    promoted_social_networks: Optional[List[StrictStr]] = Field(default=None, alias="promotedSocialNetworks")
+    __properties: ClassVar[List[str]] = ["pricingOptions", "maximumLinks", "advertisingLabellingPolicy", "promotedSocialNetworks"]
+
+    @field_validator('advertising_labelling_policy')
+    def advertising_labelling_policy_validate_enum(cls, value):
+        """Validates the enum"""
+        if value is None:
+            return value
+
+        if value not in set(['always', 'never']):
+            raise ValueError("must be one of enum values ('always', 'never')")
+        return value
+
+    @field_validator('promoted_social_networks')
+    def promoted_social_networks_validate_enum(cls, value):
+        """Validates the enum"""
+        if value is None:
+            return value
+
+        for i in value:
+            if i not in set(['twitter', 'instagram', 'facebook', 'pinterest', 'tumblr', 'newsletter']):
+                raise ValueError("each list item must be one of ('twitter', 'instagram', 'facebook', 'pinterest', 'tumblr', 'newsletter')")
+        return value
 
     model_config = ConfigDict(
         validate_by_name=True,
@@ -91,7 +115,10 @@ class UpdateSellerMediaRequestPostOffer(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "pricingOptions": [UpdateSellerMediaRequestPostOfferPricingOptionsInner.from_dict(_item) for _item in obj["pricingOptions"]] if obj.get("pricingOptions") is not None else None
+            "pricingOptions": [UpdateSellerMediaRequestPostOfferPricingOptionsInner.from_dict(_item) for _item in obj["pricingOptions"]] if obj.get("pricingOptions") is not None else None,
+            "maximumLinks": obj.get("maximumLinks"),
+            "advertisingLabellingPolicy": obj.get("advertisingLabellingPolicy"),
+            "promotedSocialNetworks": obj.get("promotedSocialNetworks")
         })
         return _obj
 

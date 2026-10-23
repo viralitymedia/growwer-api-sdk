@@ -60,7 +60,7 @@ public class CreateSavedFilterRequest {
   public static final String SERIALIZED_NAME_FILTERS = "filters";
   @SerializedName(SERIALIZED_NAME_FILTERS)
   @javax.annotation.Nonnull
-  private Map<String, Object> filters = new HashMap<>();
+  private Map<String, Object> filters;
 
   /**
    * Email new matching medias this often. Omit it for no emails.

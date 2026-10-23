@@ -2004,7 +2004,7 @@
           "Managed services"
         ],
         "summary": "Request a new campaign",
-        "description": "Asks your account manager for a new campaign, as the managed service page does: the team emails you to agree on it. For accounts with a managed service (GET /me `managedService.active`); without one, POST /managed-service/info-requests asks about the service.\n\nYou may send 5 such requests per UTC day through the API. Past them it answers 429 `managed_service_request_limit_reached`, with `Retry-After` the time to the next UTC midnight. A request that is refused (4xx) does not count; one that fails on the server (5xx) does, as it may have been sent.",
+        "description": "Asks your account manager for a new campaign, as the managed service page does: the team emails you to agree on it. For accounts with a managed service (GET /me `managedService.active`); without one, POST /managed-service/info-requests asks about the service.\n\nThe API admits a limited number of such requests per user and UTC day (5 by default; the refusal message states the current limit). Past it, it answers 429 `managed_service_request_limit_reached`, with `Retry-After` the time to the next UTC midnight. A request that is refused (4xx) does not count; one that fails on the server (5xx) does, as it may have been sent.",
         "operationId": "requestManagedServiceCampaign",
         "parameters": [
           {
@@ -2079,7 +2079,7 @@
           "Managed services"
         ],
         "summary": "Ask about the managed service",
-        "description": "Asks the team about the managed service for your website, as the managed service landing page does: the team contacts you. For accounts without a managed service (GET /me `managedService.active`); with one, POST /managed-service/campaign-requests requests a new campaign.\n\nYou may send 5 such requests per UTC day through the API. Past them it answers 429 `managed_service_request_limit_reached`, with `Retry-After` the time to the next UTC midnight. A request that is refused (4xx) does not count; one that fails on the server (5xx) does, as it may have been sent.",
+        "description": "Asks the team about the managed service for your website, as the managed service landing page does: the team contacts you. For accounts without a managed service (GET /me `managedService.active`); with one, POST /managed-service/campaign-requests requests a new campaign.\n\nThe API admits a limited number of such requests per user and UTC day (5 by default; the refusal message states the current limit). Past it, it answers 429 `managed_service_request_limit_reached`, with `Retry-After` the time to the next UTC midnight. A request that is refused (4xx) does not count; one that fails on the server (5xx) does, as it may have been sent.",
         "operationId": "requestManagedServiceInfo",
         "parameters": [
           {
@@ -3760,297 +3760,6 @@
         }
       }
     },
-    "/api/v1/seller/medias/{id}": {
-      "get": {
-        "tags": [
-          "Seller medias"
-        ],
-        "summary": "Get a media you sell on",
-        "description": "One of your medias, with your fees, its extras, the competitive fees Growwer suggests and how it performs. Another seller's media is not found.",
-        "operationId": "getSellerMedia",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "The media.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SellerMedia"
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "429": {
-            "$ref": "#/components/responses/TooManyRequests"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          },
-          "503": {
-            "$ref": "#/components/responses/ServiceUnavailable"
-          }
-        }
-      },
-      "patch": {
-        "tags": [
-          "Seller medias"
-        ],
-        "summary": "Edit the fees of a media you sell on",
-        "description": "Sets the fees of one of your medias, as the media edit page saves them. Send only the sections you change: a section you send replaces that section wholly, a section you leave out stays as it is.\n\n- `postOffer.pricingOptions` lists every link type you offer for sponsored posts, at least one. A link type you leave out is no longer offered. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR.\n- `linkAdditionOffer.pricingOptions` lists the link types you offer for adding a link to an existing article; `null` or an empty list stops offering link additions.\n- `extraServices` is the full list of extra services you offer; an empty list removes them all.\n\nThe fees are your base fees, the ones GET /seller/medias/{id} returns: while a flash offer runs, its discount keeps applying on top of them, and `currentCost` shows the result. `currentCost` may be sent back as read and is ignored. Characteristics, topics and comments are not edited here.\n\nAs on the page, a change of the post offer's price may cancel the managed-service proposals accepted for the media whose price it changes, and raising the price above the best competitor's tells Growwer's support team. A restricted seller account may edit its fees.",
-        "operationId": "updateSellerMedia",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          },
-          {
-            "$ref": "#/components/parameters/IdempotencyKey"
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "properties": {
-                  "postOffer": {
-                    "required": [
-                      "pricingOptions"
-                    ],
-                    "properties": {
-                      "pricingOptions": {
-                        "type": "array",
-                        "items": {
-                          "required": [
-                            "linkType"
-                          ],
-                          "properties": {
-                            "linkType": {
-                              "type": "string",
-                              "enum": [
-                                "dofollow",
-                                "nofollow",
-                                "citation"
-                              ]
-                            },
-                            "feeWhenSellerWritesPost": {
-                              "description": "What you are paid for a post you write; null or left out when you do not offer it.",
-                              "allOf": [
-                                {
-                                  "$ref": "#/components/schemas/MoneyOrNull"
-                                }
-                              ]
-                            },
-                            "feeWhenSellerDoesNotWritePost": {
-                              "description": "What you are paid for a post the buyer or Growwer writes; null or left out when you do not offer it.",
-                              "allOf": [
-                                {
-                                  "$ref": "#/components/schemas/MoneyOrNull"
-                                }
-                              ]
-                            }
-                          },
-                          "type": "object"
-                        },
-                        "minItems": 1
-                      }
-                    },
-                    "type": "object",
-                    "additionalProperties": false
-                  },
-                  "linkAdditionOffer": {
-                    "required": [
-                      "pricingOptions"
-                    ],
-                    "properties": {
-                      "pricingOptions": {
-                        "type": "array",
-                        "items": {
-                          "required": [
-                            "linkType",
-                            "fee"
-                          ],
-                          "properties": {
-                            "linkType": {
-                              "type": "string",
-                              "enum": [
-                                "dofollow",
-                                "nofollow",
-                                "citation"
-                              ]
-                            },
-                            "fee": {
-                              "description": "Your base fee for adding a link of this type.",
-                              "allOf": [
-                                {
-                                  "$ref": "#/components/schemas/Money"
-                                }
-                              ]
-                            }
-                          },
-                          "type": "object"
-                        }
-                      }
-                    },
-                    "type": "object",
-                    "nullable": true,
-                    "additionalProperties": false
-                  },
-                  "extraServices": {
-                    "type": "array",
-                    "items": {
-                      "required": [
-                        "name",
-                        "cost"
-                      ],
-                      "properties": {
-                        "name": {
-                          "type": "string",
-                          "enum": [
-                            "list_on_homepage",
-                            "extra_charge_for_sensitive_topic"
-                          ]
-                        },
-                        "cost": {
-                          "description": "What you are paid for the extra service.",
-                          "allOf": [
-                            {
-                              "$ref": "#/components/schemas/Money"
-                            }
-                          ]
-                        }
-                      },
-                      "type": "object"
-                    }
-                  }
-                },
-                "type": "object",
-                "additionalProperties": false
-              },
-              "example": {
-                "postOffer": {
-                  "pricingOptions": [
-                    {
-                      "linkType": "dofollow",
-                      "feeWhenSellerWritesPost": {
-                        "amount": 12000,
-                        "currency": "EUR"
-                      },
-                      "feeWhenSellerDoesNotWritePost": {
-                        "amount": 10000,
-                        "currency": "EUR"
-                      }
-                    },
-                    {
-                      "linkType": "nofollow",
-                      "feeWhenSellerWritesPost": {
-                        "amount": 9000,
-                        "currency": "EUR"
-                      },
-                      "feeWhenSellerDoesNotWritePost": {
-                        "amount": 7000,
-                        "currency": "EUR"
-                      }
-                    }
-                  ]
-                },
-                "linkAdditionOffer": null,
-                "extraServices": [
-                  {
-                    "name": "list_on_homepage",
-                    "cost": {
-                      "amount": 5000,
-                      "currency": "EUR"
-                    }
-                  }
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "The media, with the fees saved.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SellerMedia"
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "403": {
-            "description": "The key is read-only (code `insufficient_capability`).",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "409": {
-            "description": "The `Idempotency-Key` conflicts (codes `idempotency_key_reused`, `idempotency_request_in_progress`, `idempotency_outcome_unknown`).",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "The body is not valid (code `validation_failed`): `details.fields` names each field by its path in the body, such as `postOffer.pricingOptions.0.feeWhenSellerWritesPost`, with the rule the media edit page applies. Nothing changed.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "429": {
-            "$ref": "#/components/responses/TooManyRequests"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          },
-          "503": {
-            "$ref": "#/components/responses/ServiceUnavailable"
-          }
-        }
-      }
-    },
     "/api/v1/seller/medias": {
       "get": {
         "tags": [
@@ -4143,6 +3852,749 @@
           },
           "422": {
             "$ref": "#/components/responses/ValidationFailed"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Seller medias"
+        ],
+        "summary": "Register a media you sell on",
+        "description": "Registers one of your medias, as the media create page does. The media is created with `state: pending_review` and Growwer reviews it in the background, as for a media registered on the web; GET /seller/medias/{id} shows its state.\n\n- `rootUrl` is the media's root URL; `typology` is `blog` or `press`.\n- `country` and `language` take the codes GET /vocabulary publishes; `topics` and `bannedTopics` take its topic ids, at most 100 each, and no topic may be both; `bannedTopics` left out bans none.\n- `postOffer.pricingOptions` lists every link type you offer for sponsored posts, at least one. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR, sent in cents.\n- `postOffer.maximumLinks` is how many links a sponsored post may hold, 1 to 4; `postOffer.advertisingLabellingPolicy` whether posts are labelled as advertising, `never` when left out; `postOffer.promotedSocialNetworks` the social networks posts are promoted on, none when left out.\n- `linkAdditionOffer.pricingOptions` lists the link types you offer for adding a link to an existing article; left out, `null` or an empty list offers none.\n- `extraServices` lists the extra services you offer, none when left out. It is sent at the top level, although GET /seller/medias/{id} reads it inside `postOffer`.\n- `acceptMediaPublishingTerms` and `declareMediaOwnership` must be `true`: they accept the media publishing terms and declare that you own or manage the media, as the page's checkboxes do, and are recorded as your consents for the media.\n\nA media registered already, by you or by anyone else, is refused with 409 `media_already_registered`, and each such refusal counts toward a daily limit of refusals (429 `media_duplicate_limit_reached` once reached); medias not registered yet are never limited by it.\n\nTo register many medias, call this operation once per media, each call with its own `Idempotency-Key` and its own answer (201, 409, 422 or 429); there is no batch operation. The request limits apply to the loop as to any calls (600 requests per minute per user and 300 per key), and each 409 `media_already_registered` counts toward the daily limit of refusals as it does for a single call. Retry a call that got no answer with its same `Idempotency-Key`, as for any write.",
+        "operationId": "createSellerMedia",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "rootUrl",
+                  "typology",
+                  "country",
+                  "language",
+                  "topics",
+                  "postOffer",
+                  "acceptMediaPublishingTerms",
+                  "declareMediaOwnership"
+                ],
+                "properties": {
+                  "rootUrl": {
+                    "type": "string",
+                    "format": "uri",
+                    "example": "https://www.example.com"
+                  },
+                  "typology": {
+                    "type": "string",
+                    "enum": [
+                      "blog",
+                      "press"
+                    ]
+                  },
+                  "country": {
+                    "description": "A country code from GET /vocabulary.",
+                    "type": "string",
+                    "example": "ES"
+                  },
+                  "language": {
+                    "description": "A language code from GET /vocabulary.",
+                    "type": "string",
+                    "example": "es"
+                  },
+                  "topics": {
+                    "description": "Topic ids from GET /vocabulary.",
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    },
+                    "maxItems": 100,
+                    "minItems": 1,
+                    "uniqueItems": true
+                  },
+                  "bannedTopics": {
+                    "description": "The topic ids from GET /vocabulary the media refuses.",
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    },
+                    "maxItems": 100,
+                    "uniqueItems": true
+                  },
+                  "postOffer": {
+                    "required": [
+                      "pricingOptions",
+                      "maximumLinks"
+                    ],
+                    "properties": {
+                      "pricingOptions": {
+                        "type": "array",
+                        "items": {
+                          "required": [
+                            "linkType"
+                          ],
+                          "properties": {
+                            "linkType": {
+                              "type": "string",
+                              "enum": [
+                                "dofollow",
+                                "nofollow",
+                                "citation"
+                              ]
+                            },
+                            "feeWhenSellerWritesPost": {
+                              "description": "What you are paid for a post you write; null or left out when you do not offer it.",
+                              "allOf": [
+                                {
+                                  "$ref": "#/components/schemas/MoneyOrNull"
+                                }
+                              ]
+                            },
+                            "feeWhenSellerDoesNotWritePost": {
+                              "description": "What you are paid for a post the buyer or Growwer writes; null or left out when you do not offer it.",
+                              "allOf": [
+                                {
+                                  "$ref": "#/components/schemas/MoneyOrNull"
+                                }
+                              ]
+                            }
+                          },
+                          "type": "object"
+                        },
+                        "minItems": 1
+                      },
+                      "maximumLinks": {
+                        "type": "integer",
+                        "maximum": 4,
+                        "minimum": 1
+                      },
+                      "advertisingLabellingPolicy": {
+                        "type": "string",
+                        "enum": [
+                          "always",
+                          "never"
+                        ]
+                      },
+                      "promotedSocialNetworks": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "twitter",
+                            "instagram",
+                            "facebook",
+                            "pinterest",
+                            "tumblr",
+                            "newsletter"
+                          ]
+                        },
+                        "uniqueItems": true
+                      }
+                    },
+                    "type": "object",
+                    "additionalProperties": false
+                  },
+                  "linkAdditionOffer": {
+                    "required": [
+                      "pricingOptions"
+                    ],
+                    "properties": {
+                      "pricingOptions": {
+                        "type": "array",
+                        "items": {
+                          "required": [
+                            "linkType",
+                            "fee"
+                          ],
+                          "properties": {
+                            "linkType": {
+                              "type": "string",
+                              "enum": [
+                                "dofollow",
+                                "nofollow",
+                                "citation"
+                              ]
+                            },
+                            "fee": {
+                              "description": "Your base fee for adding a link of this type.",
+                              "allOf": [
+                                {
+                                  "$ref": "#/components/schemas/Money"
+                                }
+                              ]
+                            }
+                          },
+                          "type": "object"
+                        }
+                      }
+                    },
+                    "type": "object",
+                    "nullable": true,
+                    "additionalProperties": false
+                  },
+                  "extraServices": {
+                    "type": "array",
+                    "items": {
+                      "required": [
+                        "name",
+                        "cost"
+                      ],
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "enum": [
+                            "list_on_homepage",
+                            "extra_charge_for_sensitive_topic"
+                          ]
+                        },
+                        "cost": {
+                          "description": "What you are paid for the extra service.",
+                          "allOf": [
+                            {
+                              "$ref": "#/components/schemas/Money"
+                            }
+                          ]
+                        }
+                      },
+                      "type": "object"
+                    }
+                  },
+                  "acceptMediaPublishingTerms": {
+                    "description": "Must be true: you accept the media publishing terms.",
+                    "type": "boolean",
+                    "enum": [
+                      true
+                    ]
+                  },
+                  "declareMediaOwnership": {
+                    "description": "Must be true: you own or manage this media.",
+                    "type": "boolean",
+                    "enum": [
+                      true
+                    ]
+                  }
+                },
+                "type": "object",
+                "additionalProperties": false
+              },
+              "example": {
+                "rootUrl": "https://www.example.com",
+                "typology": "blog",
+                "country": "ES",
+                "language": "es",
+                "topics": [
+                  3,
+                  7
+                ],
+                "bannedTopics": [
+                  12
+                ],
+                "postOffer": {
+                  "pricingOptions": [
+                    {
+                      "linkType": "dofollow",
+                      "feeWhenSellerWritesPost": {
+                        "amount": 12000,
+                        "currency": "EUR"
+                      },
+                      "feeWhenSellerDoesNotWritePost": {
+                        "amount": 10000,
+                        "currency": "EUR"
+                      }
+                    }
+                  ],
+                  "maximumLinks": 2,
+                  "advertisingLabellingPolicy": "always",
+                  "promotedSocialNetworks": [
+                    "twitter"
+                  ]
+                },
+                "linkAdditionOffer": {
+                  "pricingOptions": [
+                    {
+                      "linkType": "dofollow",
+                      "fee": {
+                        "amount": 6000,
+                        "currency": "EUR"
+                      }
+                    }
+                  ]
+                },
+                "extraServices": [
+                  {
+                    "name": "list_on_homepage",
+                    "cost": {
+                      "amount": 5000,
+                      "currency": "EUR"
+                    }
+                  }
+                ],
+                "acceptMediaPublishingTerms": true,
+                "declareMediaOwnership": true
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The media, registered with `state: pending_review`. `Location` is its URL.",
+            "headers": {
+              "Location": {
+                "description": "The URL of the new media.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SellerMedia"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "description": "The key is read-only (code `insufficient_capability`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Nothing was registered: your seller account is restricted (code `seller_restricted`); or the media is registered already (code `media_already_registered`), with `details.mediaId` naming it only when it is yours, and the refusal counts toward the daily limit of such refusals; or the `Idempotency-Key` conflicts (codes `idempotency_key_reused`, `idempotency_request_in_progress`, `idempotency_outcome_unknown`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The body is not valid (code `validation_failed`): `details.fields` names each field by its path in the body, such as `postOffer.pricingOptions.0.feeWhenSellerWritesPost` or `topics.1`, with the rule the media create page applies. Nothing was registered, and the refusal does not count toward the daily limit of `media_already_registered` refusals.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/seller/medias/{id}": {
+      "get": {
+        "tags": [
+          "Seller medias"
+        ],
+        "summary": "Get a media you sell on",
+        "description": "One of your medias, with your fees, its extras, the competitive fees Growwer suggests and how it performs. Another seller's media is not found.",
+        "operationId": "getSellerMedia",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The media.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SellerMedia"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Seller medias"
+        ],
+        "summary": "Delete a media you sell on",
+        "description": "Deletes one of your medias, in any state, as the media delete button does. The media must have no order in progress: close or reject its orders first. The API never cancels an order for you, and an order placed while the delete runs is refused, never cancelled.\n\nWhat goes with the media, as on the web:\n\n- A running flash offer ends with it, and its managed-service proposals are deleted.\n- Its finished orders stay, with the media's URL; they read `media.id` null.\n- Buyers' favourites and discards of the domain stay, as they are kept by domain.\n- The catalogue search drops the media shortly after the 204, as the search index updates asynchronously.\n\nRepeating the call with the same `Idempotency-Key` answers the same 204 with `Idempotent-Replayed: true`; a new key after the delete answers 404.",
+        "operationId": "deleteSellerMedia",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "The media was deleted."
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "description": "The key is read-only (code `insufficient_capability`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "description": "Nothing was deleted. Your seller account is restricted (code `seller_restricted`); the media has orders that are not finished (code `media_has_active_orders`, `details.orderIds` lists them: close or reject them first); or the `Idempotency-Key` conflicts (codes `idempotency_key_reused`, `idempotency_request_in_progress`, `idempotency_outcome_unknown`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Seller medias"
+        ],
+        "summary": "Edit the offer of a media you sell on",
+        "description": "Sets the fees, extra services, typology and post offer characteristics of one of your medias, as the media edit page saves them. Send only the fields you change: a field you send replaces that field wholly, a field you leave out stays as it is, inside `postOffer` too (sending only `postOffer.maximumLinks` keeps your fees).\n\n- `typology` is `blog` or `press`.\n- `postOffer.pricingOptions` lists every link type you offer for sponsored posts, at least one. A link type you leave out is no longer offered. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR.\n- `postOffer.maximumLinks` is how many links a sponsored post may hold, 1 to 4; `postOffer.advertisingLabellingPolicy` whether posts are labelled as advertising (`always` or `never`); `postOffer.promotedSocialNetworks` the full list of social networks posts are promoted on, each once (an empty list for none).\n- `linkAdditionOffer.pricingOptions` lists the link types you offer for adding a link to an existing article; `null` or an empty list stops offering link additions.\n- `extraServices` is the full list of extra services you offer; an empty list removes them all. It is sent at the top level, although GET /seller/medias/{id} reads it inside `postOffer`.\n\nThe fees are your base fees, the ones GET /seller/medias/{id} returns: while a flash offer runs, its discount keeps applying on top of them, and `currentCost` shows the result. `currentCost` may be sent back as read and is ignored. Country, language, topics and comments are not edited here.\n\nAs on the page, a change of the post offer's price may cancel the managed-service proposals accepted for the media whose price it changes, and raising the price above the best competitor's tells Growwer's support team. A restricted seller account may edit its offer.",
+        "operationId": "updateSellerMedia",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "typology": {
+                    "type": "string",
+                    "enum": [
+                      "blog",
+                      "press"
+                    ]
+                  },
+                  "postOffer": {
+                    "properties": {
+                      "pricingOptions": {
+                        "type": "array",
+                        "items": {
+                          "required": [
+                            "linkType"
+                          ],
+                          "properties": {
+                            "linkType": {
+                              "type": "string",
+                              "enum": [
+                                "dofollow",
+                                "nofollow",
+                                "citation"
+                              ]
+                            },
+                            "feeWhenSellerWritesPost": {
+                              "description": "What you are paid for a post you write; null or left out when you do not offer it.",
+                              "allOf": [
+                                {
+                                  "$ref": "#/components/schemas/MoneyOrNull"
+                                }
+                              ]
+                            },
+                            "feeWhenSellerDoesNotWritePost": {
+                              "description": "What you are paid for a post the buyer or Growwer writes; null or left out when you do not offer it.",
+                              "allOf": [
+                                {
+                                  "$ref": "#/components/schemas/MoneyOrNull"
+                                }
+                              ]
+                            }
+                          },
+                          "type": "object"
+                        },
+                        "minItems": 1
+                      },
+                      "maximumLinks": {
+                        "type": "integer",
+                        "maximum": 4,
+                        "minimum": 1
+                      },
+                      "advertisingLabellingPolicy": {
+                        "type": "string",
+                        "enum": [
+                          "always",
+                          "never"
+                        ]
+                      },
+                      "promotedSocialNetworks": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "twitter",
+                            "instagram",
+                            "facebook",
+                            "pinterest",
+                            "tumblr",
+                            "newsletter"
+                          ]
+                        },
+                        "uniqueItems": true
+                      }
+                    },
+                    "type": "object",
+                    "additionalProperties": false
+                  },
+                  "linkAdditionOffer": {
+                    "required": [
+                      "pricingOptions"
+                    ],
+                    "properties": {
+                      "pricingOptions": {
+                        "type": "array",
+                        "items": {
+                          "required": [
+                            "linkType",
+                            "fee"
+                          ],
+                          "properties": {
+                            "linkType": {
+                              "type": "string",
+                              "enum": [
+                                "dofollow",
+                                "nofollow",
+                                "citation"
+                              ]
+                            },
+                            "fee": {
+                              "description": "Your base fee for adding a link of this type.",
+                              "allOf": [
+                                {
+                                  "$ref": "#/components/schemas/Money"
+                                }
+                              ]
+                            }
+                          },
+                          "type": "object"
+                        }
+                      }
+                    },
+                    "type": "object",
+                    "nullable": true,
+                    "additionalProperties": false
+                  },
+                  "extraServices": {
+                    "type": "array",
+                    "items": {
+                      "required": [
+                        "name",
+                        "cost"
+                      ],
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "enum": [
+                            "list_on_homepage",
+                            "extra_charge_for_sensitive_topic"
+                          ]
+                        },
+                        "cost": {
+                          "description": "What you are paid for the extra service.",
+                          "allOf": [
+                            {
+                              "$ref": "#/components/schemas/Money"
+                            }
+                          ]
+                        }
+                      },
+                      "type": "object"
+                    }
+                  }
+                },
+                "type": "object",
+                "additionalProperties": false
+              },
+              "example": {
+                "typology": "blog",
+                "postOffer": {
+                  "maximumLinks": 2,
+                  "advertisingLabellingPolicy": "always",
+                  "promotedSocialNetworks": [
+                    "twitter",
+                    "newsletter"
+                  ],
+                  "pricingOptions": [
+                    {
+                      "linkType": "dofollow",
+                      "feeWhenSellerWritesPost": {
+                        "amount": 12000,
+                        "currency": "EUR"
+                      },
+                      "feeWhenSellerDoesNotWritePost": {
+                        "amount": 10000,
+                        "currency": "EUR"
+                      }
+                    },
+                    {
+                      "linkType": "nofollow",
+                      "feeWhenSellerWritesPost": {
+                        "amount": 9000,
+                        "currency": "EUR"
+                      },
+                      "feeWhenSellerDoesNotWritePost": {
+                        "amount": 7000,
+                        "currency": "EUR"
+                      }
+                    }
+                  ]
+                },
+                "linkAdditionOffer": null,
+                "extraServices": [
+                  {
+                    "name": "list_on_homepage",
+                    "cost": {
+                      "amount": 5000,
+                      "currency": "EUR"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The media, with the changes saved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SellerMedia"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "description": "The key is read-only (code `insufficient_capability`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "description": "The `Idempotency-Key` conflicts (codes `idempotency_key_reused`, `idempotency_request_in_progress`, `idempotency_outcome_unknown`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The body is not valid (code `validation_failed`): `details.fields` names each field by its path in the body, such as `postOffer.pricingOptions.0.feeWhenSellerWritesPost`, with the rule the media edit page applies. Nothing changed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           },
           "429": {
             "$ref": "#/components/responses/TooManyRequests"
@@ -6114,14 +6566,15 @@
             ],
             "properties": {
               "project": {
-                "description": "The media's state in the project.",
+                "description": "The media's state in the project, and the AI keywords the web lists for the media in this project.",
                 "required": [
                   "favourite",
                   "discarded",
                   "requested",
                   "recommended",
                   "bought",
-                  "new"
+                  "new",
+                  "aiKeywords"
                 ],
                 "properties": {
                   "favourite": {
@@ -6144,6 +6597,33 @@
                   "new": {
                     "description": "Growwer matched the media with the project recently.",
                     "type": "boolean"
+                  },
+                  "aiKeywords": {
+                    "description": "The AI keywords the web lists for the media in this project, one entry per keyword of each stored source, empty when there are none. Keywords an AI answer gave without referencing any domain may be listed for every media of the project, so an entry does not mean that the engine cited the media. Entries keep their order within an engine, and a keyword listed by two engines appears once for each; the order of the engines is not promised.",
+                    "type": "array",
+                    "items": {
+                      "required": [
+                        "keyword",
+                        "source"
+                      ],
+                      "properties": {
+                        "keyword": {
+                          "type": "string"
+                        },
+                        "source": {
+                          "description": "The AI engine that gave the keyword, as the `ranksAiKeyword` filter names it, or null for an engine it does not name. It is never where the media comes from.",
+                          "type": "string",
+                          "nullable": true,
+                          "enum": [
+                            "googleAiOverview",
+                            "chatgpt",
+                            "googleAiMode",
+                            null
+                          ]
+                        }
+                      },
+                      "type": "object"
+                    }
                   }
                 },
                 "type": "object"
@@ -6210,6 +6690,7 @@
           "id",
           "domain",
           "url",
+          "typology",
           "state",
           "deactivationStrikes",
           "country",
@@ -6239,6 +6720,13 @@
           "url": {
             "description": "The media's root URL.",
             "type": "string"
+          },
+          "typology": {
+            "type": "string",
+            "enum": [
+              "blog",
+              "press"
+            ]
           },
           "state": {
             "type": "string",
@@ -6318,6 +6806,9 @@
           "postOffer": {
             "required": [
               "pricingOptions",
+              "maximumLinks",
+              "advertisingLabellingPolicy",
+              "promotedSocialNetworks",
               "extraServices"
             ],
             "properties": {
@@ -6357,7 +6848,35 @@
                   ]
                 }
               },
+              "maximumLinks": {
+                "description": "How many links a sponsored post may hold, 1 to 4.",
+                "type": "integer"
+              },
+              "advertisingLabellingPolicy": {
+                "description": "Whether sponsored posts are labelled as advertising.",
+                "type": "string",
+                "enum": [
+                  "always",
+                  "never"
+                ]
+              },
+              "promotedSocialNetworks": {
+                "description": "The social networks sponsored posts are promoted on.",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "twitter",
+                    "instagram",
+                    "facebook",
+                    "pinterest",
+                    "tumblr",
+                    "newsletter"
+                  ]
+                }
+              },
               "extraServices": {
+                "description": "Read here, but PATCH /seller/medias/{id} and POST /seller/medias take it at the top level of the body.",
                 "type": "array",
                 "items": {
                   "required": [
@@ -8190,7 +8709,7 @@
         }
       },
       "TooManyRequests": {
-        "description": "Over the rate limit (code `rate_limit_exceeded`), or too many failed authentications (code `too_many_failed_authentications`): with this key from this address, or from this address with any key; a valid key is never refused for it. On the catalogue operations, also when the response would take the account beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining` says how many new medias still fit today, `details.limit` is the daily cap that applies and `details.tier` is `full`, or `trial` for an account without a recent completed order, whose quota rises to the full cap after one; `Retry-After` is the time to the next UTC midnight, and medias already seen today stay readable. On the managed service requests, also when you sent as many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`): `Retry-After` is the time to the next UTC midnight.",
+        "description": "Over the rate limit (code `rate_limit_exceeded`), or too many failed authentications (code `too_many_failed_authentications`): with this key from this address, or from this address with any key; a valid key is never refused for it. On the catalogue operations, also when the response would take the account beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining` says how many new medias still fit today, `details.limit` is the daily cap that applies and `details.tier` is `full`, or `trial` for an account without a recent completed order, whose quota rises to the full cap after one; `Retry-After` is the time to the next UTC midnight, and medias already seen today stay readable. On the managed service requests, also when you sent as many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`): `Retry-After` is the time to the next UTC midnight. On POST /seller/medias, also when you sent as many medias that are already registered as you may per UTC day (code `media_duplicate_limit_reached`): `Retry-After` is the time to the next UTC midnight, and medias not registered yet are still accepted.",
         "headers": {
           "Retry-After": {
             "$ref": "#/components/headers/RetryAfter"
@@ -8612,7 +9131,7 @@
       "CatalogueRanksAiKeyword": {
         "name": "ranksAiKeyword",
         "in": "query",
-        "description": "A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.",
+        "description": "A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.",
         "required": false,
         "schema": {
           "type": "string"

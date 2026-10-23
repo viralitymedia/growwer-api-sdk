@@ -52,6 +52,52 @@ namespace Growwer.Api.Api
         /// <returns>ApiResponse of SellerMedia</returns>
         ApiResponse<SellerMedia> ApplySellerMediaCompetitiveFeesWithHttpInfo(Guid id, string idempotencyKey);
         /// <summary>
+        /// Register a media you sell on
+        /// </summary>
+        /// <remarks>
+        /// Registers one of your medias, as the media create page does. The media is created with &#x60;state: pending_review&#x60; and Growwer reviews it in the background, as for a media registered on the web; GET /seller/medias/{id} shows its state.  - &#x60;rootUrl&#x60; is the media&#39;s root URL; &#x60;typology&#x60; is &#x60;blog&#x60; or &#x60;press&#x60;. - &#x60;country&#x60; and &#x60;language&#x60; take the codes GET /vocabulary publishes; &#x60;topics&#x60; and &#x60;bannedTopics&#x60; take its topic ids, at most 100 each, and no topic may be both; &#x60;bannedTopics&#x60; left out bans none. - &#x60;postOffer.pricingOptions&#x60; lists every link type you offer for sponsored posts, at least one. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR, sent in cents. - &#x60;postOffer.maximumLinks&#x60; is how many links a sponsored post may hold, 1 to 4; &#x60;postOffer.advertisingLabellingPolicy&#x60; whether posts are labelled as advertising, &#x60;never&#x60; when left out; &#x60;postOffer.promotedSocialNetworks&#x60; the social networks posts are promoted on, none when left out. - &#x60;linkAdditionOffer.pricingOptions&#x60; lists the link types you offer for adding a link to an existing article; left out, &#x60;null&#x60; or an empty list offers none. - &#x60;extraServices&#x60; lists the extra services you offer, none when left out. It is sent at the top level, although GET /seller/medias/{id} reads it inside &#x60;postOffer&#x60;. - &#x60;acceptMediaPublishingTerms&#x60; and &#x60;declareMediaOwnership&#x60; must be &#x60;true&#x60;: they accept the media publishing terms and declare that you own or manage the media, as the page&#39;s checkboxes do, and are recorded as your consents for the media.  A media registered already, by you or by anyone else, is refused with 409 &#x60;media_already_registered&#x60;, and each such refusal counts toward a daily limit of refusals (429 &#x60;media_duplicate_limit_reached&#x60; once reached); medias not registered yet are never limited by it.  To register many medias, call this operation once per media, each call with its own &#x60;Idempotency-Key&#x60; and its own answer (201, 409, 422 or 429); there is no batch operation. The request limits apply to the loop as to any calls (600 requests per minute per user and 300 per key), and each 409 &#x60;media_already_registered&#x60; counts toward the daily limit of refusals as it does for a single call. Retry a call that got no answer with its same &#x60;Idempotency-Key&#x60;, as for any write.
+        /// </remarks>
+        /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
+        /// <param name="createSellerMediaRequest"></param>
+        /// <returns>SellerMedia</returns>
+        SellerMedia CreateSellerMedia(string idempotencyKey, CreateSellerMediaRequest createSellerMediaRequest);
+
+        /// <summary>
+        /// Register a media you sell on
+        /// </summary>
+        /// <remarks>
+        /// Registers one of your medias, as the media create page does. The media is created with &#x60;state: pending_review&#x60; and Growwer reviews it in the background, as for a media registered on the web; GET /seller/medias/{id} shows its state.  - &#x60;rootUrl&#x60; is the media&#39;s root URL; &#x60;typology&#x60; is &#x60;blog&#x60; or &#x60;press&#x60;. - &#x60;country&#x60; and &#x60;language&#x60; take the codes GET /vocabulary publishes; &#x60;topics&#x60; and &#x60;bannedTopics&#x60; take its topic ids, at most 100 each, and no topic may be both; &#x60;bannedTopics&#x60; left out bans none. - &#x60;postOffer.pricingOptions&#x60; lists every link type you offer for sponsored posts, at least one. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR, sent in cents. - &#x60;postOffer.maximumLinks&#x60; is how many links a sponsored post may hold, 1 to 4; &#x60;postOffer.advertisingLabellingPolicy&#x60; whether posts are labelled as advertising, &#x60;never&#x60; when left out; &#x60;postOffer.promotedSocialNetworks&#x60; the social networks posts are promoted on, none when left out. - &#x60;linkAdditionOffer.pricingOptions&#x60; lists the link types you offer for adding a link to an existing article; left out, &#x60;null&#x60; or an empty list offers none. - &#x60;extraServices&#x60; lists the extra services you offer, none when left out. It is sent at the top level, although GET /seller/medias/{id} reads it inside &#x60;postOffer&#x60;. - &#x60;acceptMediaPublishingTerms&#x60; and &#x60;declareMediaOwnership&#x60; must be &#x60;true&#x60;: they accept the media publishing terms and declare that you own or manage the media, as the page&#39;s checkboxes do, and are recorded as your consents for the media.  A media registered already, by you or by anyone else, is refused with 409 &#x60;media_already_registered&#x60;, and each such refusal counts toward a daily limit of refusals (429 &#x60;media_duplicate_limit_reached&#x60; once reached); medias not registered yet are never limited by it.  To register many medias, call this operation once per media, each call with its own &#x60;Idempotency-Key&#x60; and its own answer (201, 409, 422 or 429); there is no batch operation. The request limits apply to the loop as to any calls (600 requests per minute per user and 300 per key), and each 409 &#x60;media_already_registered&#x60; counts toward the daily limit of refusals as it does for a single call. Retry a call that got no answer with its same &#x60;Idempotency-Key&#x60;, as for any write.
+        /// </remarks>
+        /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
+        /// <param name="createSellerMediaRequest"></param>
+        /// <returns>ApiResponse of SellerMedia</returns>
+        ApiResponse<SellerMedia> CreateSellerMediaWithHttpInfo(string idempotencyKey, CreateSellerMediaRequest createSellerMediaRequest);
+        /// <summary>
+        /// Delete a media you sell on
+        /// </summary>
+        /// <remarks>
+        /// Deletes one of your medias, in any state, as the media delete button does. The media must have no order in progress: close or reject its orders first. The API never cancels an order for you, and an order placed while the delete runs is refused, never cancelled.  What goes with the media, as on the web:  - A running flash offer ends with it, and its managed-service proposals are deleted. - Its finished orders stay, with the media&#39;s URL; they read &#x60;media.id&#x60; null. - Buyers&#39; favourites and discards of the domain stay, as they are kept by domain. - The catalogue search drops the media shortly after the 204, as the search index updates asynchronously.  Repeating the call with the same &#x60;Idempotency-Key&#x60; answers the same 204 with &#x60;Idempotent-Replayed: true&#x60;; a new key after the delete answers 404.
+        /// </remarks>
+        /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="id"></param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
+        /// <returns></returns>
+        void DeleteSellerMedia(Guid id, string idempotencyKey);
+
+        /// <summary>
+        /// Delete a media you sell on
+        /// </summary>
+        /// <remarks>
+        /// Deletes one of your medias, in any state, as the media delete button does. The media must have no order in progress: close or reject its orders first. The API never cancels an order for you, and an order placed while the delete runs is refused, never cancelled.  What goes with the media, as on the web:  - A running flash offer ends with it, and its managed-service proposals are deleted. - Its finished orders stay, with the media&#39;s URL; they read &#x60;media.id&#x60; null. - Buyers&#39; favourites and discards of the domain stay, as they are kept by domain. - The catalogue search drops the media shortly after the 204, as the search index updates asynchronously.  Repeating the call with the same &#x60;Idempotency-Key&#x60; answers the same 204 with &#x60;Idempotent-Replayed: true&#x60;; a new key after the delete answers 404.
+        /// </remarks>
+        /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="id"></param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
+        /// <returns>ApiResponse of Object(void)</returns>
+        ApiResponse<Object> DeleteSellerMediaWithHttpInfo(Guid id, string idempotencyKey);
+        /// <summary>
         /// Get a media you sell on
         /// </summary>
         /// <remarks>
@@ -100,10 +146,10 @@ namespace Growwer.Api.Api
         /// <returns>ApiResponse of ListSellerMedias200Response</returns>
         ApiResponse<ListSellerMedias200Response> ListSellerMediasWithHttpInfo(string? state = default, string? sort = default, int? limit = default, int? offset = default);
         /// <summary>
-        /// Edit the fees of a media you sell on
+        /// Edit the offer of a media you sell on
         /// </summary>
         /// <remarks>
-        /// Sets the fees of one of your medias, as the media edit page saves them. Send only the sections you change: a section you send replaces that section wholly, a section you leave out stays as it is.  - &#x60;postOffer.pricingOptions&#x60; lists every link type you offer for sponsored posts, at least one. A link type you leave out is no longer offered. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR. - &#x60;linkAdditionOffer.pricingOptions&#x60; lists the link types you offer for adding a link to an existing article; &#x60;null&#x60; or an empty list stops offering link additions. - &#x60;extraServices&#x60; is the full list of extra services you offer; an empty list removes them all.  The fees are your base fees, the ones GET /seller/medias/{id} returns: while a flash offer runs, its discount keeps applying on top of them, and &#x60;currentCost&#x60; shows the result. &#x60;currentCost&#x60; may be sent back as read and is ignored. Characteristics, topics and comments are not edited here.  As on the page, a change of the post offer&#39;s price may cancel the managed-service proposals accepted for the media whose price it changes, and raising the price above the best competitor&#39;s tells Growwer&#39;s support team. A restricted seller account may edit its fees.
+        /// Sets the fees, extra services, typology and post offer characteristics of one of your medias, as the media edit page saves them. Send only the fields you change: a field you send replaces that field wholly, a field you leave out stays as it is, inside &#x60;postOffer&#x60; too (sending only &#x60;postOffer.maximumLinks&#x60; keeps your fees).  - &#x60;typology&#x60; is &#x60;blog&#x60; or &#x60;press&#x60;. - &#x60;postOffer.pricingOptions&#x60; lists every link type you offer for sponsored posts, at least one. A link type you leave out is no longer offered. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR. - &#x60;postOffer.maximumLinks&#x60; is how many links a sponsored post may hold, 1 to 4; &#x60;postOffer.advertisingLabellingPolicy&#x60; whether posts are labelled as advertising (&#x60;always&#x60; or &#x60;never&#x60;); &#x60;postOffer.promotedSocialNetworks&#x60; the full list of social networks posts are promoted on, each once (an empty list for none). - &#x60;linkAdditionOffer.pricingOptions&#x60; lists the link types you offer for adding a link to an existing article; &#x60;null&#x60; or an empty list stops offering link additions. - &#x60;extraServices&#x60; is the full list of extra services you offer; an empty list removes them all. It is sent at the top level, although GET /seller/medias/{id} reads it inside &#x60;postOffer&#x60;.  The fees are your base fees, the ones GET /seller/medias/{id} returns: while a flash offer runs, its discount keeps applying on top of them, and &#x60;currentCost&#x60; shows the result. &#x60;currentCost&#x60; may be sent back as read and is ignored. Country, language, topics and comments are not edited here.  As on the page, a change of the post offer&#39;s price may cancel the managed-service proposals accepted for the media whose price it changes, and raising the price above the best competitor&#39;s tells Growwer&#39;s support team. A restricted seller account may edit its offer.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
@@ -113,10 +159,10 @@ namespace Growwer.Api.Api
         SellerMedia UpdateSellerMedia(Guid id, string idempotencyKey, UpdateSellerMediaRequest updateSellerMediaRequest);
 
         /// <summary>
-        /// Edit the fees of a media you sell on
+        /// Edit the offer of a media you sell on
         /// </summary>
         /// <remarks>
-        /// Sets the fees of one of your medias, as the media edit page saves them. Send only the sections you change: a section you send replaces that section wholly, a section you leave out stays as it is.  - &#x60;postOffer.pricingOptions&#x60; lists every link type you offer for sponsored posts, at least one. A link type you leave out is no longer offered. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR. - &#x60;linkAdditionOffer.pricingOptions&#x60; lists the link types you offer for adding a link to an existing article; &#x60;null&#x60; or an empty list stops offering link additions. - &#x60;extraServices&#x60; is the full list of extra services you offer; an empty list removes them all.  The fees are your base fees, the ones GET /seller/medias/{id} returns: while a flash offer runs, its discount keeps applying on top of them, and &#x60;currentCost&#x60; shows the result. &#x60;currentCost&#x60; may be sent back as read and is ignored. Characteristics, topics and comments are not edited here.  As on the page, a change of the post offer&#39;s price may cancel the managed-service proposals accepted for the media whose price it changes, and raising the price above the best competitor&#39;s tells Growwer&#39;s support team. A restricted seller account may edit its fees.
+        /// Sets the fees, extra services, typology and post offer characteristics of one of your medias, as the media edit page saves them. Send only the fields you change: a field you send replaces that field wholly, a field you leave out stays as it is, inside &#x60;postOffer&#x60; too (sending only &#x60;postOffer.maximumLinks&#x60; keeps your fees).  - &#x60;typology&#x60; is &#x60;blog&#x60; or &#x60;press&#x60;. - &#x60;postOffer.pricingOptions&#x60; lists every link type you offer for sponsored posts, at least one. A link type you leave out is no longer offered. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR. - &#x60;postOffer.maximumLinks&#x60; is how many links a sponsored post may hold, 1 to 4; &#x60;postOffer.advertisingLabellingPolicy&#x60; whether posts are labelled as advertising (&#x60;always&#x60; or &#x60;never&#x60;); &#x60;postOffer.promotedSocialNetworks&#x60; the full list of social networks posts are promoted on, each once (an empty list for none). - &#x60;linkAdditionOffer.pricingOptions&#x60; lists the link types you offer for adding a link to an existing article; &#x60;null&#x60; or an empty list stops offering link additions. - &#x60;extraServices&#x60; is the full list of extra services you offer; an empty list removes them all. It is sent at the top level, although GET /seller/medias/{id} reads it inside &#x60;postOffer&#x60;.  The fees are your base fees, the ones GET /seller/medias/{id} returns: while a flash offer runs, its discount keeps applying on top of them, and &#x60;currentCost&#x60; shows the result. &#x60;currentCost&#x60; may be sent back as read and is ignored. Country, language, topics and comments are not edited here.  As on the page, a change of the post offer&#39;s price may cancel the managed-service proposals accepted for the media whose price it changes, and raising the price above the best competitor&#39;s tells Growwer&#39;s support team. A restricted seller account may edit its offer.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
@@ -158,6 +204,56 @@ namespace Growwer.Api.Api
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (SellerMedia)</returns>
         System.Threading.Tasks.Task<ApiResponse<SellerMedia>> ApplySellerMediaCompetitiveFeesWithHttpInfoAsync(Guid id, string idempotencyKey, System.Threading.CancellationToken cancellationToken = default);
+        /// <summary>
+        /// Register a media you sell on
+        /// </summary>
+        /// <remarks>
+        /// Registers one of your medias, as the media create page does. The media is created with &#x60;state: pending_review&#x60; and Growwer reviews it in the background, as for a media registered on the web; GET /seller/medias/{id} shows its state.  - &#x60;rootUrl&#x60; is the media&#39;s root URL; &#x60;typology&#x60; is &#x60;blog&#x60; or &#x60;press&#x60;. - &#x60;country&#x60; and &#x60;language&#x60; take the codes GET /vocabulary publishes; &#x60;topics&#x60; and &#x60;bannedTopics&#x60; take its topic ids, at most 100 each, and no topic may be both; &#x60;bannedTopics&#x60; left out bans none. - &#x60;postOffer.pricingOptions&#x60; lists every link type you offer for sponsored posts, at least one. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR, sent in cents. - &#x60;postOffer.maximumLinks&#x60; is how many links a sponsored post may hold, 1 to 4; &#x60;postOffer.advertisingLabellingPolicy&#x60; whether posts are labelled as advertising, &#x60;never&#x60; when left out; &#x60;postOffer.promotedSocialNetworks&#x60; the social networks posts are promoted on, none when left out. - &#x60;linkAdditionOffer.pricingOptions&#x60; lists the link types you offer for adding a link to an existing article; left out, &#x60;null&#x60; or an empty list offers none. - &#x60;extraServices&#x60; lists the extra services you offer, none when left out. It is sent at the top level, although GET /seller/medias/{id} reads it inside &#x60;postOffer&#x60;. - &#x60;acceptMediaPublishingTerms&#x60; and &#x60;declareMediaOwnership&#x60; must be &#x60;true&#x60;: they accept the media publishing terms and declare that you own or manage the media, as the page&#39;s checkboxes do, and are recorded as your consents for the media.  A media registered already, by you or by anyone else, is refused with 409 &#x60;media_already_registered&#x60;, and each such refusal counts toward a daily limit of refusals (429 &#x60;media_duplicate_limit_reached&#x60; once reached); medias not registered yet are never limited by it.  To register many medias, call this operation once per media, each call with its own &#x60;Idempotency-Key&#x60; and its own answer (201, 409, 422 or 429); there is no batch operation. The request limits apply to the loop as to any calls (600 requests per minute per user and 300 per key), and each 409 &#x60;media_already_registered&#x60; counts toward the daily limit of refusals as it does for a single call. Retry a call that got no answer with its same &#x60;Idempotency-Key&#x60;, as for any write.
+        /// </remarks>
+        /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
+        /// <param name="createSellerMediaRequest"></param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of SellerMedia</returns>
+        System.Threading.Tasks.Task<SellerMedia> CreateSellerMediaAsync(string idempotencyKey, CreateSellerMediaRequest createSellerMediaRequest, System.Threading.CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Register a media you sell on
+        /// </summary>
+        /// <remarks>
+        /// Registers one of your medias, as the media create page does. The media is created with &#x60;state: pending_review&#x60; and Growwer reviews it in the background, as for a media registered on the web; GET /seller/medias/{id} shows its state.  - &#x60;rootUrl&#x60; is the media&#39;s root URL; &#x60;typology&#x60; is &#x60;blog&#x60; or &#x60;press&#x60;. - &#x60;country&#x60; and &#x60;language&#x60; take the codes GET /vocabulary publishes; &#x60;topics&#x60; and &#x60;bannedTopics&#x60; take its topic ids, at most 100 each, and no topic may be both; &#x60;bannedTopics&#x60; left out bans none. - &#x60;postOffer.pricingOptions&#x60; lists every link type you offer for sponsored posts, at least one. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR, sent in cents. - &#x60;postOffer.maximumLinks&#x60; is how many links a sponsored post may hold, 1 to 4; &#x60;postOffer.advertisingLabellingPolicy&#x60; whether posts are labelled as advertising, &#x60;never&#x60; when left out; &#x60;postOffer.promotedSocialNetworks&#x60; the social networks posts are promoted on, none when left out. - &#x60;linkAdditionOffer.pricingOptions&#x60; lists the link types you offer for adding a link to an existing article; left out, &#x60;null&#x60; or an empty list offers none. - &#x60;extraServices&#x60; lists the extra services you offer, none when left out. It is sent at the top level, although GET /seller/medias/{id} reads it inside &#x60;postOffer&#x60;. - &#x60;acceptMediaPublishingTerms&#x60; and &#x60;declareMediaOwnership&#x60; must be &#x60;true&#x60;: they accept the media publishing terms and declare that you own or manage the media, as the page&#39;s checkboxes do, and are recorded as your consents for the media.  A media registered already, by you or by anyone else, is refused with 409 &#x60;media_already_registered&#x60;, and each such refusal counts toward a daily limit of refusals (429 &#x60;media_duplicate_limit_reached&#x60; once reached); medias not registered yet are never limited by it.  To register many medias, call this operation once per media, each call with its own &#x60;Idempotency-Key&#x60; and its own answer (201, 409, 422 or 429); there is no batch operation. The request limits apply to the loop as to any calls (600 requests per minute per user and 300 per key), and each 409 &#x60;media_already_registered&#x60; counts toward the daily limit of refusals as it does for a single call. Retry a call that got no answer with its same &#x60;Idempotency-Key&#x60;, as for any write.
+        /// </remarks>
+        /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
+        /// <param name="createSellerMediaRequest"></param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse (SellerMedia)</returns>
+        System.Threading.Tasks.Task<ApiResponse<SellerMedia>> CreateSellerMediaWithHttpInfoAsync(string idempotencyKey, CreateSellerMediaRequest createSellerMediaRequest, System.Threading.CancellationToken cancellationToken = default);
+        /// <summary>
+        /// Delete a media you sell on
+        /// </summary>
+        /// <remarks>
+        /// Deletes one of your medias, in any state, as the media delete button does. The media must have no order in progress: close or reject its orders first. The API never cancels an order for you, and an order placed while the delete runs is refused, never cancelled.  What goes with the media, as on the web:  - A running flash offer ends with it, and its managed-service proposals are deleted. - Its finished orders stay, with the media&#39;s URL; they read &#x60;media.id&#x60; null. - Buyers&#39; favourites and discards of the domain stay, as they are kept by domain. - The catalogue search drops the media shortly after the 204, as the search index updates asynchronously.  Repeating the call with the same &#x60;Idempotency-Key&#x60; answers the same 204 with &#x60;Idempotent-Replayed: true&#x60;; a new key after the delete answers 404.
+        /// </remarks>
+        /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="id"></param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of void</returns>
+        System.Threading.Tasks.Task DeleteSellerMediaAsync(Guid id, string idempotencyKey, System.Threading.CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Delete a media you sell on
+        /// </summary>
+        /// <remarks>
+        /// Deletes one of your medias, in any state, as the media delete button does. The media must have no order in progress: close or reject its orders first. The API never cancels an order for you, and an order placed while the delete runs is refused, never cancelled.  What goes with the media, as on the web:  - A running flash offer ends with it, and its managed-service proposals are deleted. - Its finished orders stay, with the media&#39;s URL; they read &#x60;media.id&#x60; null. - Buyers&#39; favourites and discards of the domain stay, as they are kept by domain. - The catalogue search drops the media shortly after the 204, as the search index updates asynchronously.  Repeating the call with the same &#x60;Idempotency-Key&#x60; answers the same 204 with &#x60;Idempotent-Replayed: true&#x60;; a new key after the delete answers 404.
+        /// </remarks>
+        /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="id"></param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse</returns>
+        System.Threading.Tasks.Task<ApiResponse<Object>> DeleteSellerMediaWithHttpInfoAsync(Guid id, string idempotencyKey, System.Threading.CancellationToken cancellationToken = default);
         /// <summary>
         /// Get a media you sell on
         /// </summary>
@@ -211,10 +307,10 @@ namespace Growwer.Api.Api
         /// <returns>Task of ApiResponse (ListSellerMedias200Response)</returns>
         System.Threading.Tasks.Task<ApiResponse<ListSellerMedias200Response>> ListSellerMediasWithHttpInfoAsync(string? state = default, string? sort = default, int? limit = default, int? offset = default, System.Threading.CancellationToken cancellationToken = default);
         /// <summary>
-        /// Edit the fees of a media you sell on
+        /// Edit the offer of a media you sell on
         /// </summary>
         /// <remarks>
-        /// Sets the fees of one of your medias, as the media edit page saves them. Send only the sections you change: a section you send replaces that section wholly, a section you leave out stays as it is.  - &#x60;postOffer.pricingOptions&#x60; lists every link type you offer for sponsored posts, at least one. A link type you leave out is no longer offered. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR. - &#x60;linkAdditionOffer.pricingOptions&#x60; lists the link types you offer for adding a link to an existing article; &#x60;null&#x60; or an empty list stops offering link additions. - &#x60;extraServices&#x60; is the full list of extra services you offer; an empty list removes them all.  The fees are your base fees, the ones GET /seller/medias/{id} returns: while a flash offer runs, its discount keeps applying on top of them, and &#x60;currentCost&#x60; shows the result. &#x60;currentCost&#x60; may be sent back as read and is ignored. Characteristics, topics and comments are not edited here.  As on the page, a change of the post offer&#39;s price may cancel the managed-service proposals accepted for the media whose price it changes, and raising the price above the best competitor&#39;s tells Growwer&#39;s support team. A restricted seller account may edit its fees.
+        /// Sets the fees, extra services, typology and post offer characteristics of one of your medias, as the media edit page saves them. Send only the fields you change: a field you send replaces that field wholly, a field you leave out stays as it is, inside &#x60;postOffer&#x60; too (sending only &#x60;postOffer.maximumLinks&#x60; keeps your fees).  - &#x60;typology&#x60; is &#x60;blog&#x60; or &#x60;press&#x60;. - &#x60;postOffer.pricingOptions&#x60; lists every link type you offer for sponsored posts, at least one. A link type you leave out is no longer offered. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR. - &#x60;postOffer.maximumLinks&#x60; is how many links a sponsored post may hold, 1 to 4; &#x60;postOffer.advertisingLabellingPolicy&#x60; whether posts are labelled as advertising (&#x60;always&#x60; or &#x60;never&#x60;); &#x60;postOffer.promotedSocialNetworks&#x60; the full list of social networks posts are promoted on, each once (an empty list for none). - &#x60;linkAdditionOffer.pricingOptions&#x60; lists the link types you offer for adding a link to an existing article; &#x60;null&#x60; or an empty list stops offering link additions. - &#x60;extraServices&#x60; is the full list of extra services you offer; an empty list removes them all. It is sent at the top level, although GET /seller/medias/{id} reads it inside &#x60;postOffer&#x60;.  The fees are your base fees, the ones GET /seller/medias/{id} returns: while a flash offer runs, its discount keeps applying on top of them, and &#x60;currentCost&#x60; shows the result. &#x60;currentCost&#x60; may be sent back as read and is ignored. Country, language, topics and comments are not edited here.  As on the page, a change of the post offer&#39;s price may cancel the managed-service proposals accepted for the media whose price it changes, and raising the price above the best competitor&#39;s tells Growwer&#39;s support team. A restricted seller account may edit its offer.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
@@ -225,10 +321,10 @@ namespace Growwer.Api.Api
         System.Threading.Tasks.Task<SellerMedia> UpdateSellerMediaAsync(Guid id, string idempotencyKey, UpdateSellerMediaRequest updateSellerMediaRequest, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Edit the fees of a media you sell on
+        /// Edit the offer of a media you sell on
         /// </summary>
         /// <remarks>
-        /// Sets the fees of one of your medias, as the media edit page saves them. Send only the sections you change: a section you send replaces that section wholly, a section you leave out stays as it is.  - &#x60;postOffer.pricingOptions&#x60; lists every link type you offer for sponsored posts, at least one. A link type you leave out is no longer offered. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR. - &#x60;linkAdditionOffer.pricingOptions&#x60; lists the link types you offer for adding a link to an existing article; &#x60;null&#x60; or an empty list stops offering link additions. - &#x60;extraServices&#x60; is the full list of extra services you offer; an empty list removes them all.  The fees are your base fees, the ones GET /seller/medias/{id} returns: while a flash offer runs, its discount keeps applying on top of them, and &#x60;currentCost&#x60; shows the result. &#x60;currentCost&#x60; may be sent back as read and is ignored. Characteristics, topics and comments are not edited here.  As on the page, a change of the post offer&#39;s price may cancel the managed-service proposals accepted for the media whose price it changes, and raising the price above the best competitor&#39;s tells Growwer&#39;s support team. A restricted seller account may edit its fees.
+        /// Sets the fees, extra services, typology and post offer characteristics of one of your medias, as the media edit page saves them. Send only the fields you change: a field you send replaces that field wholly, a field you leave out stays as it is, inside &#x60;postOffer&#x60; too (sending only &#x60;postOffer.maximumLinks&#x60; keeps your fees).  - &#x60;typology&#x60; is &#x60;blog&#x60; or &#x60;press&#x60;. - &#x60;postOffer.pricingOptions&#x60; lists every link type you offer for sponsored posts, at least one. A link type you leave out is no longer offered. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR. - &#x60;postOffer.maximumLinks&#x60; is how many links a sponsored post may hold, 1 to 4; &#x60;postOffer.advertisingLabellingPolicy&#x60; whether posts are labelled as advertising (&#x60;always&#x60; or &#x60;never&#x60;); &#x60;postOffer.promotedSocialNetworks&#x60; the full list of social networks posts are promoted on, each once (an empty list for none). - &#x60;linkAdditionOffer.pricingOptions&#x60; lists the link types you offer for adding a link to an existing article; &#x60;null&#x60; or an empty list stops offering link additions. - &#x60;extraServices&#x60; is the full list of extra services you offer; an empty list removes them all. It is sent at the top level, although GET /seller/medias/{id} reads it inside &#x60;postOffer&#x60;.  The fees are your base fees, the ones GET /seller/medias/{id} returns: while a flash offer runs, its discount keeps applying on top of them, and &#x60;currentCost&#x60; shows the result. &#x60;currentCost&#x60; may be sent back as read and is ignored. Country, language, topics and comments are not edited here.  As on the page, a change of the post offer&#39;s price may cancel the managed-service proposals accepted for the media whose price it changes, and raising the price above the best competitor&#39;s tells Growwer&#39;s support team. A restricted seller account may edit its offer.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
@@ -584,6 +680,280 @@ namespace Growwer.Api.Api
         }
 
         /// <summary>
+        /// Register a media you sell on Registers one of your medias, as the media create page does. The media is created with &#x60;state: pending_review&#x60; and Growwer reviews it in the background, as for a media registered on the web; GET /seller/medias/{id} shows its state.  - &#x60;rootUrl&#x60; is the media&#39;s root URL; &#x60;typology&#x60; is &#x60;blog&#x60; or &#x60;press&#x60;. - &#x60;country&#x60; and &#x60;language&#x60; take the codes GET /vocabulary publishes; &#x60;topics&#x60; and &#x60;bannedTopics&#x60; take its topic ids, at most 100 each, and no topic may be both; &#x60;bannedTopics&#x60; left out bans none. - &#x60;postOffer.pricingOptions&#x60; lists every link type you offer for sponsored posts, at least one. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR, sent in cents. - &#x60;postOffer.maximumLinks&#x60; is how many links a sponsored post may hold, 1 to 4; &#x60;postOffer.advertisingLabellingPolicy&#x60; whether posts are labelled as advertising, &#x60;never&#x60; when left out; &#x60;postOffer.promotedSocialNetworks&#x60; the social networks posts are promoted on, none when left out. - &#x60;linkAdditionOffer.pricingOptions&#x60; lists the link types you offer for adding a link to an existing article; left out, &#x60;null&#x60; or an empty list offers none. - &#x60;extraServices&#x60; lists the extra services you offer, none when left out. It is sent at the top level, although GET /seller/medias/{id} reads it inside &#x60;postOffer&#x60;. - &#x60;acceptMediaPublishingTerms&#x60; and &#x60;declareMediaOwnership&#x60; must be &#x60;true&#x60;: they accept the media publishing terms and declare that you own or manage the media, as the page&#39;s checkboxes do, and are recorded as your consents for the media.  A media registered already, by you or by anyone else, is refused with 409 &#x60;media_already_registered&#x60;, and each such refusal counts toward a daily limit of refusals (429 &#x60;media_duplicate_limit_reached&#x60; once reached); medias not registered yet are never limited by it.  To register many medias, call this operation once per media, each call with its own &#x60;Idempotency-Key&#x60; and its own answer (201, 409, 422 or 429); there is no batch operation. The request limits apply to the loop as to any calls (600 requests per minute per user and 300 per key), and each 409 &#x60;media_already_registered&#x60; counts toward the daily limit of refusals as it does for a single call. Retry a call that got no answer with its same &#x60;Idempotency-Key&#x60;, as for any write.
+        /// </summary>
+        /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
+        /// <param name="createSellerMediaRequest"></param>
+        /// <returns>SellerMedia</returns>
+        public SellerMedia CreateSellerMedia(string idempotencyKey, CreateSellerMediaRequest createSellerMediaRequest)
+        {
+            Growwer.Api.Client.ApiResponse<SellerMedia> localVarResponse = CreateSellerMediaWithHttpInfo(idempotencyKey, createSellerMediaRequest);
+            return localVarResponse.Data;
+        }
+
+        /// <summary>
+        /// Register a media you sell on Registers one of your medias, as the media create page does. The media is created with &#x60;state: pending_review&#x60; and Growwer reviews it in the background, as for a media registered on the web; GET /seller/medias/{id} shows its state.  - &#x60;rootUrl&#x60; is the media&#39;s root URL; &#x60;typology&#x60; is &#x60;blog&#x60; or &#x60;press&#x60;. - &#x60;country&#x60; and &#x60;language&#x60; take the codes GET /vocabulary publishes; &#x60;topics&#x60; and &#x60;bannedTopics&#x60; take its topic ids, at most 100 each, and no topic may be both; &#x60;bannedTopics&#x60; left out bans none. - &#x60;postOffer.pricingOptions&#x60; lists every link type you offer for sponsored posts, at least one. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR, sent in cents. - &#x60;postOffer.maximumLinks&#x60; is how many links a sponsored post may hold, 1 to 4; &#x60;postOffer.advertisingLabellingPolicy&#x60; whether posts are labelled as advertising, &#x60;never&#x60; when left out; &#x60;postOffer.promotedSocialNetworks&#x60; the social networks posts are promoted on, none when left out. - &#x60;linkAdditionOffer.pricingOptions&#x60; lists the link types you offer for adding a link to an existing article; left out, &#x60;null&#x60; or an empty list offers none. - &#x60;extraServices&#x60; lists the extra services you offer, none when left out. It is sent at the top level, although GET /seller/medias/{id} reads it inside &#x60;postOffer&#x60;. - &#x60;acceptMediaPublishingTerms&#x60; and &#x60;declareMediaOwnership&#x60; must be &#x60;true&#x60;: they accept the media publishing terms and declare that you own or manage the media, as the page&#39;s checkboxes do, and are recorded as your consents for the media.  A media registered already, by you or by anyone else, is refused with 409 &#x60;media_already_registered&#x60;, and each such refusal counts toward a daily limit of refusals (429 &#x60;media_duplicate_limit_reached&#x60; once reached); medias not registered yet are never limited by it.  To register many medias, call this operation once per media, each call with its own &#x60;Idempotency-Key&#x60; and its own answer (201, 409, 422 or 429); there is no batch operation. The request limits apply to the loop as to any calls (600 requests per minute per user and 300 per key), and each 409 &#x60;media_already_registered&#x60; counts toward the daily limit of refusals as it does for a single call. Retry a call that got no answer with its same &#x60;Idempotency-Key&#x60;, as for any write.
+        /// </summary>
+        /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
+        /// <param name="createSellerMediaRequest"></param>
+        /// <returns>ApiResponse of SellerMedia</returns>
+        public Growwer.Api.Client.ApiResponse<SellerMedia> CreateSellerMediaWithHttpInfo(string idempotencyKey, CreateSellerMediaRequest createSellerMediaRequest)
+        {
+            // verify the required parameter 'idempotencyKey' is set
+            if (idempotencyKey == null)
+                throw new Growwer.Api.Client.ApiException(400, "Missing required parameter 'idempotencyKey' when calling SellerMediasApi->CreateSellerMedia");
+
+            // verify the required parameter 'createSellerMediaRequest' is set
+            if (createSellerMediaRequest == null)
+                throw new Growwer.Api.Client.ApiException(400, "Missing required parameter 'createSellerMediaRequest' when calling SellerMediasApi->CreateSellerMedia");
+
+            Growwer.Api.Client.RequestOptions localVarRequestOptions = new Growwer.Api.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+                "application/json"
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+                "application/json"
+            };
+
+            var localVarContentType = Growwer.Api.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null) localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+
+            var localVarAccept = Growwer.Api.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null) localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+
+            localVarRequestOptions.HeaderParameters.Add("Idempotency-Key", Growwer.Api.Client.ClientUtils.ParameterToString(idempotencyKey)); // header parameter
+            localVarRequestOptions.Data = createSellerMediaRequest;
+
+            // authentication (apiKey) required
+            // bearer authentication required
+            if (!string.IsNullOrEmpty(this.Configuration.AccessToken) && !localVarRequestOptions.HeaderParameters.ContainsKey("Authorization"))
+            {
+                localVarRequestOptions.HeaderParameters.Add("Authorization", "Bearer " + this.Configuration.AccessToken);
+            }
+
+            // make the HTTP request
+            var localVarResponse = this.Client.Post<SellerMedia>("/api/v1/seller/medias", localVarRequestOptions, this.Configuration);
+
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("CreateSellerMedia", localVarResponse);
+                if (_exception != null) throw _exception;
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        /// Register a media you sell on Registers one of your medias, as the media create page does. The media is created with &#x60;state: pending_review&#x60; and Growwer reviews it in the background, as for a media registered on the web; GET /seller/medias/{id} shows its state.  - &#x60;rootUrl&#x60; is the media&#39;s root URL; &#x60;typology&#x60; is &#x60;blog&#x60; or &#x60;press&#x60;. - &#x60;country&#x60; and &#x60;language&#x60; take the codes GET /vocabulary publishes; &#x60;topics&#x60; and &#x60;bannedTopics&#x60; take its topic ids, at most 100 each, and no topic may be both; &#x60;bannedTopics&#x60; left out bans none. - &#x60;postOffer.pricingOptions&#x60; lists every link type you offer for sponsored posts, at least one. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR, sent in cents. - &#x60;postOffer.maximumLinks&#x60; is how many links a sponsored post may hold, 1 to 4; &#x60;postOffer.advertisingLabellingPolicy&#x60; whether posts are labelled as advertising, &#x60;never&#x60; when left out; &#x60;postOffer.promotedSocialNetworks&#x60; the social networks posts are promoted on, none when left out. - &#x60;linkAdditionOffer.pricingOptions&#x60; lists the link types you offer for adding a link to an existing article; left out, &#x60;null&#x60; or an empty list offers none. - &#x60;extraServices&#x60; lists the extra services you offer, none when left out. It is sent at the top level, although GET /seller/medias/{id} reads it inside &#x60;postOffer&#x60;. - &#x60;acceptMediaPublishingTerms&#x60; and &#x60;declareMediaOwnership&#x60; must be &#x60;true&#x60;: they accept the media publishing terms and declare that you own or manage the media, as the page&#39;s checkboxes do, and are recorded as your consents for the media.  A media registered already, by you or by anyone else, is refused with 409 &#x60;media_already_registered&#x60;, and each such refusal counts toward a daily limit of refusals (429 &#x60;media_duplicate_limit_reached&#x60; once reached); medias not registered yet are never limited by it.  To register many medias, call this operation once per media, each call with its own &#x60;Idempotency-Key&#x60; and its own answer (201, 409, 422 or 429); there is no batch operation. The request limits apply to the loop as to any calls (600 requests per minute per user and 300 per key), and each 409 &#x60;media_already_registered&#x60; counts toward the daily limit of refusals as it does for a single call. Retry a call that got no answer with its same &#x60;Idempotency-Key&#x60;, as for any write.
+        /// </summary>
+        /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
+        /// <param name="createSellerMediaRequest"></param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of SellerMedia</returns>
+        public async System.Threading.Tasks.Task<SellerMedia> CreateSellerMediaAsync(string idempotencyKey, CreateSellerMediaRequest createSellerMediaRequest, System.Threading.CancellationToken cancellationToken = default)
+        {
+            Growwer.Api.Client.ApiResponse<SellerMedia> localVarResponse = await CreateSellerMediaWithHttpInfoAsync(idempotencyKey, createSellerMediaRequest, cancellationToken).ConfigureAwait(false);
+            return localVarResponse.Data;
+        }
+
+        /// <summary>
+        /// Register a media you sell on Registers one of your medias, as the media create page does. The media is created with &#x60;state: pending_review&#x60; and Growwer reviews it in the background, as for a media registered on the web; GET /seller/medias/{id} shows its state.  - &#x60;rootUrl&#x60; is the media&#39;s root URL; &#x60;typology&#x60; is &#x60;blog&#x60; or &#x60;press&#x60;. - &#x60;country&#x60; and &#x60;language&#x60; take the codes GET /vocabulary publishes; &#x60;topics&#x60; and &#x60;bannedTopics&#x60; take its topic ids, at most 100 each, and no topic may be both; &#x60;bannedTopics&#x60; left out bans none. - &#x60;postOffer.pricingOptions&#x60; lists every link type you offer for sponsored posts, at least one. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR, sent in cents. - &#x60;postOffer.maximumLinks&#x60; is how many links a sponsored post may hold, 1 to 4; &#x60;postOffer.advertisingLabellingPolicy&#x60; whether posts are labelled as advertising, &#x60;never&#x60; when left out; &#x60;postOffer.promotedSocialNetworks&#x60; the social networks posts are promoted on, none when left out. - &#x60;linkAdditionOffer.pricingOptions&#x60; lists the link types you offer for adding a link to an existing article; left out, &#x60;null&#x60; or an empty list offers none. - &#x60;extraServices&#x60; lists the extra services you offer, none when left out. It is sent at the top level, although GET /seller/medias/{id} reads it inside &#x60;postOffer&#x60;. - &#x60;acceptMediaPublishingTerms&#x60; and &#x60;declareMediaOwnership&#x60; must be &#x60;true&#x60;: they accept the media publishing terms and declare that you own or manage the media, as the page&#39;s checkboxes do, and are recorded as your consents for the media.  A media registered already, by you or by anyone else, is refused with 409 &#x60;media_already_registered&#x60;, and each such refusal counts toward a daily limit of refusals (429 &#x60;media_duplicate_limit_reached&#x60; once reached); medias not registered yet are never limited by it.  To register many medias, call this operation once per media, each call with its own &#x60;Idempotency-Key&#x60; and its own answer (201, 409, 422 or 429); there is no batch operation. The request limits apply to the loop as to any calls (600 requests per minute per user and 300 per key), and each 409 &#x60;media_already_registered&#x60; counts toward the daily limit of refusals as it does for a single call. Retry a call that got no answer with its same &#x60;Idempotency-Key&#x60;, as for any write.
+        /// </summary>
+        /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
+        /// <param name="createSellerMediaRequest"></param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse (SellerMedia)</returns>
+        public async System.Threading.Tasks.Task<Growwer.Api.Client.ApiResponse<SellerMedia>> CreateSellerMediaWithHttpInfoAsync(string idempotencyKey, CreateSellerMediaRequest createSellerMediaRequest, System.Threading.CancellationToken cancellationToken = default)
+        {
+            // verify the required parameter 'idempotencyKey' is set
+            if (idempotencyKey == null)
+                throw new Growwer.Api.Client.ApiException(400, "Missing required parameter 'idempotencyKey' when calling SellerMediasApi->CreateSellerMedia");
+
+            // verify the required parameter 'createSellerMediaRequest' is set
+            if (createSellerMediaRequest == null)
+                throw new Growwer.Api.Client.ApiException(400, "Missing required parameter 'createSellerMediaRequest' when calling SellerMediasApi->CreateSellerMedia");
+
+
+            Growwer.Api.Client.RequestOptions localVarRequestOptions = new Growwer.Api.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+                "application/json"
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+                "application/json"
+            };
+
+
+            var localVarContentType = Growwer.Api.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null) localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+
+            var localVarAccept = Growwer.Api.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null) localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+
+            localVarRequestOptions.HeaderParameters.Add("Idempotency-Key", Growwer.Api.Client.ClientUtils.ParameterToString(idempotencyKey)); // header parameter
+            localVarRequestOptions.Data = createSellerMediaRequest;
+
+            // authentication (apiKey) required
+            // bearer authentication required
+            if (!string.IsNullOrEmpty(this.Configuration.AccessToken) && !localVarRequestOptions.HeaderParameters.ContainsKey("Authorization"))
+            {
+                localVarRequestOptions.HeaderParameters.Add("Authorization", "Bearer " + this.Configuration.AccessToken);
+            }
+
+            // make the HTTP request
+
+            var localVarResponse = await this.AsynchronousClient.PostAsync<SellerMedia>("/api/v1/seller/medias", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("CreateSellerMedia", localVarResponse);
+                if (_exception != null) throw _exception;
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        /// Delete a media you sell on Deletes one of your medias, in any state, as the media delete button does. The media must have no order in progress: close or reject its orders first. The API never cancels an order for you, and an order placed while the delete runs is refused, never cancelled.  What goes with the media, as on the web:  - A running flash offer ends with it, and its managed-service proposals are deleted. - Its finished orders stay, with the media&#39;s URL; they read &#x60;media.id&#x60; null. - Buyers&#39; favourites and discards of the domain stay, as they are kept by domain. - The catalogue search drops the media shortly after the 204, as the search index updates asynchronously.  Repeating the call with the same &#x60;Idempotency-Key&#x60; answers the same 204 with &#x60;Idempotent-Replayed: true&#x60;; a new key after the delete answers 404.
+        /// </summary>
+        /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="id"></param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
+        /// <returns></returns>
+        public void DeleteSellerMedia(Guid id, string idempotencyKey)
+        {
+            DeleteSellerMediaWithHttpInfo(id, idempotencyKey);
+        }
+
+        /// <summary>
+        /// Delete a media you sell on Deletes one of your medias, in any state, as the media delete button does. The media must have no order in progress: close or reject its orders first. The API never cancels an order for you, and an order placed while the delete runs is refused, never cancelled.  What goes with the media, as on the web:  - A running flash offer ends with it, and its managed-service proposals are deleted. - Its finished orders stay, with the media&#39;s URL; they read &#x60;media.id&#x60; null. - Buyers&#39; favourites and discards of the domain stay, as they are kept by domain. - The catalogue search drops the media shortly after the 204, as the search index updates asynchronously.  Repeating the call with the same &#x60;Idempotency-Key&#x60; answers the same 204 with &#x60;Idempotent-Replayed: true&#x60;; a new key after the delete answers 404.
+        /// </summary>
+        /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="id"></param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
+        /// <returns>ApiResponse of Object(void)</returns>
+        public Growwer.Api.Client.ApiResponse<Object> DeleteSellerMediaWithHttpInfo(Guid id, string idempotencyKey)
+        {
+            // verify the required parameter 'idempotencyKey' is set
+            if (idempotencyKey == null)
+                throw new Growwer.Api.Client.ApiException(400, "Missing required parameter 'idempotencyKey' when calling SellerMediasApi->DeleteSellerMedia");
+
+            Growwer.Api.Client.RequestOptions localVarRequestOptions = new Growwer.Api.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+                "application/json"
+            };
+
+            var localVarContentType = Growwer.Api.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null) localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+
+            var localVarAccept = Growwer.Api.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null) localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+
+            localVarRequestOptions.PathParameters.Add("id", Growwer.Api.Client.ClientUtils.ParameterToString(id)); // path parameter
+            localVarRequestOptions.HeaderParameters.Add("Idempotency-Key", Growwer.Api.Client.ClientUtils.ParameterToString(idempotencyKey)); // header parameter
+
+            // authentication (apiKey) required
+            // bearer authentication required
+            if (!string.IsNullOrEmpty(this.Configuration.AccessToken) && !localVarRequestOptions.HeaderParameters.ContainsKey("Authorization"))
+            {
+                localVarRequestOptions.HeaderParameters.Add("Authorization", "Bearer " + this.Configuration.AccessToken);
+            }
+
+            // make the HTTP request
+            var localVarResponse = this.Client.Delete<Object>("/api/v1/seller/medias/{id}", localVarRequestOptions, this.Configuration);
+
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("DeleteSellerMedia", localVarResponse);
+                if (_exception != null) throw _exception;
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        /// Delete a media you sell on Deletes one of your medias, in any state, as the media delete button does. The media must have no order in progress: close or reject its orders first. The API never cancels an order for you, and an order placed while the delete runs is refused, never cancelled.  What goes with the media, as on the web:  - A running flash offer ends with it, and its managed-service proposals are deleted. - Its finished orders stay, with the media&#39;s URL; they read &#x60;media.id&#x60; null. - Buyers&#39; favourites and discards of the domain stay, as they are kept by domain. - The catalogue search drops the media shortly after the 204, as the search index updates asynchronously.  Repeating the call with the same &#x60;Idempotency-Key&#x60; answers the same 204 with &#x60;Idempotent-Replayed: true&#x60;; a new key after the delete answers 404.
+        /// </summary>
+        /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="id"></param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of void</returns>
+        public async System.Threading.Tasks.Task DeleteSellerMediaAsync(Guid id, string idempotencyKey, System.Threading.CancellationToken cancellationToken = default)
+        {
+            await DeleteSellerMediaWithHttpInfoAsync(id, idempotencyKey, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Delete a media you sell on Deletes one of your medias, in any state, as the media delete button does. The media must have no order in progress: close or reject its orders first. The API never cancels an order for you, and an order placed while the delete runs is refused, never cancelled.  What goes with the media, as on the web:  - A running flash offer ends with it, and its managed-service proposals are deleted. - Its finished orders stay, with the media&#39;s URL; they read &#x60;media.id&#x60; null. - Buyers&#39; favourites and discards of the domain stay, as they are kept by domain. - The catalogue search drops the media shortly after the 204, as the search index updates asynchronously.  Repeating the call with the same &#x60;Idempotency-Key&#x60; answers the same 204 with &#x60;Idempotent-Replayed: true&#x60;; a new key after the delete answers 404.
+        /// </summary>
+        /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="id"></param>
+        /// <param name="idempotencyKey">A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse</returns>
+        public async System.Threading.Tasks.Task<Growwer.Api.Client.ApiResponse<Object>> DeleteSellerMediaWithHttpInfoAsync(Guid id, string idempotencyKey, System.Threading.CancellationToken cancellationToken = default)
+        {
+            // verify the required parameter 'idempotencyKey' is set
+            if (idempotencyKey == null)
+                throw new Growwer.Api.Client.ApiException(400, "Missing required parameter 'idempotencyKey' when calling SellerMediasApi->DeleteSellerMedia");
+
+
+            Growwer.Api.Client.RequestOptions localVarRequestOptions = new Growwer.Api.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+                "application/json"
+            };
+
+
+            var localVarContentType = Growwer.Api.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null) localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+
+            var localVarAccept = Growwer.Api.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null) localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+
+            localVarRequestOptions.PathParameters.Add("id", Growwer.Api.Client.ClientUtils.ParameterToString(id)); // path parameter
+            localVarRequestOptions.HeaderParameters.Add("Idempotency-Key", Growwer.Api.Client.ClientUtils.ParameterToString(idempotencyKey)); // header parameter
+
+            // authentication (apiKey) required
+            // bearer authentication required
+            if (!string.IsNullOrEmpty(this.Configuration.AccessToken) && !localVarRequestOptions.HeaderParameters.ContainsKey("Authorization"))
+            {
+                localVarRequestOptions.HeaderParameters.Add("Authorization", "Bearer " + this.Configuration.AccessToken);
+            }
+
+            // make the HTTP request
+
+            var localVarResponse = await this.AsynchronousClient.DeleteAsync<Object>("/api/v1/seller/medias/{id}", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("DeleteSellerMedia", localVarResponse);
+                if (_exception != null) throw _exception;
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
         /// Get a media you sell on One of your medias, with your fees, its extras, the competitive fees Growwer suggests and how it performs. Another seller&#39;s media is not found.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
@@ -864,7 +1234,7 @@ namespace Growwer.Api.Api
         }
 
         /// <summary>
-        /// Edit the fees of a media you sell on Sets the fees of one of your medias, as the media edit page saves them. Send only the sections you change: a section you send replaces that section wholly, a section you leave out stays as it is.  - &#x60;postOffer.pricingOptions&#x60; lists every link type you offer for sponsored posts, at least one. A link type you leave out is no longer offered. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR. - &#x60;linkAdditionOffer.pricingOptions&#x60; lists the link types you offer for adding a link to an existing article; &#x60;null&#x60; or an empty list stops offering link additions. - &#x60;extraServices&#x60; is the full list of extra services you offer; an empty list removes them all.  The fees are your base fees, the ones GET /seller/medias/{id} returns: while a flash offer runs, its discount keeps applying on top of them, and &#x60;currentCost&#x60; shows the result. &#x60;currentCost&#x60; may be sent back as read and is ignored. Characteristics, topics and comments are not edited here.  As on the page, a change of the post offer&#39;s price may cancel the managed-service proposals accepted for the media whose price it changes, and raising the price above the best competitor&#39;s tells Growwer&#39;s support team. A restricted seller account may edit its fees.
+        /// Edit the offer of a media you sell on Sets the fees, extra services, typology and post offer characteristics of one of your medias, as the media edit page saves them. Send only the fields you change: a field you send replaces that field wholly, a field you leave out stays as it is, inside &#x60;postOffer&#x60; too (sending only &#x60;postOffer.maximumLinks&#x60; keeps your fees).  - &#x60;typology&#x60; is &#x60;blog&#x60; or &#x60;press&#x60;. - &#x60;postOffer.pricingOptions&#x60; lists every link type you offer for sponsored posts, at least one. A link type you leave out is no longer offered. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR. - &#x60;postOffer.maximumLinks&#x60; is how many links a sponsored post may hold, 1 to 4; &#x60;postOffer.advertisingLabellingPolicy&#x60; whether posts are labelled as advertising (&#x60;always&#x60; or &#x60;never&#x60;); &#x60;postOffer.promotedSocialNetworks&#x60; the full list of social networks posts are promoted on, each once (an empty list for none). - &#x60;linkAdditionOffer.pricingOptions&#x60; lists the link types you offer for adding a link to an existing article; &#x60;null&#x60; or an empty list stops offering link additions. - &#x60;extraServices&#x60; is the full list of extra services you offer; an empty list removes them all. It is sent at the top level, although GET /seller/medias/{id} reads it inside &#x60;postOffer&#x60;.  The fees are your base fees, the ones GET /seller/medias/{id} returns: while a flash offer runs, its discount keeps applying on top of them, and &#x60;currentCost&#x60; shows the result. &#x60;currentCost&#x60; may be sent back as read and is ignored. Country, language, topics and comments are not edited here.  As on the page, a change of the post offer&#39;s price may cancel the managed-service proposals accepted for the media whose price it changes, and raising the price above the best competitor&#39;s tells Growwer&#39;s support team. A restricted seller account may edit its offer.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
@@ -878,7 +1248,7 @@ namespace Growwer.Api.Api
         }
 
         /// <summary>
-        /// Edit the fees of a media you sell on Sets the fees of one of your medias, as the media edit page saves them. Send only the sections you change: a section you send replaces that section wholly, a section you leave out stays as it is.  - &#x60;postOffer.pricingOptions&#x60; lists every link type you offer for sponsored posts, at least one. A link type you leave out is no longer offered. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR. - &#x60;linkAdditionOffer.pricingOptions&#x60; lists the link types you offer for adding a link to an existing article; &#x60;null&#x60; or an empty list stops offering link additions. - &#x60;extraServices&#x60; is the full list of extra services you offer; an empty list removes them all.  The fees are your base fees, the ones GET /seller/medias/{id} returns: while a flash offer runs, its discount keeps applying on top of them, and &#x60;currentCost&#x60; shows the result. &#x60;currentCost&#x60; may be sent back as read and is ignored. Characteristics, topics and comments are not edited here.  As on the page, a change of the post offer&#39;s price may cancel the managed-service proposals accepted for the media whose price it changes, and raising the price above the best competitor&#39;s tells Growwer&#39;s support team. A restricted seller account may edit its fees.
+        /// Edit the offer of a media you sell on Sets the fees, extra services, typology and post offer characteristics of one of your medias, as the media edit page saves them. Send only the fields you change: a field you send replaces that field wholly, a field you leave out stays as it is, inside &#x60;postOffer&#x60; too (sending only &#x60;postOffer.maximumLinks&#x60; keeps your fees).  - &#x60;typology&#x60; is &#x60;blog&#x60; or &#x60;press&#x60;. - &#x60;postOffer.pricingOptions&#x60; lists every link type you offer for sponsored posts, at least one. A link type you leave out is no longer offered. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR. - &#x60;postOffer.maximumLinks&#x60; is how many links a sponsored post may hold, 1 to 4; &#x60;postOffer.advertisingLabellingPolicy&#x60; whether posts are labelled as advertising (&#x60;always&#x60; or &#x60;never&#x60;); &#x60;postOffer.promotedSocialNetworks&#x60; the full list of social networks posts are promoted on, each once (an empty list for none). - &#x60;linkAdditionOffer.pricingOptions&#x60; lists the link types you offer for adding a link to an existing article; &#x60;null&#x60; or an empty list stops offering link additions. - &#x60;extraServices&#x60; is the full list of extra services you offer; an empty list removes them all. It is sent at the top level, although GET /seller/medias/{id} reads it inside &#x60;postOffer&#x60;.  The fees are your base fees, the ones GET /seller/medias/{id} returns: while a flash offer runs, its discount keeps applying on top of them, and &#x60;currentCost&#x60; shows the result. &#x60;currentCost&#x60; may be sent back as read and is ignored. Country, language, topics and comments are not edited here.  As on the page, a change of the post offer&#39;s price may cancel the managed-service proposals accepted for the media whose price it changes, and raising the price above the best competitor&#39;s tells Growwer&#39;s support team. A restricted seller account may edit its offer.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
@@ -936,7 +1306,7 @@ namespace Growwer.Api.Api
         }
 
         /// <summary>
-        /// Edit the fees of a media you sell on Sets the fees of one of your medias, as the media edit page saves them. Send only the sections you change: a section you send replaces that section wholly, a section you leave out stays as it is.  - &#x60;postOffer.pricingOptions&#x60; lists every link type you offer for sponsored posts, at least one. A link type you leave out is no longer offered. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR. - &#x60;linkAdditionOffer.pricingOptions&#x60; lists the link types you offer for adding a link to an existing article; &#x60;null&#x60; or an empty list stops offering link additions. - &#x60;extraServices&#x60; is the full list of extra services you offer; an empty list removes them all.  The fees are your base fees, the ones GET /seller/medias/{id} returns: while a flash offer runs, its discount keeps applying on top of them, and &#x60;currentCost&#x60; shows the result. &#x60;currentCost&#x60; may be sent back as read and is ignored. Characteristics, topics and comments are not edited here.  As on the page, a change of the post offer&#39;s price may cancel the managed-service proposals accepted for the media whose price it changes, and raising the price above the best competitor&#39;s tells Growwer&#39;s support team. A restricted seller account may edit its fees.
+        /// Edit the offer of a media you sell on Sets the fees, extra services, typology and post offer characteristics of one of your medias, as the media edit page saves them. Send only the fields you change: a field you send replaces that field wholly, a field you leave out stays as it is, inside &#x60;postOffer&#x60; too (sending only &#x60;postOffer.maximumLinks&#x60; keeps your fees).  - &#x60;typology&#x60; is &#x60;blog&#x60; or &#x60;press&#x60;. - &#x60;postOffer.pricingOptions&#x60; lists every link type you offer for sponsored posts, at least one. A link type you leave out is no longer offered. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR. - &#x60;postOffer.maximumLinks&#x60; is how many links a sponsored post may hold, 1 to 4; &#x60;postOffer.advertisingLabellingPolicy&#x60; whether posts are labelled as advertising (&#x60;always&#x60; or &#x60;never&#x60;); &#x60;postOffer.promotedSocialNetworks&#x60; the full list of social networks posts are promoted on, each once (an empty list for none). - &#x60;linkAdditionOffer.pricingOptions&#x60; lists the link types you offer for adding a link to an existing article; &#x60;null&#x60; or an empty list stops offering link additions. - &#x60;extraServices&#x60; is the full list of extra services you offer; an empty list removes them all. It is sent at the top level, although GET /seller/medias/{id} reads it inside &#x60;postOffer&#x60;.  The fees are your base fees, the ones GET /seller/medias/{id} returns: while a flash offer runs, its discount keeps applying on top of them, and &#x60;currentCost&#x60; shows the result. &#x60;currentCost&#x60; may be sent back as read and is ignored. Country, language, topics and comments are not edited here.  As on the page, a change of the post offer&#39;s price may cancel the managed-service proposals accepted for the media whose price it changes, and raising the price above the best competitor&#39;s tells Growwer&#39;s support team. A restricted seller account may edit its offer.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
@@ -951,7 +1321,7 @@ namespace Growwer.Api.Api
         }
 
         /// <summary>
-        /// Edit the fees of a media you sell on Sets the fees of one of your medias, as the media edit page saves them. Send only the sections you change: a section you send replaces that section wholly, a section you leave out stays as it is.  - &#x60;postOffer.pricingOptions&#x60; lists every link type you offer for sponsored posts, at least one. A link type you leave out is no longer offered. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR. - &#x60;linkAdditionOffer.pricingOptions&#x60; lists the link types you offer for adding a link to an existing article; &#x60;null&#x60; or an empty list stops offering link additions. - &#x60;extraServices&#x60; is the full list of extra services you offer; an empty list removes them all.  The fees are your base fees, the ones GET /seller/medias/{id} returns: while a flash offer runs, its discount keeps applying on top of them, and &#x60;currentCost&#x60; shows the result. &#x60;currentCost&#x60; may be sent back as read and is ignored. Characteristics, topics and comments are not edited here.  As on the page, a change of the post offer&#39;s price may cancel the managed-service proposals accepted for the media whose price it changes, and raising the price above the best competitor&#39;s tells Growwer&#39;s support team. A restricted seller account may edit its fees.
+        /// Edit the offer of a media you sell on Sets the fees, extra services, typology and post offer characteristics of one of your medias, as the media edit page saves them. Send only the fields you change: a field you send replaces that field wholly, a field you leave out stays as it is, inside &#x60;postOffer&#x60; too (sending only &#x60;postOffer.maximumLinks&#x60; keeps your fees).  - &#x60;typology&#x60; is &#x60;blog&#x60; or &#x60;press&#x60;. - &#x60;postOffer.pricingOptions&#x60; lists every link type you offer for sponsored posts, at least one. A link type you leave out is no longer offered. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR. - &#x60;postOffer.maximumLinks&#x60; is how many links a sponsored post may hold, 1 to 4; &#x60;postOffer.advertisingLabellingPolicy&#x60; whether posts are labelled as advertising (&#x60;always&#x60; or &#x60;never&#x60;); &#x60;postOffer.promotedSocialNetworks&#x60; the full list of social networks posts are promoted on, each once (an empty list for none). - &#x60;linkAdditionOffer.pricingOptions&#x60; lists the link types you offer for adding a link to an existing article; &#x60;null&#x60; or an empty list stops offering link additions. - &#x60;extraServices&#x60; is the full list of extra services you offer; an empty list removes them all. It is sent at the top level, although GET /seller/medias/{id} reads it inside &#x60;postOffer&#x60;.  The fees are your base fees, the ones GET /seller/medias/{id} returns: while a flash offer runs, its discount keeps applying on top of them, and &#x60;currentCost&#x60; shows the result. &#x60;currentCost&#x60; may be sent back as read and is ignored. Country, language, topics and comments are not edited here.  As on the page, a change of the post offer&#39;s price may cancel the managed-service proposals accepted for the media whose price it changes, and raising the price above the best competitor&#39;s tells Growwer&#39;s support team. A restricted seller account may edit its offer.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>

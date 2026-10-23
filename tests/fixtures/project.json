@@ -1,0 +1,13 @@
+{
+  "id": "5e0c2b7a-3d4f-4a1b-9c8d-7e6f5a4b3c2d",
+  "name": "Trail running",
+  "rootUrl": "https://shop.example",
+  "websiteType": "ecommerce",
+  "topics": [12],
+  "language": "es",
+  "country": null,
+  "promotedProducts": ["trail shoes", "running socks", "hydration vests", "headlamps", "gaiters"],
+  "userKeywords": [],
+  "state": "finished",
+  "createdAt": "2026-10-01T09:30:00+00:00"
+}

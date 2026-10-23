@@ -50,7 +50,7 @@ class UpdateSellerMediaRequestLinkAdditionOfferPricingOptionsInner implements Mo
      *
      * @var string
      */
-    protected static $openAPIModelName = 'updateSellerMedia_request_linkAdditionOffer_pricingOptions_inner';
+    protected static $openAPIModelName = 'UpdateSellerMediaRequestLinkAdditionOfferPricingOptionsInner';
 
     /**
      * Array of property to type mappings. Used for (de)serialization

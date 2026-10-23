@@ -20,6 +20,7 @@ var _ MappedNullable = &UpdateSellerMediaRequest{}
 
 // UpdateSellerMediaRequest struct for UpdateSellerMediaRequest
 type UpdateSellerMediaRequest struct {
+	Typology *string `json:"typology,omitempty"`
 	PostOffer *UpdateSellerMediaRequestPostOffer `json:"postOffer,omitempty"`
 	LinkAdditionOffer NullableUpdateSellerMediaRequestLinkAdditionOffer `json:"linkAdditionOffer,omitempty"`
 	ExtraServices []UpdateSellerMediaRequestExtraServicesInner `json:"extraServices,omitempty"`
@@ -40,6 +41,38 @@ func NewUpdateSellerMediaRequest() *UpdateSellerMediaRequest {
 func NewUpdateSellerMediaRequestWithDefaults() *UpdateSellerMediaRequest {
 	this := UpdateSellerMediaRequest{}
 	return &this
+}
+
+// GetTypology returns the Typology field value if set, zero value otherwise.
+func (o *UpdateSellerMediaRequest) GetTypology() string {
+	if o == nil || IsNil(o.Typology) {
+		var ret string
+		return ret
+	}
+	return *o.Typology
+}
+
+// GetTypologyOk returns a tuple with the Typology field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *UpdateSellerMediaRequest) GetTypologyOk() (*string, bool) {
+	if o == nil || IsNil(o.Typology) {
+		return nil, false
+	}
+	return o.Typology, true
+}
+
+// HasTypology returns a boolean if a field has been set.
+func (o *UpdateSellerMediaRequest) HasTypology() bool {
+	if o != nil && !IsNil(o.Typology) {
+		return true
+	}
+
+	return false
+}
+
+// SetTypology gets a reference to the given string and assigns it to the Typology field.
+func (o *UpdateSellerMediaRequest) SetTypology(v string) {
+	o.Typology = &v
 }
 
 // GetPostOffer returns the PostOffer field value if set, zero value otherwise.
@@ -158,6 +191,9 @@ func (o UpdateSellerMediaRequest) MarshalJSON() ([]byte, error) {
 
 func (o UpdateSellerMediaRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Typology) {
+		toSerialize["typology"] = o.Typology
+	}
 	if !IsNil(o.PostOffer) {
 		toSerialize["postOffer"] = o.PostOffer
 	}

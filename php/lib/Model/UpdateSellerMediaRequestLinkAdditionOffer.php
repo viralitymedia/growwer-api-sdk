@@ -50,7 +50,7 @@ class UpdateSellerMediaRequestLinkAdditionOffer implements ModelInterface, Array
      *
      * @var string
      */
-    protected static $openAPIModelName = 'updateSellerMedia_request_linkAdditionOffer';
+    protected static $openAPIModelName = 'UpdateSellerMediaRequestLinkAdditionOffer';
 
     /**
      * Array of property to type mappings. Used for (de)serialization

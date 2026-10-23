@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **id** | **UUID** |  | 
 **domain** | **str** |  | 
 **url** | **str** | The media&#39;s root URL. | 
+**typology** | **str** |  | 
 **state** | **str** |  | 
 **deactivation_strikes** | **int** | How many times the media was deactivated for not publishing. | 
 **country** | **str** | A country code, as in GET /vocabulary, or null for none. | 

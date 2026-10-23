@@ -132,7 +132,7 @@ public class Project {
   public static final String SERIALIZED_NAME_TOPICS = "topics";
   @SerializedName(SERIALIZED_NAME_TOPICS)
   @javax.annotation.Nonnull
-  private List<Integer> topics = new ArrayList<>();
+  private List<Integer> topics;
 
   public static final String SERIALIZED_NAME_LANGUAGE = "language";
   @SerializedName(SERIALIZED_NAME_LANGUAGE)
@@ -147,12 +147,12 @@ public class Project {
   public static final String SERIALIZED_NAME_PROMOTED_PRODUCTS = "promotedProducts";
   @SerializedName(SERIALIZED_NAME_PROMOTED_PRODUCTS)
   @javax.annotation.Nonnull
-  private List<String> promotedProducts = new ArrayList<>();
+  private List<String> promotedProducts;
 
   public static final String SERIALIZED_NAME_USER_KEYWORDS = "userKeywords";
   @SerializedName(SERIALIZED_NAME_USER_KEYWORDS)
   @javax.annotation.Nonnull
-  private List<String> userKeywords = new ArrayList<>();
+  private List<String> userKeywords;
 
   /**
    * &#x60;finished&#x60; once Growwer has recommended media for the project, &#x60;analyzing&#x60; until then. Analysis can take hours, and it never finishes when no medium matches the project. Poll with backoff, and use &#x60;createdAt&#x60; to decide how long to keep polling. 

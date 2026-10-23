@@ -76,11 +76,21 @@ namespace Growwer.Api.Model
         /// <param name="userKeywords">At most 100 keywords, none with a line break..</param>
         public UpdateProjectRequest(string name = default, WebsiteTypeEnum? websiteType = default, List<int> topics = default, string language = default, string country = default, List<string> promotedProducts = default, List<string> userKeywords = default)
         {
-            this.Name = name;
+            // a null "name" leaves Name unset, so it is not sent
+            this._Name = name;
+            if (this.Name != null)
+            {
+                this._flagName = true;
+            }
             this.WebsiteType = websiteType;
             this.Topics = topics;
             this.Language = language;
-            this.Country = country;
+            // a null "country" leaves Country unset, so it is not sent
+            this._Country = country;
+            if (this.Country != null)
+            {
+                this._flagCountry = true;
+            }
             this.PromotedProducts = promotedProducts;
             this.UserKeywords = userKeywords;
         }
@@ -90,7 +100,27 @@ namespace Growwer.Api.Model
         /// </summary>
         /// <value>Null or an empty string removes the name.</value>
         [DataMember(Name = "name", EmitDefaultValue = true)]
-        public string Name { get; set; }
+        public string Name
+        {
+            get { return _Name; }
+            set
+            {
+                _Name = value;
+                _flagName = true;
+            }
+        }
+        private string _Name;
+        private bool _flagName;
+
+        /// <summary>
+        /// Returns true once Name has been set, so that a property left unset is left out of
+        /// the request rather than sent as null, which the API reads as a value.
+        /// </summary>
+        /// <returns>true once Name has been set (boolean)</returns>
+        public bool ShouldSerializeName()
+        {
+            return _flagName;
+        }
 
         /// <summary>
         /// Exactly one topic id from GET /vocabulary.
@@ -111,7 +141,27 @@ namespace Growwer.Api.Model
         /// </summary>
         /// <value>A country code from GET /vocabulary, or null for worldwide.</value>
         [DataMember(Name = "country", EmitDefaultValue = true)]
-        public string Country { get; set; }
+        public string Country
+        {
+            get { return _Country; }
+            set
+            {
+                _Country = value;
+                _flagCountry = true;
+            }
+        }
+        private string _Country;
+        private bool _flagCountry;
+
+        /// <summary>
+        /// Returns true once Country has been set, so that a property left unset is left out of
+        /// the request rather than sent as null, which the API reads as a value.
+        /// </summary>
+        /// <returns>true once Country has been set (boolean)</returns>
+        public bool ShouldSerializeCountry()
+        {
+            return _flagCountry;
+        }
 
         /// <summary>
         /// 5 to 10 products or services the campaign promotes.

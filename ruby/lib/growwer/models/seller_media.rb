@@ -23,6 +23,8 @@ module Growwer
     # The media's root URL.
     attr_accessor :url
 
+    attr_accessor :typology
+
     attr_accessor :state
 
     # How many times the media was deactivated for not publishing.
@@ -92,6 +94,7 @@ module Growwer
         :'id' => :'id',
         :'domain' => :'domain',
         :'url' => :'url',
+        :'typology' => :'typology',
         :'state' => :'state',
         :'deactivation_strikes' => :'deactivationStrikes',
         :'country' => :'country',
@@ -127,6 +130,7 @@ module Growwer
         :'id' => :'String',
         :'domain' => :'String',
         :'url' => :'String',
+        :'typology' => :'String',
         :'state' => :'String',
         :'deactivation_strikes' => :'Integer',
         :'country' => :'String',
@@ -191,6 +195,12 @@ module Growwer
         self.url = attributes[:'url']
       else
         self.url = nil
+      end
+
+      if attributes.key?(:'typology')
+        self.typology = attributes[:'typology']
+      else
+        self.typology = nil
       end
 
       if attributes.key?(:'state')
@@ -311,6 +321,10 @@ module Growwer
         invalid_properties.push('invalid value for "url", url cannot be nil.')
       end
 
+      if @typology.nil?
+        invalid_properties.push('invalid value for "typology", typology cannot be nil.')
+      end
+
       if @state.nil?
         invalid_properties.push('invalid value for "state", state cannot be nil.')
       end
@@ -357,6 +371,9 @@ module Growwer
       return false if @id.nil?
       return false if @domain.nil?
       return false if @url.nil?
+      return false if @typology.nil?
+      typology_validator = EnumAttributeValidator.new('String', ["blog", "press"])
+      return false unless typology_validator.valid?(@typology)
       return false if @state.nil?
       state_validator = EnumAttributeValidator.new('String', ["analyzing", "pending_review", "active", "deactivated"])
       return false unless state_validator.valid?(@state)
@@ -399,6 +416,16 @@ module Growwer
       end
 
       @url = url
+    end
+
+    # Custom attribute writer method checking allowed values (enum).
+    # @param [Object] typology Object to be assigned
+    def typology=(typology)
+      validator = EnumAttributeValidator.new('String', ["blog", "press"])
+      unless validator.valid?(typology)
+        fail ArgumentError, "invalid value for \"typology\", must be one of #{validator.allowable_values}."
+      end
+      @typology = typology
     end
 
     # Custom attribute writer method checking allowed values (enum).
@@ -499,6 +526,7 @@ module Growwer
           id == o.id &&
           domain == o.domain &&
           url == o.url &&
+          typology == o.typology &&
           state == o.state &&
           deactivation_strikes == o.deactivation_strikes &&
           country == o.country &&
@@ -526,7 +554,7 @@ module Growwer
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, domain, url, state, deactivation_strikes, country, language, topics, banned_topics, provider_comments, publication_rate, average_days_to_publication, num_published_orders, on_holiday, flash_offer, post_offer, link_addition_offer, competitive_fees, created_at].hash
+      [id, domain, url, typology, state, deactivation_strikes, country, language, topics, banned_topics, provider_comments, publication_rate, average_days_to_publication, num_published_orders, on_holiday, flash_offer, post_offer, link_addition_offer, competitive_fees, created_at].hash
     end
 
     # Builds the object from hash

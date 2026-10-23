@@ -10,6 +10,7 @@ Name | Type
 `id` | string
 `domain` | string
 `url` | string
+`typology` | string
 `state` | string
 `deactivationStrikes` | number
 `country` | string
@@ -37,6 +38,7 @@ const example = {
   "id": null,
   "domain": example.com,
   "url": null,
+  "typology": null,
   "state": null,
   "deactivationStrikes": null,
   "country": null,

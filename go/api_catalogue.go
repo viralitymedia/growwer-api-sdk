@@ -825,7 +825,7 @@ func (r ApiListFlashOffersRequest) RanksGoalKeyword(ranksGoalKeyword string) Api
 	return r
 }
 
-// A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;.
+// A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;.
 func (r ApiListFlashOffersRequest) RanksAiKeyword(ranksAiKeyword string) ApiListFlashOffersRequest {
 	r.ranksAiKeyword = &ranksAiKeyword
 	return r
@@ -1603,7 +1603,7 @@ func (r ApiSearchProjectMediasRequest) RanksGoalKeyword(ranksGoalKeyword string)
 	return r
 }
 
-// A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;.
+// A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;.
 func (r ApiSearchProjectMediasRequest) RanksAiKeyword(ranksAiKeyword string) ApiSearchProjectMediasRequest {
 	r.ranksAiKeyword = &ranksAiKeyword
 	return r

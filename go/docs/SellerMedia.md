@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 **Id** | **string** |  | 
 **Domain** | **string** |  | 
 **Url** | **string** | The media&#39;s root URL. | 
+**Typology** | **string** |  | 
 **State** | **string** |  | 
 **DeactivationStrikes** | **int32** | How many times the media was deactivated for not publishing. | 
 **Country** | **NullableString** | A country code, as in GET /vocabulary, or null for none. | 
@@ -28,7 +29,7 @@ Name | Type | Description | Notes
 
 ### NewSellerMedia
 
-`func NewSellerMedia(id string, domain string, url string, state string, deactivationStrikes int32, country NullableString, language string, topics []int32, bannedTopics []int32, providerComments NullableString, publicationRate NullableInt32, averageDaysToPublication NullableInt32, numPublishedOrders int32, onHoliday bool, flashOffer NullableSellerMediaFlashOffer, postOffer SellerMediaPostOffer, linkAdditionOffer NullableSellerMediaLinkAdditionOffer, competitiveFees NullableSellerFeesOrNull, createdAt time.Time, ) *SellerMedia`
+`func NewSellerMedia(id string, domain string, url string, typology string, state string, deactivationStrikes int32, country NullableString, language string, topics []int32, bannedTopics []int32, providerComments NullableString, publicationRate NullableInt32, averageDaysToPublication NullableInt32, numPublishedOrders int32, onHoliday bool, flashOffer NullableSellerMediaFlashOffer, postOffer SellerMediaPostOffer, linkAdditionOffer NullableSellerMediaLinkAdditionOffer, competitiveFees NullableSellerFeesOrNull, createdAt time.Time, ) *SellerMedia`
 
 NewSellerMedia instantiates a new SellerMedia object
 This constructor will assign default values to properties that have it defined,
@@ -101,6 +102,26 @@ and a boolean to check if the value has been set.
 `func (o *SellerMedia) SetUrl(v string)`
 
 SetUrl sets Url field to given value.
+
+
+### GetTypology
+
+`func (o *SellerMedia) GetTypology() string`
+
+GetTypology returns the Typology field if non-nil, zero value otherwise.
+
+### GetTypologyOk
+
+`func (o *SellerMedia) GetTypologyOk() (*string, bool)`
+
+GetTypologyOk returns a tuple with the Typology field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetTypology
+
+`func (o *SellerMedia) SetTypology(v string)`
+
+SetTypology sets Typology field to given value.
 
 
 ### GetState

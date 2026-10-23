@@ -93,6 +93,159 @@ module Growwer
       return data, status_code, headers
     end
 
+    # Register a media you sell on
+    # Registers one of your medias, as the media create page does. The media is created with `state: pending_review` and Growwer reviews it in the background, as for a media registered on the web; GET /seller/medias/{id} shows its state.  - `rootUrl` is the media's root URL; `typology` is `blog` or `press`. - `country` and `language` take the codes GET /vocabulary publishes; `topics` and `bannedTopics` take its topic ids, at most 100 each, and no topic may be both; `bannedTopics` left out bans none. - `postOffer.pricingOptions` lists every link type you offer for sponsored posts, at least one. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR, sent in cents. - `postOffer.maximumLinks` is how many links a sponsored post may hold, 1 to 4; `postOffer.advertisingLabellingPolicy` whether posts are labelled as advertising, `never` when left out; `postOffer.promotedSocialNetworks` the social networks posts are promoted on, none when left out. - `linkAdditionOffer.pricingOptions` lists the link types you offer for adding a link to an existing article; left out, `null` or an empty list offers none. - `extraServices` lists the extra services you offer, none when left out. It is sent at the top level, although GET /seller/medias/{id} reads it inside `postOffer`. - `acceptMediaPublishingTerms` and `declareMediaOwnership` must be `true`: they accept the media publishing terms and declare that you own or manage the media, as the page's checkboxes do, and are recorded as your consents for the media.  A media registered already, by you or by anyone else, is refused with 409 `media_already_registered`, and each such refusal counts toward a daily limit of refusals (429 `media_duplicate_limit_reached` once reached); medias not registered yet are never limited by it.  To register many medias, call this operation once per media, each call with its own `Idempotency-Key` and its own answer (201, 409, 422 or 429); there is no batch operation. The request limits apply to the loop as to any calls (600 requests per minute per user and 300 per key), and each 409 `media_already_registered` counts toward the daily limit of refusals as it does for a single call. Retry a call that got no answer with its same `Idempotency-Key`, as for any write.
+    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
+    # @param create_seller_media_request [CreateSellerMediaRequest] 
+    # @param [Hash] opts the optional parameters
+    # @return [SellerMedia]
+    def create_seller_media(idempotency_key, create_seller_media_request, opts = {})
+      data, _status_code, _headers = create_seller_media_with_http_info(idempotency_key, create_seller_media_request, opts)
+      data
+    end
+
+    # Register a media you sell on
+    # Registers one of your medias, as the media create page does. The media is created with &#x60;state: pending_review&#x60; and Growwer reviews it in the background, as for a media registered on the web; GET /seller/medias/{id} shows its state.  - &#x60;rootUrl&#x60; is the media&#39;s root URL; &#x60;typology&#x60; is &#x60;blog&#x60; or &#x60;press&#x60;. - &#x60;country&#x60; and &#x60;language&#x60; take the codes GET /vocabulary publishes; &#x60;topics&#x60; and &#x60;bannedTopics&#x60; take its topic ids, at most 100 each, and no topic may be both; &#x60;bannedTopics&#x60; left out bans none. - &#x60;postOffer.pricingOptions&#x60; lists every link type you offer for sponsored posts, at least one. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR, sent in cents. - &#x60;postOffer.maximumLinks&#x60; is how many links a sponsored post may hold, 1 to 4; &#x60;postOffer.advertisingLabellingPolicy&#x60; whether posts are labelled as advertising, &#x60;never&#x60; when left out; &#x60;postOffer.promotedSocialNetworks&#x60; the social networks posts are promoted on, none when left out. - &#x60;linkAdditionOffer.pricingOptions&#x60; lists the link types you offer for adding a link to an existing article; left out, &#x60;null&#x60; or an empty list offers none. - &#x60;extraServices&#x60; lists the extra services you offer, none when left out. It is sent at the top level, although GET /seller/medias/{id} reads it inside &#x60;postOffer&#x60;. - &#x60;acceptMediaPublishingTerms&#x60; and &#x60;declareMediaOwnership&#x60; must be &#x60;true&#x60;: they accept the media publishing terms and declare that you own or manage the media, as the page&#39;s checkboxes do, and are recorded as your consents for the media.  A media registered already, by you or by anyone else, is refused with 409 &#x60;media_already_registered&#x60;, and each such refusal counts toward a daily limit of refusals (429 &#x60;media_duplicate_limit_reached&#x60; once reached); medias not registered yet are never limited by it.  To register many medias, call this operation once per media, each call with its own &#x60;Idempotency-Key&#x60; and its own answer (201, 409, 422 or 429); there is no batch operation. The request limits apply to the loop as to any calls (600 requests per minute per user and 300 per key), and each 409 &#x60;media_already_registered&#x60; counts toward the daily limit of refusals as it does for a single call. Retry a call that got no answer with its same &#x60;Idempotency-Key&#x60;, as for any write.
+    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
+    # @param create_seller_media_request [CreateSellerMediaRequest] 
+    # @param [Hash] opts the optional parameters
+    # @return [Array<(SellerMedia, Integer, Hash)>] SellerMedia data, response status code and response headers
+    def create_seller_media_with_http_info(idempotency_key, create_seller_media_request, opts = {})
+      if @api_client.config.debugging
+        @api_client.config.logger.debug 'Calling API: SellerMediasApi.create_seller_media ...'
+      end
+      # verify the required parameter 'idempotency_key' is set
+      if @api_client.config.client_side_validation && idempotency_key.nil?
+        fail ArgumentError, "Missing the required parameter 'idempotency_key' when calling SellerMediasApi.create_seller_media"
+      end
+      if @api_client.config.client_side_validation && idempotency_key.to_s.length > 255
+        fail ArgumentError, 'invalid value for "idempotency_key" when calling SellerMediasApi.create_seller_media, the character length must be smaller than or equal to 255.'
+      end
+
+      # verify the required parameter 'create_seller_media_request' is set
+      if @api_client.config.client_side_validation && create_seller_media_request.nil?
+        fail ArgumentError, "Missing the required parameter 'create_seller_media_request' when calling SellerMediasApi.create_seller_media"
+      end
+      # resource path
+      local_var_path = '/api/v1/seller/medias'
+
+      # query parameters
+      query_params = opts[:query_params] || {}
+
+      # header parameters
+      header_params = opts[:header_params] || {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json']) unless header_params['Accept']
+      # HTTP header 'Content-Type'
+      content_type = @api_client.select_header_content_type(['application/json'])
+      if !content_type.nil?
+          header_params['Content-Type'] = content_type
+      end
+      header_params[:'Idempotency-Key'] = idempotency_key
+
+      # form parameters
+      form_params = opts[:form_params] || {}
+
+      # http body (model)
+      post_body = opts[:debug_body] || @api_client.object_to_http_body(create_seller_media_request)
+
+      # return_type
+      return_type = opts[:debug_return_type] || 'SellerMedia'
+
+      # auth_names
+      auth_names = opts[:debug_auth_names] || ['apiKey']
+
+      new_options = opts.merge(
+        :operation => :"SellerMediasApi.create_seller_media",
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type
+      )
+
+      data, status_code, headers = @api_client.call_api(:POST, local_var_path, new_options)
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: SellerMediasApi#create_seller_media\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
+    # Delete a media you sell on
+    # Deletes one of your medias, in any state, as the media delete button does. The media must have no order in progress: close or reject its orders first. The API never cancels an order for you, and an order placed while the delete runs is refused, never cancelled.  What goes with the media, as on the web:  - A running flash offer ends with it, and its managed-service proposals are deleted. - Its finished orders stay, with the media's URL; they read `media.id` null. - Buyers' favourites and discards of the domain stay, as they are kept by domain. - The catalogue search drops the media shortly after the 204, as the search index updates asynchronously.  Repeating the call with the same `Idempotency-Key` answers the same 204 with `Idempotent-Replayed: true`; a new key after the delete answers 404.
+    # @param id [String] 
+    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
+    # @param [Hash] opts the optional parameters
+    # @return [nil]
+    def delete_seller_media(id, idempotency_key, opts = {})
+      delete_seller_media_with_http_info(id, idempotency_key, opts)
+      nil
+    end
+
+    # Delete a media you sell on
+    # Deletes one of your medias, in any state, as the media delete button does. The media must have no order in progress: close or reject its orders first. The API never cancels an order for you, and an order placed while the delete runs is refused, never cancelled.  What goes with the media, as on the web:  - A running flash offer ends with it, and its managed-service proposals are deleted. - Its finished orders stay, with the media&#39;s URL; they read &#x60;media.id&#x60; null. - Buyers&#39; favourites and discards of the domain stay, as they are kept by domain. - The catalogue search drops the media shortly after the 204, as the search index updates asynchronously.  Repeating the call with the same &#x60;Idempotency-Key&#x60; answers the same 204 with &#x60;Idempotent-Replayed: true&#x60;; a new key after the delete answers 404.
+    # @param id [String] 
+    # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
+    # @param [Hash] opts the optional parameters
+    # @return [Array<(nil, Integer, Hash)>] nil, response status code and response headers
+    def delete_seller_media_with_http_info(id, idempotency_key, opts = {})
+      if @api_client.config.debugging
+        @api_client.config.logger.debug 'Calling API: SellerMediasApi.delete_seller_media ...'
+      end
+      # verify the required parameter 'id' is set
+      if @api_client.config.client_side_validation && id.nil?
+        fail ArgumentError, "Missing the required parameter 'id' when calling SellerMediasApi.delete_seller_media"
+      end
+      # verify the required parameter 'idempotency_key' is set
+      if @api_client.config.client_side_validation && idempotency_key.nil?
+        fail ArgumentError, "Missing the required parameter 'idempotency_key' when calling SellerMediasApi.delete_seller_media"
+      end
+      if @api_client.config.client_side_validation && idempotency_key.to_s.length > 255
+        fail ArgumentError, 'invalid value for "idempotency_key" when calling SellerMediasApi.delete_seller_media, the character length must be smaller than or equal to 255.'
+      end
+
+      # resource path
+      local_var_path = '/api/v1/seller/medias/{id}'.sub('{id}', CGI.escape(id.to_s))
+
+      # query parameters
+      query_params = opts[:query_params] || {}
+
+      # header parameters
+      header_params = opts[:header_params] || {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json']) unless header_params['Accept']
+      header_params[:'Idempotency-Key'] = idempotency_key
+
+      # form parameters
+      form_params = opts[:form_params] || {}
+
+      # http body (model)
+      post_body = opts[:debug_body]
+
+      # return_type
+      return_type = opts[:debug_return_type]
+
+      # auth_names
+      auth_names = opts[:debug_auth_names] || ['apiKey']
+
+      new_options = opts.merge(
+        :operation => :"SellerMediasApi.delete_seller_media",
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type
+      )
+
+      data, status_code, headers = @api_client.call_api(:DELETE, local_var_path, new_options)
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: SellerMediasApi#delete_seller_media\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
     # Get a media you sell on
     # One of your medias, with your fees, its extras, the competitive fees Growwer suggests and how it performs. Another seller's media is not found.
     # @param id [String] 
@@ -241,8 +394,8 @@ module Growwer
       return data, status_code, headers
     end
 
-    # Edit the fees of a media you sell on
-    # Sets the fees of one of your medias, as the media edit page saves them. Send only the sections you change: a section you send replaces that section wholly, a section you leave out stays as it is.  - `postOffer.pricingOptions` lists every link type you offer for sponsored posts, at least one. A link type you leave out is no longer offered. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR. - `linkAdditionOffer.pricingOptions` lists the link types you offer for adding a link to an existing article; `null` or an empty list stops offering link additions. - `extraServices` is the full list of extra services you offer; an empty list removes them all.  The fees are your base fees, the ones GET /seller/medias/{id} returns: while a flash offer runs, its discount keeps applying on top of them, and `currentCost` shows the result. `currentCost` may be sent back as read and is ignored. Characteristics, topics and comments are not edited here.  As on the page, a change of the post offer's price may cancel the managed-service proposals accepted for the media whose price it changes, and raising the price above the best competitor's tells Growwer's support team. A restricted seller account may edit its fees.
+    # Edit the offer of a media you sell on
+    # Sets the fees, extra services, typology and post offer characteristics of one of your medias, as the media edit page saves them. Send only the fields you change: a field you send replaces that field wholly, a field you leave out stays as it is, inside `postOffer` too (sending only `postOffer.maximumLinks` keeps your fees).  - `typology` is `blog` or `press`. - `postOffer.pricingOptions` lists every link type you offer for sponsored posts, at least one. A link type you leave out is no longer offered. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR. - `postOffer.maximumLinks` is how many links a sponsored post may hold, 1 to 4; `postOffer.advertisingLabellingPolicy` whether posts are labelled as advertising (`always` or `never`); `postOffer.promotedSocialNetworks` the full list of social networks posts are promoted on, each once (an empty list for none). - `linkAdditionOffer.pricingOptions` lists the link types you offer for adding a link to an existing article; `null` or an empty list stops offering link additions. - `extraServices` is the full list of extra services you offer; an empty list removes them all. It is sent at the top level, although GET /seller/medias/{id} reads it inside `postOffer`.  The fees are your base fees, the ones GET /seller/medias/{id} returns: while a flash offer runs, its discount keeps applying on top of them, and `currentCost` shows the result. `currentCost` may be sent back as read and is ignored. Country, language, topics and comments are not edited here.  As on the page, a change of the post offer's price may cancel the managed-service proposals accepted for the media whose price it changes, and raising the price above the best competitor's tells Growwer's support team. A restricted seller account may edit its offer.
     # @param id [String] 
     # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
     # @param update_seller_media_request [UpdateSellerMediaRequest] 
@@ -253,8 +406,8 @@ module Growwer
       data
     end
 
-    # Edit the fees of a media you sell on
-    # Sets the fees of one of your medias, as the media edit page saves them. Send only the sections you change: a section you send replaces that section wholly, a section you leave out stays as it is.  - &#x60;postOffer.pricingOptions&#x60; lists every link type you offer for sponsored posts, at least one. A link type you leave out is no longer offered. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR. - &#x60;linkAdditionOffer.pricingOptions&#x60; lists the link types you offer for adding a link to an existing article; &#x60;null&#x60; or an empty list stops offering link additions. - &#x60;extraServices&#x60; is the full list of extra services you offer; an empty list removes them all.  The fees are your base fees, the ones GET /seller/medias/{id} returns: while a flash offer runs, its discount keeps applying on top of them, and &#x60;currentCost&#x60; shows the result. &#x60;currentCost&#x60; may be sent back as read and is ignored. Characteristics, topics and comments are not edited here.  As on the page, a change of the post offer&#39;s price may cancel the managed-service proposals accepted for the media whose price it changes, and raising the price above the best competitor&#39;s tells Growwer&#39;s support team. A restricted seller account may edit its fees.
+    # Edit the offer of a media you sell on
+    # Sets the fees, extra services, typology and post offer characteristics of one of your medias, as the media edit page saves them. Send only the fields you change: a field you send replaces that field wholly, a field you leave out stays as it is, inside &#x60;postOffer&#x60; too (sending only &#x60;postOffer.maximumLinks&#x60; keeps your fees).  - &#x60;typology&#x60; is &#x60;blog&#x60; or &#x60;press&#x60;. - &#x60;postOffer.pricingOptions&#x60; lists every link type you offer for sponsored posts, at least one. A link type you leave out is no longer offered. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR. - &#x60;postOffer.maximumLinks&#x60; is how many links a sponsored post may hold, 1 to 4; &#x60;postOffer.advertisingLabellingPolicy&#x60; whether posts are labelled as advertising (&#x60;always&#x60; or &#x60;never&#x60;); &#x60;postOffer.promotedSocialNetworks&#x60; the full list of social networks posts are promoted on, each once (an empty list for none). - &#x60;linkAdditionOffer.pricingOptions&#x60; lists the link types you offer for adding a link to an existing article; &#x60;null&#x60; or an empty list stops offering link additions. - &#x60;extraServices&#x60; is the full list of extra services you offer; an empty list removes them all. It is sent at the top level, although GET /seller/medias/{id} reads it inside &#x60;postOffer&#x60;.  The fees are your base fees, the ones GET /seller/medias/{id} returns: while a flash offer runs, its discount keeps applying on top of them, and &#x60;currentCost&#x60; shows the result. &#x60;currentCost&#x60; may be sent back as read and is ignored. Country, language, topics and comments are not edited here.  As on the page, a change of the post offer&#39;s price may cancel the managed-service proposals accepted for the media whose price it changes, and raising the price above the best competitor&#39;s tells Growwer&#39;s support team. A restricted seller account may edit its offer.
     # @param id [String] 
     # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
     # @param update_seller_media_request [UpdateSellerMediaRequest] 

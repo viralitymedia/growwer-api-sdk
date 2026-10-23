@@ -13,8 +13,6 @@ package growwer
 
 import (
 	"encoding/json"
-	"bytes"
-	"fmt"
 )
 
 // checks if the UpdateSellerMediaRequestPostOffer type satisfies the MappedNullable interface at compile time
@@ -22,18 +20,18 @@ var _ MappedNullable = &UpdateSellerMediaRequestPostOffer{}
 
 // UpdateSellerMediaRequestPostOffer struct for UpdateSellerMediaRequestPostOffer
 type UpdateSellerMediaRequestPostOffer struct {
-	PricingOptions []UpdateSellerMediaRequestPostOfferPricingOptionsInner `json:"pricingOptions"`
+	PricingOptions []UpdateSellerMediaRequestPostOfferPricingOptionsInner `json:"pricingOptions,omitempty"`
+	MaximumLinks *int32 `json:"maximumLinks,omitempty"`
+	AdvertisingLabellingPolicy *string `json:"advertisingLabellingPolicy,omitempty"`
+	PromotedSocialNetworks []string `json:"promotedSocialNetworks,omitempty"`
 }
-
-type _UpdateSellerMediaRequestPostOffer UpdateSellerMediaRequestPostOffer
 
 // NewUpdateSellerMediaRequestPostOffer instantiates a new UpdateSellerMediaRequestPostOffer object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewUpdateSellerMediaRequestPostOffer(pricingOptions []UpdateSellerMediaRequestPostOfferPricingOptionsInner) *UpdateSellerMediaRequestPostOffer {
+func NewUpdateSellerMediaRequestPostOffer() *UpdateSellerMediaRequestPostOffer {
 	this := UpdateSellerMediaRequestPostOffer{}
-	this.PricingOptions = pricingOptions
 	return &this
 }
 
@@ -45,28 +43,132 @@ func NewUpdateSellerMediaRequestPostOfferWithDefaults() *UpdateSellerMediaReques
 	return &this
 }
 
-// GetPricingOptions returns the PricingOptions field value
+// GetPricingOptions returns the PricingOptions field value if set, zero value otherwise.
 func (o *UpdateSellerMediaRequestPostOffer) GetPricingOptions() []UpdateSellerMediaRequestPostOfferPricingOptionsInner {
-	if o == nil {
+	if o == nil || IsNil(o.PricingOptions) {
 		var ret []UpdateSellerMediaRequestPostOfferPricingOptionsInner
 		return ret
 	}
-
 	return o.PricingOptions
 }
 
-// GetPricingOptionsOk returns a tuple with the PricingOptions field value
+// GetPricingOptionsOk returns a tuple with the PricingOptions field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *UpdateSellerMediaRequestPostOffer) GetPricingOptionsOk() ([]UpdateSellerMediaRequestPostOfferPricingOptionsInner, bool) {
-	if o == nil {
+	if o == nil || IsNil(o.PricingOptions) {
 		return nil, false
 	}
 	return o.PricingOptions, true
 }
 
-// SetPricingOptions sets field value
+// HasPricingOptions returns a boolean if a field has been set.
+func (o *UpdateSellerMediaRequestPostOffer) HasPricingOptions() bool {
+	if o != nil && !IsNil(o.PricingOptions) {
+		return true
+	}
+
+	return false
+}
+
+// SetPricingOptions gets a reference to the given []UpdateSellerMediaRequestPostOfferPricingOptionsInner and assigns it to the PricingOptions field.
 func (o *UpdateSellerMediaRequestPostOffer) SetPricingOptions(v []UpdateSellerMediaRequestPostOfferPricingOptionsInner) {
 	o.PricingOptions = v
+}
+
+// GetMaximumLinks returns the MaximumLinks field value if set, zero value otherwise.
+func (o *UpdateSellerMediaRequestPostOffer) GetMaximumLinks() int32 {
+	if o == nil || IsNil(o.MaximumLinks) {
+		var ret int32
+		return ret
+	}
+	return *o.MaximumLinks
+}
+
+// GetMaximumLinksOk returns a tuple with the MaximumLinks field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *UpdateSellerMediaRequestPostOffer) GetMaximumLinksOk() (*int32, bool) {
+	if o == nil || IsNil(o.MaximumLinks) {
+		return nil, false
+	}
+	return o.MaximumLinks, true
+}
+
+// HasMaximumLinks returns a boolean if a field has been set.
+func (o *UpdateSellerMediaRequestPostOffer) HasMaximumLinks() bool {
+	if o != nil && !IsNil(o.MaximumLinks) {
+		return true
+	}
+
+	return false
+}
+
+// SetMaximumLinks gets a reference to the given int32 and assigns it to the MaximumLinks field.
+func (o *UpdateSellerMediaRequestPostOffer) SetMaximumLinks(v int32) {
+	o.MaximumLinks = &v
+}
+
+// GetAdvertisingLabellingPolicy returns the AdvertisingLabellingPolicy field value if set, zero value otherwise.
+func (o *UpdateSellerMediaRequestPostOffer) GetAdvertisingLabellingPolicy() string {
+	if o == nil || IsNil(o.AdvertisingLabellingPolicy) {
+		var ret string
+		return ret
+	}
+	return *o.AdvertisingLabellingPolicy
+}
+
+// GetAdvertisingLabellingPolicyOk returns a tuple with the AdvertisingLabellingPolicy field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *UpdateSellerMediaRequestPostOffer) GetAdvertisingLabellingPolicyOk() (*string, bool) {
+	if o == nil || IsNil(o.AdvertisingLabellingPolicy) {
+		return nil, false
+	}
+	return o.AdvertisingLabellingPolicy, true
+}
+
+// HasAdvertisingLabellingPolicy returns a boolean if a field has been set.
+func (o *UpdateSellerMediaRequestPostOffer) HasAdvertisingLabellingPolicy() bool {
+	if o != nil && !IsNil(o.AdvertisingLabellingPolicy) {
+		return true
+	}
+
+	return false
+}
+
+// SetAdvertisingLabellingPolicy gets a reference to the given string and assigns it to the AdvertisingLabellingPolicy field.
+func (o *UpdateSellerMediaRequestPostOffer) SetAdvertisingLabellingPolicy(v string) {
+	o.AdvertisingLabellingPolicy = &v
+}
+
+// GetPromotedSocialNetworks returns the PromotedSocialNetworks field value if set, zero value otherwise.
+func (o *UpdateSellerMediaRequestPostOffer) GetPromotedSocialNetworks() []string {
+	if o == nil || IsNil(o.PromotedSocialNetworks) {
+		var ret []string
+		return ret
+	}
+	return o.PromotedSocialNetworks
+}
+
+// GetPromotedSocialNetworksOk returns a tuple with the PromotedSocialNetworks field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *UpdateSellerMediaRequestPostOffer) GetPromotedSocialNetworksOk() ([]string, bool) {
+	if o == nil || IsNil(o.PromotedSocialNetworks) {
+		return nil, false
+	}
+	return o.PromotedSocialNetworks, true
+}
+
+// HasPromotedSocialNetworks returns a boolean if a field has been set.
+func (o *UpdateSellerMediaRequestPostOffer) HasPromotedSocialNetworks() bool {
+	if o != nil && !IsNil(o.PromotedSocialNetworks) {
+		return true
+	}
+
+	return false
+}
+
+// SetPromotedSocialNetworks gets a reference to the given []string and assigns it to the PromotedSocialNetworks field.
+func (o *UpdateSellerMediaRequestPostOffer) SetPromotedSocialNetworks(v []string) {
+	o.PromotedSocialNetworks = v
 }
 
 func (o UpdateSellerMediaRequestPostOffer) MarshalJSON() ([]byte, error) {
@@ -79,45 +181,19 @@ func (o UpdateSellerMediaRequestPostOffer) MarshalJSON() ([]byte, error) {
 
 func (o UpdateSellerMediaRequestPostOffer) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["pricingOptions"] = o.PricingOptions
+	if !IsNil(o.PricingOptions) {
+		toSerialize["pricingOptions"] = o.PricingOptions
+	}
+	if !IsNil(o.MaximumLinks) {
+		toSerialize["maximumLinks"] = o.MaximumLinks
+	}
+	if !IsNil(o.AdvertisingLabellingPolicy) {
+		toSerialize["advertisingLabellingPolicy"] = o.AdvertisingLabellingPolicy
+	}
+	if !IsNil(o.PromotedSocialNetworks) {
+		toSerialize["promotedSocialNetworks"] = o.PromotedSocialNetworks
+	}
 	return toSerialize, nil
-}
-
-func (o *UpdateSellerMediaRequestPostOffer) UnmarshalJSON(data []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"pricingOptions",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(data, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varUpdateSellerMediaRequestPostOffer := _UpdateSellerMediaRequestPostOffer{}
-
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varUpdateSellerMediaRequestPostOffer)
-
-	if err != nil {
-		return err
-	}
-
-	*o = UpdateSellerMediaRequestPostOffer(varUpdateSellerMediaRequestPostOffer)
-
-	return err
 }
 
 type NullableUpdateSellerMediaRequestPostOffer struct {

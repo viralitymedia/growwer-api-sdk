@@ -88,7 +88,12 @@ namespace Growwer.Api.Model
         public SellerOrderRejectionReason(NameEnum name = default, string additionalInfo = default)
         {
             this.Name = name;
-            this.AdditionalInfo = additionalInfo;
+            // a null "additionalInfo" leaves AdditionalInfo unset, so it is not sent
+            this._AdditionalInfo = additionalInfo;
+            if (this.AdditionalInfo != null)
+            {
+                this._flagAdditionalInfo = true;
+            }
             this.AdditionalProperties = new Dictionary<string, object>();
         }
 
@@ -97,7 +102,27 @@ namespace Growwer.Api.Model
         /// </summary>
         /// <value>More about the reason, which the buyer is told, 10 to 2000 characters. Required with &#x60;other_reasons&#x60;.</value>
         [DataMember(Name = "additionalInfo", EmitDefaultValue = true)]
-        public string AdditionalInfo { get; set; }
+        public string AdditionalInfo
+        {
+            get { return _AdditionalInfo; }
+            set
+            {
+                _AdditionalInfo = value;
+                _flagAdditionalInfo = true;
+            }
+        }
+        private string _AdditionalInfo;
+        private bool _flagAdditionalInfo;
+
+        /// <summary>
+        /// Returns true once AdditionalInfo has been set, so that a property left unset is left out of
+        /// the request rather than sent as null, which the API reads as a value.
+        /// </summary>
+        /// <returns>true once AdditionalInfo has been set (boolean)</returns>
+        public bool ShouldSerializeAdditionalInfo()
+        {
+            return _flagAdditionalInfo;
+        }
 
         /// <summary>
         /// Gets or Sets additional properties

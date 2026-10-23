@@ -34,29 +34,105 @@ namespace Growwer.Api.Model
     public partial class UpdateSellerMediaRequestPostOffer : IValidatableObject
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="UpdateSellerMediaRequestPostOffer" /> class.
+        /// Defines AdvertisingLabellingPolicy
         /// </summary>
-        [JsonConstructorAttribute]
-        protected UpdateSellerMediaRequestPostOffer() { }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public enum AdvertisingLabellingPolicyEnum
+        {
+            /// <summary>
+            /// Enum Always for value: always
+            /// </summary>
+            [EnumMember(Value = "always")]
+            Always = 1,
+
+            /// <summary>
+            /// Enum Never for value: never
+            /// </summary>
+            [EnumMember(Value = "never")]
+            Never = 2
+        }
+
+
+        /// <summary>
+        /// Gets or Sets AdvertisingLabellingPolicy
+        /// </summary>
+        [DataMember(Name = "advertisingLabellingPolicy", EmitDefaultValue = false)]
+        public AdvertisingLabellingPolicyEnum? AdvertisingLabellingPolicy { get; set; }
+        /// <summary>
+        /// Defines PromotedSocialNetworks
+        /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
+        public enum PromotedSocialNetworksEnum
+        {
+            /// <summary>
+            /// Enum Twitter for value: twitter
+            /// </summary>
+            [EnumMember(Value = "twitter")]
+            Twitter = 1,
+
+            /// <summary>
+            /// Enum Instagram for value: instagram
+            /// </summary>
+            [EnumMember(Value = "instagram")]
+            Instagram = 2,
+
+            /// <summary>
+            /// Enum Facebook for value: facebook
+            /// </summary>
+            [EnumMember(Value = "facebook")]
+            Facebook = 3,
+
+            /// <summary>
+            /// Enum Pinterest for value: pinterest
+            /// </summary>
+            [EnumMember(Value = "pinterest")]
+            Pinterest = 4,
+
+            /// <summary>
+            /// Enum Tumblr for value: tumblr
+            /// </summary>
+            [EnumMember(Value = "tumblr")]
+            Tumblr = 5,
+
+            /// <summary>
+            /// Enum Newsletter for value: newsletter
+            /// </summary>
+            [EnumMember(Value = "newsletter")]
+            Newsletter = 6
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="UpdateSellerMediaRequestPostOffer" /> class.
         /// </summary>
-        /// <param name="pricingOptions">pricingOptions (required).</param>
-        public UpdateSellerMediaRequestPostOffer(List<UpdateSellerMediaRequestPostOfferPricingOptionsInner> pricingOptions = default)
+        /// <param name="pricingOptions">pricingOptions.</param>
+        /// <param name="maximumLinks">maximumLinks.</param>
+        /// <param name="advertisingLabellingPolicy">advertisingLabellingPolicy.</param>
+        /// <param name="promotedSocialNetworks">promotedSocialNetworks.</param>
+        public UpdateSellerMediaRequestPostOffer(List<UpdateSellerMediaRequestPostOfferPricingOptionsInner> pricingOptions = default, int maximumLinks = default, AdvertisingLabellingPolicyEnum? advertisingLabellingPolicy = default, List<PromotedSocialNetworksEnum> promotedSocialNetworks = default)
         {
-            // to ensure "pricingOptions" is required (not null)
-            if (pricingOptions == null)
-            {
-                throw new ArgumentNullException("pricingOptions is a required property for UpdateSellerMediaRequestPostOffer and cannot be null");
-            }
             this.PricingOptions = pricingOptions;
+            this.MaximumLinks = maximumLinks;
+            this.AdvertisingLabellingPolicy = advertisingLabellingPolicy;
+            this.PromotedSocialNetworks = promotedSocialNetworks;
         }
 
         /// <summary>
         /// Gets or Sets PricingOptions
         /// </summary>
-        [DataMember(Name = "pricingOptions", IsRequired = true, EmitDefaultValue = true)]
+        [DataMember(Name = "pricingOptions", EmitDefaultValue = false)]
         public List<UpdateSellerMediaRequestPostOfferPricingOptionsInner> PricingOptions { get; set; }
+
+        /// <summary>
+        /// Gets or Sets MaximumLinks
+        /// </summary>
+        [DataMember(Name = "maximumLinks", EmitDefaultValue = false)]
+        public int MaximumLinks { get; set; }
+
+        /// <summary>
+        /// Gets or Sets PromotedSocialNetworks
+        /// </summary>
+        [DataMember(Name = "promotedSocialNetworks", EmitDefaultValue = false)]
+        public List<UpdateSellerMediaRequestPostOffer.PromotedSocialNetworksEnum> PromotedSocialNetworks { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -67,6 +143,9 @@ namespace Growwer.Api.Model
             StringBuilder sb = new StringBuilder();
             sb.Append("class UpdateSellerMediaRequestPostOffer {\n");
             sb.Append("  PricingOptions: ").Append(PricingOptions).Append("\n");
+            sb.Append("  MaximumLinks: ").Append(MaximumLinks).Append("\n");
+            sb.Append("  AdvertisingLabellingPolicy: ").Append(AdvertisingLabellingPolicy).Append("\n");
+            sb.Append("  PromotedSocialNetworks: ").Append(PromotedSocialNetworks).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -87,6 +166,18 @@ namespace Growwer.Api.Model
         /// <returns>Validation Result</returns>
         IEnumerable<ValidationResult> IValidatableObject.Validate(ValidationContext validationContext)
         {
+            // MaximumLinks (int) maximum
+            if (this.MaximumLinks > (int)4)
+            {
+                yield return new ValidationResult("Invalid value for MaximumLinks, must be a value less than or equal to 4.", new [] { "MaximumLinks" });
+            }
+
+            // MaximumLinks (int) minimum
+            if (this.MaximumLinks < (int)1)
+            {
+                yield return new ValidationResult("Invalid value for MaximumLinks, must be a value greater than or equal to 1.", new [] { "MaximumLinks" });
+            }
+
             yield break;
         }
     }

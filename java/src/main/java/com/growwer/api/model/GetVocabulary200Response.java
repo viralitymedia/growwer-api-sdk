@@ -57,17 +57,17 @@ public class GetVocabulary200Response {
   public static final String SERIALIZED_NAME_COUNTRIES = "countries";
   @SerializedName(SERIALIZED_NAME_COUNTRIES)
   @javax.annotation.Nonnull
-  private List<CodeName> countries = new ArrayList<>();
+  private List<CodeName> countries;
 
   public static final String SERIALIZED_NAME_LANGUAGES = "languages";
   @SerializedName(SERIALIZED_NAME_LANGUAGES)
   @javax.annotation.Nonnull
-  private List<CodeName> languages = new ArrayList<>();
+  private List<CodeName> languages;
 
   public static final String SERIALIZED_NAME_TOPICS = "topics";
   @SerializedName(SERIALIZED_NAME_TOPICS)
   @javax.annotation.Nonnull
-  private List<GetVocabulary200ResponseTopicsInner> topics = new ArrayList<>();
+  private List<GetVocabulary200ResponseTopicsInner> topics;
 
   /**
    * Gets or Sets productTypes
@@ -124,7 +124,7 @@ public class GetVocabulary200Response {
   public static final String SERIALIZED_NAME_PRODUCT_TYPES = "productTypes";
   @SerializedName(SERIALIZED_NAME_PRODUCT_TYPES)
   @javax.annotation.Nonnull
-  private List<ProductTypesEnum> productTypes = new ArrayList<>();
+  private List<ProductTypesEnum> productTypes;
 
   /**
    * Gets or Sets linkTypes
@@ -183,12 +183,12 @@ public class GetVocabulary200Response {
   public static final String SERIALIZED_NAME_LINK_TYPES = "linkTypes";
   @SerializedName(SERIALIZED_NAME_LINK_TYPES)
   @javax.annotation.Nonnull
-  private List<LinkTypesEnum> linkTypes = new ArrayList<>();
+  private List<LinkTypesEnum> linkTypes;
 
   public static final String SERIALIZED_NAME_ORDER_STATES = "orderStates";
   @SerializedName(SERIALIZED_NAME_ORDER_STATES)
   @javax.annotation.Nonnull
-  private List<String> orderStates = new ArrayList<>();
+  private List<String> orderStates;
 
   public GetVocabulary200Response() {
   }

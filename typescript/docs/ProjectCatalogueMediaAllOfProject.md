@@ -1,7 +1,7 @@
 
 # ProjectCatalogueMediaAllOfProject
 
-The media\'s state in the project.
+The media\'s state in the project, and the AI keywords the web lists for the media in this project.
 
 ## Properties
 
@@ -13,6 +13,7 @@ Name | Type
 `recommended` | boolean
 `bought` | boolean
 `_new` | boolean
+`aiKeywords` | [Array&lt;ProjectCatalogueMediaAllOfProjectAiKeywords&gt;](ProjectCatalogueMediaAllOfProjectAiKeywords.md)
 
 ## Example
 
@@ -27,6 +28,7 @@ const example = {
   "recommended": null,
   "bought": null,
   "_new": null,
+  "aiKeywords": null,
 } satisfies ProjectCatalogueMediaAllOfProject
 
 console.log(example)

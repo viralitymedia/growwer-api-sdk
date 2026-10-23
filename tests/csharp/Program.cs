@@ -17,14 +17,17 @@ using Growwer.Api.Api;
 using Growwer.Api.Client;
 using Growwer.Api.Model;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 internal static class Program
 {
     private static readonly string Fixtures = Path.Combine("tests", "fixtures");
     private static readonly Guid MediaId = Guid.Parse("c1d2e3f4-a5b6-4c7d-8e9f-a0b1c2d3e4f5");
     private static readonly Guid OrderId = Guid.Parse("0b9c6a4e-6f1d-4c39-9a51-2f5d7c1e8a01");
+    private static readonly Guid ProjectId = Guid.Parse("5e0c2b7a-3d4f-4a1b-9c8d-7e6f5a4b3c2d");
 
     private static readonly List<HttpRequestMessage> Sent = new List<HttpRequestMessage>();
+    private static readonly List<string> SentBodies = new List<string>();
 
     private static byte[] Fixture(string name) => File.ReadAllBytes(Path.Combine(Fixtures, name));
 
@@ -56,6 +59,7 @@ internal static class Program
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             Sent.Add(request);
+            SentBodies.Add(request.Content?.ReadAsStringAsync(cancellationToken).GetAwaiter().GetResult());
             var response = new HttpResponseMessage(status) { RequestMessage = request, Content = new ByteArrayContent(body) };
             response.Content.Headers.ContentType = MediaTypeHeaderValue.Parse(contentType);
             for (int i = 0; i < headers.Length; i += 2)
@@ -72,6 +76,7 @@ internal static class Program
     private static HttpClient Answer(HttpStatusCode status, byte[] body, string contentType, params string[] headers)
     {
         Sent.Clear();
+        SentBodies.Clear();
         return new HttpClient(new Canned(status, body, contentType, headers));
     }
 
@@ -90,6 +95,18 @@ internal static class Program
     {
         Equal("requests sent", Sent.Count, 1);
         return Sent[0];
+    }
+
+    private static JObject SentBody()
+    {
+        Equal("requests sent", SentBodies.Count, 1);
+        return JObject.Parse(SentBodies[0]);
+    }
+
+    private static void Keys(string name, JObject body, params string[] expected)
+    {
+        Equal(name, string.Join(",", body.Properties().Select(property => property.Name).OrderBy(key => key, StringComparer.Ordinal)),
+            string.Join(",", expected.OrderBy(key => key, StringComparer.Ordinal)));
     }
 
     private static void GetMeCallsProductionWithTheBearerKey()
@@ -276,6 +293,67 @@ internal static class Program
         Equal("bytes", copy.ToArray(), body);
     }
 
+    private static void AProjectMediaReadsAnAiKeywordWithANullSource()
+    {
+        ListFlashOffers200Response page = new CatalogueApi(Answer(Fixture("project-medias-page.json")), Key())
+            .SearchProjectMedias(MediaId);
+
+        List<ProjectCatalogueMediaAllOfProjectAiKeywords> keywords = page.Items[0].Project.AiKeywords;
+        Equal("aiKeywords", keywords.Count, 2);
+        Equal("source", keywords[0].Source, ProjectCatalogueMediaAllOfProjectAiKeywords.SourceEnum.Chatgpt);
+        Equal("keyword", keywords[1].Keyword, "trail shoes");
+        Equal("null source", keywords[1].Source, null);
+    }
+
+    // An optional, nullable property means something when it is null: a project's country null is
+    // worldwide. One the caller never set must be left out of a PATCH, not sent as null.
+    private static void AProjectUpdateWithOnlyANameLeavesTheCountryOut()
+    {
+        new ProjectsApi(Answer(Fixture("project.json")), Key())
+            .UpdateProject(ProjectId, "key-1", new UpdateProjectRequest(name: "Trail running"));
+
+        Equal("method", SentRequest().Method, HttpMethod.Patch);
+        JObject body = SentBody();
+        Keys("request keys", body, "name");
+        Equal("name", (string)body["name"], "Trail running");
+    }
+
+    private static void AProjectUpdateSendsACountrySetToNull()
+    {
+        new ProjectsApi(Answer(Fixture("project.json")), Key())
+            .UpdateProject(ProjectId, "key-1", new UpdateProjectRequest { Country = null });
+
+        JObject body = SentBody();
+        Keys("request keys", body, "country");
+        Equal("country", body["country"].Type, JTokenType.Null);
+    }
+
+    private static void ASellerMediaUpdateWithoutALinkAdditionOfferLeavesItOut()
+    {
+        var option = new UpdateSellerMediaRequestPostOfferPricingOptionsInner(
+            linkType: UpdateSellerMediaRequestPostOfferPricingOptionsInner.LinkTypeEnum.Dofollow,
+            feeWhenSellerWritesPost: new MoneyOrNull(6000, "EUR"));
+        var update = new UpdateSellerMediaRequest(postOffer: new UpdateSellerMediaRequestPostOffer(
+            pricingOptions: new List<UpdateSellerMediaRequestPostOfferPricingOptionsInner> { option }));
+        new SellerMediasApi(Answer(Fixture("seller-media.json")), Key()).UpdateSellerMedia(MediaId, "key-1", update);
+
+        Equal("method", SentRequest().Method, HttpMethod.Patch);
+        JObject body = SentBody();
+        Keys("request keys", body, "postOffer");
+        Keys("postOffer keys", (JObject)body["postOffer"], "pricingOptions");
+        Keys("option keys", (JObject)body["postOffer"]["pricingOptions"][0], "linkType", "feeWhenSellerWritesPost");
+    }
+
+    private static void ASellerMediaUpdateSendsALinkAdditionOfferSetToNull()
+    {
+        new SellerMediasApi(Answer(Fixture("seller-media.json")), Key())
+            .UpdateSellerMedia(MediaId, "key-1", new UpdateSellerMediaRequest { LinkAdditionOffer = null });
+
+        JObject body = SentBody();
+        Keys("request keys", body, "linkAdditionOffer");
+        Equal("linkAdditionOffer", body["linkAdditionOffer"].Type, JTokenType.Null);
+    }
+
     private static int Main()
     {
         var cases = new List<(string Name, Action Run)>
@@ -287,8 +365,13 @@ internal static class Program
             ("a link addition order with fields this client does not know still deserialises", ALinkAdditionOrderWithFieldsThisClientDoesNotKnowStillDeserialises),
             ("a catalogue media reads a null previousPrice and linkAdditionOffer", ACatalogueMediaReadsANullPreviousPriceAndLinkAdditionOffer),
             ("a catalogue media reads a null linkType beside present offers", ACatalogueMediaReadsANullLinkTypeBesidePresentOffers),
+            ("a project media reads an AI keyword with a null source", AProjectMediaReadsAnAiKeywordWithANullSource),
             ("a seller media reads null competitiveFees", ASellerMediaReadsNullCompetitiveFees),
             ("a seller media reads competitiveFees with one side null", ASellerMediaReadsCompetitiveFeesWithOneSideNull),
+            ("a project update with only a name leaves the country out", AProjectUpdateWithOnlyANameLeavesTheCountryOut),
+            ("a project update sends a country set to null", AProjectUpdateSendsACountrySetToNull),
+            ("a seller media update without a linkAdditionOffer leaves it out", ASellerMediaUpdateWithoutALinkAdditionOfferLeavesItOut),
+            ("a seller media update sends a linkAdditionOffer set to null", ASellerMediaUpdateSendsALinkAdditionOfferSetToNull),
             ("the error envelope is readable from the ApiException", TheErrorEnvelopeIsReadableFromTheException),
             ("a binary download returns the exact bytes", ABinaryDownloadReturnsTheExactBytes),
         };

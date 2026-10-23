@@ -19,8 +19,11 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import com.growwer.api.model.ProjectCatalogueMediaAllOfProjectAiKeywords;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -46,7 +49,7 @@ import java.util.Set;
 import com.growwer.api.JSON;
 
 /**
- * The media&#39;s state in the project.
+ * The media&#39;s state in the project, and the AI keywords the web lists for the media in this project.
  */
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.24.0")
 public class ProjectCatalogueMediaAllOfProject {
@@ -79,6 +82,11 @@ public class ProjectCatalogueMediaAllOfProject {
   @SerializedName(SERIALIZED_NAME_NEW)
   @javax.annotation.Nonnull
   private Boolean _new;
+
+  public static final String SERIALIZED_NAME_AI_KEYWORDS = "aiKeywords";
+  @SerializedName(SERIALIZED_NAME_AI_KEYWORDS)
+  @javax.annotation.Nonnull
+  private List<ProjectCatalogueMediaAllOfProjectAiKeywords> aiKeywords;
 
   public ProjectCatalogueMediaAllOfProject() {
   }
@@ -196,6 +204,33 @@ public class ProjectCatalogueMediaAllOfProject {
     this._new = _new;
   }
 
+
+  public ProjectCatalogueMediaAllOfProject aiKeywords(@javax.annotation.Nonnull List<ProjectCatalogueMediaAllOfProjectAiKeywords> aiKeywords) {
+    this.aiKeywords = aiKeywords;
+    return this;
+  }
+
+  public ProjectCatalogueMediaAllOfProject addAiKeywordsItem(ProjectCatalogueMediaAllOfProjectAiKeywords aiKeywordsItem) {
+    if (this.aiKeywords == null) {
+      this.aiKeywords = new ArrayList<>();
+    }
+    this.aiKeywords.add(aiKeywordsItem);
+    return this;
+  }
+
+  /**
+   * The AI keywords the web lists for the media in this project, one entry per keyword of each stored source, empty when there are none. Keywords an AI answer gave without referencing any domain may be listed for every media of the project, so an entry does not mean that the engine cited the media. Entries keep their order within an engine, and a keyword listed by two engines appears once for each; the order of the engines is not promised.
+   * @return aiKeywords
+   */
+  @javax.annotation.Nonnull
+  public List<ProjectCatalogueMediaAllOfProjectAiKeywords> getAiKeywords() {
+    return aiKeywords;
+  }
+
+  public void setAiKeywords(@javax.annotation.Nonnull List<ProjectCatalogueMediaAllOfProjectAiKeywords> aiKeywords) {
+    this.aiKeywords = aiKeywords;
+  }
+
   /**
    * A container for additional, undeclared properties.
    * This is a holder for any undeclared properties as specified with
@@ -256,13 +291,14 @@ public class ProjectCatalogueMediaAllOfProject {
         Objects.equals(this.requested, projectCatalogueMediaAllOfProject.requested) &&
         Objects.equals(this.recommended, projectCatalogueMediaAllOfProject.recommended) &&
         Objects.equals(this.bought, projectCatalogueMediaAllOfProject.bought) &&
-        Objects.equals(this._new, projectCatalogueMediaAllOfProject._new)&&
+        Objects.equals(this._new, projectCatalogueMediaAllOfProject._new) &&
+        Objects.equals(this.aiKeywords, projectCatalogueMediaAllOfProject.aiKeywords)&&
         Objects.equals(this.additionalProperties, projectCatalogueMediaAllOfProject.additionalProperties);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(favourite, discarded, requested, recommended, bought, _new, additionalProperties);
+    return Objects.hash(favourite, discarded, requested, recommended, bought, _new, aiKeywords, additionalProperties);
   }
 
   @Override
@@ -275,6 +311,7 @@ public class ProjectCatalogueMediaAllOfProject {
     sb.append("    recommended: ").append(toIndentedString(recommended)).append("\n");
     sb.append("    bought: ").append(toIndentedString(bought)).append("\n");
     sb.append("    _new: ").append(toIndentedString(_new)).append("\n");
+    sb.append("    aiKeywords: ").append(toIndentedString(aiKeywords)).append("\n");
     sb.append("    additionalProperties: ").append(toIndentedString(additionalProperties)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -294,10 +331,10 @@ public class ProjectCatalogueMediaAllOfProject {
 
   static {
     // a set of all properties/fields (JSON key names)
-    openapiFields = new HashSet<String>(Arrays.asList("favourite", "discarded", "requested", "recommended", "bought", "new"));
+    openapiFields = new HashSet<String>(Arrays.asList("favourite", "discarded", "requested", "recommended", "bought", "new", "aiKeywords"));
 
     // a set of required properties/fields (JSON key names)
-    openapiRequiredFields = new HashSet<String>(Arrays.asList("favourite", "discarded", "requested", "recommended", "bought", "new"));
+    openapiRequiredFields = new HashSet<String>(Arrays.asList("favourite", "discarded", "requested", "recommended", "bought", "new", "aiKeywords"));
   }
 
   /**
@@ -320,6 +357,16 @@ public class ProjectCatalogueMediaAllOfProject {
         }
       }
         JsonObject jsonObj = jsonElement.getAsJsonObject();
+      if (jsonObj.get("aiKeywords") != null) {
+        if (!jsonObj.get("aiKeywords").isJsonArray()) {
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `aiKeywords` to be an array in the JSON string but got `%s`", jsonObj.get("aiKeywords").toString()));
+        }
+        JsonArray jsonArrayaiKeywords = jsonObj.getAsJsonArray("aiKeywords");
+        // validate the required field `aiKeywords` (array)
+        for (int i = 0; i < jsonArrayaiKeywords.size(); i++) {
+          ProjectCatalogueMediaAllOfProjectAiKeywords.validateJsonElement(jsonArrayaiKeywords.get(i));
+        }
+      }
   }
 
   public static class CustomTypeAdapterFactory implements TypeAdapterFactory {

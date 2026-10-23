@@ -55,7 +55,7 @@ public class RequestMedias201Response {
   public static final String SERIALIZED_NAME_DOMAINS = "domains";
   @SerializedName(SERIALIZED_NAME_DOMAINS)
   @javax.annotation.Nonnull
-  private List<String> domains = new ArrayList<>();
+  private List<String> domains;
 
   public RequestMedias201Response() {
   }

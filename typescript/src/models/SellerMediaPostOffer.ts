@@ -41,18 +41,63 @@ export interface SellerMediaPostOffer {
      */
     pricingOptions: Array<SellerMediaPostOfferPricingOptionsInner>;
     /**
-     * 
+     * How many links a sponsored post may hold, 1 to 4.
+     * @type {number}
+     * @memberof SellerMediaPostOffer
+     */
+    maximumLinks: number;
+    /**
+     * Whether sponsored posts are labelled as advertising.
+     * @type {SellerMediaPostOfferAdvertisingLabellingPolicyEnum}
+     * @memberof SellerMediaPostOffer
+     */
+    advertisingLabellingPolicy: SellerMediaPostOfferAdvertisingLabellingPolicyEnum;
+    /**
+     * The social networks sponsored posts are promoted on.
+     * @type {Array<SellerMediaPostOfferPromotedSocialNetworksEnum>}
+     * @memberof SellerMediaPostOffer
+     */
+    promotedSocialNetworks: Array<SellerMediaPostOfferPromotedSocialNetworksEnum>;
+    /**
+     * Read here, but PATCH /seller/medias/{id} and POST /seller/medias take it at the top level of the body.
      * @type {Array<UpdateSellerMediaRequestExtraServicesInner>}
      * @memberof SellerMediaPostOffer
      */
     extraServices: Array<UpdateSellerMediaRequestExtraServicesInner>;
 }
 
+
+/**
+ * @export
+ */
+export const SellerMediaPostOfferAdvertisingLabellingPolicyEnum = {
+    Always: 'always',
+    Never: 'never'
+} as const;
+export type SellerMediaPostOfferAdvertisingLabellingPolicyEnum = typeof SellerMediaPostOfferAdvertisingLabellingPolicyEnum[keyof typeof SellerMediaPostOfferAdvertisingLabellingPolicyEnum];
+
+/**
+ * @export
+ */
+export const SellerMediaPostOfferPromotedSocialNetworksEnum = {
+    Twitter: 'twitter',
+    Instagram: 'instagram',
+    Facebook: 'facebook',
+    Pinterest: 'pinterest',
+    Tumblr: 'tumblr',
+    Newsletter: 'newsletter'
+} as const;
+export type SellerMediaPostOfferPromotedSocialNetworksEnum = typeof SellerMediaPostOfferPromotedSocialNetworksEnum[keyof typeof SellerMediaPostOfferPromotedSocialNetworksEnum];
+
+
 /**
  * Check if a given object implements the SellerMediaPostOffer interface.
  */
 export function instanceOfSellerMediaPostOffer(value: object): value is SellerMediaPostOffer {
     if (!('pricingOptions' in value) || value['pricingOptions'] === undefined) return false;
+    if (!('maximumLinks' in value) || value['maximumLinks'] === undefined) return false;
+    if (!('advertisingLabellingPolicy' in value) || value['advertisingLabellingPolicy'] === undefined) return false;
+    if (!('promotedSocialNetworks' in value) || value['promotedSocialNetworks'] === undefined) return false;
     if (!('extraServices' in value) || value['extraServices'] === undefined) return false;
     return true;
 }
@@ -68,6 +113,9 @@ export function SellerMediaPostOfferFromJSONTyped(json: any, ignoreDiscriminator
     return {
         
         'pricingOptions': ((json['pricingOptions'] as Array<any>).map(SellerMediaPostOfferPricingOptionsInnerFromJSON)),
+        'maximumLinks': json['maximumLinks'],
+        'advertisingLabellingPolicy': json['advertisingLabellingPolicy'],
+        'promotedSocialNetworks': json['promotedSocialNetworks'],
         'extraServices': ((json['extraServices'] as Array<any>).map(UpdateSellerMediaRequestExtraServicesInnerFromJSON)),
     };
 }
@@ -84,6 +132,9 @@ export function SellerMediaPostOfferToJSONTyped(value?: SellerMediaPostOffer | n
     return {
         
         'pricingOptions': ((value['pricingOptions'] as Array<any>).map(SellerMediaPostOfferPricingOptionsInnerToJSON)),
+        'maximumLinks': value['maximumLinks'],
+        'advertisingLabellingPolicy': value['advertisingLabellingPolicy'],
+        'promotedSocialNetworks': value['promotedSocialNetworks'],
         'extraServices': ((value['extraServices'] as Array<any>).map(UpdateSellerMediaRequestExtraServicesInnerToJSON)),
     };
 }

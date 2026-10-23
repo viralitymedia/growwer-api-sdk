@@ -34,15 +34,47 @@ namespace Growwer.Api.Model
     public partial class UpdateSellerMediaRequest : IValidatableObject
     {
         /// <summary>
+        /// Defines Typology
+        /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
+        public enum TypologyEnum
+        {
+            /// <summary>
+            /// Enum Blog for value: blog
+            /// </summary>
+            [EnumMember(Value = "blog")]
+            Blog = 1,
+
+            /// <summary>
+            /// Enum Press for value: press
+            /// </summary>
+            [EnumMember(Value = "press")]
+            Press = 2
+        }
+
+
+        /// <summary>
+        /// Gets or Sets Typology
+        /// </summary>
+        [DataMember(Name = "typology", EmitDefaultValue = false)]
+        public TypologyEnum? Typology { get; set; }
+        /// <summary>
         /// Initializes a new instance of the <see cref="UpdateSellerMediaRequest" /> class.
         /// </summary>
+        /// <param name="typology">typology.</param>
         /// <param name="postOffer">postOffer.</param>
         /// <param name="linkAdditionOffer">linkAdditionOffer.</param>
         /// <param name="extraServices">extraServices.</param>
-        public UpdateSellerMediaRequest(UpdateSellerMediaRequestPostOffer postOffer = default, UpdateSellerMediaRequestLinkAdditionOffer linkAdditionOffer = default, List<UpdateSellerMediaRequestExtraServicesInner> extraServices = default)
+        public UpdateSellerMediaRequest(TypologyEnum? typology = default, UpdateSellerMediaRequestPostOffer postOffer = default, UpdateSellerMediaRequestLinkAdditionOffer linkAdditionOffer = default, List<UpdateSellerMediaRequestExtraServicesInner> extraServices = default)
         {
+            this.Typology = typology;
             this.PostOffer = postOffer;
-            this.LinkAdditionOffer = linkAdditionOffer;
+            // a null "linkAdditionOffer" leaves LinkAdditionOffer unset, so it is not sent
+            this._LinkAdditionOffer = linkAdditionOffer;
+            if (this.LinkAdditionOffer != null)
+            {
+                this._flagLinkAdditionOffer = true;
+            }
             this.ExtraServices = extraServices;
         }
 
@@ -56,7 +88,27 @@ namespace Growwer.Api.Model
         /// Gets or Sets LinkAdditionOffer
         /// </summary>
         [DataMember(Name = "linkAdditionOffer", EmitDefaultValue = true)]
-        public UpdateSellerMediaRequestLinkAdditionOffer LinkAdditionOffer { get; set; }
+        public UpdateSellerMediaRequestLinkAdditionOffer LinkAdditionOffer
+        {
+            get { return _LinkAdditionOffer; }
+            set
+            {
+                _LinkAdditionOffer = value;
+                _flagLinkAdditionOffer = true;
+            }
+        }
+        private UpdateSellerMediaRequestLinkAdditionOffer _LinkAdditionOffer;
+        private bool _flagLinkAdditionOffer;
+
+        /// <summary>
+        /// Returns true once LinkAdditionOffer has been set, so that a property left unset is left out of
+        /// the request rather than sent as null, which the API reads as a value.
+        /// </summary>
+        /// <returns>true once LinkAdditionOffer has been set (boolean)</returns>
+        public bool ShouldSerializeLinkAdditionOffer()
+        {
+            return _flagLinkAdditionOffer;
+        }
 
         /// <summary>
         /// Gets or Sets ExtraServices
@@ -72,6 +124,7 @@ namespace Growwer.Api.Model
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("class UpdateSellerMediaRequest {\n");
+            sb.Append("  Typology: ").Append(Typology).Append("\n");
             sb.Append("  PostOffer: ").Append(PostOffer).Append("\n");
             sb.Append("  LinkAdditionOffer: ").Append(LinkAdditionOffer).Append("\n");
             sb.Append("  ExtraServices: ").Append(ExtraServices).Append("\n");

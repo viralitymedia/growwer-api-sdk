@@ -46,7 +46,12 @@ namespace Growwer.Api.Model
         public PutSellerHolidayRequest(bool onHoliday = default, DateOnly? endDate = default)
         {
             this.OnHoliday = onHoliday;
-            this.EndDate = endDate;
+            // a null "endDate" leaves EndDate unset, so it is not sent
+            this._EndDate = endDate;
+            if (this.EndDate != null)
+            {
+                this._flagEndDate = true;
+            }
         }
 
         /// <summary>
@@ -62,7 +67,27 @@ namespace Growwer.Api.Model
         <example>Tue Dec 01 00:00:00 UTC 2026</example>
         */
         [DataMember(Name = "endDate", EmitDefaultValue = true)]
-        public DateOnly? EndDate { get; set; }
+        public DateOnly? EndDate
+        {
+            get { return _EndDate; }
+            set
+            {
+                _EndDate = value;
+                _flagEndDate = true;
+            }
+        }
+        private DateOnly? _EndDate;
+        private bool _flagEndDate;
+
+        /// <summary>
+        /// Returns true once EndDate has been set, so that a property left unset is left out of
+        /// the request rather than sent as null, which the API reads as a value.
+        /// </summary>
+        /// <returns>true once EndDate has been set (boolean)</returns>
+        public bool ShouldSerializeEndDate()
+        {
+            return _flagEndDate;
+        }
 
         /// <summary>
         /// Returns the string presentation of the object

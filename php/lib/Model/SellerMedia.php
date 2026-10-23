@@ -62,6 +62,7 @@ class SellerMedia implements ModelInterface, ArrayAccess, \JsonSerializable
         'id' => 'string',
         'domain' => 'string',
         'url' => 'string',
+        'typology' => 'string',
         'state' => 'string',
         'deactivation_strikes' => 'int',
         'country' => 'string',
@@ -91,6 +92,7 @@ class SellerMedia implements ModelInterface, ArrayAccess, \JsonSerializable
         'id' => 'uuid',
         'domain' => null,
         'url' => null,
+        'typology' => null,
         'state' => null,
         'deactivation_strikes' => null,
         'country' => null,
@@ -118,6 +120,7 @@ class SellerMedia implements ModelInterface, ArrayAccess, \JsonSerializable
         'id' => false,
         'domain' => false,
         'url' => false,
+        'typology' => false,
         'state' => false,
         'deactivation_strikes' => false,
         'country' => true,
@@ -225,6 +228,7 @@ class SellerMedia implements ModelInterface, ArrayAccess, \JsonSerializable
         'id' => 'id',
         'domain' => 'domain',
         'url' => 'url',
+        'typology' => 'typology',
         'state' => 'state',
         'deactivation_strikes' => 'deactivationStrikes',
         'country' => 'country',
@@ -252,6 +256,7 @@ class SellerMedia implements ModelInterface, ArrayAccess, \JsonSerializable
         'id' => 'setId',
         'domain' => 'setDomain',
         'url' => 'setUrl',
+        'typology' => 'setTypology',
         'state' => 'setState',
         'deactivation_strikes' => 'setDeactivationStrikes',
         'country' => 'setCountry',
@@ -279,6 +284,7 @@ class SellerMedia implements ModelInterface, ArrayAccess, \JsonSerializable
         'id' => 'getId',
         'domain' => 'getDomain',
         'url' => 'getUrl',
+        'typology' => 'getTypology',
         'state' => 'getState',
         'deactivation_strikes' => 'getDeactivationStrikes',
         'country' => 'getCountry',
@@ -338,10 +344,25 @@ class SellerMedia implements ModelInterface, ArrayAccess, \JsonSerializable
         return self::$openAPIModelName;
     }
 
+    public const TYPOLOGY_BLOG = 'blog';
+    public const TYPOLOGY_PRESS = 'press';
     public const STATE_ANALYZING = 'analyzing';
     public const STATE_PENDING_REVIEW = 'pending_review';
     public const STATE_ACTIVE = 'active';
     public const STATE_DEACTIVATED = 'deactivated';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public function getTypologyAllowableValues()
+    {
+        return [
+            self::TYPOLOGY_BLOG,
+            self::TYPOLOGY_PRESS,
+        ];
+    }
 
     /**
      * Gets allowable values of the enum
@@ -376,6 +397,7 @@ class SellerMedia implements ModelInterface, ArrayAccess, \JsonSerializable
         $this->setIfExists('id', $data ?? [], null);
         $this->setIfExists('domain', $data ?? [], null);
         $this->setIfExists('url', $data ?? [], null);
+        $this->setIfExists('typology', $data ?? [], null);
         $this->setIfExists('state', $data ?? [], null);
         $this->setIfExists('deactivation_strikes', $data ?? [], null);
         $this->setIfExists('country', $data ?? [], null);
@@ -430,6 +452,18 @@ class SellerMedia implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['url'] === null) {
             $invalidProperties[] = "'url' can't be null";
         }
+        if ($this->container['typology'] === null) {
+            $invalidProperties[] = "'typology' can't be null";
+        }
+        $allowedValues = $this->getTypologyAllowableValues();
+        if (!is_null($this->container['typology']) && !in_array($this->container['typology'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'typology', must be one of '%s'",
+                $this->container['typology'],
+                implode("', '", $allowedValues)
+            );
+        }
+
         if ($this->container['state'] === null) {
             $invalidProperties[] = "'state' can't be null";
         }
@@ -579,6 +613,43 @@ class SellerMedia implements ModelInterface, ArrayAccess, \JsonSerializable
             throw new \InvalidArgumentException('non-nullable url cannot be null');
         }
         $this->container['url'] = $url;
+
+        return $this;
+    }
+
+    /**
+     * Gets typology
+     *
+     * @return string
+     */
+    public function getTypology()
+    {
+        return $this->container['typology'];
+    }
+
+    /**
+     * Sets typology
+     *
+     * @param string $typology typology
+     *
+     * @return self
+     */
+    public function setTypology($typology)
+    {
+        if (is_null($typology)) {
+            throw new \InvalidArgumentException('non-nullable typology cannot be null');
+        }
+        $allowedValues = $this->getTypologyAllowableValues();
+        if (!in_array($typology, $allowedValues, true)) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    "Invalid value '%s' for 'typology', must be one of '%s'",
+                    $typology,
+                    implode("', '", $allowedValues)
+                )
+            );
+        }
+        $this->container['typology'] = $typology;
 
         return $this;
     }

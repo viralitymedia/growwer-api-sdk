@@ -1191,7 +1191,7 @@ class CatalogueApi
      * @param  bool|null $discarded &#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $new Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)
      * @param  string|null $ranks_goal_keyword A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. &#x60;user&#x60;: your keywords; &#x60;publicGenerated&#x60;: keywords Growwer found for the project. (optional)
-     * @param  string|null $ranks_ai_keyword A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)
+     * @param  string|null $ranks_ai_keyword A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)
      * @param  int|null $limit Medias per page, 1 to 100. (optional, default to 20)
      * @param  int|null $offset Medias to skip, at most 99900. (optional, default to 0)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listFlashOffers'] to see the possible values for this operation
@@ -1244,7 +1244,7 @@ class CatalogueApi
      * @param  bool|null $discarded &#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $new Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)
      * @param  string|null $ranks_goal_keyword A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. &#x60;user&#x60;: your keywords; &#x60;publicGenerated&#x60;: keywords Growwer found for the project. (optional)
-     * @param  string|null $ranks_ai_keyword A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)
+     * @param  string|null $ranks_ai_keyword A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)
      * @param  int|null $limit Medias per page, 1 to 100. (optional, default to 20)
      * @param  int|null $offset Medias to skip, at most 99900. (optional, default to 0)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listFlashOffers'] to see the possible values for this operation
@@ -1462,7 +1462,7 @@ class CatalogueApi
      * @param  bool|null $discarded &#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $new Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)
      * @param  string|null $ranks_goal_keyword A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. &#x60;user&#x60;: your keywords; &#x60;publicGenerated&#x60;: keywords Growwer found for the project. (optional)
-     * @param  string|null $ranks_ai_keyword A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)
+     * @param  string|null $ranks_ai_keyword A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)
      * @param  int|null $limit Medias per page, 1 to 100. (optional, default to 20)
      * @param  int|null $offset Medias to skip, at most 99900. (optional, default to 0)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listFlashOffers'] to see the possible values for this operation
@@ -1518,7 +1518,7 @@ class CatalogueApi
      * @param  bool|null $discarded &#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $new Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)
      * @param  string|null $ranks_goal_keyword A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. &#x60;user&#x60;: your keywords; &#x60;publicGenerated&#x60;: keywords Growwer found for the project. (optional)
-     * @param  string|null $ranks_ai_keyword A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)
+     * @param  string|null $ranks_ai_keyword A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)
      * @param  int|null $limit Medias per page, 1 to 100. (optional, default to 20)
      * @param  int|null $offset Medias to skip, at most 99900. (optional, default to 0)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listFlashOffers'] to see the possible values for this operation
@@ -1603,7 +1603,7 @@ class CatalogueApi
      * @param  bool|null $discarded &#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $new Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)
      * @param  string|null $ranks_goal_keyword A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. &#x60;user&#x60;: your keywords; &#x60;publicGenerated&#x60;: keywords Growwer found for the project. (optional)
-     * @param  string|null $ranks_ai_keyword A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)
+     * @param  string|null $ranks_ai_keyword A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)
      * @param  int|null $limit Medias per page, 1 to 100. (optional, default to 20)
      * @param  int|null $offset Medias to skip, at most 99900. (optional, default to 0)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listFlashOffers'] to see the possible values for this operation
@@ -2537,7 +2537,7 @@ class CatalogueApi
      * @param  bool|null $discarded &#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $new Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)
      * @param  string|null $ranks_goal_keyword A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. &#x60;user&#x60;: your keywords; &#x60;publicGenerated&#x60;: keywords Growwer found for the project. (optional)
-     * @param  string|null $ranks_ai_keyword A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)
+     * @param  string|null $ranks_ai_keyword A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)
      * @param  int|null $limit Medias per page, 1 to 100. (optional, default to 20)
      * @param  int|null $offset Medias to skip, at most 99900. (optional, default to 0)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['searchProjectMedias'] to see the possible values for this operation
@@ -2592,7 +2592,7 @@ class CatalogueApi
      * @param  bool|null $discarded &#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $new Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)
      * @param  string|null $ranks_goal_keyword A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. &#x60;user&#x60;: your keywords; &#x60;publicGenerated&#x60;: keywords Growwer found for the project. (optional)
-     * @param  string|null $ranks_ai_keyword A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)
+     * @param  string|null $ranks_ai_keyword A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)
      * @param  int|null $limit Medias per page, 1 to 100. (optional, default to 20)
      * @param  int|null $offset Medias to skip, at most 99900. (optional, default to 0)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['searchProjectMedias'] to see the possible values for this operation
@@ -2812,7 +2812,7 @@ class CatalogueApi
      * @param  bool|null $discarded &#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $new Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)
      * @param  string|null $ranks_goal_keyword A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. &#x60;user&#x60;: your keywords; &#x60;publicGenerated&#x60;: keywords Growwer found for the project. (optional)
-     * @param  string|null $ranks_ai_keyword A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)
+     * @param  string|null $ranks_ai_keyword A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)
      * @param  int|null $limit Medias per page, 1 to 100. (optional, default to 20)
      * @param  int|null $offset Medias to skip, at most 99900. (optional, default to 0)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['searchProjectMedias'] to see the possible values for this operation
@@ -2870,7 +2870,7 @@ class CatalogueApi
      * @param  bool|null $discarded &#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $new Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)
      * @param  string|null $ranks_goal_keyword A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. &#x60;user&#x60;: your keywords; &#x60;publicGenerated&#x60;: keywords Growwer found for the project. (optional)
-     * @param  string|null $ranks_ai_keyword A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)
+     * @param  string|null $ranks_ai_keyword A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)
      * @param  int|null $limit Medias per page, 1 to 100. (optional, default to 20)
      * @param  int|null $offset Medias to skip, at most 99900. (optional, default to 0)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['searchProjectMedias'] to see the possible values for this operation
@@ -2957,7 +2957,7 @@ class CatalogueApi
      * @param  bool|null $discarded &#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $new Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)
      * @param  string|null $ranks_goal_keyword A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. &#x60;user&#x60;: your keywords; &#x60;publicGenerated&#x60;: keywords Growwer found for the project. (optional)
-     * @param  string|null $ranks_ai_keyword A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)
+     * @param  string|null $ranks_ai_keyword A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)
      * @param  int|null $limit Medias per page, 1 to 100. (optional, default to 20)
      * @param  int|null $offset Medias to skip, at most 99900. (optional, default to 0)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['searchProjectMedias'] to see the possible values for this operation

@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **Id** | **Guid** |  | 
 **Domain** | **string** |  | 
 **Url** | **string** | The media&#39;s root URL. | 
+**Typology** | **string** |  | 
 **State** | **string** |  | 
 **DeactivationStrikes** | **int** | How many times the media was deactivated for not publishing. | 
 **Country** | **string** | A country code, as in GET /vocabulary, or null for none. | 

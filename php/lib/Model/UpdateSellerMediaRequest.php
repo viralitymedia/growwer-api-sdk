@@ -58,6 +58,7 @@ class UpdateSellerMediaRequest implements ModelInterface, ArrayAccess, \JsonSeri
      * @var string[]
      */
     protected static $openAPITypes = [
+        'typology' => 'string',
         'post_offer' => '\Growwer\Api\Model\UpdateSellerMediaRequestPostOffer',
         'link_addition_offer' => '\Growwer\Api\Model\UpdateSellerMediaRequestLinkAdditionOffer',
         'extra_services' => '\Growwer\Api\Model\UpdateSellerMediaRequestExtraServicesInner[]'
@@ -71,6 +72,7 @@ class UpdateSellerMediaRequest implements ModelInterface, ArrayAccess, \JsonSeri
      * @psalm-var array<string, string|null>
      */
     protected static $openAPIFormats = [
+        'typology' => null,
         'post_offer' => null,
         'link_addition_offer' => null,
         'extra_services' => null
@@ -82,6 +84,7 @@ class UpdateSellerMediaRequest implements ModelInterface, ArrayAccess, \JsonSeri
      * @var boolean[]
      */
     protected static array $openAPINullables = [
+        'typology' => false,
         'post_offer' => false,
         'link_addition_offer' => true,
         'extra_services' => false
@@ -173,6 +176,7 @@ class UpdateSellerMediaRequest implements ModelInterface, ArrayAccess, \JsonSeri
      * @var string[]
      */
     protected static $attributeMap = [
+        'typology' => 'typology',
         'post_offer' => 'postOffer',
         'link_addition_offer' => 'linkAdditionOffer',
         'extra_services' => 'extraServices'
@@ -184,6 +188,7 @@ class UpdateSellerMediaRequest implements ModelInterface, ArrayAccess, \JsonSeri
      * @var string[]
      */
     protected static $setters = [
+        'typology' => 'setTypology',
         'post_offer' => 'setPostOffer',
         'link_addition_offer' => 'setLinkAdditionOffer',
         'extra_services' => 'setExtraServices'
@@ -195,6 +200,7 @@ class UpdateSellerMediaRequest implements ModelInterface, ArrayAccess, \JsonSeri
      * @var string[]
      */
     protected static $getters = [
+        'typology' => 'getTypology',
         'post_offer' => 'getPostOffer',
         'link_addition_offer' => 'getLinkAdditionOffer',
         'extra_services' => 'getExtraServices'
@@ -241,6 +247,21 @@ class UpdateSellerMediaRequest implements ModelInterface, ArrayAccess, \JsonSeri
         return self::$openAPIModelName;
     }
 
+    public const TYPOLOGY_BLOG = 'blog';
+    public const TYPOLOGY_PRESS = 'press';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public function getTypologyAllowableValues()
+    {
+        return [
+            self::TYPOLOGY_BLOG,
+            self::TYPOLOGY_PRESS,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -257,6 +278,7 @@ class UpdateSellerMediaRequest implements ModelInterface, ArrayAccess, \JsonSeri
      */
     public function __construct(?array $data = null)
     {
+        $this->setIfExists('typology', $data ?? [], null);
         $this->setIfExists('post_offer', $data ?? [], null);
         $this->setIfExists('link_addition_offer', $data ?? [], null);
         $this->setIfExists('extra_services', $data ?? [], null);
@@ -289,6 +311,15 @@ class UpdateSellerMediaRequest implements ModelInterface, ArrayAccess, \JsonSeri
     {
         $invalidProperties = [];
 
+        $allowedValues = $this->getTypologyAllowableValues();
+        if (!is_null($this->container['typology']) && !in_array($this->container['typology'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'typology', must be one of '%s'",
+                $this->container['typology'],
+                implode("', '", $allowedValues)
+            );
+        }
+
         return $invalidProperties;
     }
 
@@ -303,6 +334,43 @@ class UpdateSellerMediaRequest implements ModelInterface, ArrayAccess, \JsonSeri
         return count($this->listInvalidProperties()) === 0;
     }
 
+
+    /**
+     * Gets typology
+     *
+     * @return string|null
+     */
+    public function getTypology()
+    {
+        return $this->container['typology'];
+    }
+
+    /**
+     * Sets typology
+     *
+     * @param string|null $typology typology
+     *
+     * @return self
+     */
+    public function setTypology($typology)
+    {
+        if (is_null($typology)) {
+            throw new \InvalidArgumentException('non-nullable typology cannot be null');
+        }
+        $allowedValues = $this->getTypologyAllowableValues();
+        if (!in_array($typology, $allowedValues, true)) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    "Invalid value '%s' for 'typology', must be one of '%s'",
+                    $typology,
+                    implode("', '", $allowedValues)
+                )
+            );
+        }
+        $this->container['typology'] = $typology;
+
+        return $this;
+    }
 
     /**
      * Gets post_offer

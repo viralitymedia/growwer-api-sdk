@@ -18,7 +18,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
 from growwer.models.update_seller_media_request_extra_services_inner import UpdateSellerMediaRequestExtraServicesInner
 from growwer.models.update_seller_media_request_link_addition_offer import UpdateSellerMediaRequestLinkAdditionOffer
@@ -31,10 +31,21 @@ class UpdateSellerMediaRequest(BaseModel):
     """
     UpdateSellerMediaRequest
     """ # noqa: E501
+    typology: Optional[StrictStr] = None
     post_offer: Optional[UpdateSellerMediaRequestPostOffer] = Field(default=None, alias="postOffer")
     link_addition_offer: Optional[UpdateSellerMediaRequestLinkAdditionOffer] = Field(default=None, alias="linkAdditionOffer")
     extra_services: Optional[List[UpdateSellerMediaRequestExtraServicesInner]] = Field(default=None, alias="extraServices")
-    __properties: ClassVar[List[str]] = ["postOffer", "linkAdditionOffer", "extraServices"]
+    __properties: ClassVar[List[str]] = ["typology", "postOffer", "linkAdditionOffer", "extraServices"]
+
+    @field_validator('typology')
+    def typology_validate_enum(cls, value):
+        """Validates the enum"""
+        if value is None:
+            return value
+
+        if value not in set(['blog', 'press']):
+            raise ValueError("must be one of enum values ('blog', 'press')")
+        return value
 
     model_config = ConfigDict(
         validate_by_name=True,
@@ -105,6 +116,7 @@ class UpdateSellerMediaRequest(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
+            "typology": obj.get("typology"),
             "postOffer": UpdateSellerMediaRequestPostOffer.from_dict(obj["postOffer"]) if obj.get("postOffer") is not None else None,
             "linkAdditionOffer": UpdateSellerMediaRequestLinkAdditionOffer.from_dict(obj["linkAdditionOffer"]) if obj.get("linkAdditionOffer") is not None else None,
             "extraServices": [UpdateSellerMediaRequestExtraServicesInner.from_dict(_item) for _item in obj["extraServices"]] if obj.get("extraServices") is not None else None

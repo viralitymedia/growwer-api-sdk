@@ -67,7 +67,7 @@ Add this dependency to your project's POM:
 <dependency>
   <groupId>com.growwer</groupId>
   <artifactId>growwer-api</artifactId>
-  <version>1.0.2</version>
+  <version>1.1.0</version>
   <scope>compile</scope>
 </dependency>
 ```
@@ -83,7 +83,7 @@ Add this dependency to your project's build file:
   }
 
   dependencies {
-     implementation "com.growwer:growwer-api:1.0.2"
+     implementation "com.growwer:growwer-api:1.1.0"
   }
 ```
 
@@ -97,7 +97,7 @@ mvn clean package
 
 Then manually install the following JARs:
 
-* `target/growwer-api-1.0.2.jar`
+* `target/growwer-api-1.1.0.jar`
 * `target/lib/*.jar`
 
 ## Getting Started
@@ -191,9 +191,11 @@ Class | Method | HTTP request | Description
 *SavedFiltersApi* | [**listSavedFilters**](docs/SavedFiltersApi.md#listSavedFilters) | **GET** /api/v1/projects/{id}/saved-filters | List the saved filters of a project
 *SellerAccountApi* | [**putSellerHoliday**](docs/SellerAccountApi.md#putSellerHoliday) | **PUT** /api/v1/seller/holiday | Set your holiday
 *SellerMediasApi* | [**applySellerMediaCompetitiveFees**](docs/SellerMediasApi.md#applySellerMediaCompetitiveFees) | **POST** /api/v1/seller/medias/{id}/apply-competitive-fees | Set the competitive fees Growwer suggests
+*SellerMediasApi* | [**createSellerMedia**](docs/SellerMediasApi.md#createSellerMedia) | **POST** /api/v1/seller/medias | Register a media you sell on
+*SellerMediasApi* | [**deleteSellerMedia**](docs/SellerMediasApi.md#deleteSellerMedia) | **DELETE** /api/v1/seller/medias/{id} | Delete a media you sell on
 *SellerMediasApi* | [**getSellerMedia**](docs/SellerMediasApi.md#getSellerMedia) | **GET** /api/v1/seller/medias/{id} | Get a media you sell on
 *SellerMediasApi* | [**listSellerMedias**](docs/SellerMediasApi.md#listSellerMedias) | **GET** /api/v1/seller/medias | List the medias you sell on
-*SellerMediasApi* | [**updateSellerMedia**](docs/SellerMediasApi.md#updateSellerMedia) | **PATCH** /api/v1/seller/medias/{id} | Edit the fees of a media you sell on
+*SellerMediasApi* | [**updateSellerMedia**](docs/SellerMediasApi.md#updateSellerMedia) | **PATCH** /api/v1/seller/medias/{id} | Edit the offer of a media you sell on
 *SellerOrdersApi* | [**acceptSellerOrder**](docs/SellerOrdersApi.md#acceptSellerOrder) | **POST** /api/v1/seller/orders/{id}/accept | Accept an order
 *SellerOrdersApi* | [**deliverSellerOrder**](docs/SellerOrdersApi.md#deliverSellerOrder) | **POST** /api/v1/seller/orders/{id}/deliver | Deliver an order
 *SellerOrdersApi* | [**deliverSellerOrderDraft**](docs/SellerOrdersApi.md#deliverSellerOrderDraft) | **POST** /api/v1/seller/orders/{id}/deliver-draft | Deliver a draft
@@ -228,6 +230,8 @@ Class | Method | HTTP request | Description
  - [CountSavedFilterMedias200Response](docs/CountSavedFilterMedias200Response.md)
  - [CreateProjectRequest](docs/CreateProjectRequest.md)
  - [CreateSavedFilterRequest](docs/CreateSavedFilterRequest.md)
+ - [CreateSellerMediaRequest](docs/CreateSellerMediaRequest.md)
+ - [CreateSellerMediaRequestPostOffer](docs/CreateSellerMediaRequestPostOffer.md)
  - [Error](docs/Error.md)
  - [GetBuyerWallet200Response](docs/GetBuyerWallet200Response.md)
  - [GetMe200Response](docs/GetMe200Response.md)
@@ -291,6 +295,7 @@ Class | Method | HTTP request | Description
  - [Project](docs/Project.md)
  - [ProjectCatalogueMedia](docs/ProjectCatalogueMedia.md)
  - [ProjectCatalogueMediaAllOfProject](docs/ProjectCatalogueMediaAllOfProject.md)
+ - [ProjectCatalogueMediaAllOfProjectAiKeywords](docs/ProjectCatalogueMediaAllOfProjectAiKeywords.md)
  - [PutSellerHoliday200Response](docs/PutSellerHoliday200Response.md)
  - [PutSellerHolidayRequest](docs/PutSellerHolidayRequest.md)
  - [RequestMedias201Response](docs/RequestMedias201Response.md)

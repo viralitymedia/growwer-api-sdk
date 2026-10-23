@@ -121,7 +121,7 @@ public class CatalogueOfferOrNull {
   public static final String SERIALIZED_NAME_PRICES = "prices";
   @SerializedName(SERIALIZED_NAME_PRICES)
   @javax.annotation.Nonnull
-  private Map<String, Money> prices = new HashMap<>();
+  private Map<String, Money> prices;
 
   public static final String SERIALIZED_NAME_PREVIOUS_PRICE = "previousPrice";
   @SerializedName(SERIALIZED_NAME_PREVIOUS_PRICE)

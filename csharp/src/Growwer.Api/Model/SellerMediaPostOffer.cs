@@ -34,6 +34,76 @@ namespace Growwer.Api.Model
     public partial class SellerMediaPostOffer : IValidatableObject
     {
         /// <summary>
+        /// Whether sponsored posts are labelled as advertising.
+        /// </summary>
+        /// <value>Whether sponsored posts are labelled as advertising.</value>
+        [JsonConverter(typeof(StringEnumConverter))]
+        public enum AdvertisingLabellingPolicyEnum
+        {
+            /// <summary>
+            /// Enum Always for value: always
+            /// </summary>
+            [EnumMember(Value = "always")]
+            Always = 1,
+
+            /// <summary>
+            /// Enum Never for value: never
+            /// </summary>
+            [EnumMember(Value = "never")]
+            Never = 2
+        }
+
+
+        /// <summary>
+        /// Whether sponsored posts are labelled as advertising.
+        /// </summary>
+        /// <value>Whether sponsored posts are labelled as advertising.</value>
+        [DataMember(Name = "advertisingLabellingPolicy", IsRequired = true, EmitDefaultValue = true)]
+        public AdvertisingLabellingPolicyEnum AdvertisingLabellingPolicy { get; set; }
+        /// <summary>
+        /// Defines PromotedSocialNetworks
+        /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
+        public enum PromotedSocialNetworksEnum
+        {
+            /// <summary>
+            /// Enum Twitter for value: twitter
+            /// </summary>
+            [EnumMember(Value = "twitter")]
+            Twitter = 1,
+
+            /// <summary>
+            /// Enum Instagram for value: instagram
+            /// </summary>
+            [EnumMember(Value = "instagram")]
+            Instagram = 2,
+
+            /// <summary>
+            /// Enum Facebook for value: facebook
+            /// </summary>
+            [EnumMember(Value = "facebook")]
+            Facebook = 3,
+
+            /// <summary>
+            /// Enum Pinterest for value: pinterest
+            /// </summary>
+            [EnumMember(Value = "pinterest")]
+            Pinterest = 4,
+
+            /// <summary>
+            /// Enum Tumblr for value: tumblr
+            /// </summary>
+            [EnumMember(Value = "tumblr")]
+            Tumblr = 5,
+
+            /// <summary>
+            /// Enum Newsletter for value: newsletter
+            /// </summary>
+            [EnumMember(Value = "newsletter")]
+            Newsletter = 6
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="SellerMediaPostOffer" /> class.
         /// </summary>
         [JsonConstructorAttribute]
@@ -45,8 +115,11 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="SellerMediaPostOffer" /> class.
         /// </summary>
         /// <param name="pricingOptions">One entry per link type you offer. (required).</param>
-        /// <param name="extraServices">extraServices (required).</param>
-        public SellerMediaPostOffer(List<SellerMediaPostOfferPricingOptionsInner> pricingOptions = default, List<UpdateSellerMediaRequestExtraServicesInner> extraServices = default)
+        /// <param name="maximumLinks">How many links a sponsored post may hold, 1 to 4. (required).</param>
+        /// <param name="advertisingLabellingPolicy">Whether sponsored posts are labelled as advertising. (required).</param>
+        /// <param name="promotedSocialNetworks">The social networks sponsored posts are promoted on. (required).</param>
+        /// <param name="extraServices">Read here, but PATCH /seller/medias/{id} and POST /seller/medias take it at the top level of the body. (required).</param>
+        public SellerMediaPostOffer(List<SellerMediaPostOfferPricingOptionsInner> pricingOptions = default, int maximumLinks = default, AdvertisingLabellingPolicyEnum advertisingLabellingPolicy = default, List<PromotedSocialNetworksEnum> promotedSocialNetworks = default, List<UpdateSellerMediaRequestExtraServicesInner> extraServices = default)
         {
             // to ensure "pricingOptions" is required (not null)
             if (pricingOptions == null)
@@ -54,6 +127,14 @@ namespace Growwer.Api.Model
                 throw new ArgumentNullException("pricingOptions is a required property for SellerMediaPostOffer and cannot be null");
             }
             this.PricingOptions = pricingOptions;
+            this.MaximumLinks = maximumLinks;
+            this.AdvertisingLabellingPolicy = advertisingLabellingPolicy;
+            // to ensure "promotedSocialNetworks" is required (not null)
+            if (promotedSocialNetworks == null)
+            {
+                throw new ArgumentNullException("promotedSocialNetworks is a required property for SellerMediaPostOffer and cannot be null");
+            }
+            this.PromotedSocialNetworks = promotedSocialNetworks;
             // to ensure "extraServices" is required (not null)
             if (extraServices == null)
             {
@@ -71,8 +152,23 @@ namespace Growwer.Api.Model
         public List<SellerMediaPostOfferPricingOptionsInner> PricingOptions { get; set; }
 
         /// <summary>
-        /// Gets or Sets ExtraServices
+        /// How many links a sponsored post may hold, 1 to 4.
         /// </summary>
+        /// <value>How many links a sponsored post may hold, 1 to 4.</value>
+        [DataMember(Name = "maximumLinks", IsRequired = true, EmitDefaultValue = true)]
+        public int MaximumLinks { get; set; }
+
+        /// <summary>
+        /// The social networks sponsored posts are promoted on.
+        /// </summary>
+        /// <value>The social networks sponsored posts are promoted on.</value>
+        [DataMember(Name = "promotedSocialNetworks", IsRequired = true, EmitDefaultValue = true)]
+        public List<SellerMediaPostOffer.PromotedSocialNetworksEnum> PromotedSocialNetworks { get; set; }
+
+        /// <summary>
+        /// Read here, but PATCH /seller/medias/{id} and POST /seller/medias take it at the top level of the body.
+        /// </summary>
+        /// <value>Read here, but PATCH /seller/medias/{id} and POST /seller/medias take it at the top level of the body.</value>
         [DataMember(Name = "extraServices", IsRequired = true, EmitDefaultValue = true)]
         public List<UpdateSellerMediaRequestExtraServicesInner> ExtraServices { get; set; }
 
@@ -91,6 +187,9 @@ namespace Growwer.Api.Model
             StringBuilder sb = new StringBuilder();
             sb.Append("class SellerMediaPostOffer {\n");
             sb.Append("  PricingOptions: ").Append(PricingOptions).Append("\n");
+            sb.Append("  MaximumLinks: ").Append(MaximumLinks).Append("\n");
+            sb.Append("  AdvertisingLabellingPolicy: ").Append(AdvertisingLabellingPolicy).Append("\n");
+            sb.Append("  PromotedSocialNetworks: ").Append(PromotedSocialNetworks).Append("\n");
             sb.Append("  ExtraServices: ").Append(ExtraServices).Append("\n");
             sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");

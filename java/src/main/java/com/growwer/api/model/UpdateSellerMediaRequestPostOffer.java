@@ -23,7 +23,9 @@ import com.growwer.api.model.UpdateSellerMediaRequestPostOfferPricingOptionsInne
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -55,13 +57,140 @@ import com.growwer.api.JSON;
 public class UpdateSellerMediaRequestPostOffer {
   public static final String SERIALIZED_NAME_PRICING_OPTIONS = "pricingOptions";
   @SerializedName(SERIALIZED_NAME_PRICING_OPTIONS)
-  @javax.annotation.Nonnull
-  private List<UpdateSellerMediaRequestPostOfferPricingOptionsInner> pricingOptions = new ArrayList<>();
+  @javax.annotation.Nullable
+  private List<UpdateSellerMediaRequestPostOfferPricingOptionsInner> pricingOptions;
+
+  public static final String SERIALIZED_NAME_MAXIMUM_LINKS = "maximumLinks";
+  @SerializedName(SERIALIZED_NAME_MAXIMUM_LINKS)
+  @javax.annotation.Nullable
+  private Integer maximumLinks;
+
+  /**
+   * Gets or Sets advertisingLabellingPolicy
+   */
+  @JsonAdapter(AdvertisingLabellingPolicyEnum.Adapter.class)
+  public enum AdvertisingLabellingPolicyEnum {
+    ALWAYS("always"),
+    
+    NEVER("never");
+
+    private String value;
+
+    AdvertisingLabellingPolicyEnum(String value) {
+      this.value = value;
+    }
+
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    public static AdvertisingLabellingPolicyEnum fromValue(String value) {
+      for (AdvertisingLabellingPolicyEnum b : AdvertisingLabellingPolicyEnum.values()) {
+        if (b.value.equals(value)) {
+          return b;
+        }
+      }
+      throw new IllegalArgumentException("Unexpected value '" + value + "'");
+    }
+
+    public static class Adapter extends TypeAdapter<AdvertisingLabellingPolicyEnum> {
+      @Override
+      public void write(final JsonWriter jsonWriter, final AdvertisingLabellingPolicyEnum enumeration) throws IOException {
+        jsonWriter.value(enumeration.getValue());
+      }
+
+      @Override
+      public AdvertisingLabellingPolicyEnum read(final JsonReader jsonReader) throws IOException {
+        String value =  jsonReader.nextString();
+        return AdvertisingLabellingPolicyEnum.fromValue(value);
+      }
+    }
+
+    public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      String value = jsonElement.getAsString();
+      AdvertisingLabellingPolicyEnum.fromValue(value);
+    }
+  }
+
+  public static final String SERIALIZED_NAME_ADVERTISING_LABELLING_POLICY = "advertisingLabellingPolicy";
+  @SerializedName(SERIALIZED_NAME_ADVERTISING_LABELLING_POLICY)
+  @javax.annotation.Nullable
+  private AdvertisingLabellingPolicyEnum advertisingLabellingPolicy;
+
+  /**
+   * Gets or Sets promotedSocialNetworks
+   */
+  @JsonAdapter(PromotedSocialNetworksEnum.Adapter.class)
+  public enum PromotedSocialNetworksEnum {
+    TWITTER("twitter"),
+    
+    INSTAGRAM("instagram"),
+    
+    FACEBOOK("facebook"),
+    
+    PINTEREST("pinterest"),
+    
+    TUMBLR("tumblr"),
+    
+    NEWSLETTER("newsletter");
+
+    private String value;
+
+    PromotedSocialNetworksEnum(String value) {
+      this.value = value;
+    }
+
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    public static PromotedSocialNetworksEnum fromValue(String value) {
+      for (PromotedSocialNetworksEnum b : PromotedSocialNetworksEnum.values()) {
+        if (b.value.equals(value)) {
+          return b;
+        }
+      }
+      throw new IllegalArgumentException("Unexpected value '" + value + "'");
+    }
+
+    public static class Adapter extends TypeAdapter<PromotedSocialNetworksEnum> {
+      @Override
+      public void write(final JsonWriter jsonWriter, final PromotedSocialNetworksEnum enumeration) throws IOException {
+        jsonWriter.value(enumeration.getValue());
+      }
+
+      @Override
+      public PromotedSocialNetworksEnum read(final JsonReader jsonReader) throws IOException {
+        String value =  jsonReader.nextString();
+        return PromotedSocialNetworksEnum.fromValue(value);
+      }
+    }
+
+    public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      String value = jsonElement.getAsString();
+      PromotedSocialNetworksEnum.fromValue(value);
+    }
+  }
+
+  public static final String SERIALIZED_NAME_PROMOTED_SOCIAL_NETWORKS = "promotedSocialNetworks";
+  @SerializedName(SERIALIZED_NAME_PROMOTED_SOCIAL_NETWORKS)
+  @javax.annotation.Nullable
+  private Set<PromotedSocialNetworksEnum> promotedSocialNetworks;
 
   public UpdateSellerMediaRequestPostOffer() {
   }
 
-  public UpdateSellerMediaRequestPostOffer pricingOptions(@javax.annotation.Nonnull List<UpdateSellerMediaRequestPostOfferPricingOptionsInner> pricingOptions) {
+  public UpdateSellerMediaRequestPostOffer pricingOptions(@javax.annotation.Nullable List<UpdateSellerMediaRequestPostOfferPricingOptionsInner> pricingOptions) {
     this.pricingOptions = pricingOptions;
     return this;
   }
@@ -78,13 +207,80 @@ public class UpdateSellerMediaRequestPostOffer {
    * Get pricingOptions
    * @return pricingOptions
    */
-  @javax.annotation.Nonnull
+  @javax.annotation.Nullable
   public List<UpdateSellerMediaRequestPostOfferPricingOptionsInner> getPricingOptions() {
     return pricingOptions;
   }
 
-  public void setPricingOptions(@javax.annotation.Nonnull List<UpdateSellerMediaRequestPostOfferPricingOptionsInner> pricingOptions) {
+  public void setPricingOptions(@javax.annotation.Nullable List<UpdateSellerMediaRequestPostOfferPricingOptionsInner> pricingOptions) {
     this.pricingOptions = pricingOptions;
+  }
+
+
+  public UpdateSellerMediaRequestPostOffer maximumLinks(@javax.annotation.Nullable Integer maximumLinks) {
+    this.maximumLinks = maximumLinks;
+    return this;
+  }
+
+  /**
+   * Get maximumLinks
+   * minimum: 1
+   * maximum: 4
+   * @return maximumLinks
+   */
+  @javax.annotation.Nullable
+  public Integer getMaximumLinks() {
+    return maximumLinks;
+  }
+
+  public void setMaximumLinks(@javax.annotation.Nullable Integer maximumLinks) {
+    this.maximumLinks = maximumLinks;
+  }
+
+
+  public UpdateSellerMediaRequestPostOffer advertisingLabellingPolicy(@javax.annotation.Nullable AdvertisingLabellingPolicyEnum advertisingLabellingPolicy) {
+    this.advertisingLabellingPolicy = advertisingLabellingPolicy;
+    return this;
+  }
+
+  /**
+   * Get advertisingLabellingPolicy
+   * @return advertisingLabellingPolicy
+   */
+  @javax.annotation.Nullable
+  public AdvertisingLabellingPolicyEnum getAdvertisingLabellingPolicy() {
+    return advertisingLabellingPolicy;
+  }
+
+  public void setAdvertisingLabellingPolicy(@javax.annotation.Nullable AdvertisingLabellingPolicyEnum advertisingLabellingPolicy) {
+    this.advertisingLabellingPolicy = advertisingLabellingPolicy;
+  }
+
+
+  public UpdateSellerMediaRequestPostOffer promotedSocialNetworks(@javax.annotation.Nullable Set<PromotedSocialNetworksEnum> promotedSocialNetworks) {
+    this.promotedSocialNetworks = promotedSocialNetworks;
+    return this;
+  }
+
+  public UpdateSellerMediaRequestPostOffer addPromotedSocialNetworksItem(PromotedSocialNetworksEnum promotedSocialNetworksItem) {
+    if (this.promotedSocialNetworks == null) {
+      this.promotedSocialNetworks = new LinkedHashSet<>();
+    }
+    this.promotedSocialNetworks.add(promotedSocialNetworksItem);
+    return this;
+  }
+
+  /**
+   * Get promotedSocialNetworks
+   * @return promotedSocialNetworks
+   */
+  @javax.annotation.Nullable
+  public Set<PromotedSocialNetworksEnum> getPromotedSocialNetworks() {
+    return promotedSocialNetworks;
+  }
+
+  public void setPromotedSocialNetworks(@javax.annotation.Nullable Set<PromotedSocialNetworksEnum> promotedSocialNetworks) {
+    this.promotedSocialNetworks = promotedSocialNetworks;
   }
 
 
@@ -98,12 +294,15 @@ public class UpdateSellerMediaRequestPostOffer {
       return false;
     }
     UpdateSellerMediaRequestPostOffer updateSellerMediaRequestPostOffer = (UpdateSellerMediaRequestPostOffer) o;
-    return Objects.equals(this.pricingOptions, updateSellerMediaRequestPostOffer.pricingOptions);
+    return Objects.equals(this.pricingOptions, updateSellerMediaRequestPostOffer.pricingOptions) &&
+        Objects.equals(this.maximumLinks, updateSellerMediaRequestPostOffer.maximumLinks) &&
+        Objects.equals(this.advertisingLabellingPolicy, updateSellerMediaRequestPostOffer.advertisingLabellingPolicy) &&
+        Objects.equals(this.promotedSocialNetworks, updateSellerMediaRequestPostOffer.promotedSocialNetworks);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(pricingOptions);
+    return Objects.hash(pricingOptions, maximumLinks, advertisingLabellingPolicy, promotedSocialNetworks);
   }
 
   @Override
@@ -111,6 +310,9 @@ public class UpdateSellerMediaRequestPostOffer {
     StringBuilder sb = new StringBuilder();
     sb.append("class UpdateSellerMediaRequestPostOffer {\n");
     sb.append("    pricingOptions: ").append(toIndentedString(pricingOptions)).append("\n");
+    sb.append("    maximumLinks: ").append(toIndentedString(maximumLinks)).append("\n");
+    sb.append("    advertisingLabellingPolicy: ").append(toIndentedString(advertisingLabellingPolicy)).append("\n");
+    sb.append("    promotedSocialNetworks: ").append(toIndentedString(promotedSocialNetworks)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -129,10 +331,10 @@ public class UpdateSellerMediaRequestPostOffer {
 
   static {
     // a set of all properties/fields (JSON key names)
-    openapiFields = new HashSet<String>(Arrays.asList("pricingOptions"));
+    openapiFields = new HashSet<String>(Arrays.asList("pricingOptions", "maximumLinks", "advertisingLabellingPolicy", "promotedSocialNetworks"));
 
     // a set of required properties/fields (JSON key names)
-    openapiRequiredFields = new HashSet<String>(Arrays.asList("pricingOptions"));
+    openapiRequiredFields = new HashSet<String>(0);
   }
 
   /**
@@ -155,23 +357,31 @@ public class UpdateSellerMediaRequestPostOffer {
           throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The field `%s` in the JSON string is not defined in the `UpdateSellerMediaRequestPostOffer` properties. JSON: %s", entry.getKey(), jsonElement.toString()));
         }
       }
+        JsonObject jsonObj = jsonElement.getAsJsonObject();
+      if (jsonObj.get("pricingOptions") != null && !jsonObj.get("pricingOptions").isJsonNull()) {
+        JsonArray jsonArraypricingOptions = jsonObj.getAsJsonArray("pricingOptions");
+        if (jsonArraypricingOptions != null) {
+          // ensure the json data is an array
+          if (!jsonObj.get("pricingOptions").isJsonArray()) {
+            throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `pricingOptions` to be an array in the JSON string but got `%s`", jsonObj.get("pricingOptions").toString()));
+          }
 
-      // check to make sure all required properties/fields are present in the JSON string
-      for (String requiredField : UpdateSellerMediaRequestPostOffer.openapiRequiredFields) {
-        if (jsonElement.getAsJsonObject().get(requiredField) == null) {
-          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field `%s` is not found in the JSON string: %s", requiredField, jsonElement.toString()));
+          // validate the optional field `pricingOptions` (array)
+          for (int i = 0; i < jsonArraypricingOptions.size(); i++) {
+            UpdateSellerMediaRequestPostOfferPricingOptionsInner.validateJsonElement(jsonArraypricingOptions.get(i));
+          };
         }
       }
-        JsonObject jsonObj = jsonElement.getAsJsonObject();
-      if (jsonObj.get("pricingOptions") != null) {
-        if (!jsonObj.get("pricingOptions").isJsonArray()) {
-          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `pricingOptions` to be an array in the JSON string but got `%s`", jsonObj.get("pricingOptions").toString()));
-        }
-        JsonArray jsonArraypricingOptions = jsonObj.getAsJsonArray("pricingOptions");
-        // validate the required field `pricingOptions` (array)
-        for (int i = 0; i < jsonArraypricingOptions.size(); i++) {
-          UpdateSellerMediaRequestPostOfferPricingOptionsInner.validateJsonElement(jsonArraypricingOptions.get(i));
-        }
+      if ((jsonObj.get("advertisingLabellingPolicy") != null && !jsonObj.get("advertisingLabellingPolicy").isJsonNull()) && !jsonObj.get("advertisingLabellingPolicy").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `advertisingLabellingPolicy` to be a primitive type in the JSON string but got `%s`", jsonObj.get("advertisingLabellingPolicy").toString()));
+      }
+      // validate the optional field `advertisingLabellingPolicy`
+      if (jsonObj.get("advertisingLabellingPolicy") != null && !jsonObj.get("advertisingLabellingPolicy").isJsonNull()) {
+        AdvertisingLabellingPolicyEnum.validateJsonElement(jsonObj.get("advertisingLabellingPolicy"));
+      }
+      // ensure the optional json data is an array if present
+      if (jsonObj.get("promotedSocialNetworks") != null && !jsonObj.get("promotedSocialNetworks").isJsonNull() && !jsonObj.get("promotedSocialNetworks").isJsonArray()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `promotedSocialNetworks` to be an array in the JSON string but got `%s`", jsonObj.get("promotedSocialNetworks").toString()));
       }
   }
 

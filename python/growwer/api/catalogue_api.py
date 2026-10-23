@@ -988,7 +988,7 @@ class CatalogueApi:
         discarded: Annotated[Optional[StrictBool], Field(description="`true`: only the medias you discarded for the project; `false`: leave them out.")] = None,
         new: Annotated[Optional[StrictBool], Field(description="Medias Growwer matched with the project recently. Only `true` applies it; omit it otherwise.")] = None,
         ranks_goal_keyword: Annotated[Optional[StrictStr], Field(description="A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. `user`: your keywords; `publicGenerated`: keywords Growwer found for the project.")] = None,
-        ranks_ai_keyword: Annotated[Optional[StrictStr], Field(description="A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.")] = None,
+        ranks_ai_keyword: Annotated[Optional[StrictStr], Field(description="A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.")] = None,
         limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Medias per page, 1 to 100.")] = None,
         offset: Annotated[Optional[Annotated[int, Field(le=99900, strict=True, ge=0)]], Field(description="Medias to skip, at most 99900.")] = None,
         _request_timeout: Union[
@@ -1074,7 +1074,7 @@ class CatalogueApi:
         :type new: bool
         :param ranks_goal_keyword: A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. `user`: your keywords; `publicGenerated`: keywords Growwer found for the project.
         :type ranks_goal_keyword: str
-        :param ranks_ai_keyword: A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.
+        :param ranks_ai_keyword: A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.
         :type ranks_ai_keyword: str
         :param limit: Medias per page, 1 to 100.
         :type limit: int
@@ -1202,7 +1202,7 @@ class CatalogueApi:
         discarded: Annotated[Optional[StrictBool], Field(description="`true`: only the medias you discarded for the project; `false`: leave them out.")] = None,
         new: Annotated[Optional[StrictBool], Field(description="Medias Growwer matched with the project recently. Only `true` applies it; omit it otherwise.")] = None,
         ranks_goal_keyword: Annotated[Optional[StrictStr], Field(description="A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. `user`: your keywords; `publicGenerated`: keywords Growwer found for the project.")] = None,
-        ranks_ai_keyword: Annotated[Optional[StrictStr], Field(description="A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.")] = None,
+        ranks_ai_keyword: Annotated[Optional[StrictStr], Field(description="A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.")] = None,
         limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Medias per page, 1 to 100.")] = None,
         offset: Annotated[Optional[Annotated[int, Field(le=99900, strict=True, ge=0)]], Field(description="Medias to skip, at most 99900.")] = None,
         _request_timeout: Union[
@@ -1288,7 +1288,7 @@ class CatalogueApi:
         :type new: bool
         :param ranks_goal_keyword: A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. `user`: your keywords; `publicGenerated`: keywords Growwer found for the project.
         :type ranks_goal_keyword: str
-        :param ranks_ai_keyword: A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.
+        :param ranks_ai_keyword: A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.
         :type ranks_ai_keyword: str
         :param limit: Medias per page, 1 to 100.
         :type limit: int
@@ -1416,7 +1416,7 @@ class CatalogueApi:
         discarded: Annotated[Optional[StrictBool], Field(description="`true`: only the medias you discarded for the project; `false`: leave them out.")] = None,
         new: Annotated[Optional[StrictBool], Field(description="Medias Growwer matched with the project recently. Only `true` applies it; omit it otherwise.")] = None,
         ranks_goal_keyword: Annotated[Optional[StrictStr], Field(description="A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. `user`: your keywords; `publicGenerated`: keywords Growwer found for the project.")] = None,
-        ranks_ai_keyword: Annotated[Optional[StrictStr], Field(description="A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.")] = None,
+        ranks_ai_keyword: Annotated[Optional[StrictStr], Field(description="A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.")] = None,
         limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Medias per page, 1 to 100.")] = None,
         offset: Annotated[Optional[Annotated[int, Field(le=99900, strict=True, ge=0)]], Field(description="Medias to skip, at most 99900.")] = None,
         _request_timeout: Union[
@@ -1502,7 +1502,7 @@ class CatalogueApi:
         :type new: bool
         :param ranks_goal_keyword: A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. `user`: your keywords; `publicGenerated`: keywords Growwer found for the project.
         :type ranks_goal_keyword: str
-        :param ranks_ai_keyword: A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.
+        :param ranks_ai_keyword: A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.
         :type ranks_ai_keyword: str
         :param limit: Medias per page, 1 to 100.
         :type limit: int
@@ -2200,7 +2200,7 @@ class CatalogueApi:
         discarded: Annotated[Optional[StrictBool], Field(description="`true`: only the medias you discarded for the project; `false`: leave them out.")] = None,
         new: Annotated[Optional[StrictBool], Field(description="Medias Growwer matched with the project recently. Only `true` applies it; omit it otherwise.")] = None,
         ranks_goal_keyword: Annotated[Optional[StrictStr], Field(description="A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. `user`: your keywords; `publicGenerated`: keywords Growwer found for the project.")] = None,
-        ranks_ai_keyword: Annotated[Optional[StrictStr], Field(description="A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.")] = None,
+        ranks_ai_keyword: Annotated[Optional[StrictStr], Field(description="A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.")] = None,
         limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Medias per page, 1 to 100.")] = None,
         offset: Annotated[Optional[Annotated[int, Field(le=99900, strict=True, ge=0)]], Field(description="Medias to skip, at most 99900.")] = None,
         _request_timeout: Union[
@@ -2290,7 +2290,7 @@ class CatalogueApi:
         :type new: bool
         :param ranks_goal_keyword: A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. `user`: your keywords; `publicGenerated`: keywords Growwer found for the project.
         :type ranks_goal_keyword: str
-        :param ranks_ai_keyword: A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.
+        :param ranks_ai_keyword: A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.
         :type ranks_ai_keyword: str
         :param limit: Medias per page, 1 to 100.
         :type limit: int
@@ -2422,7 +2422,7 @@ class CatalogueApi:
         discarded: Annotated[Optional[StrictBool], Field(description="`true`: only the medias you discarded for the project; `false`: leave them out.")] = None,
         new: Annotated[Optional[StrictBool], Field(description="Medias Growwer matched with the project recently. Only `true` applies it; omit it otherwise.")] = None,
         ranks_goal_keyword: Annotated[Optional[StrictStr], Field(description="A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. `user`: your keywords; `publicGenerated`: keywords Growwer found for the project.")] = None,
-        ranks_ai_keyword: Annotated[Optional[StrictStr], Field(description="A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.")] = None,
+        ranks_ai_keyword: Annotated[Optional[StrictStr], Field(description="A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.")] = None,
         limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Medias per page, 1 to 100.")] = None,
         offset: Annotated[Optional[Annotated[int, Field(le=99900, strict=True, ge=0)]], Field(description="Medias to skip, at most 99900.")] = None,
         _request_timeout: Union[
@@ -2512,7 +2512,7 @@ class CatalogueApi:
         :type new: bool
         :param ranks_goal_keyword: A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. `user`: your keywords; `publicGenerated`: keywords Growwer found for the project.
         :type ranks_goal_keyword: str
-        :param ranks_ai_keyword: A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.
+        :param ranks_ai_keyword: A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.
         :type ranks_ai_keyword: str
         :param limit: Medias per page, 1 to 100.
         :type limit: int
@@ -2644,7 +2644,7 @@ class CatalogueApi:
         discarded: Annotated[Optional[StrictBool], Field(description="`true`: only the medias you discarded for the project; `false`: leave them out.")] = None,
         new: Annotated[Optional[StrictBool], Field(description="Medias Growwer matched with the project recently. Only `true` applies it; omit it otherwise.")] = None,
         ranks_goal_keyword: Annotated[Optional[StrictStr], Field(description="A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. `user`: your keywords; `publicGenerated`: keywords Growwer found for the project.")] = None,
-        ranks_ai_keyword: Annotated[Optional[StrictStr], Field(description="A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.")] = None,
+        ranks_ai_keyword: Annotated[Optional[StrictStr], Field(description="A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.")] = None,
         limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Medias per page, 1 to 100.")] = None,
         offset: Annotated[Optional[Annotated[int, Field(le=99900, strict=True, ge=0)]], Field(description="Medias to skip, at most 99900.")] = None,
         _request_timeout: Union[
@@ -2734,7 +2734,7 @@ class CatalogueApi:
         :type new: bool
         :param ranks_goal_keyword: A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. `user`: your keywords; `publicGenerated`: keywords Growwer found for the project.
         :type ranks_goal_keyword: str
-        :param ranks_ai_keyword: A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.
+        :param ranks_ai_keyword: A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.
         :type ranks_ai_keyword: str
         :param limit: Medias per page, 1 to 100.
         :type limit: int

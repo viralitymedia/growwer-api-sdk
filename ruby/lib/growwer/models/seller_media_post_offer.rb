@@ -18,12 +18,47 @@ module Growwer
     # One entry per link type you offer.
     attr_accessor :pricing_options
 
+    # How many links a sponsored post may hold, 1 to 4.
+    attr_accessor :maximum_links
+
+    # Whether sponsored posts are labelled as advertising.
+    attr_accessor :advertising_labelling_policy
+
+    # The social networks sponsored posts are promoted on.
+    attr_accessor :promoted_social_networks
+
+    # Read here, but PATCH /seller/medias/{id} and POST /seller/medias take it at the top level of the body.
     attr_accessor :extra_services
+
+    class EnumAttributeValidator
+      attr_reader :datatype
+      attr_reader :allowable_values
+
+      def initialize(datatype, allowable_values)
+        @allowable_values = allowable_values.map do |value|
+          case datatype.to_s
+          when /Integer/i
+            value.to_i
+          when /Float/i
+            value.to_f
+          else
+            value
+          end
+        end
+      end
+
+      def valid?(value)
+        !value || allowable_values.include?(value)
+      end
+    end
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
         :'pricing_options' => :'pricingOptions',
+        :'maximum_links' => :'maximumLinks',
+        :'advertising_labelling_policy' => :'advertisingLabellingPolicy',
+        :'promoted_social_networks' => :'promotedSocialNetworks',
         :'extra_services' => :'extraServices'
       }
     end
@@ -42,6 +77,9 @@ module Growwer
     def self.openapi_types
       {
         :'pricing_options' => :'Array<SellerMediaPostOfferPricingOptionsInner>',
+        :'maximum_links' => :'Integer',
+        :'advertising_labelling_policy' => :'String',
+        :'promoted_social_networks' => :'Array<String>',
         :'extra_services' => :'Array<UpdateSellerMediaRequestExtraServicesInner>'
       }
     end
@@ -76,6 +114,26 @@ module Growwer
         self.pricing_options = nil
       end
 
+      if attributes.key?(:'maximum_links')
+        self.maximum_links = attributes[:'maximum_links']
+      else
+        self.maximum_links = nil
+      end
+
+      if attributes.key?(:'advertising_labelling_policy')
+        self.advertising_labelling_policy = attributes[:'advertising_labelling_policy']
+      else
+        self.advertising_labelling_policy = nil
+      end
+
+      if attributes.key?(:'promoted_social_networks')
+        if (value = attributes[:'promoted_social_networks']).is_a?(Array)
+          self.promoted_social_networks = value
+        end
+      else
+        self.promoted_social_networks = nil
+      end
+
       if attributes.key?(:'extra_services')
         if (value = attributes[:'extra_services']).is_a?(Array)
           self.extra_services = value
@@ -94,6 +152,18 @@ module Growwer
         invalid_properties.push('invalid value for "pricing_options", pricing_options cannot be nil.')
       end
 
+      if @maximum_links.nil?
+        invalid_properties.push('invalid value for "maximum_links", maximum_links cannot be nil.')
+      end
+
+      if @advertising_labelling_policy.nil?
+        invalid_properties.push('invalid value for "advertising_labelling_policy", advertising_labelling_policy cannot be nil.')
+      end
+
+      if @promoted_social_networks.nil?
+        invalid_properties.push('invalid value for "promoted_social_networks", promoted_social_networks cannot be nil.')
+      end
+
       if @extra_services.nil?
         invalid_properties.push('invalid value for "extra_services", extra_services cannot be nil.')
       end
@@ -106,6 +176,11 @@ module Growwer
     def valid?
       warn '[DEPRECATED] the `valid?` method is obsolete'
       return false if @pricing_options.nil?
+      return false if @maximum_links.nil?
+      return false if @advertising_labelling_policy.nil?
+      advertising_labelling_policy_validator = EnumAttributeValidator.new('String', ["always", "never"])
+      return false unless advertising_labelling_policy_validator.valid?(@advertising_labelling_policy)
+      return false if @promoted_social_networks.nil?
       return false if @extra_services.nil?
       true
     end
@@ -118,6 +193,26 @@ module Growwer
       end
 
       @pricing_options = pricing_options
+    end
+
+    # Custom attribute writer method with validation
+    # @param [Object] maximum_links Value to be assigned
+    def maximum_links=(maximum_links)
+      if maximum_links.nil?
+        fail ArgumentError, 'maximum_links cannot be nil'
+      end
+
+      @maximum_links = maximum_links
+    end
+
+    # Custom attribute writer method checking allowed values (enum).
+    # @param [Object] advertising_labelling_policy Object to be assigned
+    def advertising_labelling_policy=(advertising_labelling_policy)
+      validator = EnumAttributeValidator.new('String', ["always", "never"])
+      unless validator.valid?(advertising_labelling_policy)
+        fail ArgumentError, "invalid value for \"advertising_labelling_policy\", must be one of #{validator.allowable_values}."
+      end
+      @advertising_labelling_policy = advertising_labelling_policy
     end
 
     # Custom attribute writer method with validation
@@ -136,6 +231,9 @@ module Growwer
       return true if self.equal?(o)
       self.class == o.class &&
           pricing_options == o.pricing_options &&
+          maximum_links == o.maximum_links &&
+          advertising_labelling_policy == o.advertising_labelling_policy &&
+          promoted_social_networks == o.promoted_social_networks &&
           extra_services == o.extra_services
     end
 
@@ -148,7 +246,7 @@ module Growwer
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [pricing_options, extra_services].hash
+      [pricing_options, maximum_links, advertising_labelling_policy, promoted_social_networks, extra_services].hash
     end
 
     # Builds the object from hash

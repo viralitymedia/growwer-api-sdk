@@ -116,17 +116,17 @@ public class ManagedServiceCampaignStrategy {
   public static final String SERIALIZED_NAME_COUNTRIES = "countries";
   @SerializedName(SERIALIZED_NAME_COUNTRIES)
   @javax.annotation.Nonnull
-  private List<String> countries = new ArrayList<>();
+  private List<String> countries;
 
   public static final String SERIALIZED_NAME_LANGUAGES = "languages";
   @SerializedName(SERIALIZED_NAME_LANGUAGES)
   @javax.annotation.Nonnull
-  private List<String> languages = new ArrayList<>();
+  private List<String> languages;
 
   public static final String SERIALIZED_NAME_TOPICS = "topics";
   @SerializedName(SERIALIZED_NAME_TOPICS)
   @javax.annotation.Nonnull
-  private List<Integer> topics = new ArrayList<>();
+  private List<Integer> topics;
 
   public static final String SERIALIZED_NAME_DEFINITION = "definition";
   @SerializedName(SERIALIZED_NAME_DEFINITION)

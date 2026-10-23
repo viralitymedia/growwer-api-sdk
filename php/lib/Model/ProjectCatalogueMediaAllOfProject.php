@@ -36,7 +36,7 @@ use \Growwer\Api\ObjectSerializer;
  * ProjectCatalogueMediaAllOfProject Class Doc Comment
  *
  * @category Class
- * @description The media&#39;s state in the project.
+ * @description The media&#39;s state in the project, and the AI keywords the web lists for the media in this project.
  * @package  Growwer\Api
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -64,7 +64,8 @@ class ProjectCatalogueMediaAllOfProject implements ModelInterface, ArrayAccess, 
         'requested' => 'bool',
         'recommended' => 'bool',
         'bought' => 'bool',
-        'new' => 'bool'
+        'new' => 'bool',
+        'ai_keywords' => '\Growwer\Api\Model\ProjectCatalogueMediaAllOfProjectAiKeywords[]'
     ];
 
     /**
@@ -80,7 +81,8 @@ class ProjectCatalogueMediaAllOfProject implements ModelInterface, ArrayAccess, 
         'requested' => null,
         'recommended' => null,
         'bought' => null,
-        'new' => null
+        'new' => null,
+        'ai_keywords' => null
     ];
 
     /**
@@ -94,7 +96,8 @@ class ProjectCatalogueMediaAllOfProject implements ModelInterface, ArrayAccess, 
         'requested' => false,
         'recommended' => false,
         'bought' => false,
-        'new' => false
+        'new' => false,
+        'ai_keywords' => false
     ];
 
     /**
@@ -188,7 +191,8 @@ class ProjectCatalogueMediaAllOfProject implements ModelInterface, ArrayAccess, 
         'requested' => 'requested',
         'recommended' => 'recommended',
         'bought' => 'bought',
-        'new' => 'new'
+        'new' => 'new',
+        'ai_keywords' => 'aiKeywords'
     ];
 
     /**
@@ -202,7 +206,8 @@ class ProjectCatalogueMediaAllOfProject implements ModelInterface, ArrayAccess, 
         'requested' => 'setRequested',
         'recommended' => 'setRecommended',
         'bought' => 'setBought',
-        'new' => 'setNew'
+        'new' => 'setNew',
+        'ai_keywords' => 'setAiKeywords'
     ];
 
     /**
@@ -216,7 +221,8 @@ class ProjectCatalogueMediaAllOfProject implements ModelInterface, ArrayAccess, 
         'requested' => 'getRequested',
         'recommended' => 'getRecommended',
         'bought' => 'getBought',
-        'new' => 'getNew'
+        'new' => 'getNew',
+        'ai_keywords' => 'getAiKeywords'
     ];
 
     /**
@@ -282,6 +288,7 @@ class ProjectCatalogueMediaAllOfProject implements ModelInterface, ArrayAccess, 
         $this->setIfExists('recommended', $data ?? [], null);
         $this->setIfExists('bought', $data ?? [], null);
         $this->setIfExists('new', $data ?? [], null);
+        $this->setIfExists('ai_keywords', $data ?? [], null);
     }
 
     /**
@@ -328,6 +335,9 @@ class ProjectCatalogueMediaAllOfProject implements ModelInterface, ArrayAccess, 
         }
         if ($this->container['new'] === null) {
             $invalidProperties[] = "'new' can't be null";
+        }
+        if ($this->container['ai_keywords'] === null) {
+            $invalidProperties[] = "'ai_keywords' can't be null";
         }
         return $invalidProperties;
     }
@@ -502,6 +512,33 @@ class ProjectCatalogueMediaAllOfProject implements ModelInterface, ArrayAccess, 
             throw new \InvalidArgumentException('non-nullable new cannot be null');
         }
         $this->container['new'] = $new;
+
+        return $this;
+    }
+
+    /**
+     * Gets ai_keywords
+     *
+     * @return \Growwer\Api\Model\ProjectCatalogueMediaAllOfProjectAiKeywords[]
+     */
+    public function getAiKeywords()
+    {
+        return $this->container['ai_keywords'];
+    }
+
+    /**
+     * Sets ai_keywords
+     *
+     * @param \Growwer\Api\Model\ProjectCatalogueMediaAllOfProjectAiKeywords[] $ai_keywords The AI keywords the web lists for the media in this project, one entry per keyword of each stored source, empty when there are none. Keywords an AI answer gave without referencing any domain may be listed for every media of the project, so an entry does not mean that the engine cited the media. Entries keep their order within an engine, and a keyword listed by two engines appears once for each; the order of the engines is not promised.
+     *
+     * @return self
+     */
+    public function setAiKeywords($ai_keywords)
+    {
+        if (is_null($ai_keywords)) {
+            throw new \InvalidArgumentException('non-nullable ai_keywords cannot be null');
+        }
+        $this->container['ai_keywords'] = $ai_keywords;
 
         return $this;
     }

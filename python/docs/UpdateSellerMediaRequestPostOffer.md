@@ -5,7 +5,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**pricing_options** | [**List[UpdateSellerMediaRequestPostOfferPricingOptionsInner]**](UpdateSellerMediaRequestPostOfferPricingOptionsInner.md) |  | 
+**pricing_options** | [**List[UpdateSellerMediaRequestPostOfferPricingOptionsInner]**](UpdateSellerMediaRequestPostOfferPricingOptionsInner.md) |  | [optional] 
+**maximum_links** | **int** |  | [optional] 
+**advertising_labelling_policy** | **str** |  | [optional] 
+**promoted_social_networks** | **List[str]** |  | [optional] 
 
 ## Example
 

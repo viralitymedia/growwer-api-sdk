@@ -124,7 +124,7 @@ public class CataloguePostOffer {
   public static final String SERIALIZED_NAME_PRICES = "prices";
   @SerializedName(SERIALIZED_NAME_PRICES)
   @javax.annotation.Nonnull
-  private Map<String, Money> prices = new HashMap<>();
+  private Map<String, Money> prices;
 
   public static final String SERIALIZED_NAME_PREVIOUS_PRICE = "previousPrice";
   @SerializedName(SERIALIZED_NAME_PREVIOUS_PRICE)
@@ -199,7 +199,7 @@ public class CataloguePostOffer {
   public static final String SERIALIZED_NAME_PROMOTED_SOCIAL_NETWORKS = "promotedSocialNetworks";
   @SerializedName(SERIALIZED_NAME_PROMOTED_SOCIAL_NETWORKS)
   @javax.annotation.Nonnull
-  private List<PromotedSocialNetworksEnum> promotedSocialNetworks = new ArrayList<>();
+  private List<PromotedSocialNetworksEnum> promotedSocialNetworks;
 
   public static final String SERIALIZED_NAME_EXTRAS = "extras";
   @SerializedName(SERIALIZED_NAME_EXTRAS)

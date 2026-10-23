@@ -17,10 +17,41 @@ module Growwer
   class UpdateSellerMediaRequestPostOffer < ApiModelBase
     attr_accessor :pricing_options
 
+    attr_accessor :maximum_links
+
+    attr_accessor :advertising_labelling_policy
+
+    attr_accessor :promoted_social_networks
+
+    class EnumAttributeValidator
+      attr_reader :datatype
+      attr_reader :allowable_values
+
+      def initialize(datatype, allowable_values)
+        @allowable_values = allowable_values.map do |value|
+          case datatype.to_s
+          when /Integer/i
+            value.to_i
+          when /Float/i
+            value.to_f
+          else
+            value
+          end
+        end
+      end
+
+      def valid?(value)
+        !value || allowable_values.include?(value)
+      end
+    end
+
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
-        :'pricing_options' => :'pricingOptions'
+        :'pricing_options' => :'pricingOptions',
+        :'maximum_links' => :'maximumLinks',
+        :'advertising_labelling_policy' => :'advertisingLabellingPolicy',
+        :'promoted_social_networks' => :'promotedSocialNetworks'
       }
     end
 
@@ -37,7 +68,10 @@ module Growwer
     # Attribute type mapping.
     def self.openapi_types
       {
-        :'pricing_options' => :'Array<UpdateSellerMediaRequestPostOfferPricingOptionsInner>'
+        :'pricing_options' => :'Array<UpdateSellerMediaRequestPostOfferPricingOptionsInner>',
+        :'maximum_links' => :'Integer',
+        :'advertising_labelling_policy' => :'String',
+        :'promoted_social_networks' => :'Array<String>'
       }
     end
 
@@ -67,8 +101,20 @@ module Growwer
         if (value = attributes[:'pricing_options']).is_a?(Array)
           self.pricing_options = value
         end
-      else
-        self.pricing_options = nil
+      end
+
+      if attributes.key?(:'maximum_links')
+        self.maximum_links = attributes[:'maximum_links']
+      end
+
+      if attributes.key?(:'advertising_labelling_policy')
+        self.advertising_labelling_policy = attributes[:'advertising_labelling_policy']
+      end
+
+      if attributes.key?(:'promoted_social_networks')
+        if (value = attributes[:'promoted_social_networks']).is_a?(Array)
+          self.promoted_social_networks = value
+        end
       end
     end
 
@@ -77,12 +123,16 @@ module Growwer
     def list_invalid_properties
       warn '[DEPRECATED] the `list_invalid_properties` method is obsolete'
       invalid_properties = Array.new
-      if @pricing_options.nil?
-        invalid_properties.push('invalid value for "pricing_options", pricing_options cannot be nil.')
+      if !@pricing_options.nil? && @pricing_options.length < 1
+        invalid_properties.push('invalid value for "pricing_options", number of items must be greater than or equal to 1.')
       end
 
-      if @pricing_options.length < 1
-        invalid_properties.push('invalid value for "pricing_options", number of items must be greater than or equal to 1.')
+      if !@maximum_links.nil? && @maximum_links > 4
+        invalid_properties.push('invalid value for "maximum_links", must be smaller than or equal to 4.')
+      end
+
+      if !@maximum_links.nil? && @maximum_links < 1
+        invalid_properties.push('invalid value for "maximum_links", must be greater than or equal to 1.')
       end
 
       invalid_properties
@@ -92,8 +142,11 @@ module Growwer
     # @return true if the model is valid
     def valid?
       warn '[DEPRECATED] the `valid?` method is obsolete'
-      return false if @pricing_options.nil?
-      return false if @pricing_options.length < 1
+      return false if !@pricing_options.nil? && @pricing_options.length < 1
+      return false if !@maximum_links.nil? && @maximum_links > 4
+      return false if !@maximum_links.nil? && @maximum_links < 1
+      advertising_labelling_policy_validator = EnumAttributeValidator.new('String', ["always", "never"])
+      return false unless advertising_labelling_policy_validator.valid?(@advertising_labelling_policy)
       true
     end
 
@@ -111,12 +164,43 @@ module Growwer
       @pricing_options = pricing_options
     end
 
+    # Custom attribute writer method with validation
+    # @param [Object] maximum_links Value to be assigned
+    def maximum_links=(maximum_links)
+      if maximum_links.nil?
+        fail ArgumentError, 'maximum_links cannot be nil'
+      end
+
+      if maximum_links > 4
+        fail ArgumentError, 'invalid value for "maximum_links", must be smaller than or equal to 4.'
+      end
+
+      if maximum_links < 1
+        fail ArgumentError, 'invalid value for "maximum_links", must be greater than or equal to 1.'
+      end
+
+      @maximum_links = maximum_links
+    end
+
+    # Custom attribute writer method checking allowed values (enum).
+    # @param [Object] advertising_labelling_policy Object to be assigned
+    def advertising_labelling_policy=(advertising_labelling_policy)
+      validator = EnumAttributeValidator.new('String', ["always", "never"])
+      unless validator.valid?(advertising_labelling_policy)
+        fail ArgumentError, "invalid value for \"advertising_labelling_policy\", must be one of #{validator.allowable_values}."
+      end
+      @advertising_labelling_policy = advertising_labelling_policy
+    end
+
     # Checks equality by comparing each attribute.
     # @param [Object] Object to be compared
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
-          pricing_options == o.pricing_options
+          pricing_options == o.pricing_options &&
+          maximum_links == o.maximum_links &&
+          advertising_labelling_policy == o.advertising_labelling_policy &&
+          promoted_social_networks == o.promoted_social_networks
     end
 
     # @see the `==` method
@@ -128,7 +212,7 @@ module Growwer
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [pricing_options].hash
+      [pricing_options, maximum_links, advertising_labelling_policy, promoted_social_networks].hash
     end
 
     # Builds the object from hash

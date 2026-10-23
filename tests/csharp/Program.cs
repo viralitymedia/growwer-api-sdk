@@ -276,6 +276,18 @@ internal static class Program
         Equal("bytes", copy.ToArray(), body);
     }
 
+    private static void AProjectMediaReadsAnAiKeywordWithANullSource()
+    {
+        ListFlashOffers200Response page = new CatalogueApi(Answer(Fixture("project-medias-page.json")), Key())
+            .SearchProjectMedias(MediaId);
+
+        List<ProjectCatalogueMediaAllOfProjectAiKeywords> keywords = page.Items[0].Project.AiKeywords;
+        Equal("aiKeywords", keywords.Count, 2);
+        Equal("source", keywords[0].Source, ProjectCatalogueMediaAllOfProjectAiKeywords.SourceEnum.Chatgpt);
+        Equal("keyword", keywords[1].Keyword, "trail shoes");
+        Equal("null source", keywords[1].Source, null);
+    }
+
     private static int Main()
     {
         var cases = new List<(string Name, Action Run)>
@@ -287,6 +299,7 @@ internal static class Program
             ("a link addition order with fields this client does not know still deserialises", ALinkAdditionOrderWithFieldsThisClientDoesNotKnowStillDeserialises),
             ("a catalogue media reads a null previousPrice and linkAdditionOffer", ACatalogueMediaReadsANullPreviousPriceAndLinkAdditionOffer),
             ("a catalogue media reads a null linkType beside present offers", ACatalogueMediaReadsANullLinkTypeBesidePresentOffers),
+            ("a project media reads an AI keyword with a null source", AProjectMediaReadsAnAiKeywordWithANullSource),
             ("a seller media reads null competitiveFees", ASellerMediaReadsNullCompetitiveFees),
             ("a seller media reads competitiveFees with one side null", ASellerMediaReadsCompetitiveFeesWithOneSideNull),
             ("the error envelope is readable from the ApiException", TheErrorEnvelopeIsReadableFromTheException),

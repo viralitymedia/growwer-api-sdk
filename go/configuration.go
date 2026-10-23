@@ -90,7 +90,7 @@ type Configuration struct {
 func NewConfiguration() *Configuration {
 	cfg := &Configuration{
 		DefaultHeader:    make(map[string]string),
-		UserAgent:        "growwer-go/1.0.2",
+		UserAgent:        "growwer-go/1.1.0",
 		Debug:            false,
 		Servers:          ServerConfigurations{
 			{

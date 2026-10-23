@@ -19,7 +19,7 @@ import (
 // checks if the ProjectCatalogueMediaAllOfProject type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ProjectCatalogueMediaAllOfProject{}
 
-// ProjectCatalogueMediaAllOfProject The media's state in the project.
+// ProjectCatalogueMediaAllOfProject The media's state in the project, and the AI keywords the web lists for the media in this project.
 type ProjectCatalogueMediaAllOfProject struct {
 	Favourite bool `json:"favourite"`
 	Discarded bool `json:"discarded"`
@@ -30,6 +30,8 @@ type ProjectCatalogueMediaAllOfProject struct {
 	Bought bool `json:"bought"`
 	// Growwer matched the media with the project recently.
 	New bool `json:"new"`
+	// The AI keywords the web lists for the media in this project, one entry per keyword of each stored source, empty when there are none. Keywords an AI answer gave without referencing any domain may be listed for every media of the project, so an entry does not mean that the engine cited the media. Entries keep their order within an engine, and a keyword listed by two engines appears once for each; the order of the engines is not promised.
+	AiKeywords []ProjectCatalogueMediaAllOfProjectAiKeywords `json:"aiKeywords"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -39,7 +41,7 @@ type _ProjectCatalogueMediaAllOfProject ProjectCatalogueMediaAllOfProject
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewProjectCatalogueMediaAllOfProject(favourite bool, discarded bool, requested bool, recommended bool, bought bool, new bool) *ProjectCatalogueMediaAllOfProject {
+func NewProjectCatalogueMediaAllOfProject(favourite bool, discarded bool, requested bool, recommended bool, bought bool, new bool, aiKeywords []ProjectCatalogueMediaAllOfProjectAiKeywords) *ProjectCatalogueMediaAllOfProject {
 	this := ProjectCatalogueMediaAllOfProject{}
 	this.Favourite = favourite
 	this.Discarded = discarded
@@ -47,6 +49,7 @@ func NewProjectCatalogueMediaAllOfProject(favourite bool, discarded bool, reques
 	this.Recommended = recommended
 	this.Bought = bought
 	this.New = new
+	this.AiKeywords = aiKeywords
 	return &this
 }
 
@@ -202,6 +205,30 @@ func (o *ProjectCatalogueMediaAllOfProject) SetNew(v bool) {
 	o.New = v
 }
 
+// GetAiKeywords returns the AiKeywords field value
+func (o *ProjectCatalogueMediaAllOfProject) GetAiKeywords() []ProjectCatalogueMediaAllOfProjectAiKeywords {
+	if o == nil {
+		var ret []ProjectCatalogueMediaAllOfProjectAiKeywords
+		return ret
+	}
+
+	return o.AiKeywords
+}
+
+// GetAiKeywordsOk returns a tuple with the AiKeywords field value
+// and a boolean to check if the value has been set.
+func (o *ProjectCatalogueMediaAllOfProject) GetAiKeywordsOk() ([]ProjectCatalogueMediaAllOfProjectAiKeywords, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.AiKeywords, true
+}
+
+// SetAiKeywords sets field value
+func (o *ProjectCatalogueMediaAllOfProject) SetAiKeywords(v []ProjectCatalogueMediaAllOfProjectAiKeywords) {
+	o.AiKeywords = v
+}
+
 func (o ProjectCatalogueMediaAllOfProject) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -218,6 +245,7 @@ func (o ProjectCatalogueMediaAllOfProject) ToMap() (map[string]interface{}, erro
 	toSerialize["recommended"] = o.Recommended
 	toSerialize["bought"] = o.Bought
 	toSerialize["new"] = o.New
+	toSerialize["aiKeywords"] = o.AiKeywords
 
 	for key, value := range o.AdditionalProperties {
 		toSerialize[key] = value
@@ -237,6 +265,7 @@ func (o *ProjectCatalogueMediaAllOfProject) UnmarshalJSON(data []byte) (err erro
 		"recommended",
 		"bought",
 		"new",
+		"aiKeywords",
 	}
 
 	allProperties := make(map[string]interface{})
@@ -272,6 +301,7 @@ func (o *ProjectCatalogueMediaAllOfProject) UnmarshalJSON(data []byte) (err erro
 		delete(additionalProperties, "recommended")
 		delete(additionalProperties, "bought")
 		delete(additionalProperties, "new")
+		delete(additionalProperties, "aiKeywords")
 		o.AdditionalProperties = additionalProperties
 	}
 

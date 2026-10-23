@@ -278,7 +278,7 @@ module Growwer
     # @option opts [Boolean] :discarded &#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out.
     # @option opts [Boolean] :new Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise.
     # @option opts [String] :ranks_goal_keyword A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. &#x60;user&#x60;: your keywords; &#x60;publicGenerated&#x60;: keywords Growwer found for the project.
-    # @option opts [String] :ranks_ai_keyword A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;.
+    # @option opts [String] :ranks_ai_keyword A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;.
     # @option opts [Integer] :limit Medias per page, 1 to 100. (default to 20)
     # @option opts [Integer] :offset Medias to skip, at most 99900. (default to 0)
     # @return [ListFlashOffers200Response]
@@ -323,7 +323,7 @@ module Growwer
     # @option opts [Boolean] :discarded &#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out.
     # @option opts [Boolean] :new Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise.
     # @option opts [String] :ranks_goal_keyword A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. &#x60;user&#x60;: your keywords; &#x60;publicGenerated&#x60;: keywords Growwer found for the project.
-    # @option opts [String] :ranks_ai_keyword A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;.
+    # @option opts [String] :ranks_ai_keyword A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;.
     # @option opts [Integer] :limit Medias per page, 1 to 100. (default to 20)
     # @option opts [Integer] :offset Medias to skip, at most 99900. (default to 0)
     # @return [Array<(ListFlashOffers200Response, Integer, Hash)>] ListFlashOffers200Response data, response status code and response headers
@@ -558,7 +558,7 @@ module Growwer
     # @option opts [Boolean] :discarded &#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out.
     # @option opts [Boolean] :new Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise.
     # @option opts [String] :ranks_goal_keyword A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. &#x60;user&#x60;: your keywords; &#x60;publicGenerated&#x60;: keywords Growwer found for the project.
-    # @option opts [String] :ranks_ai_keyword A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;.
+    # @option opts [String] :ranks_ai_keyword A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;.
     # @option opts [Integer] :limit Medias per page, 1 to 100. (default to 20)
     # @option opts [Integer] :offset Medias to skip, at most 99900. (default to 0)
     # @return [ListFlashOffers200Response]
@@ -605,7 +605,7 @@ module Growwer
     # @option opts [Boolean] :discarded &#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out.
     # @option opts [Boolean] :new Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise.
     # @option opts [String] :ranks_goal_keyword A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. &#x60;user&#x60;: your keywords; &#x60;publicGenerated&#x60;: keywords Growwer found for the project.
-    # @option opts [String] :ranks_ai_keyword A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;.
+    # @option opts [String] :ranks_ai_keyword A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;.
     # @option opts [Integer] :limit Medias per page, 1 to 100. (default to 20)
     # @option opts [Integer] :offset Medias to skip, at most 99900. (default to 0)
     # @return [Array<(ListFlashOffers200Response, Integer, Hash)>] ListFlashOffers200Response data, response status code and response headers

@@ -34,6 +34,31 @@ namespace Growwer.Api.Model
     public partial class SellerMedia : IValidatableObject
     {
         /// <summary>
+        /// Defines Typology
+        /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
+        public enum TypologyEnum
+        {
+            /// <summary>
+            /// Enum Blog for value: blog
+            /// </summary>
+            [EnumMember(Value = "blog")]
+            Blog = 1,
+
+            /// <summary>
+            /// Enum Press for value: press
+            /// </summary>
+            [EnumMember(Value = "press")]
+            Press = 2
+        }
+
+
+        /// <summary>
+        /// Gets or Sets Typology
+        /// </summary>
+        [DataMember(Name = "typology", IsRequired = true, EmitDefaultValue = true)]
+        public TypologyEnum Typology { get; set; }
+        /// <summary>
         /// Defines State
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
@@ -84,6 +109,7 @@ namespace Growwer.Api.Model
         /// <param name="id">id (required).</param>
         /// <param name="domain">domain (required).</param>
         /// <param name="url">The media&#39;s root URL. (required).</param>
+        /// <param name="typology">typology (required).</param>
         /// <param name="state">state (required).</param>
         /// <param name="deactivationStrikes">How many times the media was deactivated for not publishing. (required).</param>
         /// <param name="country">A country code, as in GET /vocabulary, or null for none. (required).</param>
@@ -100,7 +126,7 @@ namespace Growwer.Api.Model
         /// <param name="linkAdditionOffer">linkAdditionOffer (required).</param>
         /// <param name="competitiveFees">The post fees Growwer suggests to sell more, as the seller media page does, or null when it suggests none. A side Growwer finds no competitive fee for is null: unlike the page, it never shows the fixed fee the page falls back to. POST /seller/medias/{id}/apply-competitive-fees sets them. (required).</param>
         /// <param name="createdAt">createdAt (required).</param>
-        public SellerMedia(Guid id = default, string domain = default, string url = default, StateEnum state = default, int deactivationStrikes = default, string country = default, string language = default, List<int> topics = default, List<int> bannedTopics = default, string providerComments = default, int? publicationRate = default, int? averageDaysToPublication = default, int numPublishedOrders = default, bool onHoliday = default, SellerMediaFlashOffer flashOffer = default, SellerMediaPostOffer postOffer = default, SellerMediaLinkAdditionOffer linkAdditionOffer = default, SellerFeesOrNull competitiveFees = default, DateTime createdAt = default)
+        public SellerMedia(Guid id = default, string domain = default, string url = default, TypologyEnum typology = default, StateEnum state = default, int deactivationStrikes = default, string country = default, string language = default, List<int> topics = default, List<int> bannedTopics = default, string providerComments = default, int? publicationRate = default, int? averageDaysToPublication = default, int numPublishedOrders = default, bool onHoliday = default, SellerMediaFlashOffer flashOffer = default, SellerMediaPostOffer postOffer = default, SellerMediaLinkAdditionOffer linkAdditionOffer = default, SellerFeesOrNull competitiveFees = default, DateTime createdAt = default)
         {
             this.Id = id;
             // to ensure "domain" is required (not null)
@@ -115,6 +141,7 @@ namespace Growwer.Api.Model
                 throw new ArgumentNullException("url is a required property for SellerMedia and cannot be null");
             }
             this.Url = url;
+            this.Typology = typology;
             this.State = state;
             this.DeactivationStrikes = deactivationStrikes;
             // to ensure "country" is required (not null)
@@ -327,6 +354,7 @@ namespace Growwer.Api.Model
             sb.Append("  Id: ").Append(Id).Append("\n");
             sb.Append("  Domain: ").Append(Domain).Append("\n");
             sb.Append("  Url: ").Append(Url).Append("\n");
+            sb.Append("  Typology: ").Append(Typology).Append("\n");
             sb.Append("  State: ").Append(State).Append("\n");
             sb.Append("  DeactivationStrikes: ").Append(DeactivationStrikes).Append("\n");
             sb.Append("  Country: ").Append(Country).Append("\n");

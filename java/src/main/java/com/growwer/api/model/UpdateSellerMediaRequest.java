@@ -56,6 +56,63 @@ import com.growwer.api.JSON;
  */
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.24.0")
 public class UpdateSellerMediaRequest {
+  /**
+   * Gets or Sets typology
+   */
+  @JsonAdapter(TypologyEnum.Adapter.class)
+  public enum TypologyEnum {
+    BLOG("blog"),
+    
+    PRESS("press");
+
+    private String value;
+
+    TypologyEnum(String value) {
+      this.value = value;
+    }
+
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    public static TypologyEnum fromValue(String value) {
+      for (TypologyEnum b : TypologyEnum.values()) {
+        if (b.value.equals(value)) {
+          return b;
+        }
+      }
+      throw new IllegalArgumentException("Unexpected value '" + value + "'");
+    }
+
+    public static class Adapter extends TypeAdapter<TypologyEnum> {
+      @Override
+      public void write(final JsonWriter jsonWriter, final TypologyEnum enumeration) throws IOException {
+        jsonWriter.value(enumeration.getValue());
+      }
+
+      @Override
+      public TypologyEnum read(final JsonReader jsonReader) throws IOException {
+        String value =  jsonReader.nextString();
+        return TypologyEnum.fromValue(value);
+      }
+    }
+
+    public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      String value = jsonElement.getAsString();
+      TypologyEnum.fromValue(value);
+    }
+  }
+
+  public static final String SERIALIZED_NAME_TYPOLOGY = "typology";
+  @SerializedName(SERIALIZED_NAME_TYPOLOGY)
+  @javax.annotation.Nullable
+  private TypologyEnum typology;
+
   public static final String SERIALIZED_NAME_POST_OFFER = "postOffer";
   @SerializedName(SERIALIZED_NAME_POST_OFFER)
   @javax.annotation.Nullable
@@ -73,6 +130,25 @@ public class UpdateSellerMediaRequest {
 
   public UpdateSellerMediaRequest() {
   }
+
+  public UpdateSellerMediaRequest typology(@javax.annotation.Nullable TypologyEnum typology) {
+    this.typology = typology;
+    return this;
+  }
+
+  /**
+   * Get typology
+   * @return typology
+   */
+  @javax.annotation.Nullable
+  public TypologyEnum getTypology() {
+    return typology;
+  }
+
+  public void setTypology(@javax.annotation.Nullable TypologyEnum typology) {
+    this.typology = typology;
+  }
+
 
   public UpdateSellerMediaRequest postOffer(@javax.annotation.Nullable UpdateSellerMediaRequestPostOffer postOffer) {
     this.postOffer = postOffer;
@@ -149,7 +225,8 @@ public class UpdateSellerMediaRequest {
       return false;
     }
     UpdateSellerMediaRequest updateSellerMediaRequest = (UpdateSellerMediaRequest) o;
-    return Objects.equals(this.postOffer, updateSellerMediaRequest.postOffer) &&
+    return Objects.equals(this.typology, updateSellerMediaRequest.typology) &&
+        Objects.equals(this.postOffer, updateSellerMediaRequest.postOffer) &&
         Objects.equals(this.linkAdditionOffer, updateSellerMediaRequest.linkAdditionOffer) &&
         Objects.equals(this.extraServices, updateSellerMediaRequest.extraServices);
   }
@@ -160,7 +237,7 @@ public class UpdateSellerMediaRequest {
 
   @Override
   public int hashCode() {
-    return Objects.hash(postOffer, linkAdditionOffer, extraServices);
+    return Objects.hash(typology, postOffer, linkAdditionOffer, extraServices);
   }
 
   private static <T> int hashCodeNullable(JsonNullable<T> a) {
@@ -174,6 +251,7 @@ public class UpdateSellerMediaRequest {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class UpdateSellerMediaRequest {\n");
+    sb.append("    typology: ").append(toIndentedString(typology)).append("\n");
     sb.append("    postOffer: ").append(toIndentedString(postOffer)).append("\n");
     sb.append("    linkAdditionOffer: ").append(toIndentedString(linkAdditionOffer)).append("\n");
     sb.append("    extraServices: ").append(toIndentedString(extraServices)).append("\n");
@@ -195,7 +273,7 @@ public class UpdateSellerMediaRequest {
 
   static {
     // a set of all properties/fields (JSON key names)
-    openapiFields = new HashSet<String>(Arrays.asList("postOffer", "linkAdditionOffer", "extraServices"));
+    openapiFields = new HashSet<String>(Arrays.asList("typology", "postOffer", "linkAdditionOffer", "extraServices"));
 
     // a set of required properties/fields (JSON key names)
     openapiRequiredFields = new HashSet<String>(0);
@@ -222,6 +300,13 @@ public class UpdateSellerMediaRequest {
         }
       }
         JsonObject jsonObj = jsonElement.getAsJsonObject();
+      if ((jsonObj.get("typology") != null && !jsonObj.get("typology").isJsonNull()) && !jsonObj.get("typology").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `typology` to be a primitive type in the JSON string but got `%s`", jsonObj.get("typology").toString()));
+      }
+      // validate the optional field `typology`
+      if (jsonObj.get("typology") != null && !jsonObj.get("typology").isJsonNull()) {
+        TypologyEnum.validateJsonElement(jsonObj.get("typology"));
+      }
       // validate the optional field `postOffer`
       if (jsonObj.get("postOffer") != null && !jsonObj.get("postOffer").isJsonNull()) {
         UpdateSellerMediaRequestPostOffer.validateJsonElement(jsonObj.get("postOffer"));

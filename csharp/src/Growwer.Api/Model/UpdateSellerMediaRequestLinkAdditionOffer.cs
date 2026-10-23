@@ -30,7 +30,7 @@ namespace Growwer.Api.Model
     /// <summary>
     /// UpdateSellerMediaRequestLinkAdditionOffer
     /// </summary>
-    [DataContract(Name = "updateSellerMedia_request_linkAdditionOffer")]
+    [DataContract(Name = "UpdateSellerMediaRequestLinkAdditionOffer")]
     public partial class UpdateSellerMediaRequestLinkAdditionOffer : IValidatableObject
     {
         /// <summary>

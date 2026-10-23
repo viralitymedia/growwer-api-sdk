@@ -43,6 +43,12 @@ import {
 export interface UpdateSellerMediaRequest {
     /**
      * 
+     * @type {UpdateSellerMediaRequestTypologyEnum}
+     * @memberof UpdateSellerMediaRequest
+     */
+    typology?: UpdateSellerMediaRequestTypologyEnum;
+    /**
+     * 
      * @type {UpdateSellerMediaRequestPostOffer}
      * @memberof UpdateSellerMediaRequest
      */
@@ -61,6 +67,17 @@ export interface UpdateSellerMediaRequest {
     extraServices?: Array<UpdateSellerMediaRequestExtraServicesInner>;
 }
 
+
+/**
+ * @export
+ */
+export const UpdateSellerMediaRequestTypologyEnum = {
+    Blog: 'blog',
+    Press: 'press'
+} as const;
+export type UpdateSellerMediaRequestTypologyEnum = typeof UpdateSellerMediaRequestTypologyEnum[keyof typeof UpdateSellerMediaRequestTypologyEnum];
+
+
 /**
  * Check if a given object implements the UpdateSellerMediaRequest interface.
  */
@@ -78,6 +95,7 @@ export function UpdateSellerMediaRequestFromJSONTyped(json: any, ignoreDiscrimin
     }
     return {
         
+        'typology': json['typology'] == null ? undefined : json['typology'],
         'postOffer': json['postOffer'] == null ? undefined : UpdateSellerMediaRequestPostOfferFromJSON(json['postOffer']),
         'linkAdditionOffer': json['linkAdditionOffer'] === undefined ? undefined : json['linkAdditionOffer'] === null ? null : UpdateSellerMediaRequestLinkAdditionOfferFromJSON(json['linkAdditionOffer']),
         'extraServices': json['extraServices'] == null ? undefined : ((json['extraServices'] as Array<any>).map(UpdateSellerMediaRequestExtraServicesInnerFromJSON)),
@@ -95,6 +113,7 @@ export function UpdateSellerMediaRequestToJSONTyped(value?: UpdateSellerMediaReq
 
     return {
         
+        'typology': value['typology'],
         'postOffer': UpdateSellerMediaRequestPostOfferToJSON(value['postOffer']),
         'linkAdditionOffer': UpdateSellerMediaRequestLinkAdditionOfferToJSON(value['linkAdditionOffer']),
         'extraServices': value['extraServices'] == null ? undefined : ((value['extraServices'] as Array<any>).map(UpdateSellerMediaRequestExtraServicesInnerToJSON)),

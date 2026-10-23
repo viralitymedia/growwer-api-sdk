@@ -28,7 +28,7 @@ using OpenAPIDateConverter = Growwer.Api.Client.OpenAPIDateConverter;
 namespace Growwer.Api.Model
 {
     /// <summary>
-    /// The media&#39;s state in the project.
+    /// The media&#39;s state in the project, and the AI keywords the web lists for the media in this project.
     /// </summary>
     [DataContract(Name = "ProjectCatalogueMedia_allOf_project")]
     public partial class ProjectCatalogueMediaAllOfProject : IValidatableObject
@@ -50,7 +50,8 @@ namespace Growwer.Api.Model
         /// <param name="recommended">Growwer recommends the media for the project. (required).</param>
         /// <param name="bought">You have ordered on the media for the project. (required).</param>
         /// <param name="varNew">Growwer matched the media with the project recently. (required).</param>
-        public ProjectCatalogueMediaAllOfProject(bool favourite = default, bool discarded = default, bool requested = default, bool recommended = default, bool bought = default, bool varNew = default)
+        /// <param name="aiKeywords">The AI keywords the web lists for the media in this project, one entry per keyword of each stored source, empty when there are none. Keywords an AI answer gave without referencing any domain may be listed for every media of the project, so an entry does not mean that the engine cited the media. Entries keep their order within an engine, and a keyword listed by two engines appears once for each; the order of the engines is not promised. (required).</param>
+        public ProjectCatalogueMediaAllOfProject(bool favourite = default, bool discarded = default, bool requested = default, bool recommended = default, bool bought = default, bool varNew = default, List<ProjectCatalogueMediaAllOfProjectAiKeywords> aiKeywords = default)
         {
             this.Favourite = favourite;
             this.Discarded = discarded;
@@ -58,6 +59,12 @@ namespace Growwer.Api.Model
             this.Recommended = recommended;
             this.Bought = bought;
             this.New = varNew;
+            // to ensure "aiKeywords" is required (not null)
+            if (aiKeywords == null)
+            {
+                throw new ArgumentNullException("aiKeywords is a required property for ProjectCatalogueMediaAllOfProject and cannot be null");
+            }
+            this.AiKeywords = aiKeywords;
             this.AdditionalProperties = new Dictionary<string, object>();
         }
 
@@ -101,6 +108,13 @@ namespace Growwer.Api.Model
         public bool New { get; set; }
 
         /// <summary>
+        /// The AI keywords the web lists for the media in this project, one entry per keyword of each stored source, empty when there are none. Keywords an AI answer gave without referencing any domain may be listed for every media of the project, so an entry does not mean that the engine cited the media. Entries keep their order within an engine, and a keyword listed by two engines appears once for each; the order of the engines is not promised.
+        /// </summary>
+        /// <value>The AI keywords the web lists for the media in this project, one entry per keyword of each stored source, empty when there are none. Keywords an AI answer gave without referencing any domain may be listed for every media of the project, so an entry does not mean that the engine cited the media. Entries keep their order within an engine, and a keyword listed by two engines appears once for each; the order of the engines is not promised.</value>
+        [DataMember(Name = "aiKeywords", IsRequired = true, EmitDefaultValue = true)]
+        public List<ProjectCatalogueMediaAllOfProjectAiKeywords> AiKeywords { get; set; }
+
+        /// <summary>
         /// Gets or Sets additional properties
         /// </summary>
         [JsonExtensionData]
@@ -120,6 +134,7 @@ namespace Growwer.Api.Model
             sb.Append("  Recommended: ").Append(Recommended).Append("\n");
             sb.Append("  Bought: ").Append(Bought).Append("\n");
             sb.Append("  New: ").Append(New).Append("\n");
+            sb.Append("  AiKeywords: ").Append(AiKeywords).Append("\n");
             sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();

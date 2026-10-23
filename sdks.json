@@ -1,6 +1,6 @@
 {
   "generatorVersion": "7.24.0",
-  "packageVersion": "1.0.2",
+  "packageVersion": "1.1.0",
   "contractUrl": "https://tool.growwer.com/api/v1/doc/json",
   "license": {
     "name": "MIT",
@@ -101,5 +101,11 @@
     }
   ],
   "goToolchain": "1.23",
-  "centralPublishingPluginVersion": "0.12.0"
+  "centralPublishingPluginVersion": "0.12.0",
+  "inlineSchemaNameMappings": {
+    "createSellerMedia_request_extraServices_inner": "UpdateSellerMediaRequestExtraServicesInner",
+    "createSellerMedia_request_linkAdditionOffer": "UpdateSellerMediaRequestLinkAdditionOffer",
+    "createSellerMedia_request_linkAdditionOffer_pricingOptions_inner": "UpdateSellerMediaRequestLinkAdditionOfferPricingOptionsInner",
+    "createSellerMedia_request_postOffer_pricingOptions_inner": "UpdateSellerMediaRequestPostOfferPricingOptionsInner"
+  }
 }

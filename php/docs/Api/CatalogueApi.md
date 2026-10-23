@@ -262,7 +262,7 @@ $bought = True; // bool | `true`: only medias you bought for the project; `false
 $discarded = True; // bool | `true`: only the medias you discarded for the project; `false`: leave them out.
 $new = True; // bool | Medias Growwer matched with the project recently. Only `true` applies it; omit it otherwise.
 $ranks_goal_keyword = 'ranks_goal_keyword_example'; // string | A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. `user`: your keywords; `publicGenerated`: keywords Growwer found for the project.
-$ranks_ai_keyword = 'ranks_ai_keyword_example'; // string | A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.
+$ranks_ai_keyword = 'ranks_ai_keyword_example'; // string | A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.
 $limit = 20; // int | Medias per page, 1 to 100.
 $offset = 0; // int | Medias to skip, at most 99900.
 
@@ -311,7 +311,7 @@ try {
 | **discarded** | **bool**| &#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. | [optional] |
 | **new** | **bool**| Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. | [optional] |
 | **ranks_goal_keyword** | **string**| A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. &#x60;user&#x60;: your keywords; &#x60;publicGenerated&#x60;: keywords Growwer found for the project. | [optional] |
-| **ranks_ai_keyword** | **string**| A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. | [optional] |
+| **ranks_ai_keyword** | **string**| A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. | [optional] |
 | **limit** | **int**| Medias per page, 1 to 100. | [optional] [default to 20] |
 | **offset** | **int**| Medias to skip, at most 99900. | [optional] [default to 0] |
 
@@ -458,7 +458,7 @@ $bought = True; // bool | `true`: only medias you bought for the project; `false
 $discarded = True; // bool | `true`: only the medias you discarded for the project; `false`: leave them out.
 $new = True; // bool | Medias Growwer matched with the project recently. Only `true` applies it; omit it otherwise.
 $ranks_goal_keyword = 'ranks_goal_keyword_example'; // string | A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. `user`: your keywords; `publicGenerated`: keywords Growwer found for the project.
-$ranks_ai_keyword = 'ranks_ai_keyword_example'; // string | A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.
+$ranks_ai_keyword = 'ranks_ai_keyword_example'; // string | A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.
 $limit = 20; // int | Medias per page, 1 to 100.
 $offset = 0; // int | Medias to skip, at most 99900.
 
@@ -509,7 +509,7 @@ try {
 | **discarded** | **bool**| &#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. | [optional] |
 | **new** | **bool**| Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. | [optional] |
 | **ranks_goal_keyword** | **string**| A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. &#x60;user&#x60;: your keywords; &#x60;publicGenerated&#x60;: keywords Growwer found for the project. | [optional] |
-| **ranks_ai_keyword** | **string**| A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. | [optional] |
+| **ranks_ai_keyword** | **string**| A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. | [optional] |
 | **limit** | **int**| Medias per page, 1 to 100. | [optional] [default to 20] |
 | **offset** | **int**| Medias to skip, at most 99900. | [optional] [default to 0] |
 

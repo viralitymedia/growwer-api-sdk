@@ -13,8 +13,16 @@
  */
 
 import { mapValues } from '../runtime';
+import type { ProjectCatalogueMediaAllOfProjectAiKeywords } from './ProjectCatalogueMediaAllOfProjectAiKeywords';
+import {
+    ProjectCatalogueMediaAllOfProjectAiKeywordsFromJSON,
+    ProjectCatalogueMediaAllOfProjectAiKeywordsFromJSONTyped,
+    ProjectCatalogueMediaAllOfProjectAiKeywordsToJSON,
+    ProjectCatalogueMediaAllOfProjectAiKeywordsToJSONTyped,
+} from './ProjectCatalogueMediaAllOfProjectAiKeywords';
+
 /**
- * The media's state in the project.
+ * The media's state in the project, and the AI keywords the web lists for the media in this project.
  * @export
  * @interface ProjectCatalogueMediaAllOfProject
  */
@@ -55,6 +63,12 @@ export interface ProjectCatalogueMediaAllOfProject {
      * @memberof ProjectCatalogueMediaAllOfProject
      */
     _new: boolean;
+    /**
+     * The AI keywords the web lists for the media in this project, one entry per keyword of each stored source, empty when there are none. Keywords an AI answer gave without referencing any domain may be listed for every media of the project, so an entry does not mean that the engine cited the media. Entries keep their order within an engine, and a keyword listed by two engines appears once for each; the order of the engines is not promised.
+     * @type {Array<ProjectCatalogueMediaAllOfProjectAiKeywords>}
+     * @memberof ProjectCatalogueMediaAllOfProject
+     */
+    aiKeywords: Array<ProjectCatalogueMediaAllOfProjectAiKeywords>;
 }
 
 /**
@@ -67,6 +81,7 @@ export function instanceOfProjectCatalogueMediaAllOfProject(value: object): valu
     if (!('recommended' in value) || value['recommended'] === undefined) return false;
     if (!('bought' in value) || value['bought'] === undefined) return false;
     if ((!('_new' in (value as Record<string, any>)) && !('new' in (value as Record<string, any>))) || ((value as Record<string, any>)['_new'] === undefined && (value as Record<string, any>)['new'] === undefined)) return false;
+    if (!('aiKeywords' in value) || value['aiKeywords'] === undefined) return false;
     return true;
 }
 
@@ -86,6 +101,7 @@ export function ProjectCatalogueMediaAllOfProjectFromJSONTyped(json: any, ignore
         'recommended': json['recommended'],
         'bought': json['bought'],
         '_new': json['new'],
+        'aiKeywords': ((json['aiKeywords'] as Array<any>).map(ProjectCatalogueMediaAllOfProjectAiKeywordsFromJSON)),
     };
 }
 
@@ -106,6 +122,7 @@ export function ProjectCatalogueMediaAllOfProjectToJSONTyped(value?: ProjectCata
         'recommended': value['recommended'],
         'bought': value['bought'],
         'new': value['_new'],
+        'aiKeywords': ((value['aiKeywords'] as Array<any>).map(ProjectCatalogueMediaAllOfProjectAiKeywordsToJSON)),
     };
 }
 

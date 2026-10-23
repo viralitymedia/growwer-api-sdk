@@ -50,7 +50,7 @@ class UpdateSellerMediaRequestExtraServicesInner implements ModelInterface, Arra
      *
      * @var string
      */
-    protected static $openAPIModelName = 'updateSellerMedia_request_extraServices_inner';
+    protected static $openAPIModelName = 'UpdateSellerMediaRequestExtraServicesInner';
 
     /**
      * Array of property to type mappings. Used for (de)serialization

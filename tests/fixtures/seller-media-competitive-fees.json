@@ -6,6 +6,7 @@
   "deactivationStrikes": 0,
   "country": null,
   "language": "es",
+  "typology": "blog",
   "topics": [3, 17],
   "bannedTopics": [],
   "providerComments": null,
@@ -15,6 +16,9 @@
   "onHoliday": false,
   "flashOffer": null,
   "postOffer": {
+    "maximumLinks": 2,
+    "advertisingLabellingPolicy": "never",
+    "promotedSocialNetworks": ["twitter"],
     "pricingOptions": [
       {
         "feeWhenSellerWritesPost": {"amount": 6000, "currency": "EUR"},

@@ -5,6 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**typology** | **str** |  | [optional] 
 **post_offer** | [**UpdateSellerMediaRequestPostOffer**](UpdateSellerMediaRequestPostOffer.md) |  | [optional] 
 **link_addition_offer** | [**UpdateSellerMediaRequestLinkAdditionOffer**](UpdateSellerMediaRequestLinkAdditionOffer.md) |  | [optional] 
 **extra_services** | [**List[UpdateSellerMediaRequestExtraServicesInner]**](UpdateSellerMediaRequestExtraServicesInner.md) |  | [optional] 

@@ -20,6 +20,8 @@ docs/CodeName.md
 docs/CountSavedFilterMedias200Response.md
 docs/CreateProjectRequest.md
 docs/CreateSavedFilterRequest.md
+docs/CreateSellerMediaRequest.md
+docs/CreateSellerMediaRequestPostOffer.md
 docs/Error.md
 docs/FilesApi.md
 docs/GetBuyerWallet200Response.md
@@ -85,6 +87,7 @@ docs/PostOrderBriefingRequest.md
 docs/Project.md
 docs/ProjectCatalogueMedia.md
 docs/ProjectCatalogueMediaAllOfProject.md
+docs/ProjectCatalogueMediaAllOfProjectAiKeywords.md
 docs/ProjectsApi.md
 docs/PutSellerHoliday200Response.md
 docs/PutSellerHolidayRequest.md
@@ -160,6 +163,8 @@ growwer/models/code_name.py
 growwer/models/count_saved_filter_medias200_response.py
 growwer/models/create_project_request.py
 growwer/models/create_saved_filter_request.py
+growwer/models/create_seller_media_request.py
+growwer/models/create_seller_media_request_post_offer.py
 growwer/models/error.py
 growwer/models/get_buyer_wallet200_response.py
 growwer/models/get_me200_response.py
@@ -223,6 +228,7 @@ growwer/models/post_order_briefing_request.py
 growwer/models/project.py
 growwer/models/project_catalogue_media.py
 growwer/models/project_catalogue_media_all_of_project.py
+growwer/models/project_catalogue_media_all_of_project_ai_keywords.py
 growwer/models/put_seller_holiday200_response.py
 growwer/models/put_seller_holiday_request.py
 growwer/models/request_medias201_response.py

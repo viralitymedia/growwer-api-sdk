@@ -10,12 +10,13 @@ Name | Type | Description | Notes
 **Recommended** | **bool** | Growwer recommends the media for the project. | 
 **Bought** | **bool** | You have ordered on the media for the project. | 
 **New** | **bool** | Growwer matched the media with the project recently. | 
+**AiKeywords** | [**[]ProjectCatalogueMediaAllOfProjectAiKeywords**](ProjectCatalogueMediaAllOfProjectAiKeywords.md) | The AI keywords the web lists for the media in this project, one entry per keyword of each stored source, empty when there are none. Keywords an AI answer gave without referencing any domain may be listed for every media of the project, so an entry does not mean that the engine cited the media. Entries keep their order within an engine, and a keyword listed by two engines appears once for each; the order of the engines is not promised. | 
 
 ## Methods
 
 ### NewProjectCatalogueMediaAllOfProject
 
-`func NewProjectCatalogueMediaAllOfProject(favourite bool, discarded bool, requested bool, recommended bool, bought bool, new bool, ) *ProjectCatalogueMediaAllOfProject`
+`func NewProjectCatalogueMediaAllOfProject(favourite bool, discarded bool, requested bool, recommended bool, bought bool, new bool, aiKeywords []ProjectCatalogueMediaAllOfProjectAiKeywords, ) *ProjectCatalogueMediaAllOfProject`
 
 NewProjectCatalogueMediaAllOfProject instantiates a new ProjectCatalogueMediaAllOfProject object
 This constructor will assign default values to properties that have it defined,
@@ -148,6 +149,26 @@ and a boolean to check if the value has been set.
 `func (o *ProjectCatalogueMediaAllOfProject) SetNew(v bool)`
 
 SetNew sets New field to given value.
+
+
+### GetAiKeywords
+
+`func (o *ProjectCatalogueMediaAllOfProject) GetAiKeywords() []ProjectCatalogueMediaAllOfProjectAiKeywords`
+
+GetAiKeywords returns the AiKeywords field if non-nil, zero value otherwise.
+
+### GetAiKeywordsOk
+
+`func (o *ProjectCatalogueMediaAllOfProject) GetAiKeywordsOk() (*[]ProjectCatalogueMediaAllOfProjectAiKeywords, bool)`
+
+GetAiKeywordsOk returns a tuple with the AiKeywords field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetAiKeywords
+
+`func (o *ProjectCatalogueMediaAllOfProject) SetAiKeywords(v []ProjectCatalogueMediaAllOfProjectAiKeywords)`
+
+SetAiKeywords sets AiKeywords field to given value.
 
 
 

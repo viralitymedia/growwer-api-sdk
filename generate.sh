@@ -211,6 +211,18 @@ for source, renamed in sdk.get('nameMappings', {}).items():
     mapping_args=(--name-mappings "$(IFS=,; echo "${name_mappings[*]}")")
   fi
 
+  # The generator gives identical inline schemas one class, named after the first operation that
+  # uses it. When a new operation comes before one that already had the shape, the class would be
+  # renamed and break every client that names it, so the manifest pins the published name.
+  mapfile -t inline_mappings < <(python3 -c "
+import json
+for source, renamed in json.load(open('sdks.json')).get('inlineSchemaNameMappings', {}).items():
+    print(f'{source}={renamed}')
+")
+  if [[ ${#inline_mappings[@]} -gt 0 ]]; then
+    mapping_args+=(--inline-schema-name-mappings "$(IFS=,; echo "${inline_mappings[*]}")")
+  fi
+
   output_dir="${target}"
   if [[ "${target}" == "go" ]]; then
     # Go API tests are deliberately not overwritten by OpenAPI Generator. Generate in an empty

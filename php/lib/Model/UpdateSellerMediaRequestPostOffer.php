@@ -58,7 +58,10 @@ class UpdateSellerMediaRequestPostOffer implements ModelInterface, ArrayAccess, 
      * @var string[]
      */
     protected static $openAPITypes = [
-        'pricing_options' => '\Growwer\Api\Model\UpdateSellerMediaRequestPostOfferPricingOptionsInner[]'
+        'pricing_options' => '\Growwer\Api\Model\UpdateSellerMediaRequestPostOfferPricingOptionsInner[]',
+        'maximum_links' => 'int',
+        'advertising_labelling_policy' => 'string',
+        'promoted_social_networks' => 'string[]'
     ];
 
     /**
@@ -69,7 +72,10 @@ class UpdateSellerMediaRequestPostOffer implements ModelInterface, ArrayAccess, 
      * @psalm-var array<string, string|null>
      */
     protected static $openAPIFormats = [
-        'pricing_options' => null
+        'pricing_options' => null,
+        'maximum_links' => null,
+        'advertising_labelling_policy' => null,
+        'promoted_social_networks' => null
     ];
 
     /**
@@ -78,7 +84,10 @@ class UpdateSellerMediaRequestPostOffer implements ModelInterface, ArrayAccess, 
      * @var boolean[]
      */
     protected static array $openAPINullables = [
-        'pricing_options' => false
+        'pricing_options' => false,
+        'maximum_links' => false,
+        'advertising_labelling_policy' => false,
+        'promoted_social_networks' => false
     ];
 
     /**
@@ -167,7 +176,10 @@ class UpdateSellerMediaRequestPostOffer implements ModelInterface, ArrayAccess, 
      * @var string[]
      */
     protected static $attributeMap = [
-        'pricing_options' => 'pricingOptions'
+        'pricing_options' => 'pricingOptions',
+        'maximum_links' => 'maximumLinks',
+        'advertising_labelling_policy' => 'advertisingLabellingPolicy',
+        'promoted_social_networks' => 'promotedSocialNetworks'
     ];
 
     /**
@@ -176,7 +188,10 @@ class UpdateSellerMediaRequestPostOffer implements ModelInterface, ArrayAccess, 
      * @var string[]
      */
     protected static $setters = [
-        'pricing_options' => 'setPricingOptions'
+        'pricing_options' => 'setPricingOptions',
+        'maximum_links' => 'setMaximumLinks',
+        'advertising_labelling_policy' => 'setAdvertisingLabellingPolicy',
+        'promoted_social_networks' => 'setPromotedSocialNetworks'
     ];
 
     /**
@@ -185,7 +200,10 @@ class UpdateSellerMediaRequestPostOffer implements ModelInterface, ArrayAccess, 
      * @var string[]
      */
     protected static $getters = [
-        'pricing_options' => 'getPricingOptions'
+        'pricing_options' => 'getPricingOptions',
+        'maximum_links' => 'getMaximumLinks',
+        'advertising_labelling_policy' => 'getAdvertisingLabellingPolicy',
+        'promoted_social_networks' => 'getPromotedSocialNetworks'
     ];
 
     /**
@@ -229,6 +247,44 @@ class UpdateSellerMediaRequestPostOffer implements ModelInterface, ArrayAccess, 
         return self::$openAPIModelName;
     }
 
+    public const ADVERTISING_LABELLING_POLICY_ALWAYS = 'always';
+    public const ADVERTISING_LABELLING_POLICY_NEVER = 'never';
+    public const PROMOTED_SOCIAL_NETWORKS_TWITTER = 'twitter';
+    public const PROMOTED_SOCIAL_NETWORKS_INSTAGRAM = 'instagram';
+    public const PROMOTED_SOCIAL_NETWORKS_FACEBOOK = 'facebook';
+    public const PROMOTED_SOCIAL_NETWORKS_PINTEREST = 'pinterest';
+    public const PROMOTED_SOCIAL_NETWORKS_TUMBLR = 'tumblr';
+    public const PROMOTED_SOCIAL_NETWORKS_NEWSLETTER = 'newsletter';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public function getAdvertisingLabellingPolicyAllowableValues()
+    {
+        return [
+            self::ADVERTISING_LABELLING_POLICY_ALWAYS,
+            self::ADVERTISING_LABELLING_POLICY_NEVER,
+        ];
+    }
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public function getPromotedSocialNetworksAllowableValues()
+    {
+        return [
+            self::PROMOTED_SOCIAL_NETWORKS_TWITTER,
+            self::PROMOTED_SOCIAL_NETWORKS_INSTAGRAM,
+            self::PROMOTED_SOCIAL_NETWORKS_FACEBOOK,
+            self::PROMOTED_SOCIAL_NETWORKS_PINTEREST,
+            self::PROMOTED_SOCIAL_NETWORKS_TUMBLR,
+            self::PROMOTED_SOCIAL_NETWORKS_NEWSLETTER,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -246,6 +302,9 @@ class UpdateSellerMediaRequestPostOffer implements ModelInterface, ArrayAccess, 
     public function __construct(?array $data = null)
     {
         $this->setIfExists('pricing_options', $data ?? [], null);
+        $this->setIfExists('maximum_links', $data ?? [], null);
+        $this->setIfExists('advertising_labelling_policy', $data ?? [], null);
+        $this->setIfExists('promoted_social_networks', $data ?? [], null);
     }
 
     /**
@@ -275,11 +334,25 @@ class UpdateSellerMediaRequestPostOffer implements ModelInterface, ArrayAccess, 
     {
         $invalidProperties = [];
 
-        if ($this->container['pricing_options'] === null) {
-            $invalidProperties[] = "'pricing_options' can't be null";
-        }
-        if ((count($this->container['pricing_options']) < 1)) {
+        if (!is_null($this->container['pricing_options']) && (count($this->container['pricing_options']) < 1)) {
             $invalidProperties[] = "invalid value for 'pricing_options', number of items must be greater than or equal to 1.";
+        }
+
+        if (!is_null($this->container['maximum_links']) && ($this->container['maximum_links'] > 4)) {
+            $invalidProperties[] = "invalid value for 'maximum_links', must be smaller than or equal to 4.";
+        }
+
+        if (!is_null($this->container['maximum_links']) && ($this->container['maximum_links'] < 1)) {
+            $invalidProperties[] = "invalid value for 'maximum_links', must be bigger than or equal to 1.";
+        }
+
+        $allowedValues = $this->getAdvertisingLabellingPolicyAllowableValues();
+        if (!is_null($this->container['advertising_labelling_policy']) && !in_array($this->container['advertising_labelling_policy'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'advertising_labelling_policy', must be one of '%s'",
+                $this->container['advertising_labelling_policy'],
+                implode("', '", $allowedValues)
+            );
         }
 
         return $invalidProperties;
@@ -300,7 +373,7 @@ class UpdateSellerMediaRequestPostOffer implements ModelInterface, ArrayAccess, 
     /**
      * Gets pricing_options
      *
-     * @return \Growwer\Api\Model\UpdateSellerMediaRequestPostOfferPricingOptionsInner[]
+     * @return \Growwer\Api\Model\UpdateSellerMediaRequestPostOfferPricingOptionsInner[]|null
      */
     public function getPricingOptions()
     {
@@ -310,7 +383,7 @@ class UpdateSellerMediaRequestPostOffer implements ModelInterface, ArrayAccess, 
     /**
      * Sets pricing_options
      *
-     * @param \Growwer\Api\Model\UpdateSellerMediaRequestPostOfferPricingOptionsInner[] $pricing_options pricing_options
+     * @param \Growwer\Api\Model\UpdateSellerMediaRequestPostOfferPricingOptionsInner[]|null $pricing_options pricing_options
      *
      * @return self
      */
@@ -324,6 +397,114 @@ class UpdateSellerMediaRequestPostOffer implements ModelInterface, ArrayAccess, 
             throw new \InvalidArgumentException('invalid length for $pricing_options when calling UpdateSellerMediaRequestPostOffer., number of items must be greater than or equal to 1.');
         }
         $this->container['pricing_options'] = $pricing_options;
+
+        return $this;
+    }
+
+    /**
+     * Gets maximum_links
+     *
+     * @return int|null
+     */
+    public function getMaximumLinks()
+    {
+        return $this->container['maximum_links'];
+    }
+
+    /**
+     * Sets maximum_links
+     *
+     * @param int|null $maximum_links maximum_links
+     *
+     * @return self
+     */
+    public function setMaximumLinks($maximum_links)
+    {
+        if (is_null($maximum_links)) {
+            throw new \InvalidArgumentException('non-nullable maximum_links cannot be null');
+        }
+        if (($maximum_links > 4)) {
+            throw new \InvalidArgumentException('invalid value for $maximum_links when calling UpdateSellerMediaRequestPostOffer., must be smaller than or equal to 4.');
+        }
+        if (($maximum_links < 1)) {
+            throw new \InvalidArgumentException('invalid value for $maximum_links when calling UpdateSellerMediaRequestPostOffer., must be bigger than or equal to 1.');
+        }
+
+        $this->container['maximum_links'] = $maximum_links;
+
+        return $this;
+    }
+
+    /**
+     * Gets advertising_labelling_policy
+     *
+     * @return string|null
+     */
+    public function getAdvertisingLabellingPolicy()
+    {
+        return $this->container['advertising_labelling_policy'];
+    }
+
+    /**
+     * Sets advertising_labelling_policy
+     *
+     * @param string|null $advertising_labelling_policy advertising_labelling_policy
+     *
+     * @return self
+     */
+    public function setAdvertisingLabellingPolicy($advertising_labelling_policy)
+    {
+        if (is_null($advertising_labelling_policy)) {
+            throw new \InvalidArgumentException('non-nullable advertising_labelling_policy cannot be null');
+        }
+        $allowedValues = $this->getAdvertisingLabellingPolicyAllowableValues();
+        if (!in_array($advertising_labelling_policy, $allowedValues, true)) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    "Invalid value '%s' for 'advertising_labelling_policy', must be one of '%s'",
+                    $advertising_labelling_policy,
+                    implode("', '", $allowedValues)
+                )
+            );
+        }
+        $this->container['advertising_labelling_policy'] = $advertising_labelling_policy;
+
+        return $this;
+    }
+
+    /**
+     * Gets promoted_social_networks
+     *
+     * @return string[]|null
+     */
+    public function getPromotedSocialNetworks()
+    {
+        return $this->container['promoted_social_networks'];
+    }
+
+    /**
+     * Sets promoted_social_networks
+     *
+     * @param string[]|null $promoted_social_networks promoted_social_networks
+     *
+     * @return self
+     */
+    public function setPromotedSocialNetworks($promoted_social_networks)
+    {
+        if (is_null($promoted_social_networks)) {
+            throw new \InvalidArgumentException('non-nullable promoted_social_networks cannot be null');
+        }
+        $allowedValues = $this->getPromotedSocialNetworksAllowableValues();
+        if (array_diff($promoted_social_networks, $allowedValues)) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    "Invalid value for 'promoted_social_networks', must be one of '%s'",
+                    implode("', '", $allowedValues)
+                )
+            );
+        }
+
+        $this->container['promoted_social_networks'] = $promoted_social_networks;
 
         return $this;
     }

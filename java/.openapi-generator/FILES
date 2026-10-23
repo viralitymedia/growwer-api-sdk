@@ -22,6 +22,8 @@ docs/CodeName.md
 docs/CountSavedFilterMedias200Response.md
 docs/CreateProjectRequest.md
 docs/CreateSavedFilterRequest.md
+docs/CreateSellerMediaRequest.md
+docs/CreateSellerMediaRequestPostOffer.md
 docs/Error.md
 docs/FilesApi.md
 docs/GetBuyerWallet200Response.md
@@ -87,6 +89,7 @@ docs/PostOrderBriefingRequest.md
 docs/Project.md
 docs/ProjectCatalogueMedia.md
 docs/ProjectCatalogueMediaAllOfProject.md
+docs/ProjectCatalogueMediaAllOfProjectAiKeywords.md
 docs/ProjectsApi.md
 docs/PutSellerHoliday200Response.md
 docs/PutSellerHolidayRequest.md
@@ -181,6 +184,8 @@ src/main/java/com/growwer/api/model/CodeName.java
 src/main/java/com/growwer/api/model/CountSavedFilterMedias200Response.java
 src/main/java/com/growwer/api/model/CreateProjectRequest.java
 src/main/java/com/growwer/api/model/CreateSavedFilterRequest.java
+src/main/java/com/growwer/api/model/CreateSellerMediaRequest.java
+src/main/java/com/growwer/api/model/CreateSellerMediaRequestPostOffer.java
 src/main/java/com/growwer/api/model/Error.java
 src/main/java/com/growwer/api/model/GetBuyerWallet200Response.java
 src/main/java/com/growwer/api/model/GetMe200Response.java
@@ -244,6 +249,7 @@ src/main/java/com/growwer/api/model/PostOrderBriefingRequest.java
 src/main/java/com/growwer/api/model/Project.java
 src/main/java/com/growwer/api/model/ProjectCatalogueMedia.java
 src/main/java/com/growwer/api/model/ProjectCatalogueMediaAllOfProject.java
+src/main/java/com/growwer/api/model/ProjectCatalogueMediaAllOfProjectAiKeywords.java
 src/main/java/com/growwer/api/model/PutSellerHoliday200Response.java
 src/main/java/com/growwer/api/model/PutSellerHolidayRequest.java
 src/main/java/com/growwer/api/model/RequestMedias201Response.java

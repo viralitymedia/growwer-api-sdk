@@ -50,7 +50,7 @@ class UpdateSellerMediaRequestPostOfferPricingOptionsInner implements ModelInter
      *
      * @var string
      */
-    protected static $openAPIModelName = 'updateSellerMedia_request_postOffer_pricingOptions_inner';
+    protected static $openAPIModelName = 'UpdateSellerMediaRequestPostOfferPricingOptionsInner';
 
     /**
      * Array of property to type mappings. Used for (de)serialization

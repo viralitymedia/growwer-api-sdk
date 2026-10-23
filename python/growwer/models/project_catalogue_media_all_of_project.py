@@ -20,13 +20,14 @@ import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictBool
 from typing import Any, ClassVar, Dict, List
+from growwer.models.project_catalogue_media_all_of_project_ai_keywords import ProjectCatalogueMediaAllOfProjectAiKeywords
 from typing import Optional, Set
 from typing_extensions import Self
 from pydantic_core import to_jsonable_python
 
 class ProjectCatalogueMediaAllOfProject(BaseModel):
     """
-    The media's state in the project.
+    The media's state in the project, and the AI keywords the web lists for the media in this project.
     """ # noqa: E501
     favourite: StrictBool
     discarded: StrictBool
@@ -34,7 +35,8 @@ class ProjectCatalogueMediaAllOfProject(BaseModel):
     recommended: StrictBool = Field(description="Growwer recommends the media for the project.")
     bought: StrictBool = Field(description="You have ordered on the media for the project.")
     new: StrictBool = Field(description="Growwer matched the media with the project recently.")
-    __properties: ClassVar[List[str]] = ["favourite", "discarded", "requested", "recommended", "bought", "new"]
+    ai_keywords: List[ProjectCatalogueMediaAllOfProjectAiKeywords] = Field(description="The AI keywords the web lists for the media in this project, one entry per keyword of each stored source, empty when there are none. Keywords an AI answer gave without referencing any domain may be listed for every media of the project, so an entry does not mean that the engine cited the media. Entries keep their order within an engine, and a keyword listed by two engines appears once for each; the order of the engines is not promised.", alias="aiKeywords")
+    __properties: ClassVar[List[str]] = ["favourite", "discarded", "requested", "recommended", "bought", "new", "aiKeywords"]
 
     model_config = ConfigDict(
         validate_by_name=True,
@@ -75,6 +77,13 @@ class ProjectCatalogueMediaAllOfProject(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of each item in ai_keywords (list)
+        _items = []
+        if self.ai_keywords:
+            for _item_ai_keywords in self.ai_keywords:
+                if _item_ai_keywords:
+                    _items.append(_item_ai_keywords.to_dict())
+            _dict['aiKeywords'] = _items
         return _dict
 
     @classmethod
@@ -92,7 +101,8 @@ class ProjectCatalogueMediaAllOfProject(BaseModel):
             "requested": obj.get("requested"),
             "recommended": obj.get("recommended"),
             "bought": obj.get("bought"),
-            "new": obj.get("new")
+            "new": obj.get("new"),
+            "aiKeywords": [ProjectCatalogueMediaAllOfProjectAiKeywords.from_dict(_item) for _item in obj["aiKeywords"]] if obj.get("aiKeywords") is not None else None
         })
         return _obj
 

@@ -14,7 +14,7 @@ require 'date'
 require 'time'
 
 module Growwer
-  # The media's state in the project.
+  # The media's state in the project, and the AI keywords the web lists for the media in this project.
   class ProjectCatalogueMediaAllOfProject < ApiModelBase
     attr_accessor :favourite
 
@@ -31,6 +31,9 @@ module Growwer
     # Growwer matched the media with the project recently.
     attr_accessor :new
 
+    # The AI keywords the web lists for the media in this project, one entry per keyword of each stored source, empty when there are none. Keywords an AI answer gave without referencing any domain may be listed for every media of the project, so an entry does not mean that the engine cited the media. Entries keep their order within an engine, and a keyword listed by two engines appears once for each; the order of the engines is not promised.
+    attr_accessor :ai_keywords
+
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
@@ -39,7 +42,8 @@ module Growwer
         :'requested' => :'requested',
         :'recommended' => :'recommended',
         :'bought' => :'bought',
-        :'new' => :'new'
+        :'new' => :'new',
+        :'ai_keywords' => :'aiKeywords'
       }
     end
 
@@ -61,7 +65,8 @@ module Growwer
         :'requested' => :'Boolean',
         :'recommended' => :'Boolean',
         :'bought' => :'Boolean',
-        :'new' => :'Boolean'
+        :'new' => :'Boolean',
+        :'ai_keywords' => :'Array<ProjectCatalogueMediaAllOfProjectAiKeywords>'
       }
     end
 
@@ -122,6 +127,14 @@ module Growwer
       else
         self.new = nil
       end
+
+      if attributes.key?(:'ai_keywords')
+        if (value = attributes[:'ai_keywords']).is_a?(Array)
+          self.ai_keywords = value
+        end
+      else
+        self.ai_keywords = nil
+      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -153,6 +166,10 @@ module Growwer
         invalid_properties.push('invalid value for "new", new cannot be nil.')
       end
 
+      if @ai_keywords.nil?
+        invalid_properties.push('invalid value for "ai_keywords", ai_keywords cannot be nil.')
+      end
+
       invalid_properties
     end
 
@@ -166,6 +183,7 @@ module Growwer
       return false if @recommended.nil?
       return false if @bought.nil?
       return false if @new.nil?
+      return false if @ai_keywords.nil?
       true
     end
 
@@ -229,6 +247,16 @@ module Growwer
       @new = new
     end
 
+    # Custom attribute writer method with validation
+    # @param [Object] ai_keywords Value to be assigned
+    def ai_keywords=(ai_keywords)
+      if ai_keywords.nil?
+        fail ArgumentError, 'ai_keywords cannot be nil'
+      end
+
+      @ai_keywords = ai_keywords
+    end
+
     # Checks equality by comparing each attribute.
     # @param [Object] Object to be compared
     def ==(o)
@@ -239,7 +267,8 @@ module Growwer
           requested == o.requested &&
           recommended == o.recommended &&
           bought == o.bought &&
-          new == o.new
+          new == o.new &&
+          ai_keywords == o.ai_keywords
     end
 
     # @see the `==` method
@@ -251,7 +280,7 @@ module Growwer
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [favourite, discarded, requested, recommended, bought, new].hash
+      [favourite, discarded, requested, recommended, bought, new, ai_keywords].hash
     end
 
     # Builds the object from hash

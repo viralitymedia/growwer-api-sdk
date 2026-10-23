@@ -33,6 +33,8 @@ docs/CodeName.md
 docs/CountSavedFilterMedias200Response.md
 docs/CreateProjectRequest.md
 docs/CreateSavedFilterRequest.md
+docs/CreateSellerMediaRequest.md
+docs/CreateSellerMediaRequestPostOffer.md
 docs/Error.md
 docs/FilesAPI.md
 docs/GetBuyerWallet200Response.md
@@ -98,6 +100,7 @@ docs/PostOrderBriefingRequest.md
 docs/Project.md
 docs/ProjectCatalogueMedia.md
 docs/ProjectCatalogueMediaAllOfProject.md
+docs/ProjectCatalogueMediaAllOfProjectAiKeywords.md
 docs/ProjectsAPI.md
 docs/PutSellerHoliday200Response.md
 docs/PutSellerHolidayRequest.md
@@ -156,6 +159,8 @@ model_code_name.go
 model_count_saved_filter_medias_200_response.go
 model_create_project_request.go
 model_create_saved_filter_request.go
+model_create_seller_media_request.go
+model_create_seller_media_request_post_offer.go
 model_error.go
 model_get_buyer_wallet_200_response.go
 model_get_me_200_response.go
@@ -219,6 +224,7 @@ model_post_order_briefing_request.go
 model_project.go
 model_project_catalogue_media.go
 model_project_catalogue_media_all_of_project.go
+model_project_catalogue_media_all_of_project_ai_keywords.go
 model_put_seller_holiday_200_response.go
 model_put_seller_holiday_request.go
 model_request_medias_201_response.go

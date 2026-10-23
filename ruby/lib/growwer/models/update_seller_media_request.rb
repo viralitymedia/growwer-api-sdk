@@ -15,15 +15,40 @@ require 'time'
 
 module Growwer
   class UpdateSellerMediaRequest < ApiModelBase
+    attr_accessor :typology
+
     attr_accessor :post_offer
 
     attr_accessor :link_addition_offer
 
     attr_accessor :extra_services
 
+    class EnumAttributeValidator
+      attr_reader :datatype
+      attr_reader :allowable_values
+
+      def initialize(datatype, allowable_values)
+        @allowable_values = allowable_values.map do |value|
+          case datatype.to_s
+          when /Integer/i
+            value.to_i
+          when /Float/i
+            value.to_f
+          else
+            value
+          end
+        end
+      end
+
+      def valid?(value)
+        !value || allowable_values.include?(value)
+      end
+    end
+
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
+        :'typology' => :'typology',
         :'post_offer' => :'postOffer',
         :'link_addition_offer' => :'linkAdditionOffer',
         :'extra_services' => :'extraServices'
@@ -43,6 +68,7 @@ module Growwer
     # Attribute type mapping.
     def self.openapi_types
       {
+        :'typology' => :'String',
         :'post_offer' => :'UpdateSellerMediaRequestPostOffer',
         :'link_addition_offer' => :'UpdateSellerMediaRequestLinkAdditionOffer',
         :'extra_services' => :'Array<UpdateSellerMediaRequestExtraServicesInner>'
@@ -72,6 +98,10 @@ module Growwer
         h[k.to_sym] = v
       }
 
+      if attributes.key?(:'typology')
+        self.typology = attributes[:'typology']
+      end
+
       if attributes.key?(:'post_offer')
         self.post_offer = attributes[:'post_offer']
       end
@@ -99,7 +129,19 @@ module Growwer
     # @return true if the model is valid
     def valid?
       warn '[DEPRECATED] the `valid?` method is obsolete'
+      typology_validator = EnumAttributeValidator.new('String', ["blog", "press"])
+      return false unless typology_validator.valid?(@typology)
       true
+    end
+
+    # Custom attribute writer method checking allowed values (enum).
+    # @param [Object] typology Object to be assigned
+    def typology=(typology)
+      validator = EnumAttributeValidator.new('String', ["blog", "press"])
+      unless validator.valid?(typology)
+        fail ArgumentError, "invalid value for \"typology\", must be one of #{validator.allowable_values}."
+      end
+      @typology = typology
     end
 
     # Checks equality by comparing each attribute.
@@ -107,6 +149,7 @@ module Growwer
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
+          typology == o.typology &&
           post_offer == o.post_offer &&
           link_addition_offer == o.link_addition_offer &&
           extra_services == o.extra_services
@@ -121,7 +164,7 @@ module Growwer
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [post_offer, link_addition_offer, extra_services].hash
+      [typology, post_offer, link_addition_offer, extra_services].hash
     end
 
     # Builds the object from hash

@@ -139,7 +139,7 @@ namespace Growwer.Api.Api
         /// <param name="discarded">&#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="varNew">Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)</param>
         /// <param name="ranksGoalKeyword">A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. &#x60;user&#x60;: your keywords; &#x60;publicGenerated&#x60;: keywords Growwer found for the project. (optional)</param>
-        /// <param name="ranksAiKeyword">A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)</param>
+        /// <param name="ranksAiKeyword">A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)</param>
         /// <param name="limit">Medias per page, 1 to 100. (optional, default to 20)</param>
         /// <param name="offset">Medias to skip, at most 99900. (optional, default to 0)</param>
         /// <returns>ListFlashOffers200Response</returns>
@@ -185,7 +185,7 @@ namespace Growwer.Api.Api
         /// <param name="discarded">&#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="varNew">Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)</param>
         /// <param name="ranksGoalKeyword">A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. &#x60;user&#x60;: your keywords; &#x60;publicGenerated&#x60;: keywords Growwer found for the project. (optional)</param>
-        /// <param name="ranksAiKeyword">A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)</param>
+        /// <param name="ranksAiKeyword">A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)</param>
         /// <param name="limit">Medias per page, 1 to 100. (optional, default to 20)</param>
         /// <param name="offset">Medias to skip, at most 99900. (optional, default to 0)</param>
         /// <returns>ApiResponse of ListFlashOffers200Response</returns>
@@ -257,7 +257,7 @@ namespace Growwer.Api.Api
         /// <param name="discarded">&#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="varNew">Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)</param>
         /// <param name="ranksGoalKeyword">A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. &#x60;user&#x60;: your keywords; &#x60;publicGenerated&#x60;: keywords Growwer found for the project. (optional)</param>
-        /// <param name="ranksAiKeyword">A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)</param>
+        /// <param name="ranksAiKeyword">A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)</param>
         /// <param name="limit">Medias per page, 1 to 100. (optional, default to 20)</param>
         /// <param name="offset">Medias to skip, at most 99900. (optional, default to 0)</param>
         /// <returns>ListFlashOffers200Response</returns>
@@ -305,7 +305,7 @@ namespace Growwer.Api.Api
         /// <param name="discarded">&#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="varNew">Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)</param>
         /// <param name="ranksGoalKeyword">A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. &#x60;user&#x60;: your keywords; &#x60;publicGenerated&#x60;: keywords Growwer found for the project. (optional)</param>
-        /// <param name="ranksAiKeyword">A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)</param>
+        /// <param name="ranksAiKeyword">A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)</param>
         /// <param name="limit">Medias per page, 1 to 100. (optional, default to 20)</param>
         /// <param name="offset">Medias to skip, at most 99900. (optional, default to 0)</param>
         /// <returns>ApiResponse of ListFlashOffers200Response</returns>
@@ -486,7 +486,7 @@ namespace Growwer.Api.Api
         /// <param name="discarded">&#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="varNew">Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)</param>
         /// <param name="ranksGoalKeyword">A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. &#x60;user&#x60;: your keywords; &#x60;publicGenerated&#x60;: keywords Growwer found for the project. (optional)</param>
-        /// <param name="ranksAiKeyword">A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)</param>
+        /// <param name="ranksAiKeyword">A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)</param>
         /// <param name="limit">Medias per page, 1 to 100. (optional, default to 20)</param>
         /// <param name="offset">Medias to skip, at most 99900. (optional, default to 0)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -533,7 +533,7 @@ namespace Growwer.Api.Api
         /// <param name="discarded">&#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="varNew">Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)</param>
         /// <param name="ranksGoalKeyword">A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. &#x60;user&#x60;: your keywords; &#x60;publicGenerated&#x60;: keywords Growwer found for the project. (optional)</param>
-        /// <param name="ranksAiKeyword">A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)</param>
+        /// <param name="ranksAiKeyword">A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)</param>
         /// <param name="limit">Medias per page, 1 to 100. (optional, default to 20)</param>
         /// <param name="offset">Medias to skip, at most 99900. (optional, default to 0)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -608,7 +608,7 @@ namespace Growwer.Api.Api
         /// <param name="discarded">&#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="varNew">Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)</param>
         /// <param name="ranksGoalKeyword">A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. &#x60;user&#x60;: your keywords; &#x60;publicGenerated&#x60;: keywords Growwer found for the project. (optional)</param>
-        /// <param name="ranksAiKeyword">A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)</param>
+        /// <param name="ranksAiKeyword">A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)</param>
         /// <param name="limit">Medias per page, 1 to 100. (optional, default to 20)</param>
         /// <param name="offset">Medias to skip, at most 99900. (optional, default to 0)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -657,7 +657,7 @@ namespace Growwer.Api.Api
         /// <param name="discarded">&#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="varNew">Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)</param>
         /// <param name="ranksGoalKeyword">A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. &#x60;user&#x60;: your keywords; &#x60;publicGenerated&#x60;: keywords Growwer found for the project. (optional)</param>
-        /// <param name="ranksAiKeyword">A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)</param>
+        /// <param name="ranksAiKeyword">A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)</param>
         /// <param name="limit">Medias per page, 1 to 100. (optional, default to 20)</param>
         /// <param name="offset">Medias to skip, at most 99900. (optional, default to 0)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -1360,7 +1360,7 @@ namespace Growwer.Api.Api
         /// <param name="discarded">&#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="varNew">Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)</param>
         /// <param name="ranksGoalKeyword">A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. &#x60;user&#x60;: your keywords; &#x60;publicGenerated&#x60;: keywords Growwer found for the project. (optional)</param>
-        /// <param name="ranksAiKeyword">A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)</param>
+        /// <param name="ranksAiKeyword">A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)</param>
         /// <param name="limit">Medias per page, 1 to 100. (optional, default to 20)</param>
         /// <param name="offset">Medias to skip, at most 99900. (optional, default to 0)</param>
         /// <returns>ListFlashOffers200Response</returns>
@@ -1407,7 +1407,7 @@ namespace Growwer.Api.Api
         /// <param name="discarded">&#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="varNew">Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)</param>
         /// <param name="ranksGoalKeyword">A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. &#x60;user&#x60;: your keywords; &#x60;publicGenerated&#x60;: keywords Growwer found for the project. (optional)</param>
-        /// <param name="ranksAiKeyword">A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)</param>
+        /// <param name="ranksAiKeyword">A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)</param>
         /// <param name="limit">Medias per page, 1 to 100. (optional, default to 20)</param>
         /// <param name="offset">Medias to skip, at most 99900. (optional, default to 0)</param>
         /// <returns>ApiResponse of ListFlashOffers200Response</returns>
@@ -1627,7 +1627,7 @@ namespace Growwer.Api.Api
         /// <param name="discarded">&#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="varNew">Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)</param>
         /// <param name="ranksGoalKeyword">A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. &#x60;user&#x60;: your keywords; &#x60;publicGenerated&#x60;: keywords Growwer found for the project. (optional)</param>
-        /// <param name="ranksAiKeyword">A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)</param>
+        /// <param name="ranksAiKeyword">A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)</param>
         /// <param name="limit">Medias per page, 1 to 100. (optional, default to 20)</param>
         /// <param name="offset">Medias to skip, at most 99900. (optional, default to 0)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -1675,7 +1675,7 @@ namespace Growwer.Api.Api
         /// <param name="discarded">&#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="varNew">Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)</param>
         /// <param name="ranksGoalKeyword">A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. &#x60;user&#x60;: your keywords; &#x60;publicGenerated&#x60;: keywords Growwer found for the project. (optional)</param>
-        /// <param name="ranksAiKeyword">A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)</param>
+        /// <param name="ranksAiKeyword">A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)</param>
         /// <param name="limit">Medias per page, 1 to 100. (optional, default to 20)</param>
         /// <param name="offset">Medias to skip, at most 99900. (optional, default to 0)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -2050,7 +2050,7 @@ namespace Growwer.Api.Api
         /// <param name="discarded">&#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="varNew">Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)</param>
         /// <param name="ranksGoalKeyword">A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. &#x60;user&#x60;: your keywords; &#x60;publicGenerated&#x60;: keywords Growwer found for the project. (optional)</param>
-        /// <param name="ranksAiKeyword">A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)</param>
+        /// <param name="ranksAiKeyword">A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)</param>
         /// <param name="limit">Medias per page, 1 to 100. (optional, default to 20)</param>
         /// <param name="offset">Medias to skip, at most 99900. (optional, default to 0)</param>
         /// <returns>ListFlashOffers200Response</returns>
@@ -2099,7 +2099,7 @@ namespace Growwer.Api.Api
         /// <param name="discarded">&#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="varNew">Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)</param>
         /// <param name="ranksGoalKeyword">A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. &#x60;user&#x60;: your keywords; &#x60;publicGenerated&#x60;: keywords Growwer found for the project. (optional)</param>
-        /// <param name="ranksAiKeyword">A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)</param>
+        /// <param name="ranksAiKeyword">A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)</param>
         /// <param name="limit">Medias per page, 1 to 100. (optional, default to 20)</param>
         /// <param name="offset">Medias to skip, at most 99900. (optional, default to 0)</param>
         /// <returns>ApiResponse of ListFlashOffers200Response</returns>
@@ -2329,7 +2329,7 @@ namespace Growwer.Api.Api
         /// <param name="discarded">&#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="varNew">Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)</param>
         /// <param name="ranksGoalKeyword">A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. &#x60;user&#x60;: your keywords; &#x60;publicGenerated&#x60;: keywords Growwer found for the project. (optional)</param>
-        /// <param name="ranksAiKeyword">A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)</param>
+        /// <param name="ranksAiKeyword">A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)</param>
         /// <param name="limit">Medias per page, 1 to 100. (optional, default to 20)</param>
         /// <param name="offset">Medias to skip, at most 99900. (optional, default to 0)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -2379,7 +2379,7 @@ namespace Growwer.Api.Api
         /// <param name="discarded">&#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="varNew">Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)</param>
         /// <param name="ranksGoalKeyword">A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. &#x60;user&#x60;: your keywords; &#x60;publicGenerated&#x60;: keywords Growwer found for the project. (optional)</param>
-        /// <param name="ranksAiKeyword">A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)</param>
+        /// <param name="ranksAiKeyword">A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. (optional)</param>
         /// <param name="limit">Medias per page, 1 to 100. (optional, default to 20)</param>
         /// <param name="offset">Medias to skip, at most 99900. (optional, default to 0)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>

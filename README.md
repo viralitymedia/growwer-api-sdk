@@ -172,6 +172,28 @@ var me = new AccountApi(config).GetMe();
 ```
 </details>
 
+## Changes in 1.1.0
+
+Additive: code written for 1.0.2 keeps compiling.
+
+- **Register and delete your medias.** `SellerMediasApi` adds `createSellerMedia`
+  (`POST /seller/medias`) and `deleteSellerMedia` (`DELETE /seller/medias/{id}`). A media
+  registered already is refused with `409 media_already_registered`, and those refusals count
+  toward a daily limit (`429 media_duplicate_limit_reached`). A delete is refused with
+  `409 media_has_active_orders`, listing `details.orderIds`, while any order on the media is not
+  finished. There is no batch operation: to register many medias, call `createSellerMedia` once
+  per media, each with its own `Idempotency-Key`.
+- **More of the offer is editable.** `getSellerMedia` and `updateSellerMedia` add `typology`, and
+  `postOffer.maximumLinks`, `postOffer.advertisingLabellingPolicy` and
+  `postOffer.promotedSocialNetworks`.
+- **AI keywords in a project.** Each media of `searchProjectMedias` adds `project.aiKeywords`, the AI
+  keywords the web lists for the media in the project, each with its `source` (`googleAiOverview`,
+  `chatgpt`, `googleAiMode`, or `null`). An entry does not mean the engine cited the media.
+- The request's sub-objects keep their 1.0.2 class names
+  (`UpdateSellerMediaRequestExtraServicesInner`, `UpdateSellerMediaRequestLinkAdditionOffer` and
+  their pricing options), which `createSellerMedia` reuses; see "Inline class names" under
+  [Regenerating](#regenerating).
+
 ## Changes in 1.0.2
 
 **Four API classes are renamed, and code that imports the old names breaks**, although the version
@@ -491,6 +513,12 @@ would be discarded on the next run:
   `nullable: true`, so the null the contract allows in a required enum such as `Order.pendingAction`
   would fail deserialisation. The `?` is added by
   [`scripts/csharp-nullable-enums.py`](scripts/csharp-nullable-enums.py).
+- **Inline class names.** The generator gives identical inline schemas one class, named after the
+  first operation that uses it, so an operation added before one that already had the shape would
+  rename its class and break every client that names it. `inlineSchemaNameMappings` in
+  [`sdks.json`](sdks.json) pins the published name, keyed by the generator's operation-based name
+  (`createSellerMedia_request_linkAdditionOffer`), and is passed as
+  `--inline-schema-name-mappings`.
 - **Package metadata.** Left alone, the Python, TypeScript and PHP manifests name OpenAPI Generator
   as their author and carry its description and keywords. They are rewritten from
   [`sdks.json`](sdks.json) by [`scripts/package-metadata.py`](scripts/package-metadata.py), which

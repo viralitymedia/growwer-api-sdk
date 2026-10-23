@@ -32,14 +32,55 @@ export interface UpdateSellerMediaRequestPostOffer {
      * @type {Array<UpdateSellerMediaRequestPostOfferPricingOptionsInner>}
      * @memberof UpdateSellerMediaRequestPostOffer
      */
-    pricingOptions: Array<UpdateSellerMediaRequestPostOfferPricingOptionsInner>;
+    pricingOptions?: Array<UpdateSellerMediaRequestPostOfferPricingOptionsInner>;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateSellerMediaRequestPostOffer
+     */
+    maximumLinks?: number;
+    /**
+     * 
+     * @type {UpdateSellerMediaRequestPostOfferAdvertisingLabellingPolicyEnum}
+     * @memberof UpdateSellerMediaRequestPostOffer
+     */
+    advertisingLabellingPolicy?: UpdateSellerMediaRequestPostOfferAdvertisingLabellingPolicyEnum;
+    /**
+     * 
+     * @type {Set<UpdateSellerMediaRequestPostOfferPromotedSocialNetworksEnum>}
+     * @memberof UpdateSellerMediaRequestPostOffer
+     */
+    promotedSocialNetworks?: Set<UpdateSellerMediaRequestPostOfferPromotedSocialNetworksEnum>;
 }
+
+
+/**
+ * @export
+ */
+export const UpdateSellerMediaRequestPostOfferAdvertisingLabellingPolicyEnum = {
+    Always: 'always',
+    Never: 'never'
+} as const;
+export type UpdateSellerMediaRequestPostOfferAdvertisingLabellingPolicyEnum = typeof UpdateSellerMediaRequestPostOfferAdvertisingLabellingPolicyEnum[keyof typeof UpdateSellerMediaRequestPostOfferAdvertisingLabellingPolicyEnum];
+
+/**
+ * @export
+ */
+export const UpdateSellerMediaRequestPostOfferPromotedSocialNetworksEnum = {
+    Twitter: 'twitter',
+    Instagram: 'instagram',
+    Facebook: 'facebook',
+    Pinterest: 'pinterest',
+    Tumblr: 'tumblr',
+    Newsletter: 'newsletter'
+} as const;
+export type UpdateSellerMediaRequestPostOfferPromotedSocialNetworksEnum = typeof UpdateSellerMediaRequestPostOfferPromotedSocialNetworksEnum[keyof typeof UpdateSellerMediaRequestPostOfferPromotedSocialNetworksEnum];
+
 
 /**
  * Check if a given object implements the UpdateSellerMediaRequestPostOffer interface.
  */
 export function instanceOfUpdateSellerMediaRequestPostOffer(value: object): value is UpdateSellerMediaRequestPostOffer {
-    if (!('pricingOptions' in value) || value['pricingOptions'] === undefined) return false;
     return true;
 }
 
@@ -53,7 +94,10 @@ export function UpdateSellerMediaRequestPostOfferFromJSONTyped(json: any, ignore
     }
     return {
         
-        'pricingOptions': ((json['pricingOptions'] as Array<any>).map(UpdateSellerMediaRequestPostOfferPricingOptionsInnerFromJSON)),
+        'pricingOptions': json['pricingOptions'] == null ? undefined : ((json['pricingOptions'] as Array<any>).map(UpdateSellerMediaRequestPostOfferPricingOptionsInnerFromJSON)),
+        'maximumLinks': json['maximumLinks'] == null ? undefined : json['maximumLinks'],
+        'advertisingLabellingPolicy': json['advertisingLabellingPolicy'] == null ? undefined : json['advertisingLabellingPolicy'],
+        'promotedSocialNetworks': json['promotedSocialNetworks'] == null ? undefined : new Set(json['promotedSocialNetworks']),
     };
 }
 
@@ -68,7 +112,10 @@ export function UpdateSellerMediaRequestPostOfferToJSONTyped(value?: UpdateSelle
 
     return {
         
-        'pricingOptions': ((value['pricingOptions'] as Array<any>).map(UpdateSellerMediaRequestPostOfferPricingOptionsInnerToJSON)),
+        'pricingOptions': value['pricingOptions'] == null ? undefined : ((value['pricingOptions'] as Array<any>).map(UpdateSellerMediaRequestPostOfferPricingOptionsInnerToJSON)),
+        'maximumLinks': value['maximumLinks'],
+        'advertisingLabellingPolicy': value['advertisingLabellingPolicy'],
+        'promotedSocialNetworks': value['promotedSocialNetworks'] == null ? undefined : Array.from(value['promotedSocialNetworks'] as Set<any>),
     };
 }
 

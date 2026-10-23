@@ -18,6 +18,8 @@ docs/CodeName.md
 docs/CountSavedFilterMedias200Response.md
 docs/CreateProjectRequest.md
 docs/CreateSavedFilterRequest.md
+docs/CreateSellerMediaRequest.md
+docs/CreateSellerMediaRequestPostOffer.md
 docs/FilesApi.md
 docs/GetBuyerWallet200Response.md
 docs/GetMe200Response.md
@@ -83,6 +85,7 @@ docs/PostOrderBriefingRequest.md
 docs/Project.md
 docs/ProjectCatalogueMedia.md
 docs/ProjectCatalogueMediaAllOfProject.md
+docs/ProjectCatalogueMediaAllOfProjectAiKeywords.md
 docs/ProjectsApi.md
 docs/PutSellerHoliday200Response.md
 docs/PutSellerHolidayRequest.md
@@ -153,6 +156,8 @@ src/models/CodeName.ts
 src/models/CountSavedFilterMedias200Response.ts
 src/models/CreateProjectRequest.ts
 src/models/CreateSavedFilterRequest.ts
+src/models/CreateSellerMediaRequest.ts
+src/models/CreateSellerMediaRequestPostOffer.ts
 src/models/GetBuyerWallet200Response.ts
 src/models/GetMe200Response.ts
 src/models/GetMe200ResponseBuyer.ts
@@ -216,6 +221,7 @@ src/models/PostOrderBriefingRequest.ts
 src/models/Project.ts
 src/models/ProjectCatalogueMedia.ts
 src/models/ProjectCatalogueMediaAllOfProject.ts
+src/models/ProjectCatalogueMediaAllOfProjectAiKeywords.ts
 src/models/PutSellerHoliday200Response.ts
 src/models/PutSellerHolidayRequest.ts
 src/models/RequestMedias201Response.ts

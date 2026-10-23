@@ -37,6 +37,7 @@ class SellerMedia(BaseModel):
     id: UUID
     domain: StrictStr = Field(json_schema_extra={"examples": ["example.com"]})
     url: StrictStr = Field(description="The media's root URL.")
+    typology: StrictStr
     state: StrictStr
     deactivation_strikes: StrictInt = Field(description="How many times the media was deactivated for not publishing.", alias="deactivationStrikes")
     country: Optional[StrictStr] = Field(description="A country code, as in GET /vocabulary, or null for none.")
@@ -53,7 +54,14 @@ class SellerMedia(BaseModel):
     link_addition_offer: Optional[SellerMediaLinkAdditionOffer] = Field(alias="linkAdditionOffer")
     competitive_fees: Optional[SellerFeesOrNull] = Field(description="The post fees Growwer suggests to sell more, as the seller media page does, or null when it suggests none. A side Growwer finds no competitive fee for is null: unlike the page, it never shows the fixed fee the page falls back to. POST /seller/medias/{id}/apply-competitive-fees sets them.", alias="competitiveFees")
     created_at: datetime = Field(alias="createdAt")
-    __properties: ClassVar[List[str]] = ["id", "domain", "url", "state", "deactivationStrikes", "country", "language", "topics", "bannedTopics", "providerComments", "publicationRate", "averageDaysToPublication", "numPublishedOrders", "onHoliday", "flashOffer", "postOffer", "linkAdditionOffer", "competitiveFees", "createdAt"]
+    __properties: ClassVar[List[str]] = ["id", "domain", "url", "typology", "state", "deactivationStrikes", "country", "language", "topics", "bannedTopics", "providerComments", "publicationRate", "averageDaysToPublication", "numPublishedOrders", "onHoliday", "flashOffer", "postOffer", "linkAdditionOffer", "competitiveFees", "createdAt"]
+
+    @field_validator('typology')
+    def typology_validate_enum(cls, value):
+        """Validates the enum"""
+        if value not in set(['blog', 'press']):
+            raise ValueError("must be one of enum values ('blog', 'press')")
+        return value
 
     @field_validator('state')
     def state_validate_enum(cls, value):
@@ -163,6 +171,7 @@ class SellerMedia(BaseModel):
             "id": obj.get("id"),
             "domain": obj.get("domain"),
             "url": obj.get("url"),
+            "typology": obj.get("typology"),
             "state": obj.get("state"),
             "deactivationStrikes": obj.get("deactivationStrikes"),
             "country": obj.get("country"),

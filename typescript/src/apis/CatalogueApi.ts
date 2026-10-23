@@ -270,7 +270,7 @@ export interface CatalogueApiInterface {
      * @param {boolean} [discarded] &#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out.
      * @param {boolean} [_new] Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise.
      * @param {string} [ranksGoalKeyword] A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. &#x60;user&#x60;: your keywords; &#x60;publicGenerated&#x60;: keywords Growwer found for the project.
-     * @param {string} [ranksAiKeyword] A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;.
+     * @param {string} [ranksAiKeyword] A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;.
      * @param {number} [limit] Medias per page, 1 to 100.
      * @param {number} [offset] Medias to skip, at most 99900.
      * @throws {RequiredError}
@@ -314,7 +314,7 @@ export interface CatalogueApiInterface {
      * @param {boolean} [discarded] &#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out.
      * @param {boolean} [_new] Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise.
      * @param {string} [ranksGoalKeyword] A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. &#x60;user&#x60;: your keywords; &#x60;publicGenerated&#x60;: keywords Growwer found for the project.
-     * @param {string} [ranksAiKeyword] A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;.
+     * @param {string} [ranksAiKeyword] A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;.
      * @param {number} [limit] Medias per page, 1 to 100.
      * @param {number} [offset] Medias to skip, at most 99900.
      * @param {*} [options] Override http request option.
@@ -394,7 +394,7 @@ export interface CatalogueApiInterface {
      * @param {boolean} [discarded] &#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out.
      * @param {boolean} [_new] Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise.
      * @param {string} [ranksGoalKeyword] A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. &#x60;user&#x60;: your keywords; &#x60;publicGenerated&#x60;: keywords Growwer found for the project.
-     * @param {string} [ranksAiKeyword] A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;.
+     * @param {string} [ranksAiKeyword] A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;.
      * @param {number} [limit] Medias per page, 1 to 100.
      * @param {number} [offset] Medias to skip, at most 99900.
      * @throws {RequiredError}
@@ -440,7 +440,7 @@ export interface CatalogueApiInterface {
      * @param {boolean} [discarded] &#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out.
      * @param {boolean} [_new] Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise.
      * @param {string} [ranksGoalKeyword] A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. &#x60;user&#x60;: your keywords; &#x60;publicGenerated&#x60;: keywords Growwer found for the project.
-     * @param {string} [ranksAiKeyword] A comma-separated list of AI answer engines: medias cited for a keyword of the project by any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;.
+     * @param {string} [ranksAiKeyword] A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;.
      * @param {number} [limit] Medias per page, 1 to 100.
      * @param {number} [offset] Medias to skip, at most 99900.
      * @param {*} [options] Override http request option.

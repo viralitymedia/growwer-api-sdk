@@ -15,7 +15,7 @@
 """  # noqa: E501
 
 
-__version__ = "1.0.2"
+__version__ = "1.1.0"
 
 # Define package exports
 __all__ = [
@@ -53,6 +53,8 @@ __all__ = [
     "CountSavedFilterMedias200Response",
     "CreateProjectRequest",
     "CreateSavedFilterRequest",
+    "CreateSellerMediaRequest",
+    "CreateSellerMediaRequestPostOffer",
     "Error",
     "GetBuyerWallet200Response",
     "GetMe200Response",
@@ -116,6 +118,7 @@ __all__ = [
     "Project",
     "ProjectCatalogueMedia",
     "ProjectCatalogueMediaAllOfProject",
+    "ProjectCatalogueMediaAllOfProjectAiKeywords",
     "PutSellerHoliday200Response",
     "PutSellerHolidayRequest",
     "RequestMedias201Response",
@@ -193,6 +196,8 @@ from growwer.models.code_name import CodeName as CodeName
 from growwer.models.count_saved_filter_medias200_response import CountSavedFilterMedias200Response as CountSavedFilterMedias200Response
 from growwer.models.create_project_request import CreateProjectRequest as CreateProjectRequest
 from growwer.models.create_saved_filter_request import CreateSavedFilterRequest as CreateSavedFilterRequest
+from growwer.models.create_seller_media_request import CreateSellerMediaRequest as CreateSellerMediaRequest
+from growwer.models.create_seller_media_request_post_offer import CreateSellerMediaRequestPostOffer as CreateSellerMediaRequestPostOffer
 from growwer.models.error import Error as Error
 from growwer.models.get_buyer_wallet200_response import GetBuyerWallet200Response as GetBuyerWallet200Response
 from growwer.models.get_me200_response import GetMe200Response as GetMe200Response
@@ -256,6 +261,7 @@ from growwer.models.post_order_briefing_request import PostOrderBriefingRequest 
 from growwer.models.project import Project as Project
 from growwer.models.project_catalogue_media import ProjectCatalogueMedia as ProjectCatalogueMedia
 from growwer.models.project_catalogue_media_all_of_project import ProjectCatalogueMediaAllOfProject as ProjectCatalogueMediaAllOfProject
+from growwer.models.project_catalogue_media_all_of_project_ai_keywords import ProjectCatalogueMediaAllOfProjectAiKeywords as ProjectCatalogueMediaAllOfProjectAiKeywords
 from growwer.models.put_seller_holiday200_response import PutSellerHoliday200Response as PutSellerHoliday200Response
 from growwer.models.put_seller_holiday_request import PutSellerHolidayRequest as PutSellerHolidayRequest
 from growwer.models.request_medias201_response import RequestMedias201Response as RequestMedias201Response

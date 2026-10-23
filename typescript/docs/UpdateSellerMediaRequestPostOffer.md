@@ -7,6 +7,9 @@
 Name | Type
 ------------ | -------------
 `pricingOptions` | [Array&lt;UpdateSellerMediaRequestPostOfferPricingOptionsInner&gt;](UpdateSellerMediaRequestPostOfferPricingOptionsInner.md)
+`maximumLinks` | number
+`advertisingLabellingPolicy` | string
+`promotedSocialNetworks` | Set&lt;string&gt;
 
 ## Example
 
@@ -16,6 +19,9 @@ import type { UpdateSellerMediaRequestPostOffer } from '@growwer/api'
 // TODO: Update the object below with actual values
 const example = {
   "pricingOptions": null,
+  "maximumLinks": null,
+  "advertisingLabellingPolicy": null,
+  "promotedSocialNetworks": null,
 } satisfies UpdateSellerMediaRequestPostOffer
 
 console.log(example)

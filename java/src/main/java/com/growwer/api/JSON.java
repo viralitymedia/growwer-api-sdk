@@ -109,6 +109,8 @@ public class JSON {
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.CountSavedFilterMedias200Response.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.CreateProjectRequest.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.CreateSavedFilterRequest.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.CreateSellerMediaRequest.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.CreateSellerMediaRequestPostOffer.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.Error.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.GetBuyerWallet200Response.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.GetMe200Response.CustomTypeAdapterFactory());
@@ -172,6 +174,7 @@ public class JSON {
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.Project.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.ProjectCatalogueMedia.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.ProjectCatalogueMediaAllOfProject.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.ProjectCatalogueMediaAllOfProjectAiKeywords.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.PutSellerHoliday200Response.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.PutSellerHolidayRequest.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.RequestMedias201Response.CustomTypeAdapterFactory());

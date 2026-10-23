@@ -6,7 +6,10 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **pricing_options** | [**List[SellerMediaPostOfferPricingOptionsInner]**](SellerMediaPostOfferPricingOptionsInner.md) | One entry per link type you offer. | 
-**extra_services** | [**List[UpdateSellerMediaRequestExtraServicesInner]**](UpdateSellerMediaRequestExtraServicesInner.md) |  | 
+**maximum_links** | **int** | How many links a sponsored post may hold, 1 to 4. | 
+**advertising_labelling_policy** | **str** | Whether sponsored posts are labelled as advertising. | 
+**promoted_social_networks** | **List[str]** | The social networks sponsored posts are promoted on. | 
+**extra_services** | [**List[UpdateSellerMediaRequestExtraServicesInner]**](UpdateSellerMediaRequestExtraServicesInner.md) | Read here, but PATCH /seller/medias/{id} and POST /seller/medias take it at the top level of the body. | 
 
 ## Example
 

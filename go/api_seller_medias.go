@@ -243,6 +243,431 @@ func (a *SellerMediasAPIService) ApplySellerMediaCompetitiveFeesExecute(r ApiApp
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type ApiCreateSellerMediaRequest struct {
+	ctx context.Context
+	ApiService *SellerMediasAPIService
+	idempotencyKey *string
+	createSellerMediaRequest *CreateSellerMediaRequest
+}
+
+// A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
+func (r ApiCreateSellerMediaRequest) IdempotencyKey(idempotencyKey string) ApiCreateSellerMediaRequest {
+	r.idempotencyKey = &idempotencyKey
+	return r
+}
+
+func (r ApiCreateSellerMediaRequest) CreateSellerMediaRequest(createSellerMediaRequest CreateSellerMediaRequest) ApiCreateSellerMediaRequest {
+	r.createSellerMediaRequest = &createSellerMediaRequest
+	return r
+}
+
+func (r ApiCreateSellerMediaRequest) Execute() (*SellerMedia, *http.Response, error) {
+	return r.ApiService.CreateSellerMediaExecute(r)
+}
+
+/*
+CreateSellerMedia Register a media you sell on
+
+Registers one of your medias, as the media create page does. The media is created with `state: pending_review` and Growwer reviews it in the background, as for a media registered on the web; GET /seller/medias/{id} shows its state.
+
+- `rootUrl` is the media's root URL; `typology` is `blog` or `press`.
+- `country` and `language` take the codes GET /vocabulary publishes; `topics` and `bannedTopics` take its topic ids, at most 100 each, and no topic may be both; `bannedTopics` left out bans none.
+- `postOffer.pricingOptions` lists every link type you offer for sponsored posts, at least one. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR, sent in cents.
+- `postOffer.maximumLinks` is how many links a sponsored post may hold, 1 to 4; `postOffer.advertisingLabellingPolicy` whether posts are labelled as advertising, `never` when left out; `postOffer.promotedSocialNetworks` the social networks posts are promoted on, none when left out.
+- `linkAdditionOffer.pricingOptions` lists the link types you offer for adding a link to an existing article; left out, `null` or an empty list offers none.
+- `extraServices` lists the extra services you offer, none when left out. It is sent at the top level, although GET /seller/medias/{id} reads it inside `postOffer`.
+- `acceptMediaPublishingTerms` and `declareMediaOwnership` must be `true`: they accept the media publishing terms and declare that you own or manage the media, as the page's checkboxes do, and are recorded as your consents for the media.
+
+A media registered already, by you or by anyone else, is refused with 409 `media_already_registered`, and each such refusal counts toward a daily limit of refusals (429 `media_duplicate_limit_reached` once reached); medias not registered yet are never limited by it.
+
+To register many medias, call this operation once per media, each call with its own `Idempotency-Key` and its own answer (201, 409, 422 or 429); there is no batch operation. The request limits apply to the loop as to any calls (600 requests per minute per user and 300 per key), and each 409 `media_already_registered` counts toward the daily limit of refusals as it does for a single call. Retry a call that got no answer with its same `Idempotency-Key`, as for any write.
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiCreateSellerMediaRequest
+*/
+func (a *SellerMediasAPIService) CreateSellerMedia(ctx context.Context) ApiCreateSellerMediaRequest {
+	return ApiCreateSellerMediaRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return SellerMedia
+func (a *SellerMediasAPIService) CreateSellerMediaExecute(r ApiCreateSellerMediaRequest) (*SellerMedia, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *SellerMedia
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SellerMediasAPIService.CreateSellerMedia")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/api/v1/seller/medias"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.idempotencyKey == nil {
+		return localVarReturnValue, nil, reportError("idempotencyKey is required and must be specified")
+	}
+	if strlen(*r.idempotencyKey) > 255 {
+		return localVarReturnValue, nil, reportError("idempotencyKey must have less than 255 elements")
+	}
+	if r.createSellerMediaRequest == nil {
+		return localVarReturnValue, nil, reportError("createSellerMediaRequest is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	parameterAddToHeaderOrQuery(localVarHeaderParams, "Idempotency-Key", r.idempotencyKey, "simple", "")
+	// body params
+	localVarPostBody = r.createSellerMediaRequest
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 400 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 401 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 409 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 422 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 429 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 500 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 503 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiDeleteSellerMediaRequest struct {
+	ctx context.Context
+	ApiService *SellerMediasAPIService
+	id string
+	idempotencyKey *string
+}
+
+// A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
+func (r ApiDeleteSellerMediaRequest) IdempotencyKey(idempotencyKey string) ApiDeleteSellerMediaRequest {
+	r.idempotencyKey = &idempotencyKey
+	return r
+}
+
+func (r ApiDeleteSellerMediaRequest) Execute() (*http.Response, error) {
+	return r.ApiService.DeleteSellerMediaExecute(r)
+}
+
+/*
+DeleteSellerMedia Delete a media you sell on
+
+Deletes one of your medias, in any state, as the media delete button does. The media must have no order in progress: close or reject its orders first. The API never cancels an order for you, and an order placed while the delete runs is refused, never cancelled.
+
+What goes with the media, as on the web:
+
+- A running flash offer ends with it, and its managed-service proposals are deleted.
+- Its finished orders stay, with the media's URL; they read `media.id` null.
+- Buyers' favourites and discards of the domain stay, as they are kept by domain.
+- The catalogue search drops the media shortly after the 204, as the search index updates asynchronously.
+
+Repeating the call with the same `Idempotency-Key` answers the same 204 with `Idempotent-Replayed: true`; a new key after the delete answers 404.
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiDeleteSellerMediaRequest
+*/
+func (a *SellerMediasAPIService) DeleteSellerMedia(ctx context.Context, id string) ApiDeleteSellerMediaRequest {
+	return ApiDeleteSellerMediaRequest{
+		ApiService: a,
+		ctx: ctx,
+		id: id,
+	}
+}
+
+// Execute executes the request
+func (a *SellerMediasAPIService) DeleteSellerMediaExecute(r ApiDeleteSellerMediaRequest) (*http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodDelete
+		localVarPostBody     interface{}
+		formFiles            []formFile
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SellerMediasAPIService.DeleteSellerMedia")
+	if err != nil {
+		return nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/api/v1/seller/medias/{id}"
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.idempotencyKey == nil {
+		return nil, reportError("idempotencyKey is required and must be specified")
+	}
+	if strlen(*r.idempotencyKey) > 255 {
+		return nil, reportError("idempotencyKey must have less than 255 elements")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	parameterAddToHeaderOrQuery(localVarHeaderParams, "Idempotency-Key", r.idempotencyKey, "simple", "")
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 400 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 401 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 404 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 409 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 429 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 500 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 503 {
+			var v Error
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		}
+		return localVarHTTPResponse, newErr
+	}
+
+	return localVarHTTPResponse, nil
+}
+
 type ApiGetSellerMediaRequest struct {
 	ctx context.Context
 	ApiService *SellerMediasAPIService
@@ -629,17 +1054,19 @@ func (r ApiUpdateSellerMediaRequest) Execute() (*SellerMedia, *http.Response, er
 }
 
 /*
-UpdateSellerMedia Edit the fees of a media you sell on
+UpdateSellerMedia Edit the offer of a media you sell on
 
-Sets the fees of one of your medias, as the media edit page saves them. Send only the sections you change: a section you send replaces that section wholly, a section you leave out stays as it is.
+Sets the fees, extra services, typology and post offer characteristics of one of your medias, as the media edit page saves them. Send only the fields you change: a field you send replaces that field wholly, a field you leave out stays as it is, inside `postOffer` too (sending only `postOffer.maximumLinks` keeps your fees).
 
+- `typology` is `blog` or `press`.
 - `postOffer.pricingOptions` lists every link type you offer for sponsored posts, at least one. A link type you leave out is no longer offered. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR.
+- `postOffer.maximumLinks` is how many links a sponsored post may hold, 1 to 4; `postOffer.advertisingLabellingPolicy` whether posts are labelled as advertising (`always` or `never`); `postOffer.promotedSocialNetworks` the full list of social networks posts are promoted on, each once (an empty list for none).
 - `linkAdditionOffer.pricingOptions` lists the link types you offer for adding a link to an existing article; `null` or an empty list stops offering link additions.
-- `extraServices` is the full list of extra services you offer; an empty list removes them all.
+- `extraServices` is the full list of extra services you offer; an empty list removes them all. It is sent at the top level, although GET /seller/medias/{id} reads it inside `postOffer`.
 
-The fees are your base fees, the ones GET /seller/medias/{id} returns: while a flash offer runs, its discount keeps applying on top of them, and `currentCost` shows the result. `currentCost` may be sent back as read and is ignored. Characteristics, topics and comments are not edited here.
+The fees are your base fees, the ones GET /seller/medias/{id} returns: while a flash offer runs, its discount keeps applying on top of them, and `currentCost` shows the result. `currentCost` may be sent back as read and is ignored. Country, language, topics and comments are not edited here.
 
-As on the page, a change of the post offer's price may cancel the managed-service proposals accepted for the media whose price it changes, and raising the price above the best competitor's tells Growwer's support team. A restricted seller account may edit its fees.
+As on the page, a change of the post offer's price may cancel the managed-service proposals accepted for the media whose price it changes, and raising the price above the best competitor's tells Growwer's support team. A restricted seller account may edit its offer.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param id

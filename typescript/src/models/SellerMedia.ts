@@ -68,6 +68,12 @@ export interface SellerMedia {
     url: string;
     /**
      * 
+     * @type {SellerMediaTypologyEnum}
+     * @memberof SellerMedia
+     */
+    typology: SellerMediaTypologyEnum;
+    /**
+     * 
      * @type {SellerMediaStateEnum}
      * @memberof SellerMedia
      */
@@ -168,6 +174,15 @@ export interface SellerMedia {
 /**
  * @export
  */
+export const SellerMediaTypologyEnum = {
+    Blog: 'blog',
+    Press: 'press'
+} as const;
+export type SellerMediaTypologyEnum = typeof SellerMediaTypologyEnum[keyof typeof SellerMediaTypologyEnum];
+
+/**
+ * @export
+ */
 export const SellerMediaStateEnum = {
     Analyzing: 'analyzing',
     PendingReview: 'pending_review',
@@ -184,6 +199,7 @@ export function instanceOfSellerMedia(value: object): value is SellerMedia {
     if (!('id' in value) || value['id'] === undefined) return false;
     if (!('domain' in value) || value['domain'] === undefined) return false;
     if (!('url' in value) || value['url'] === undefined) return false;
+    if (!('typology' in value) || value['typology'] === undefined) return false;
     if (!('state' in value) || value['state'] === undefined) return false;
     if (!('deactivationStrikes' in value) || value['deactivationStrikes'] === undefined) return false;
     if (!('country' in value) || value['country'] === undefined) return false;
@@ -216,6 +232,7 @@ export function SellerMediaFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'id': json['id'],
         'domain': json['domain'],
         'url': json['url'],
+        'typology': json['typology'],
         'state': json['state'],
         'deactivationStrikes': json['deactivationStrikes'],
         'country': json['country'],
@@ -249,6 +266,7 @@ export function SellerMediaToJSONTyped(value?: SellerMedia | null, ignoreDiscrim
         'id': value['id'],
         'domain': value['domain'],
         'url': value['url'],
+        'typology': value['typology'],
         'state': value['state'],
         'deactivationStrikes': value['deactivationStrikes'],
         'country': value['country'],

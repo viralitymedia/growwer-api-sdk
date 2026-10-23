@@ -7,6 +7,7 @@
 | **id** | **String** |  |  |
 | **domain** | **String** |  |  |
 | **url** | **String** | The media&#39;s root URL. |  |
+| **typology** | **String** |  |  |
 | **state** | **String** |  |  |
 | **deactivation_strikes** | **Integer** | How many times the media was deactivated for not publishing. |  |
 | **country** | **String** | A country code, as in GET /vocabulary, or null for none. |  |
@@ -33,6 +34,7 @@ instance = Growwer::SellerMedia.new(
   id: null,
   domain: example.com,
   url: null,
+  typology: null,
   state: null,
   deactivation_strikes: null,
   country: null,

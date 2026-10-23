@@ -174,8 +174,9 @@ var me = new AccountApi(config).GetMe();
 
 ## Changes in 1.1.0
 
-**Some constructors change, so code that calls them positionally, or that builds a `SellerMedia`
-by hand, breaks** even though this is a minor version:
+**Some code written for 1.0.2 breaks** even though this is a minor version: constructor calls,
+a `SellerMedia` built by hand, and in Java and C# two runtime changes that come with the partial
+update fix below:
 
 - **Go:** `NewUpdateSellerMediaRequestPostOffer` now takes no arguments, because
   `postOffer.pricingOptions` is optional in an update. Other constructors gain required parameters:
@@ -186,9 +187,17 @@ by hand, breaks** even though this is a minor version:
   no longer compiles; name the arguments. The `SellerMedia` constructor inserts `typology` after
   `url`, and `SellerMediaPostOffer` inserts `maximumLinks`, `advertisingLabellingPolicy` and
   `promotedSocialNetworks` before `extraServices`.
-- **Python, TypeScript and Ruby:** a `SellerMedia` or catalogue media built without the new required
-  fields (`typology`, the post offer's new fields, `project.aiKeywords`), as test mocks often are,
-  now fails validation.
+- **C# nulls passed to a constructor:** a `null` passed as a constructor argument is no longer
+  sent, so `new UpdateSellerMediaRequest(postOffer: p, linkAdditionOffer: null)` now keeps link
+  additions and `new UpdateProjectRequest(name: null)` keeps the name. To send `null`, assign the
+  property: `LinkAdditionOffer = null`, `Name = null`.
+- **Java null lists and maps:** every list and map property now starts as `null` instead of an
+  empty container, so code that reads one without a null check, such as
+  `err.getDetails().isEmpty()` or `new UpdateProjectRequest().getTopics().add(12)`, throws a
+  `NullPointerException`. Use the `add...Item` methods, which create the list.
+- **Python and Ruby:** a `SellerMedia` or catalogue media built without the new required fields
+  (`typology`, the post offer's new fields, `project.aiKeywords`), as test mocks often are, now
+  fails validation. **TypeScript:** such an object literal no longer type-checks.
 
 What changes:
 
@@ -209,7 +218,8 @@ What changes:
   `chatgpt`, `googleAiMode`, or `null`). An entry does not mean the engine cited the media.
 - **A partial update no longer erases what it leaves out.** Java's `updateSellerMedia` sent
   `postOffer.promotedSocialNetworks` and `extraServices` as empty lists when they were not set,
-  which cleared them. In C#, every request sent each optional, nullable property left unset as
+  which cleared them, and its `updateProject` sent empty `topics`, `promotedProducts` and
+  `userKeywords`, so a partial project update was refused with a 422. In C#, every request sent each optional, nullable property left unset as
   `null`, which the API reads as a value. A project rename alone set the country to worldwide, and
   a seller media update without `LinkAdditionOffer` stopped link additions. Both now send only what
   was set, and C# still sends a `null` you assign (`Country = null`).

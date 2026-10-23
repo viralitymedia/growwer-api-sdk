@@ -37,7 +37,7 @@ class TestCreateSellerMediaRequestPostOffer(unittest.TestCase):
         if include_optional:
             return CreateSellerMediaRequestPostOffer(
                 pricing_options = [
-                    growwer.models.create_seller_media_request_post_offer_pricing_options_inner.createSellerMedia_request_postOffer_pricingOptions_inner(
+                    growwer.models.update_seller_media_request_post_offer_pricing_options_inner.UpdateSellerMediaRequestPostOfferPricingOptionsInner(
                         link_type = 'dofollow', 
                         fee_when_seller_writes_post = null, 
                         fee_when_seller_does_not_write_post = null, )
@@ -51,7 +51,7 @@ class TestCreateSellerMediaRequestPostOffer(unittest.TestCase):
         else:
             return CreateSellerMediaRequestPostOffer(
                 pricing_options = [
-                    growwer.models.create_seller_media_request_post_offer_pricing_options_inner.createSellerMedia_request_postOffer_pricingOptions_inner(
+                    growwer.models.update_seller_media_request_post_offer_pricing_options_inner.UpdateSellerMediaRequestPostOfferPricingOptionsInner(
                         link_type = 'dofollow', 
                         fee_when_seller_writes_post = null, 
                         fee_when_seller_does_not_write_post = null, )

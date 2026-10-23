@@ -48,7 +48,7 @@ class TestCreateSellerMediaRequest(unittest.TestCase):
                     ],
                 post_offer = growwer.models.create_seller_media_request_post_offer.createSellerMedia_request_postOffer(
                     pricing_options = [
-                        growwer.models.create_seller_media_request_post_offer_pricing_options_inner.createSellerMedia_request_postOffer_pricingOptions_inner(
+                        growwer.models.update_seller_media_request_post_offer_pricing_options_inner.UpdateSellerMediaRequestPostOfferPricingOptionsInner(
                             link_type = 'dofollow', 
                             fee_when_seller_writes_post = null, 
                             fee_when_seller_does_not_write_post = null, )
@@ -58,14 +58,14 @@ class TestCreateSellerMediaRequest(unittest.TestCase):
                     promoted_social_networks = [
                         'twitter'
                         ], ),
-                link_addition_offer = growwer.models.create_seller_media_request_link_addition_offer.createSellerMedia_request_linkAdditionOffer(
+                link_addition_offer = growwer.models.update_seller_media_request_link_addition_offer.UpdateSellerMediaRequestLinkAdditionOffer(
                     pricing_options = [
-                        growwer.models.create_seller_media_request_link_addition_offer_pricing_options_inner.createSellerMedia_request_linkAdditionOffer_pricingOptions_inner(
+                        growwer.models.update_seller_media_request_link_addition_offer_pricing_options_inner.UpdateSellerMediaRequestLinkAdditionOfferPricingOptionsInner(
                             link_type = 'dofollow', 
                             fee = null, )
                         ], ),
                 extra_services = [
-                    growwer.models.create_seller_media_request_extra_services_inner.createSellerMedia_request_extraServices_inner(
+                    growwer.models.update_seller_media_request_extra_services_inner.UpdateSellerMediaRequestExtraServicesInner(
                         name = 'list_on_homepage', 
                         cost = null, )
                     ],
@@ -83,7 +83,7 @@ class TestCreateSellerMediaRequest(unittest.TestCase):
                     ],
                 post_offer = growwer.models.create_seller_media_request_post_offer.createSellerMedia_request_postOffer(
                     pricing_options = [
-                        growwer.models.create_seller_media_request_post_offer_pricing_options_inner.createSellerMedia_request_postOffer_pricingOptions_inner(
+                        growwer.models.update_seller_media_request_post_offer_pricing_options_inner.UpdateSellerMediaRequestPostOfferPricingOptionsInner(
                             link_type = 'dofollow', 
                             fee_when_seller_writes_post = null, 
                             fee_when_seller_does_not_write_post = null, )

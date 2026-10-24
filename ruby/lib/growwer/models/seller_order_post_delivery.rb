@@ -16,7 +16,7 @@ require 'time'
 module Growwer
   # The published post of a post order. A link addition order takes no body.
   class SellerOrderPostDelivery < ApiModelBase
-    # The URL of the published post. It is checked to be a URL only, as the web does; whether the post carries the links is not checked here.
+    # The URL of the published post. It is checked to be a URL without `<` or `>`, as the web does; whether the post carries the links is not checked here.
     attr_accessor :url
 
     # Must be true. Confirms the post is live, or for an order with a scheduled publication date, that it will be published on that date.

@@ -72,7 +72,7 @@ export interface SavedFiltersApiInterface {
     countSavedFilterMediasRequestOpts(requestParameters: CountSavedFilterMediasRequest): Promise<runtime.RequestOpts>;
 
     /**
-     * How many medias of the project\'s catalogue one of your saved filters matches: the `total` of GET /projects/{id}/medias with its `savedFilterId`. The number is cached for up to 24 hours, and it can differ from the count the web shows, which is not limited to the project\'s catalogue. A filter saved on the web that uses a filter the API does not support is refused with 422 `saved_filter_unsupported`.
+     * How many medias of the project\'s catalogue one of your saved filters matches: the `total` of GET /projects/{id}/medias with its `savedFilterId`. The number is cached for up to 24 hours, and it can differ from the count the web shows, which is not limited to the project\'s catalogue. A filter saved on the web that uses a filter the API does not support is refused with 422 `saved_filter_unsupported`. The catalogue access and the daily limit of the catalogue apply: a count costs one unit of that limit the first time a filter is counted in a UTC day, and counting the same filter again that day is free.
      * @summary Count the medias of a saved filter
      * @param {string} id The project.
      * @param {string} filterId The saved filter.
@@ -83,7 +83,7 @@ export interface SavedFiltersApiInterface {
     countSavedFilterMediasRaw(requestParameters: CountSavedFilterMediasRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CountSavedFilterMedias200Response>>;
 
     /**
-     * How many medias of the project\'s catalogue one of your saved filters matches: the `total` of GET /projects/{id}/medias with its `savedFilterId`. The number is cached for up to 24 hours, and it can differ from the count the web shows, which is not limited to the project\'s catalogue. A filter saved on the web that uses a filter the API does not support is refused with 422 `saved_filter_unsupported`.
+     * How many medias of the project\'s catalogue one of your saved filters matches: the `total` of GET /projects/{id}/medias with its `savedFilterId`. The number is cached for up to 24 hours, and it can differ from the count the web shows, which is not limited to the project\'s catalogue. A filter saved on the web that uses a filter the API does not support is refused with 422 `saved_filter_unsupported`. The catalogue access and the daily limit of the catalogue apply: a count costs one unit of that limit the first time a filter is counted in a UTC day, and counting the same filter again that day is free.
      * Count the medias of a saved filter
      */
     countSavedFilterMedias(requestParameters: CountSavedFilterMediasRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CountSavedFilterMedias200Response>;
@@ -219,7 +219,7 @@ export class SavedFiltersApi extends runtime.BaseAPI implements SavedFiltersApiI
     }
 
     /**
-     * How many medias of the project\'s catalogue one of your saved filters matches: the `total` of GET /projects/{id}/medias with its `savedFilterId`. The number is cached for up to 24 hours, and it can differ from the count the web shows, which is not limited to the project\'s catalogue. A filter saved on the web that uses a filter the API does not support is refused with 422 `saved_filter_unsupported`.
+     * How many medias of the project\'s catalogue one of your saved filters matches: the `total` of GET /projects/{id}/medias with its `savedFilterId`. The number is cached for up to 24 hours, and it can differ from the count the web shows, which is not limited to the project\'s catalogue. A filter saved on the web that uses a filter the API does not support is refused with 422 `saved_filter_unsupported`. The catalogue access and the daily limit of the catalogue apply: a count costs one unit of that limit the first time a filter is counted in a UTC day, and counting the same filter again that day is free.
      * Count the medias of a saved filter
      */
     async countSavedFilterMediasRaw(requestParameters: CountSavedFilterMediasRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CountSavedFilterMedias200Response>> {
@@ -230,7 +230,7 @@ export class SavedFiltersApi extends runtime.BaseAPI implements SavedFiltersApiI
     }
 
     /**
-     * How many medias of the project\'s catalogue one of your saved filters matches: the `total` of GET /projects/{id}/medias with its `savedFilterId`. The number is cached for up to 24 hours, and it can differ from the count the web shows, which is not limited to the project\'s catalogue. A filter saved on the web that uses a filter the API does not support is refused with 422 `saved_filter_unsupported`.
+     * How many medias of the project\'s catalogue one of your saved filters matches: the `total` of GET /projects/{id}/medias with its `savedFilterId`. The number is cached for up to 24 hours, and it can differ from the count the web shows, which is not limited to the project\'s catalogue. A filter saved on the web that uses a filter the API does not support is refused with 422 `saved_filter_unsupported`. The catalogue access and the daily limit of the catalogue apply: a count costs one unit of that limit the first time a filter is counted in a UTC day, and counting the same filter again that day is free.
      * Count the medias of a saved filter
      */
     async countSavedFilterMedias(requestParameters: CountSavedFilterMediasRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CountSavedFilterMedias200Response> {

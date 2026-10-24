@@ -21,7 +21,7 @@ var _ MappedNullable = &LinkAdditionOrderBriefingRequest{}
 
 // LinkAdditionOrderBriefingRequest The briefing of a link addition (`type` `link_addition`), checked against the media's link addition offer as the web checks it.
 type LinkAdditionOrderBriefingRequest struct {
-	// The URL of an existing article on the media's domain that the link goes into.
+	// The URL of an existing article on the media's domain that the link goes into, without `<` or `>`.
 	LinkingFrom string `json:"linkingFrom"`
 	Link OrderLinkRequest `json:"link"`
 	AdditionalInfo *string `json:"additionalInfo,omitempty"`

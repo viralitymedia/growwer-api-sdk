@@ -151,7 +151,7 @@ module Growwer
     end
 
     # Download the summary of a campaign's proposals
-    # The PDF the campaign page offers: the proposals awaiting your review, accepted or being published, newest first, in your language. With `extended=true` it also shows each proposal's price, the price it was proposed at (`proposedPrice`).
+    # The PDF the campaign page offers: the proposals awaiting your review, accepted or being published, newest first, in your language. With `extended=true` it also shows each proposal's price, the price it was proposed at (`proposedPrice`). One summary of yours is rendered at a time: a request while another is being rendered gets 429 `proposals_summary_in_progress`, to retry after the `Retry-After` header.
     # @param id [String] 
     # @param [Hash] opts the optional parameters
     # @option opts [String] :extended Whether to show the prices. (default to 'false')
@@ -162,7 +162,7 @@ module Growwer
     end
 
     # Download the summary of a campaign&#39;s proposals
-    # The PDF the campaign page offers: the proposals awaiting your review, accepted or being published, newest first, in your language. With &#x60;extended&#x3D;true&#x60; it also shows each proposal&#39;s price, the price it was proposed at (&#x60;proposedPrice&#x60;).
+    # The PDF the campaign page offers: the proposals awaiting your review, accepted or being published, newest first, in your language. With &#x60;extended&#x3D;true&#x60; it also shows each proposal&#39;s price, the price it was proposed at (&#x60;proposedPrice&#x60;). One summary of yours is rendered at a time: a request while another is being rendered gets 429 &#x60;proposals_summary_in_progress&#x60;, to retry after the &#x60;Retry-After&#x60; header.
     # @param id [String] 
     # @param [Hash] opts the optional parameters
     # @option opts [String] :extended Whether to show the prices. (default to 'false')

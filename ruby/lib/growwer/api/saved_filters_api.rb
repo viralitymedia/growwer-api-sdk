@@ -20,7 +20,7 @@ module Growwer
       @api_client = api_client
     end
     # Count the medias of a saved filter
-    # How many medias of the project's catalogue one of your saved filters matches: the `total` of GET /projects/{id}/medias with its `savedFilterId`. The number is cached for up to 24 hours, and it can differ from the count the web shows, which is not limited to the project's catalogue. A filter saved on the web that uses a filter the API does not support is refused with 422 `saved_filter_unsupported`.
+    # How many medias of the project's catalogue one of your saved filters matches: the `total` of GET /projects/{id}/medias with its `savedFilterId`. The number is cached for up to 24 hours, and it can differ from the count the web shows, which is not limited to the project's catalogue. A filter saved on the web that uses a filter the API does not support is refused with 422 `saved_filter_unsupported`. The catalogue access and the daily limit of the catalogue apply: a count costs one unit of that limit the first time a filter is counted in a UTC day, and counting the same filter again that day is free.
     # @param id [String] The project.
     # @param filter_id [String] The saved filter.
     # @param [Hash] opts the optional parameters
@@ -31,7 +31,7 @@ module Growwer
     end
 
     # Count the medias of a saved filter
-    # How many medias of the project&#39;s catalogue one of your saved filters matches: the &#x60;total&#x60; of GET /projects/{id}/medias with its &#x60;savedFilterId&#x60;. The number is cached for up to 24 hours, and it can differ from the count the web shows, which is not limited to the project&#39;s catalogue. A filter saved on the web that uses a filter the API does not support is refused with 422 &#x60;saved_filter_unsupported&#x60;.
+    # How many medias of the project&#39;s catalogue one of your saved filters matches: the &#x60;total&#x60; of GET /projects/{id}/medias with its &#x60;savedFilterId&#x60;. The number is cached for up to 24 hours, and it can differ from the count the web shows, which is not limited to the project&#39;s catalogue. A filter saved on the web that uses a filter the API does not support is refused with 422 &#x60;saved_filter_unsupported&#x60;. The catalogue access and the daily limit of the catalogue apply: a count costs one unit of that limit the first time a filter is counted in a UTC day, and counting the same filter again that day is free.
     # @param id [String] The project.
     # @param filter_id [String] The saved filter.
     # @param [Hash] opts the optional parameters

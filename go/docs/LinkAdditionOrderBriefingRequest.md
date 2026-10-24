@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**LinkingFrom** | **string** | The URL of an existing article on the media&#39;s domain that the link goes into. | 
+**LinkingFrom** | **string** | The URL of an existing article on the media&#39;s domain that the link goes into, without &#x60;&lt;&#x60; or &#x60;&gt;&#x60;. | 
 **Link** | [**OrderLinkRequest**](OrderLinkRequest.md) |  | 
 **AdditionalInfo** | Pointer to **string** |  | [optional] 
 

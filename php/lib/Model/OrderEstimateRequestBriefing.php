@@ -479,7 +479,7 @@ class OrderEstimateRequestBriefing implements ModelInterface, ArrayAccess, \Json
     /**
      * Sets linking_from
      *
-     * @param string $linking_from The URL of an existing article on the media's domain that the link goes into.
+     * @param string $linking_from The URL of an existing article on the media's domain that the link goes into, without `<` or `>`.
      *
      * @return self
      */

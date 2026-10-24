@@ -20,7 +20,7 @@ import { mapValues } from '../runtime';
  */
 export interface SellerOrderPostDelivery {
     /**
-     * The URL of the published post. It is checked to be a URL only, as the web does; whether the post carries the links is not checked here.
+     * The URL of the published post. It is checked to be a URL without `<` or `>`, as the web does; whether the post carries the links is not checked here.
      * @type {string}
      * @memberof SellerOrderPostDelivery
      */

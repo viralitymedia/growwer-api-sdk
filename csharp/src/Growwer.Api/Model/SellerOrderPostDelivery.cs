@@ -44,7 +44,7 @@ namespace Growwer.Api.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="SellerOrderPostDelivery" /> class.
         /// </summary>
-        /// <param name="url">The URL of the published post. It is checked to be a URL only, as the web does; whether the post carries the links is not checked here. (required).</param>
+        /// <param name="url">The URL of the published post. It is checked to be a URL without &#x60;&lt;&#x60; or &#x60;&gt;&#x60;, as the web does; whether the post carries the links is not checked here. (required).</param>
         /// <param name="publicationDateConfirmed">Must be true. Confirms the post is live, or for an order with a scheduled publication date, that it will be published on that date. (required).</param>
         public SellerOrderPostDelivery(string url = default, bool publicationDateConfirmed = default)
         {
@@ -59,9 +59,9 @@ namespace Growwer.Api.Model
         }
 
         /// <summary>
-        /// The URL of the published post. It is checked to be a URL only, as the web does; whether the post carries the links is not checked here.
+        /// The URL of the published post. It is checked to be a URL without &#x60;&lt;&#x60; or &#x60;&gt;&#x60;, as the web does; whether the post carries the links is not checked here.
         /// </summary>
-        /// <value>The URL of the published post. It is checked to be a URL only, as the web does; whether the post carries the links is not checked here.</value>
+        /// <value>The URL of the published post. It is checked to be a URL without &#x60;&lt;&#x60; or &#x60;&gt;&#x60;, as the web does; whether the post carries the links is not checked here.</value>
         [DataMember(Name = "url", IsRequired = true, EmitDefaultValue = true)]
         public string Url { get; set; }
 

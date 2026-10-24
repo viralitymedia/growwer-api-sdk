@@ -1,6 +1,6 @@
 {
   "name": "@growwer/api",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Official client for the Growwer API: orders, projects, the media catalogue, seller medias and wallets.",
   "author": "Growwer Support <support@growwer.com> (https://growwer.com)",
   "repository": {

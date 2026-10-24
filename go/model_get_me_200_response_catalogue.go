@@ -25,7 +25,7 @@ type GetMe200ResponseCatalogue struct {
 	Eligible bool `json:"eligible"`
 	// How many distinct medias the catalogue operations show you per UTC day: the full cap when `eligible` is true, the trial quota otherwise. 0 means the catalogue answers 403 `catalogue_requires_recent_order` until you have a recent completed order.
 	DailyCap int32 `json:"dailyCap"`
-	// How many new distinct medias still fit in `dailyCap` today (UTC). Medias you have already seen today are free. Null when the count cannot be read right now; the catalogue operations then answer 503 until it can.
+	// How many units of `dailyCap` still fit today (UTC): each new distinct media costs one, and a catalogue response that holds no new media, an empty one or a saved filter count included, costs one unless the same request was answered today and the media lists, topics and language of its project have not changed since. Medias you have already seen today, and requests already answered today, are free. Null when the count cannot be read right now; the catalogue operations then answer 503 until it can.
 	RemainingToday NullableInt32 `json:"remainingToday"`
 	AdditionalProperties map[string]interface{}
 }

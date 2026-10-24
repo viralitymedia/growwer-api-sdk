@@ -317,7 +317,7 @@ class SellerOrderPostDelivery implements ModelInterface, ArrayAccess, \JsonSeria
     /**
      * Sets url
      *
-     * @param string $url The URL of the published post. It is checked to be a URL only, as the web does; whether the post carries the links is not checked here.
+     * @param string $url The URL of the published post. It is checked to be a URL without `<` or `>`, as the web does; whether the post carries the links is not checked here.
      *
      * @return self
      */

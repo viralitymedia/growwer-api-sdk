@@ -654,7 +654,7 @@ class ManagedServicesApi:
     ) -> bytes:
         """Download the summary of a campaign's proposals
 
-        The PDF the campaign page offers: the proposals awaiting your review, accepted or being published, newest first, in your language. With `extended=true` it also shows each proposal's price, the price it was proposed at (`proposedPrice`).
+        The PDF the campaign page offers: the proposals awaiting your review, accepted or being published, newest first, in your language. With `extended=true` it also shows each proposal's price, the price it was proposed at (`proposedPrice`). One summary of yours is rendered at a time: a request while another is being rendered gets 429 `proposals_summary_in_progress`, to retry after the `Retry-After` header.
 
         :param id: (required)
         :type id: UUID
@@ -731,7 +731,7 @@ class ManagedServicesApi:
     ) -> ApiResponse[bytes]:
         """Download the summary of a campaign's proposals
 
-        The PDF the campaign page offers: the proposals awaiting your review, accepted or being published, newest first, in your language. With `extended=true` it also shows each proposal's price, the price it was proposed at (`proposedPrice`).
+        The PDF the campaign page offers: the proposals awaiting your review, accepted or being published, newest first, in your language. With `extended=true` it also shows each proposal's price, the price it was proposed at (`proposedPrice`). One summary of yours is rendered at a time: a request while another is being rendered gets 429 `proposals_summary_in_progress`, to retry after the `Retry-After` header.
 
         :param id: (required)
         :type id: UUID
@@ -808,7 +808,7 @@ class ManagedServicesApi:
     ) -> RESTResponseType:
         """Download the summary of a campaign's proposals
 
-        The PDF the campaign page offers: the proposals awaiting your review, accepted or being published, newest first, in your language. With `extended=true` it also shows each proposal's price, the price it was proposed at (`proposedPrice`).
+        The PDF the campaign page offers: the proposals awaiting your review, accepted or being published, newest first, in your language. With `extended=true` it also shows each proposal's price, the price it was proposed at (`proposedPrice`). One summary of yours is rendered at a time: a request while another is being rendered gets 429 `proposals_summary_in_progress`, to retry after the `Retry-After` header.
 
         :param id: (required)
         :type id: UUID

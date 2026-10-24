@@ -94,7 +94,7 @@ module Growwer
     end
 
     # Deliver an order
-    # Delivers an order placed on one of your medias (`state` `pending_order_delivery`), as the web does. A post order takes the URL of the published post and the confirmation of its publication date; a link addition order takes no body, and any field is refused. The order moves to `pending_order_delivery_review` and the buyer is asked to review it, or, for a post order whose scheduled publication date is still to come, to `scheduled` without telling the buyer yet. The URL is checked to be a URL only, as the web does.
+    # Delivers an order placed on one of your medias (`state` `pending_order_delivery`), as the web does. A post order takes the URL of the published post and the confirmation of its publication date; a link addition order takes no body, and any field is refused. The order moves to `pending_order_delivery_review` and the buyer is asked to review it, or, for a post order whose scheduled publication date is still to come, to `scheduled` without telling the buyer yet. The URL is checked to be a URL without `<` or `>`, as the web does.
     # @param id [String] 
     # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
     # @param [Hash] opts the optional parameters
@@ -106,7 +106,7 @@ module Growwer
     end
 
     # Deliver an order
-    # Delivers an order placed on one of your medias (&#x60;state&#x60; &#x60;pending_order_delivery&#x60;), as the web does. A post order takes the URL of the published post and the confirmation of its publication date; a link addition order takes no body, and any field is refused. The order moves to &#x60;pending_order_delivery_review&#x60; and the buyer is asked to review it, or, for a post order whose scheduled publication date is still to come, to &#x60;scheduled&#x60; without telling the buyer yet. The URL is checked to be a URL only, as the web does.
+    # Delivers an order placed on one of your medias (&#x60;state&#x60; &#x60;pending_order_delivery&#x60;), as the web does. A post order takes the URL of the published post and the confirmation of its publication date; a link addition order takes no body, and any field is refused. The order moves to &#x60;pending_order_delivery_review&#x60; and the buyer is asked to review it, or, for a post order whose scheduled publication date is still to come, to &#x60;scheduled&#x60; without telling the buyer yet. The URL is checked to be a URL without &#x60;&lt;&#x60; or &#x60;&gt;&#x60;, as the web does.
     # @param id [String] 
     # @param idempotency_key [String] A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
     # @param [Hash] opts the optional parameters

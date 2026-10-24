@@ -1006,7 +1006,7 @@ class CatalogueApi:
     ) -> ListFlashOffers200Response:
         """List flash offers
 
-        The medias on a flash offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with `flashOffer=true`, and takes the same parameters except `flashOffer` and `savedFilterId`. The catalogue access and the daily distinct-media limit of that operation apply.
+        The medias on a flash offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with `flashOffer=true`, and takes the same parameters except `flashOffer` and `savedFilterId`. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
 
         :param project_id: The project to search flash offers for. (required)
         :type project_id: UUID
@@ -1220,7 +1220,7 @@ class CatalogueApi:
     ) -> ApiResponse[ListFlashOffers200Response]:
         """List flash offers
 
-        The medias on a flash offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with `flashOffer=true`, and takes the same parameters except `flashOffer` and `savedFilterId`. The catalogue access and the daily distinct-media limit of that operation apply.
+        The medias on a flash offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with `flashOffer=true`, and takes the same parameters except `flashOffer` and `savedFilterId`. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
 
         :param project_id: The project to search flash offers for. (required)
         :type project_id: UUID
@@ -1434,7 +1434,7 @@ class CatalogueApi:
     ) -> RESTResponseType:
         """List flash offers
 
-        The medias on a flash offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with `flashOffer=true`, and takes the same parameters except `flashOffer` and `savedFilterId`. The catalogue access and the daily distinct-media limit of that operation apply.
+        The medias on a flash offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with `flashOffer=true`, and takes the same parameters except `flashOffer` and `savedFilterId`. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
 
         :param project_id: The project to search flash offers for. (required)
         :type project_id: UUID
@@ -2218,7 +2218,7 @@ class CatalogueApi:
     ) -> ListFlashOffers200Response:
         """Search the catalogue for a project
 
-        The medias the catalogue offers for one of your projects, as the web lists them, with each media's state in the project. Filter with the parameters below, which all combine, or apply one of your saved filters with `savedFilterId` alone. Each account can see a limited number of distinct medias per day (UTC) across the catalogue operations: the full daily cap for accounts with recent completed orders, as buyer or as seller, and a smaller trial quota for other accounts, which rises to the full cap after a completed order (see `catalogue.eligible`, `catalogue.dailyCap` and `catalogue.remainingToday` on GET /me). Medias seen again the same day are free.
+        The medias the catalogue offers for one of your projects, as the web lists them, with each media's state in the project. Filter with the parameters below, which all combine, or apply one of your saved filters with `savedFilterId` alone. Each account can see a limited number of distinct medias per day (UTC) across the catalogue operations: the full daily cap for accounts with recent completed orders, as buyer or as seller, and a smaller trial quota for other accounts, which rises to the full cap after a completed order (see `catalogue.eligible`, `catalogue.dailyCap` and `catalogue.remainingToday` on GET /me). Each new media of a page costs one unit of that limit, and a page that holds no new media, an empty one included, costs one unit, so a `total` costs at least one; repeating a request already answered the same day is free, and so are medias seen again that day. A change of the media lists of the project (a media request, a favourite, a discard), its topics or its language makes the same request a new one.
 
         :param id: The project. (required)
         :type id: UUID
@@ -2440,7 +2440,7 @@ class CatalogueApi:
     ) -> ApiResponse[ListFlashOffers200Response]:
         """Search the catalogue for a project
 
-        The medias the catalogue offers for one of your projects, as the web lists them, with each media's state in the project. Filter with the parameters below, which all combine, or apply one of your saved filters with `savedFilterId` alone. Each account can see a limited number of distinct medias per day (UTC) across the catalogue operations: the full daily cap for accounts with recent completed orders, as buyer or as seller, and a smaller trial quota for other accounts, which rises to the full cap after a completed order (see `catalogue.eligible`, `catalogue.dailyCap` and `catalogue.remainingToday` on GET /me). Medias seen again the same day are free.
+        The medias the catalogue offers for one of your projects, as the web lists them, with each media's state in the project. Filter with the parameters below, which all combine, or apply one of your saved filters with `savedFilterId` alone. Each account can see a limited number of distinct medias per day (UTC) across the catalogue operations: the full daily cap for accounts with recent completed orders, as buyer or as seller, and a smaller trial quota for other accounts, which rises to the full cap after a completed order (see `catalogue.eligible`, `catalogue.dailyCap` and `catalogue.remainingToday` on GET /me). Each new media of a page costs one unit of that limit, and a page that holds no new media, an empty one included, costs one unit, so a `total` costs at least one; repeating a request already answered the same day is free, and so are medias seen again that day. A change of the media lists of the project (a media request, a favourite, a discard), its topics or its language makes the same request a new one.
 
         :param id: The project. (required)
         :type id: UUID
@@ -2662,7 +2662,7 @@ class CatalogueApi:
     ) -> RESTResponseType:
         """Search the catalogue for a project
 
-        The medias the catalogue offers for one of your projects, as the web lists them, with each media's state in the project. Filter with the parameters below, which all combine, or apply one of your saved filters with `savedFilterId` alone. Each account can see a limited number of distinct medias per day (UTC) across the catalogue operations: the full daily cap for accounts with recent completed orders, as buyer or as seller, and a smaller trial quota for other accounts, which rises to the full cap after a completed order (see `catalogue.eligible`, `catalogue.dailyCap` and `catalogue.remainingToday` on GET /me). Medias seen again the same day are free.
+        The medias the catalogue offers for one of your projects, as the web lists them, with each media's state in the project. Filter with the parameters below, which all combine, or apply one of your saved filters with `savedFilterId` alone. Each account can see a limited number of distinct medias per day (UTC) across the catalogue operations: the full daily cap for accounts with recent completed orders, as buyer or as seller, and a smaller trial quota for other accounts, which rises to the full cap after a completed order (see `catalogue.eligible`, `catalogue.dailyCap` and `catalogue.remainingToday` on GET /me). Each new media of a page costs one unit of that limit, and a page that holds no new media, an empty one included, costs one unit, so a `total` costs at least one; repeating a request already answered the same day is free, and so are medias seen again that day. A change of the media lists of the project (a media request, a favourite, a discard), its topics or its language makes the same request a new one.
 
         :param id: The project. (required)
         :type id: UUID

@@ -32,7 +32,7 @@ export interface GetMe200ResponseCatalogue {
      */
     dailyCap: number;
     /**
-     * How many new distinct medias still fit in `dailyCap` today (UTC). Medias you have already seen today are free. Null when the count cannot be read right now; the catalogue operations then answer 503 until it can.
+     * How many units of `dailyCap` still fit today (UTC): each new distinct media costs one, and a catalogue response that holds no new media, an empty one or a saved filter count included, costs one unless the same request was answered today and the media lists, topics and language of its project have not changed since. Medias you have already seen today, and requests already answered today, are free. Null when the count cannot be read right now; the catalogue operations then answer 503 until it can.
      * @type {number}
      * @memberof GetMe200ResponseCatalogue
      */

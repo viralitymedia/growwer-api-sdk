@@ -167,7 +167,7 @@ export interface ManagedServicesApiInterface {
     getManagedServiceProposalsSummaryRequestOpts(requestParameters: GetManagedServiceProposalsSummaryRequest): Promise<runtime.RequestOpts>;
 
     /**
-     * The PDF the campaign page offers: the proposals awaiting your review, accepted or being published, newest first, in your language. With `extended=true` it also shows each proposal\'s price, the price it was proposed at (`proposedPrice`).
+     * The PDF the campaign page offers: the proposals awaiting your review, accepted or being published, newest first, in your language. With `extended=true` it also shows each proposal\'s price, the price it was proposed at (`proposedPrice`). One summary of yours is rendered at a time: a request while another is being rendered gets 429 `proposals_summary_in_progress`, to retry after the `Retry-After` header.
      * @summary Download the summary of a campaign\'s proposals
      * @param {string} id 
      * @param {'true' | 'false'} [extended] Whether to show the prices.
@@ -178,7 +178,7 @@ export interface ManagedServicesApiInterface {
     getManagedServiceProposalsSummaryRaw(requestParameters: GetManagedServiceProposalsSummaryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Blob>>;
 
     /**
-     * The PDF the campaign page offers: the proposals awaiting your review, accepted or being published, newest first, in your language. With `extended=true` it also shows each proposal\'s price, the price it was proposed at (`proposedPrice`).
+     * The PDF the campaign page offers: the proposals awaiting your review, accepted or being published, newest first, in your language. With `extended=true` it also shows each proposal\'s price, the price it was proposed at (`proposedPrice`). One summary of yours is rendered at a time: a request while another is being rendered gets 429 `proposals_summary_in_progress`, to retry after the `Retry-After` header.
      * Download the summary of a campaign\'s proposals
      */
     getManagedServiceProposalsSummary(requestParameters: GetManagedServiceProposalsSummaryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Blob>;
@@ -477,7 +477,7 @@ export class ManagedServicesApi extends runtime.BaseAPI implements ManagedServic
     }
 
     /**
-     * The PDF the campaign page offers: the proposals awaiting your review, accepted or being published, newest first, in your language. With `extended=true` it also shows each proposal\'s price, the price it was proposed at (`proposedPrice`).
+     * The PDF the campaign page offers: the proposals awaiting your review, accepted or being published, newest first, in your language. With `extended=true` it also shows each proposal\'s price, the price it was proposed at (`proposedPrice`). One summary of yours is rendered at a time: a request while another is being rendered gets 429 `proposals_summary_in_progress`, to retry after the `Retry-After` header.
      * Download the summary of a campaign\'s proposals
      */
     async getManagedServiceProposalsSummaryRaw(requestParameters: GetManagedServiceProposalsSummaryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Blob>> {
@@ -488,7 +488,7 @@ export class ManagedServicesApi extends runtime.BaseAPI implements ManagedServic
     }
 
     /**
-     * The PDF the campaign page offers: the proposals awaiting your review, accepted or being published, newest first, in your language. With `extended=true` it also shows each proposal\'s price, the price it was proposed at (`proposedPrice`).
+     * The PDF the campaign page offers: the proposals awaiting your review, accepted or being published, newest first, in your language. With `extended=true` it also shows each proposal\'s price, the price it was proposed at (`proposedPrice`). One summary of yours is rendered at a time: a request while another is being rendered gets 429 `proposals_summary_in_progress`, to retry after the `Retry-After` header.
      * Download the summary of a campaign\'s proposals
      */
     async getManagedServiceProposalsSummary(requestParameters: GetManagedServiceProposalsSummaryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Blob> {

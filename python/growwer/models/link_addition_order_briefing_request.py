@@ -29,7 +29,7 @@ class LinkAdditionOrderBriefingRequest(BaseModel):
     """
     The briefing of a link addition (`type` `link_addition`), checked against the media's link addition offer as the web checks it.
     """ # noqa: E501
-    linking_from: StrictStr = Field(description="The URL of an existing article on the media's domain that the link goes into.", alias="linkingFrom")
+    linking_from: StrictStr = Field(description="The URL of an existing article on the media's domain that the link goes into, without `<` or `>`.", alias="linkingFrom")
     link: OrderLinkRequest
     additional_info: Optional[StrictStr] = Field(default=None, alias="additionalInfo")
     __properties: ClassVar[List[str]] = ["linkingFrom", "link", "additionalInfo"]

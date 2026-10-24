@@ -70,7 +70,7 @@ public class SellerOrderPostDelivery {
   }
 
   /**
-   * The URL of the published post. It is checked to be a URL only, as the web does; whether the post carries the links is not checked here.
+   * The URL of the published post. It is checked to be a URL without &#x60;&lt;&#x60; or &#x60;&gt;&#x60;, as the web does; whether the post carries the links is not checked here.
    * @return url
    */
   @javax.annotation.Nonnull

@@ -75,7 +75,7 @@ public class LinkAdditionOrderBriefingRequest {
   }
 
   /**
-   * The URL of an existing article on the media&#39;s domain that the link goes into.
+   * The URL of an existing article on the media&#39;s domain that the link goes into, without &#x60;&lt;&#x60; or &#x60;&gt;&#x60;.
    * @return linkingFrom
    */
   @javax.annotation.Nonnull

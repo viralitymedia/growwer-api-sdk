@@ -8,7 +8,7 @@ Name | Type | Description | Notes
 **ExtraServices** | **List&lt;OrderEstimateRequestBriefing.ExtraServicesEnum&gt;** | Extra services the offer has, added to the ones the web selects for your project by default. A project with a sensitive topic always carries &#x60;extra_charge_for_sensitive_topic&#x60; when the media charges it. | [optional] 
 **Title** | **string** |  | [optional] 
 **AdditionalInfo** | **string** |  | [optional] 
-**LinkingFrom** | **string** | The URL of an existing article on the media&#39;s domain that the link goes into. | 
+**LinkingFrom** | **string** | The URL of an existing article on the media&#39;s domain that the link goes into, without &#x60;&lt;&#x60; or &#x60;&gt;&#x60;. | 
 **Link** | [**OrderLinkRequest**](OrderLinkRequest.md) |  | 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

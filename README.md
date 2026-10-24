@@ -172,6 +172,23 @@ var me = new AccountApi(config).GetMe();
 ```
 </details>
 
+## Changes in 1.1.1
+
+No code written for 1.1.0 breaks. The contract changes only in what the API documents and in one
+error a method can now return:
+
+- **Catalogue daily cap.** The cap now counts units, not only distinct medias: each new media still
+  costs one, and a catalogue response that holds no new media, an empty page or a `total` read
+  included, costs one unit. Repeating a request already answered the same UTC day is free while the
+  project's media lists, topics and language stay as they were. `countSavedFilterMedias` is now
+  subject to the catalogue access and the cap, so it can answer `403` (no catalogue access) and
+  `429 catalogue_daily_cap_reached`; the first count of a filter in a UTC day costs one unit.
+- **URLs without `<` or `>`.** The post URL of `deliverSellerOrder` and `deliverSellerOrderUpdate`
+  and the `briefing.linkingFrom` of a link addition order are refused with a `422` when they contain
+  `<` or `>`.
+- **Proposals summary PDF.** `getManagedServiceProposalsSummary` renders one summary per user at a time; a request while another is
+  being rendered gets `429 proposals_summary_in_progress`, to retry after `Retry-After`.
+
 ## Changes in 1.1.0
 
 **Some code written for 1.0.2 breaks** even though this is a minor version: constructor calls,

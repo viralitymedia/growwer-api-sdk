@@ -73,7 +73,7 @@ namespace Growwer.Api.Api
         /// Download the summary of a campaign&#39;s proposals
         /// </summary>
         /// <remarks>
-        /// The PDF the campaign page offers: the proposals awaiting your review, accepted or being published, newest first, in your language. With &#x60;extended&#x3D;true&#x60; it also shows each proposal&#39;s price, the price it was proposed at (&#x60;proposedPrice&#x60;).
+        /// The PDF the campaign page offers: the proposals awaiting your review, accepted or being published, newest first, in your language. With &#x60;extended&#x3D;true&#x60; it also shows each proposal&#39;s price, the price it was proposed at (&#x60;proposedPrice&#x60;). One summary of yours is rendered at a time: a request while another is being rendered gets 429 &#x60;proposals_summary_in_progress&#x60;, to retry after the &#x60;Retry-After&#x60; header.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
@@ -85,7 +85,7 @@ namespace Growwer.Api.Api
         /// Download the summary of a campaign&#39;s proposals
         /// </summary>
         /// <remarks>
-        /// The PDF the campaign page offers: the proposals awaiting your review, accepted or being published, newest first, in your language. With &#x60;extended&#x3D;true&#x60; it also shows each proposal&#39;s price, the price it was proposed at (&#x60;proposedPrice&#x60;).
+        /// The PDF the campaign page offers: the proposals awaiting your review, accepted or being published, newest first, in your language. With &#x60;extended&#x3D;true&#x60; it also shows each proposal&#39;s price, the price it was proposed at (&#x60;proposedPrice&#x60;). One summary of yours is rendered at a time: a request while another is being rendered gets 429 &#x60;proposals_summary_in_progress&#x60;, to retry after the &#x60;Retry-After&#x60; header.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
@@ -274,7 +274,7 @@ namespace Growwer.Api.Api
         /// Download the summary of a campaign&#39;s proposals
         /// </summary>
         /// <remarks>
-        /// The PDF the campaign page offers: the proposals awaiting your review, accepted or being published, newest first, in your language. With &#x60;extended&#x3D;true&#x60; it also shows each proposal&#39;s price, the price it was proposed at (&#x60;proposedPrice&#x60;).
+        /// The PDF the campaign page offers: the proposals awaiting your review, accepted or being published, newest first, in your language. With &#x60;extended&#x3D;true&#x60; it also shows each proposal&#39;s price, the price it was proposed at (&#x60;proposedPrice&#x60;). One summary of yours is rendered at a time: a request while another is being rendered gets 429 &#x60;proposals_summary_in_progress&#x60;, to retry after the &#x60;Retry-After&#x60; header.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
@@ -287,7 +287,7 @@ namespace Growwer.Api.Api
         /// Download the summary of a campaign&#39;s proposals
         /// </summary>
         /// <remarks>
-        /// The PDF the campaign page offers: the proposals awaiting your review, accepted or being published, newest first, in your language. With &#x60;extended&#x3D;true&#x60; it also shows each proposal&#39;s price, the price it was proposed at (&#x60;proposedPrice&#x60;).
+        /// The PDF the campaign page offers: the proposals awaiting your review, accepted or being published, newest first, in your language. With &#x60;extended&#x3D;true&#x60; it also shows each proposal&#39;s price, the price it was proposed at (&#x60;proposedPrice&#x60;). One summary of yours is rendered at a time: a request while another is being rendered gets 429 &#x60;proposals_summary_in_progress&#x60;, to retry after the &#x60;Retry-After&#x60; header.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
@@ -886,7 +886,7 @@ namespace Growwer.Api.Api
         }
 
         /// <summary>
-        /// Download the summary of a campaign&#39;s proposals The PDF the campaign page offers: the proposals awaiting your review, accepted or being published, newest first, in your language. With &#x60;extended&#x3D;true&#x60; it also shows each proposal&#39;s price, the price it was proposed at (&#x60;proposedPrice&#x60;).
+        /// Download the summary of a campaign&#39;s proposals The PDF the campaign page offers: the proposals awaiting your review, accepted or being published, newest first, in your language. With &#x60;extended&#x3D;true&#x60; it also shows each proposal&#39;s price, the price it was proposed at (&#x60;proposedPrice&#x60;). One summary of yours is rendered at a time: a request while another is being rendered gets 429 &#x60;proposals_summary_in_progress&#x60;, to retry after the &#x60;Retry-After&#x60; header.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
@@ -899,7 +899,7 @@ namespace Growwer.Api.Api
         }
 
         /// <summary>
-        /// Download the summary of a campaign&#39;s proposals The PDF the campaign page offers: the proposals awaiting your review, accepted or being published, newest first, in your language. With &#x60;extended&#x3D;true&#x60; it also shows each proposal&#39;s price, the price it was proposed at (&#x60;proposedPrice&#x60;).
+        /// Download the summary of a campaign&#39;s proposals The PDF the campaign page offers: the proposals awaiting your review, accepted or being published, newest first, in your language. With &#x60;extended&#x3D;true&#x60; it also shows each proposal&#39;s price, the price it was proposed at (&#x60;proposedPrice&#x60;). One summary of yours is rendered at a time: a request while another is being rendered gets 429 &#x60;proposals_summary_in_progress&#x60;, to retry after the &#x60;Retry-After&#x60; header.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
@@ -950,7 +950,7 @@ namespace Growwer.Api.Api
         }
 
         /// <summary>
-        /// Download the summary of a campaign&#39;s proposals The PDF the campaign page offers: the proposals awaiting your review, accepted or being published, newest first, in your language. With &#x60;extended&#x3D;true&#x60; it also shows each proposal&#39;s price, the price it was proposed at (&#x60;proposedPrice&#x60;).
+        /// Download the summary of a campaign&#39;s proposals The PDF the campaign page offers: the proposals awaiting your review, accepted or being published, newest first, in your language. With &#x60;extended&#x3D;true&#x60; it also shows each proposal&#39;s price, the price it was proposed at (&#x60;proposedPrice&#x60;). One summary of yours is rendered at a time: a request while another is being rendered gets 429 &#x60;proposals_summary_in_progress&#x60;, to retry after the &#x60;Retry-After&#x60; header.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
@@ -964,7 +964,7 @@ namespace Growwer.Api.Api
         }
 
         /// <summary>
-        /// Download the summary of a campaign&#39;s proposals The PDF the campaign page offers: the proposals awaiting your review, accepted or being published, newest first, in your language. With &#x60;extended&#x3D;true&#x60; it also shows each proposal&#39;s price, the price it was proposed at (&#x60;proposedPrice&#x60;).
+        /// Download the summary of a campaign&#39;s proposals The PDF the campaign page offers: the proposals awaiting your review, accepted or being published, newest first, in your language. With &#x60;extended&#x3D;true&#x60; it also shows each proposal&#39;s price, the price it was proposed at (&#x60;proposedPrice&#x60;). One summary of yours is rendered at a time: a request while another is being rendered gets 429 &#x60;proposals_summary_in_progress&#x60;, to retry after the &#x60;Retry-After&#x60; header.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>

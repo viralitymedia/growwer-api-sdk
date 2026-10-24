@@ -16,7 +16,7 @@ require 'time'
 module Growwer
   # The briefing of a link addition (`type` `link_addition`), checked against the media's link addition offer as the web checks it.
   class LinkAdditionOrderBriefingRequest < ApiModelBase
-    # The URL of an existing article on the media's domain that the link goes into.
+    # The URL of an existing article on the media's domain that the link goes into, without `<` or `>`.
     attr_accessor :linking_from
 
     attr_accessor :link

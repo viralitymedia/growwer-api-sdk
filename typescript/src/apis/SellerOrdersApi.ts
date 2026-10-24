@@ -156,7 +156,7 @@ export interface SellerOrdersApiInterface {
     deliverSellerOrderRequestOpts(requestParameters: DeliverSellerOrderRequest): Promise<runtime.RequestOpts>;
 
     /**
-     * Delivers an order placed on one of your medias (`state` `pending_order_delivery`), as the web does. A post order takes the URL of the published post and the confirmation of its publication date; a link addition order takes no body, and any field is refused. The order moves to `pending_order_delivery_review` and the buyer is asked to review it, or, for a post order whose scheduled publication date is still to come, to `scheduled` without telling the buyer yet. The URL is checked to be a URL only, as the web does.
+     * Delivers an order placed on one of your medias (`state` `pending_order_delivery`), as the web does. A post order takes the URL of the published post and the confirmation of its publication date; a link addition order takes no body, and any field is refused. The order moves to `pending_order_delivery_review` and the buyer is asked to review it, or, for a post order whose scheduled publication date is still to come, to `scheduled` without telling the buyer yet. The URL is checked to be a URL without `<` or `>`, as the web does.
      * @summary Deliver an order
      * @param {string} id 
      * @param {string} idempotencyKey A new key for each write, reused only to retry that same write. 1 to 255 printable ASCII characters without spaces (&#x60;!&#x60; to &#x60;~&#x60;); any other value answers 400 &#x60;invalid_idempotency_key&#x60;.
@@ -168,7 +168,7 @@ export interface SellerOrdersApiInterface {
     deliverSellerOrderRaw(requestParameters: DeliverSellerOrderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SellerOrder>>;
 
     /**
-     * Delivers an order placed on one of your medias (`state` `pending_order_delivery`), as the web does. A post order takes the URL of the published post and the confirmation of its publication date; a link addition order takes no body, and any field is refused. The order moves to `pending_order_delivery_review` and the buyer is asked to review it, or, for a post order whose scheduled publication date is still to come, to `scheduled` without telling the buyer yet. The URL is checked to be a URL only, as the web does.
+     * Delivers an order placed on one of your medias (`state` `pending_order_delivery`), as the web does. A post order takes the URL of the published post and the confirmation of its publication date; a link addition order takes no body, and any field is refused. The order moves to `pending_order_delivery_review` and the buyer is asked to review it, or, for a post order whose scheduled publication date is still to come, to `scheduled` without telling the buyer yet. The URL is checked to be a URL without `<` or `>`, as the web does.
      * Deliver an order
      */
     deliverSellerOrder(requestParameters: DeliverSellerOrderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SellerOrder>;
@@ -570,7 +570,7 @@ export class SellerOrdersApi extends runtime.BaseAPI implements SellerOrdersApiI
     }
 
     /**
-     * Delivers an order placed on one of your medias (`state` `pending_order_delivery`), as the web does. A post order takes the URL of the published post and the confirmation of its publication date; a link addition order takes no body, and any field is refused. The order moves to `pending_order_delivery_review` and the buyer is asked to review it, or, for a post order whose scheduled publication date is still to come, to `scheduled` without telling the buyer yet. The URL is checked to be a URL only, as the web does.
+     * Delivers an order placed on one of your medias (`state` `pending_order_delivery`), as the web does. A post order takes the URL of the published post and the confirmation of its publication date; a link addition order takes no body, and any field is refused. The order moves to `pending_order_delivery_review` and the buyer is asked to review it, or, for a post order whose scheduled publication date is still to come, to `scheduled` without telling the buyer yet. The URL is checked to be a URL without `<` or `>`, as the web does.
      * Deliver an order
      */
     async deliverSellerOrderRaw(requestParameters: DeliverSellerOrderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SellerOrder>> {
@@ -581,7 +581,7 @@ export class SellerOrdersApi extends runtime.BaseAPI implements SellerOrdersApiI
     }
 
     /**
-     * Delivers an order placed on one of your medias (`state` `pending_order_delivery`), as the web does. A post order takes the URL of the published post and the confirmation of its publication date; a link addition order takes no body, and any field is refused. The order moves to `pending_order_delivery_review` and the buyer is asked to review it, or, for a post order whose scheduled publication date is still to come, to `scheduled` without telling the buyer yet. The URL is checked to be a URL only, as the web does.
+     * Delivers an order placed on one of your medias (`state` `pending_order_delivery`), as the web does. A post order takes the URL of the published post and the confirmation of its publication date; a link addition order takes no body, and any field is refused. The order moves to `pending_order_delivery_review` and the buyer is asked to review it, or, for a post order whose scheduled publication date is still to come, to `scheduled` without telling the buyer yet. The URL is checked to be a URL without `<` or `>`, as the web does.
      * Deliver an order
      */
     async deliverSellerOrder(requestParameters: DeliverSellerOrderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SellerOrder> {

@@ -11,7 +11,7 @@
 |**extraServices** | [**List&lt;ExtraServicesEnum&gt;**](#List&lt;ExtraServicesEnum&gt;) | Extra services the offer has, added to the ones the web selects for your project by default. A project with a sensitive topic always carries &#x60;extra_charge_for_sensitive_topic&#x60; when the media charges it. |  [optional] |
 |**title** | **String** |  |  [optional] |
 |**additionalInfo** | **String** |  |  [optional] |
-|**linkingFrom** | **String** | The URL of an existing article on the media&#39;s domain that the link goes into. |  |
+|**linkingFrom** | **String** | The URL of an existing article on the media&#39;s domain that the link goes into, without &#x60;&lt;&#x60; or &#x60;&gt;&#x60;. |  |
 |**link** | [**OrderLinkRequest**](OrderLinkRequest.md) |  |  |
 
 

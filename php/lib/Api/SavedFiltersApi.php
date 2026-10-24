@@ -146,7 +146,7 @@ class SavedFiltersApi
      *
      * @throws \Growwer\Api\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return \Growwer\Api\Model\CountSavedFilterMedias200Response|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error
+     * @return \Growwer\Api\Model\CountSavedFilterMedias200Response|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error
      */
     public function countSavedFilterMedias($id, $filter_id, string $contentType = self::contentTypes['countSavedFilterMedias'][0])
     {
@@ -165,7 +165,7 @@ class SavedFiltersApi
      *
      * @throws \Growwer\Api\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return array of \Growwer\Api\Model\CountSavedFilterMedias200Response|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Growwer\Api\Model\CountSavedFilterMedias200Response|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function countSavedFilterMediasWithHttpInfo($id, $filter_id, string $contentType = self::contentTypes['countSavedFilterMedias'][0])
     {
@@ -202,6 +202,12 @@ class SavedFiltersApi
                         $response,
                     );
                 case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Growwer\Api\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
                     return $this->handleResponseWithDataType(
                         '\Growwer\Api\Model\Error',
                         $request,
@@ -270,6 +276,14 @@ class SavedFiltersApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Growwer\Api\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Growwer\Api\Model\Error',

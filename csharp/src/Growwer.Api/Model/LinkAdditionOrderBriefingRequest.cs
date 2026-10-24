@@ -44,7 +44,7 @@ namespace Growwer.Api.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="LinkAdditionOrderBriefingRequest" /> class.
         /// </summary>
-        /// <param name="linkingFrom">The URL of an existing article on the media&#39;s domain that the link goes into. (required).</param>
+        /// <param name="linkingFrom">The URL of an existing article on the media&#39;s domain that the link goes into, without &#x60;&lt;&#x60; or &#x60;&gt;&#x60;. (required).</param>
         /// <param name="link">link (required).</param>
         /// <param name="additionalInfo">additionalInfo.</param>
         public LinkAdditionOrderBriefingRequest(string linkingFrom = default, OrderLinkRequest link = default, string additionalInfo = default)
@@ -66,9 +66,9 @@ namespace Growwer.Api.Model
         }
 
         /// <summary>
-        /// The URL of an existing article on the media&#39;s domain that the link goes into.
+        /// The URL of an existing article on the media&#39;s domain that the link goes into, without &#x60;&lt;&#x60; or &#x60;&gt;&#x60;.
         /// </summary>
-        /// <value>The URL of an existing article on the media&#39;s domain that the link goes into.</value>
+        /// <value>The URL of an existing article on the media&#39;s domain that the link goes into, without &#x60;&lt;&#x60; or &#x60;&gt;&#x60;.</value>
         [DataMember(Name = "linkingFrom", IsRequired = true, EmitDefaultValue = true)]
         public string LinkingFrom { get; set; }
 

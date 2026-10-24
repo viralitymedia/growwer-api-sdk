@@ -124,7 +124,7 @@
                           "minimum": 0
                         },
                         "remainingToday": {
-                          "description": "How many new distinct medias still fit in `dailyCap` today (UTC). Medias you have already seen today are free. Null when the count cannot be read right now; the catalogue operations then answer 503 until it can.",
+                          "description": "How many units of `dailyCap` still fit today (UTC): each new distinct media costs one, and a catalogue response that holds no new media, an empty one or a saved filter count included, costs one unless the same request was answered today and the media lists, topics and language of its project have not changed since. Medias you have already seen today, and requests already answered today, are free. Null when the count cannot be read right now; the catalogue operations then answer 503 until it can.",
                           "type": "integer",
                           "nullable": true,
                           "minimum": 0
@@ -275,7 +275,7 @@
           "Saved filters"
         ],
         "summary": "Count the medias of a saved filter",
-        "description": "How many medias of the project's catalogue one of your saved filters matches: the `total` of GET /projects/{id}/medias with its `savedFilterId`. The number is cached for up to 24 hours, and it can differ from the count the web shows, which is not limited to the project's catalogue. A filter saved on the web that uses a filter the API does not support is refused with 422 `saved_filter_unsupported`.",
+        "description": "How many medias of the project's catalogue one of your saved filters matches: the `total` of GET /projects/{id}/medias with its `savedFilterId`. The number is cached for up to 24 hours, and it can differ from the count the web shows, which is not limited to the project's catalogue. A filter saved on the web that uses a filter the API does not support is refused with 422 `saved_filter_unsupported`. The catalogue access and the daily limit of the catalogue apply: a count costs one unit of that limit the first time a filter is counted in a UTC day, and counting the same filter again that day is free.",
         "operationId": "countSavedFilterMedias",
         "parameters": [
           {
@@ -321,6 +321,9 @@
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/CatalogueForbidden"
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
@@ -896,7 +899,7 @@
           "Catalogue"
         ],
         "summary": "List flash offers",
-        "description": "The medias on a flash offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with `flashOffer=true`, and takes the same parameters except `flashOffer` and `savedFilterId`. The catalogue access and the daily distinct-media limit of that operation apply.",
+        "description": "The medias on a flash offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with `flashOffer=true`, and takes the same parameters except `flashOffer` and `savedFilterId`. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.",
         "operationId": "listFlashOffers",
         "parameters": [
           {
@@ -1187,7 +1190,7 @@
           "Catalogue"
         ],
         "summary": "Search the catalogue for a project",
-        "description": "The medias the catalogue offers for one of your projects, as the web lists them, with each media's state in the project. Filter with the parameters below, which all combine, or apply one of your saved filters with `savedFilterId` alone. Each account can see a limited number of distinct medias per day (UTC) across the catalogue operations: the full daily cap for accounts with recent completed orders, as buyer or as seller, and a smaller trial quota for other accounts, which rises to the full cap after a completed order (see `catalogue.eligible`, `catalogue.dailyCap` and `catalogue.remainingToday` on GET /me). Medias seen again the same day are free.",
+        "description": "The medias the catalogue offers for one of your projects, as the web lists them, with each media's state in the project. Filter with the parameters below, which all combine, or apply one of your saved filters with `savedFilterId` alone. Each account can see a limited number of distinct medias per day (UTC) across the catalogue operations: the full daily cap for accounts with recent completed orders, as buyer or as seller, and a smaller trial quota for other accounts, which rises to the full cap after a completed order (see `catalogue.eligible`, `catalogue.dailyCap` and `catalogue.remainingToday` on GET /me). Each new media of a page costs one unit of that limit, and a page that holds no new media, an empty one included, costs one unit, so a `total` costs at least one; repeating a request already answered the same day is free, and so are medias seen again that day. A change of the media lists of the project (a media request, a favourite, a discard), its topics or its language makes the same request a new one.",
         "operationId": "searchProjectMedias",
         "parameters": [
           {
@@ -1762,7 +1765,7 @@
           "Managed services"
         ],
         "summary": "Download the summary of a campaign's proposals",
-        "description": "The PDF the campaign page offers: the proposals awaiting your review, accepted or being published, newest first, in your language. With `extended=true` it also shows each proposal's price, the price it was proposed at (`proposedPrice`).",
+        "description": "The PDF the campaign page offers: the proposals awaiting your review, accepted or being published, newest first, in your language. With `extended=true` it also shows each proposal's price, the price it was proposed at (`proposedPrice`). One summary of yours is rendered at a time: a request while another is being rendered gets 429 `proposals_summary_in_progress`, to retry after the `Retry-After` header.",
         "operationId": "getManagedServiceProposalsSummary",
         "parameters": [
           {
@@ -4997,7 +5000,7 @@
           "Seller orders"
         ],
         "summary": "Deliver an order",
-        "description": "Delivers an order placed on one of your medias (`state` `pending_order_delivery`), as the web does. A post order takes the URL of the published post and the confirmation of its publication date; a link addition order takes no body, and any field is refused. The order moves to `pending_order_delivery_review` and the buyer is asked to review it, or, for a post order whose scheduled publication date is still to come, to `scheduled` without telling the buyer yet. The URL is checked to be a URL only, as the web does.",
+        "description": "Delivers an order placed on one of your medias (`state` `pending_order_delivery`), as the web does. A post order takes the URL of the published post and the confirmation of its publication date; a link addition order takes no body, and any field is refused. The order moves to `pending_order_delivery_review` and the buyer is asked to review it, or, for a post order whose scheduled publication date is still to come, to `scheduled` without telling the buyer yet. The URL is checked to be a URL without `<` or `>`, as the web does.",
         "operationId": "deliverSellerOrder",
         "parameters": [
           {
@@ -7706,7 +7709,7 @@
         ],
         "properties": {
           "linkingFrom": {
-            "description": "The URL of an existing article on the media's domain that the link goes into.",
+            "description": "The URL of an existing article on the media's domain that the link goes into, without `<` or `>`.",
             "type": "string"
           },
           "link": {
@@ -7903,7 +7906,7 @@
         ],
         "properties": {
           "url": {
-            "description": "The URL of the published post. It is checked to be a URL only, as the web does; whether the post carries the links is not checked here.",
+            "description": "The URL of the published post. It is checked to be a URL without `<` or `>`, as the web does; whether the post carries the links is not checked here.",
             "type": "string",
             "format": "uri"
           },
@@ -8709,7 +8712,7 @@
         }
       },
       "TooManyRequests": {
-        "description": "Over the rate limit (code `rate_limit_exceeded`), or too many failed authentications (code `too_many_failed_authentications`): with this key from this address, or from this address with any key; a valid key is never refused for it. On the catalogue operations, also when the response would take the account beyond the distinct medias it may see per UTC day (code `catalogue_daily_cap_reached`): `details.remaining` says how many new medias still fit today, `details.limit` is the daily cap that applies and `details.tier` is `full`, or `trial` for an account without a recent completed order, whose quota rises to the full cap after one; `Retry-After` is the time to the next UTC midnight, and medias already seen today stay readable. On the managed service requests, also when you sent as many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`): `Retry-After` is the time to the next UTC midnight. On POST /seller/medias, also when you sent as many medias that are already registered as you may per UTC day (code `media_duplicate_limit_reached`): `Retry-After` is the time to the next UTC midnight, and medias not registered yet are still accepted.",
+        "description": "Over the rate limit (code `rate_limit_exceeded`), or too many failed authentications (code `too_many_failed_authentications`): with this key from this address, or from this address with any key; a valid key is never refused for it. On the catalogue operations, also when the response would take the account beyond the units of the catalogue it may spend per UTC day (code `catalogue_daily_cap_reached`): each new media costs one unit and a response that holds no new media, an empty one or a count included, costs one unless the same request was answered today while the media lists, topics and language of its project stayed as they were, which is free; `details.remaining` says how many units still fit today, `details.limit` is the daily cap that applies and `details.tier` is `full`, or `trial` for an account without a recent completed order, whose quota rises to the full cap after one; `Retry-After` is the time to the next UTC midnight, and a request already answered today stays readable. On the managed service requests, also when you sent as many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`): `Retry-After` is the time to the next UTC midnight. On POST /seller/medias, also when you sent as many medias that are already registered as you may per UTC day (code `media_duplicate_limit_reached`): `Retry-After` is the time to the next UTC midnight, and medias not registered yet are still accepted.",
         "headers": {
           "Retry-After": {
             "$ref": "#/components/headers/RetryAfter"

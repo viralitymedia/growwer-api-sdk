@@ -62,7 +62,7 @@ class SavedFiltersApi:
     ) -> CountSavedFilterMedias200Response:
         """Count the medias of a saved filter
 
-        How many medias of the project's catalogue one of your saved filters matches: the `total` of GET /projects/{id}/medias with its `savedFilterId`. The number is cached for up to 24 hours, and it can differ from the count the web shows, which is not limited to the project's catalogue. A filter saved on the web that uses a filter the API does not support is refused with 422 `saved_filter_unsupported`.
+        How many medias of the project's catalogue one of your saved filters matches: the `total` of GET /projects/{id}/medias with its `savedFilterId`. The number is cached for up to 24 hours, and it can differ from the count the web shows, which is not limited to the project's catalogue. A filter saved on the web that uses a filter the API does not support is refused with 422 `saved_filter_unsupported`. The catalogue access and the daily limit of the catalogue apply: a count costs one unit of that limit the first time a filter is counted in a UTC day, and counting the same filter again that day is free.
 
         :param id: The project. (required)
         :type id: UUID
@@ -102,6 +102,7 @@ class SavedFiltersApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "CountSavedFilterMedias200Response",
             '401': "Error",
+            '403': "Error",
             '404': "Error",
             '422': "Error",
             '429': "Error",
@@ -139,7 +140,7 @@ class SavedFiltersApi:
     ) -> ApiResponse[CountSavedFilterMedias200Response]:
         """Count the medias of a saved filter
 
-        How many medias of the project's catalogue one of your saved filters matches: the `total` of GET /projects/{id}/medias with its `savedFilterId`. The number is cached for up to 24 hours, and it can differ from the count the web shows, which is not limited to the project's catalogue. A filter saved on the web that uses a filter the API does not support is refused with 422 `saved_filter_unsupported`.
+        How many medias of the project's catalogue one of your saved filters matches: the `total` of GET /projects/{id}/medias with its `savedFilterId`. The number is cached for up to 24 hours, and it can differ from the count the web shows, which is not limited to the project's catalogue. A filter saved on the web that uses a filter the API does not support is refused with 422 `saved_filter_unsupported`. The catalogue access and the daily limit of the catalogue apply: a count costs one unit of that limit the first time a filter is counted in a UTC day, and counting the same filter again that day is free.
 
         :param id: The project. (required)
         :type id: UUID
@@ -179,6 +180,7 @@ class SavedFiltersApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "CountSavedFilterMedias200Response",
             '401': "Error",
+            '403': "Error",
             '404': "Error",
             '422': "Error",
             '429': "Error",
@@ -216,7 +218,7 @@ class SavedFiltersApi:
     ) -> RESTResponseType:
         """Count the medias of a saved filter
 
-        How many medias of the project's catalogue one of your saved filters matches: the `total` of GET /projects/{id}/medias with its `savedFilterId`. The number is cached for up to 24 hours, and it can differ from the count the web shows, which is not limited to the project's catalogue. A filter saved on the web that uses a filter the API does not support is refused with 422 `saved_filter_unsupported`.
+        How many medias of the project's catalogue one of your saved filters matches: the `total` of GET /projects/{id}/medias with its `savedFilterId`. The number is cached for up to 24 hours, and it can differ from the count the web shows, which is not limited to the project's catalogue. A filter saved on the web that uses a filter the API does not support is refused with 422 `saved_filter_unsupported`. The catalogue access and the daily limit of the catalogue apply: a count costs one unit of that limit the first time a filter is counted in a UTC day, and counting the same filter again that day is free.
 
         :param id: The project. (required)
         :type id: UUID
@@ -256,6 +258,7 @@ class SavedFiltersApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "CountSavedFilterMedias200Response",
             '401': "Error",
+            '403': "Error",
             '404': "Error",
             '422': "Error",
             '429': "Error",

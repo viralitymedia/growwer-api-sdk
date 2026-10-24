@@ -28,7 +28,7 @@ import {
  */
 export interface LinkAdditionOrderBriefingRequest {
     /**
-     * The URL of an existing article on the media's domain that the link goes into.
+     * The URL of an existing article on the media's domain that the link goes into, without `<` or `>`.
      * @type {string}
      * @memberof LinkAdditionOrderBriefingRequest
      */

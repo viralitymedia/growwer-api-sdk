@@ -28,7 +28,7 @@ class SellerOrderPostDelivery(BaseModel):
     """
     The published post of a post order. A link addition order takes no body.
     """ # noqa: E501
-    url: StrictStr = Field(description="The URL of the published post. It is checked to be a URL only, as the web does; whether the post carries the links is not checked here.")
+    url: StrictStr = Field(description="The URL of the published post. It is checked to be a URL without `<` or `>`, as the web does; whether the post carries the links is not checked here.")
     publication_date_confirmed: StrictBool = Field(description="Must be true. Confirms the post is live, or for an order with a scheduled publication date, that it will be published on that date.", alias="publicationDateConfirmed")
     __properties: ClassVar[List[str]] = ["url", "publicationDateConfirmed"]
 

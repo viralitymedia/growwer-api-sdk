@@ -55,7 +55,7 @@ namespace Growwer.Api.Api
         /// Deliver an order
         /// </summary>
         /// <remarks>
-        /// Delivers an order placed on one of your medias (&#x60;state&#x60; &#x60;pending_order_delivery&#x60;), as the web does. A post order takes the URL of the published post and the confirmation of its publication date; a link addition order takes no body, and any field is refused. The order moves to &#x60;pending_order_delivery_review&#x60; and the buyer is asked to review it, or, for a post order whose scheduled publication date is still to come, to &#x60;scheduled&#x60; without telling the buyer yet. The URL is checked to be a URL only, as the web does.
+        /// Delivers an order placed on one of your medias (&#x60;state&#x60; &#x60;pending_order_delivery&#x60;), as the web does. A post order takes the URL of the published post and the confirmation of its publication date; a link addition order takes no body, and any field is refused. The order moves to &#x60;pending_order_delivery_review&#x60; and the buyer is asked to review it, or, for a post order whose scheduled publication date is still to come, to &#x60;scheduled&#x60; without telling the buyer yet. The URL is checked to be a URL without &#x60;&lt;&#x60; or &#x60;&gt;&#x60;, as the web does.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
@@ -68,7 +68,7 @@ namespace Growwer.Api.Api
         /// Deliver an order
         /// </summary>
         /// <remarks>
-        /// Delivers an order placed on one of your medias (&#x60;state&#x60; &#x60;pending_order_delivery&#x60;), as the web does. A post order takes the URL of the published post and the confirmation of its publication date; a link addition order takes no body, and any field is refused. The order moves to &#x60;pending_order_delivery_review&#x60; and the buyer is asked to review it, or, for a post order whose scheduled publication date is still to come, to &#x60;scheduled&#x60; without telling the buyer yet. The URL is checked to be a URL only, as the web does.
+        /// Delivers an order placed on one of your medias (&#x60;state&#x60; &#x60;pending_order_delivery&#x60;), as the web does. A post order takes the URL of the published post and the confirmation of its publication date; a link addition order takes no body, and any field is refused. The order moves to &#x60;pending_order_delivery_review&#x60; and the buyer is asked to review it, or, for a post order whose scheduled publication date is still to come, to &#x60;scheduled&#x60; without telling the buyer yet. The URL is checked to be a URL without &#x60;&lt;&#x60; or &#x60;&gt;&#x60;, as the web does.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
@@ -358,7 +358,7 @@ namespace Growwer.Api.Api
         /// Deliver an order
         /// </summary>
         /// <remarks>
-        /// Delivers an order placed on one of your medias (&#x60;state&#x60; &#x60;pending_order_delivery&#x60;), as the web does. A post order takes the URL of the published post and the confirmation of its publication date; a link addition order takes no body, and any field is refused. The order moves to &#x60;pending_order_delivery_review&#x60; and the buyer is asked to review it, or, for a post order whose scheduled publication date is still to come, to &#x60;scheduled&#x60; without telling the buyer yet. The URL is checked to be a URL only, as the web does.
+        /// Delivers an order placed on one of your medias (&#x60;state&#x60; &#x60;pending_order_delivery&#x60;), as the web does. A post order takes the URL of the published post and the confirmation of its publication date; a link addition order takes no body, and any field is refused. The order moves to &#x60;pending_order_delivery_review&#x60; and the buyer is asked to review it, or, for a post order whose scheduled publication date is still to come, to &#x60;scheduled&#x60; without telling the buyer yet. The URL is checked to be a URL without &#x60;&lt;&#x60; or &#x60;&gt;&#x60;, as the web does.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
@@ -372,7 +372,7 @@ namespace Growwer.Api.Api
         /// Deliver an order
         /// </summary>
         /// <remarks>
-        /// Delivers an order placed on one of your medias (&#x60;state&#x60; &#x60;pending_order_delivery&#x60;), as the web does. A post order takes the URL of the published post and the confirmation of its publication date; a link addition order takes no body, and any field is refused. The order moves to &#x60;pending_order_delivery_review&#x60; and the buyer is asked to review it, or, for a post order whose scheduled publication date is still to come, to &#x60;scheduled&#x60; without telling the buyer yet. The URL is checked to be a URL only, as the web does.
+        /// Delivers an order placed on one of your medias (&#x60;state&#x60; &#x60;pending_order_delivery&#x60;), as the web does. A post order takes the URL of the published post and the confirmation of its publication date; a link addition order takes no body, and any field is refused. The order moves to &#x60;pending_order_delivery_review&#x60; and the buyer is asked to review it, or, for a post order whose scheduled publication date is still to come, to &#x60;scheduled&#x60; without telling the buyer yet. The URL is checked to be a URL without &#x60;&lt;&#x60; or &#x60;&gt;&#x60;, as the web does.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
@@ -992,7 +992,7 @@ namespace Growwer.Api.Api
         }
 
         /// <summary>
-        /// Deliver an order Delivers an order placed on one of your medias (&#x60;state&#x60; &#x60;pending_order_delivery&#x60;), as the web does. A post order takes the URL of the published post and the confirmation of its publication date; a link addition order takes no body, and any field is refused. The order moves to &#x60;pending_order_delivery_review&#x60; and the buyer is asked to review it, or, for a post order whose scheduled publication date is still to come, to &#x60;scheduled&#x60; without telling the buyer yet. The URL is checked to be a URL only, as the web does.
+        /// Deliver an order Delivers an order placed on one of your medias (&#x60;state&#x60; &#x60;pending_order_delivery&#x60;), as the web does. A post order takes the URL of the published post and the confirmation of its publication date; a link addition order takes no body, and any field is refused. The order moves to &#x60;pending_order_delivery_review&#x60; and the buyer is asked to review it, or, for a post order whose scheduled publication date is still to come, to &#x60;scheduled&#x60; without telling the buyer yet. The URL is checked to be a URL without &#x60;&lt;&#x60; or &#x60;&gt;&#x60;, as the web does.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
@@ -1006,7 +1006,7 @@ namespace Growwer.Api.Api
         }
 
         /// <summary>
-        /// Deliver an order Delivers an order placed on one of your medias (&#x60;state&#x60; &#x60;pending_order_delivery&#x60;), as the web does. A post order takes the URL of the published post and the confirmation of its publication date; a link addition order takes no body, and any field is refused. The order moves to &#x60;pending_order_delivery_review&#x60; and the buyer is asked to review it, or, for a post order whose scheduled publication date is still to come, to &#x60;scheduled&#x60; without telling the buyer yet. The URL is checked to be a URL only, as the web does.
+        /// Deliver an order Delivers an order placed on one of your medias (&#x60;state&#x60; &#x60;pending_order_delivery&#x60;), as the web does. A post order takes the URL of the published post and the confirmation of its publication date; a link addition order takes no body, and any field is refused. The order moves to &#x60;pending_order_delivery_review&#x60; and the buyer is asked to review it, or, for a post order whose scheduled publication date is still to come, to &#x60;scheduled&#x60; without telling the buyer yet. The URL is checked to be a URL without &#x60;&lt;&#x60; or &#x60;&gt;&#x60;, as the web does.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
@@ -1060,7 +1060,7 @@ namespace Growwer.Api.Api
         }
 
         /// <summary>
-        /// Deliver an order Delivers an order placed on one of your medias (&#x60;state&#x60; &#x60;pending_order_delivery&#x60;), as the web does. A post order takes the URL of the published post and the confirmation of its publication date; a link addition order takes no body, and any field is refused. The order moves to &#x60;pending_order_delivery_review&#x60; and the buyer is asked to review it, or, for a post order whose scheduled publication date is still to come, to &#x60;scheduled&#x60; without telling the buyer yet. The URL is checked to be a URL only, as the web does.
+        /// Deliver an order Delivers an order placed on one of your medias (&#x60;state&#x60; &#x60;pending_order_delivery&#x60;), as the web does. A post order takes the URL of the published post and the confirmation of its publication date; a link addition order takes no body, and any field is refused. The order moves to &#x60;pending_order_delivery_review&#x60; and the buyer is asked to review it, or, for a post order whose scheduled publication date is still to come, to &#x60;scheduled&#x60; without telling the buyer yet. The URL is checked to be a URL without &#x60;&lt;&#x60; or &#x60;&gt;&#x60;, as the web does.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
@@ -1075,7 +1075,7 @@ namespace Growwer.Api.Api
         }
 
         /// <summary>
-        /// Deliver an order Delivers an order placed on one of your medias (&#x60;state&#x60; &#x60;pending_order_delivery&#x60;), as the web does. A post order takes the URL of the published post and the confirmation of its publication date; a link addition order takes no body, and any field is refused. The order moves to &#x60;pending_order_delivery_review&#x60; and the buyer is asked to review it, or, for a post order whose scheduled publication date is still to come, to &#x60;scheduled&#x60; without telling the buyer yet. The URL is checked to be a URL only, as the web does.
+        /// Deliver an order Delivers an order placed on one of your medias (&#x60;state&#x60; &#x60;pending_order_delivery&#x60;), as the web does. A post order takes the URL of the published post and the confirmation of its publication date; a link addition order takes no body, and any field is refused. The order moves to &#x60;pending_order_delivery_review&#x60; and the buyer is asked to review it, or, for a post order whose scheduled publication date is still to come, to &#x60;scheduled&#x60; without telling the buyer yet. The URL is checked to be a URL without &#x60;&lt;&#x60; or &#x60;&gt;&#x60;, as the web does.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>

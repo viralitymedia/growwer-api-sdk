@@ -187,9 +187,9 @@ The contract adds one enum value and has no breaking change: no path, field or t
 
 - **Channel `mcp`.** `Order.channel.created`, `SellerOrder.channel.created` and
   `SellerOrder.channel.accepted` can now be `mcp`, for an order placed or accepted through the MCP
-  server. The Python and Java clients of 1.1.1 refuse that value when they read such an order; this
-  release accepts it. Code that switches over every channel needs a case for it, and in C# the
-  numeric value of `Web` moves from 2 to 3.
+  server. The Python, PHP, Java, C# and Ruby clients of 1.1.1 refuse that value when they read such
+  an order; this release accepts it. Code that switches over every channel needs a case for it, and
+  in C# the numeric value of `Web` moves from 2 to 3.
 
 ## Changes in 1.1.1
 

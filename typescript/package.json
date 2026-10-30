@@ -25,5 +25,8 @@
     "sdk",
     "seo",
     "link-building"
-  ]
+  ],
+  "engines": {
+    "node": ">=22"
+  }
 }

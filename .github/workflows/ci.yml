@@ -43,11 +43,16 @@ jobs:
 
   typescript:
     runs-on: ubuntu-latest
+    # The newest 22.x, the release line package.json declares as its floor, and the current LTS.
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ["22", "26"]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: ${{ matrix.node-version }}
           cache: npm
           cache-dependency-path: typescript/package-lock.json
       - working-directory: typescript

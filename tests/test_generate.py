@@ -1096,6 +1096,70 @@ class PythonDependencyFloorsTest(unittest.TestCase):
         self.assertIn("filelock >= 3.20.3\n", test_requirements)
 
 
+class TypeScriptPackageMetadataTest(unittest.TestCase):
+    """scripts/package-metadata.py replaces the generator's author, description and keywords in
+    typescript/package.json and declares the Node floor the package is tested on."""
+
+    # The fields openapi-generator 7.24.0 writes that the script rewrites; it emits no `engines`.
+    GENERATED = {
+        "name": "@growwer/api",
+        "version": "1.1.1",
+        "description": "OpenAPI client for @growwer/api",
+        "author": "OpenAPI-Generator",
+        "license": "MIT",
+        "devDependencies": {"typescript": "^4.0 || ^5.0"},
+    }
+
+    def run_script(self, package, runs=1):
+        with tempfile.TemporaryDirectory(prefix="growwer-typescript-metadata-test-") as directory:
+            root = Path(directory)
+            (root / "scripts").mkdir()
+            shutil.copyfile(ROOT / "scripts/package-metadata.py", root / "scripts/package-metadata.py")
+            shutil.copyfile(ROOT / "sdks.json", root / "sdks.json")
+            folder = root / "typescript"
+            folder.mkdir()
+            (folder / "package.json").write_text(json.dumps(package, indent=2) + "\n", encoding="utf-8")
+            results = [
+                subprocess.run(
+                    [sys.executable, "scripts/package-metadata.py", "typescript"],
+                    cwd=root,
+                    capture_output=True,
+                    text=True,
+                    check=False,
+                )
+                for _ in range(runs)
+            ]
+            return results, (folder / "package.json").read_text(encoding="utf-8")
+
+    def test_the_generated_manifest_gets_the_node_floor_and_the_growwer_metadata(self):
+        (result,), text = self.run_script(self.GENERATED)
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        package = json.loads(text)
+        manifest = json.loads((ROOT / "sdks.json").read_text(encoding="utf-8"))
+        self.assertEqual({"node": ">=22"}, package["engines"])
+        self.assertEqual(manifest["description"], package["description"])
+        self.assertNotIn("OpenAPI", package["author"])
+        self.assertEqual(["growwer", "api", "sdk", "seo", "link-building"], package["keywords"])
+        # The fields the script does not own stay exactly as the generator wrote them.
+        for field in ("name", "version", "license", "devDependencies"):
+            self.assertEqual(self.GENERATED[field], package[field])
+        self.assertIn("engines node >=22", result.stdout)
+
+    def test_a_second_run_over_its_own_output_changes_nothing(self):
+        (first,), once = self.run_script(self.GENERATED)
+        results, twice = self.run_script(self.GENERATED, runs=2)
+        for result in (first, *results):
+            self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        self.assertEqual(once, twice)
+
+    def test_the_committed_manifest_declares_the_floor_ci_tests(self):
+        package = json.loads((ROOT / "typescript/package.json").read_text(encoding="utf-8"))
+        self.assertEqual({"node": ">=22"}, package["engines"])
+        # A floor the package claims but CI never runs is a claim nobody checked.
+        ci = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+        self.assertIn('node-version: ["22", "26"]\n', ci)
+
+
 class WorkflowSecretTest(unittest.TestCase):
     """A secret expanded into a `run` script becomes part of the shell source, where quoting it is the
     script's job and a stray character can break or leak it; it is passed through `env` instead."""

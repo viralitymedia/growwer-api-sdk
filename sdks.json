@@ -28,7 +28,7 @@
     {
       "dir": "typescript",
       "generator": "typescript-fetch",
-      "label": "TypeScript (Node 18+ and browsers)",
+      "label": "TypeScript (Node 22+ and browsers)",
       "config": {
         "npmName": "@growwer/api",
         "supportsES6": true,

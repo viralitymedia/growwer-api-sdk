@@ -5,7 +5,8 @@ Java, C#, Ruby and PHP take their author, description and homepage as options, a
 feeds them from sdks.json. Three manifests keep template text that no option reaches:
 
   typescript  package.json hardcodes `"author": "OpenAPI-Generator"` and describes the package as
-              "OpenAPI client for @growwer/api"
+              "OpenAPI client for @growwer/api"; it also declares no supported Node range, so the
+              `engines` floor is added here
   python      pyproject.toml and setup.py hardcode the keywords "OpenAPI" and "OpenAPI-Generator";
               the author comes from the contract's info.contact and needs nothing here
   php         php/composer.json hardcodes the keywords "openapitools", "openapi-generator" and
@@ -45,6 +46,10 @@ PYTHON_FLOOR = "3.10"
 URLLIB3_FLOOR = "2.8.0"
 PYTEST_FLOOR = "9.0.3"
 FILELOCK_FLOOR = "3.20.3"
+
+# The oldest Node release line still supported upstream; CI tests the package on it and on the
+# current LTS.
+NODE_FLOOR = "22"
 
 target = sys.argv[1]
 
@@ -103,9 +108,10 @@ if target == "typescript":
         package["description"] = description
         package["author"] = f"{author['name']} <{author['email']}> ({author['url']})"
         package["keywords"] = KEYWORDS
+        package["engines"] = {"node": f">={NODE_FLOOR}"}
 
     rewrite_json(ROOT / "typescript" / "package.json", 2, update)
-    print("  package.json: author, description, keywords")
+    print(f"  package.json: author, description, keywords, engines node >={NODE_FLOOR}")
 
 elif target == "python":
     keywords = json.dumps(KEYWORDS)

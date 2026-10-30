@@ -15,7 +15,7 @@ contract, one generator run, one version: a change to the API reaches all seven 
 | Python 3.10+ | `growwer` | [![PyPI](https://img.shields.io/pypi/v/growwer?label=pypi&color=informational)](https://pypi.org/project/growwer/) | [`python/`](python/) |
 | TypeScript (Node 22+, browsers) | `@growwer/api` | [![npm](https://img.shields.io/npm/v/%40growwer%2Fapi?label=npm&color=informational)](https://www.npmjs.com/package/@growwer/api) | [`typescript/`](typescript/) |
 | PHP 8.1+ | `growwer/growwer-api-sdk` | [![Packagist](https://img.shields.io/packagist/v/growwer/growwer-api-sdk?label=packagist&color=informational)](https://packagist.org/packages/growwer/growwer-api-sdk) | [`php/`](php/) |
-| Go 1.23+ | `github.com/viralitymedia/growwer-api-sdk/go` | [![Go module](https://img.shields.io/github/v/tag/viralitymedia/growwer-api-sdk?filter=go%2F*&label=go&color=informational)](https://pkg.go.dev/github.com/viralitymedia/growwer-api-sdk/go) | [`go/`](go/) |
+| Go 1.23+ | `github.com/viralitymedia/growwer-api-sdk/go/v2` | [![Go module](https://img.shields.io/github/v/tag/viralitymedia/growwer-api-sdk?filter=go%2F*&label=go&color=informational)](https://pkg.go.dev/github.com/viralitymedia/growwer-api-sdk/go/v2) | [`go/`](go/) |
 | Java 11+ | `com.growwer:growwer-api` | [![Maven Central](https://img.shields.io/maven-central/v/com.growwer/growwer-api?label=maven%20central&color=informational)](https://central.sonatype.com/artifact/com.growwer/growwer-api) | [`java/`](java/) |
 | .NET 8 | `Growwer.Api` | [![NuGet](https://img.shields.io/nuget/v/Growwer.Api?label=nuget&color=informational)](https://www.nuget.org/packages/Growwer.Api/) | [`csharp/`](csharp/) |
 | Ruby 3.0+ | `growwer` | [![RubyGems](https://img.shields.io/gem/v/growwer?label=gem&color=informational)](https://rubygems.org/gems/growwer) | [`ruby/`](ruby/) |
@@ -97,7 +97,7 @@ import (
 	"context"
 	"os"
 
-	growwer "github.com/viralitymedia/growwer-api-sdk/go"
+	growwer "github.com/viralitymedia/growwer-api-sdk/go/v2"
 )
 
 config := growwer.NewConfiguration()
@@ -171,6 +171,25 @@ var config = new Configuration
 var me = new AccountApi(config).GetMe();
 ```
 </details>
+
+## Changes in 2.0.0
+
+**Two changes break code written for 1.1.1**, and neither comes from the API. Python, PHP, Java, C#
+and Ruby need no change:
+
+- **TypeScript:** `@growwer/api` now declares Node 22 or newer. Browsers are not affected.
+- **Go:** the module moves to `github.com/viralitymedia/growwer-api-sdk/go/v2`, because Go requires
+  a second major version to carry `/v2`. Update every import and run
+  `go get github.com/viralitymedia/growwer-api-sdk/go/v2@v2.0.0`. The package is still `growwer`,
+  and the old path stays at 1.1.1.
+
+The contract adds one enum value and has no breaking change: no path, field or type moved.
+
+- **Channel `mcp`.** `Order.channel.created`, `SellerOrder.channel.created` and
+  `SellerOrder.channel.accepted` can now be `mcp`, for an order placed or accepted through the MCP
+  server. The Python, PHP, Java, C# and Ruby clients of 1.1.1 refuse that value when they read such
+  an order; this release accepts it. Code that switches over every channel needs a case for it, and
+  in C# the numeric value of `Web` moves from 2 to 3.
 
 ## Changes in 1.1.1
 
@@ -562,9 +581,10 @@ contract dropped them:
 These corrections are applied by the generator script rather than by hand, because a hand edit
 would be discarded on the next run:
 
-- **Go** has no package registry, so the import path is the repository URL plus the directory. The
-  generator derives the module path from the Go package name, and `go` is a keyword, so it cannot
-  produce `.../growwer-api-sdk/go` on its own.
+- **Go** has no package registry, so the import path is the repository URL plus the directory, and
+  from 2.0.0 on the `/v2` Go requires of a second major. The generator derives the module path from
+  the Go package name, and `go` is a keyword, so it cannot produce `.../growwer-api-sdk/go/v2`
+  on its own.
 - **Go**'s oneOf template writes its no-match branch twice in a row, and `go vet` rejects the second
   copy as unreachable code. The copy is dropped by
   [`scripts/go-oneof-unreachable.py`](scripts/go-oneof-unreachable.py).
@@ -629,7 +649,8 @@ An owner sets the registries up once, before the first tag:
       `MAVEN_GPG_PRIVATE_KEY` and `MAVEN_GPG_PASSPHRASE`.
 - [ ] **Packagist**: submit this repository as `growwer/growwer-api-sdk`, and add Packagist's GitHub
       webhook so new tags are picked up.
-- [ ] **Go**: nothing. The module proxy resolves the `go/vX.Y.Z` tag the workflow pushes.
+- [ ] **Go**: nothing. The module proxy resolves the `go/vX.Y.Z` tag the workflow pushes. A new
+      major also moves `GO_MODULE` in `generate.sh` to its `/vN`, or that tag does not resolve.
 - [ ] The GitHub environment `release`, which every publishing job runs in.
 
 ## License

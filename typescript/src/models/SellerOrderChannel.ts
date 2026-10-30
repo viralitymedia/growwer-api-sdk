@@ -20,13 +20,13 @@ import { mapValues } from '../runtime';
  */
 export interface SellerOrderChannel {
     /**
-     * Whether the order was placed through this API or on the web.
+     * Whether the order was placed through this API (`api`), through its MCP server (`mcp`) or on the web.
      * @type {SellerOrderChannelCreatedEnum}
      * @memberof SellerOrderChannel
      */
     created: SellerOrderChannelCreatedEnum;
     /**
-     * Whether you accepted the order through this API or elsewhere, or null while it is not accepted.
+     * Whether you accepted the order through this API (`api`), through its MCP server (`mcp`) or elsewhere (`web`), or null while it is not accepted.
      * @type {SellerOrderChannelAcceptedEnum}
      * @memberof SellerOrderChannel
      */
@@ -39,6 +39,7 @@ export interface SellerOrderChannel {
  */
 export const SellerOrderChannelCreatedEnum = {
     Api: 'api',
+    Mcp: 'mcp',
     Web: 'web'
 } as const;
 export type SellerOrderChannelCreatedEnum = typeof SellerOrderChannelCreatedEnum[keyof typeof SellerOrderChannelCreatedEnum];
@@ -48,6 +49,7 @@ export type SellerOrderChannelCreatedEnum = typeof SellerOrderChannelCreatedEnum
  */
 export const SellerOrderChannelAcceptedEnum = {
     Api: 'api',
+    Mcp: 'mcp',
     Web: 'web'
 } as const;
 export type SellerOrderChannelAcceptedEnum = typeof SellerOrderChannelAcceptedEnum[keyof typeof SellerOrderChannelAcceptedEnum];

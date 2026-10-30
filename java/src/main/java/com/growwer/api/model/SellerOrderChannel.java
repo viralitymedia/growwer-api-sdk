@@ -51,11 +51,13 @@ import com.growwer.api.JSON;
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.24.0")
 public class SellerOrderChannel {
   /**
-   * Whether the order was placed through this API or on the web.
+   * Whether the order was placed through this API (&#x60;api&#x60;), through its MCP server (&#x60;mcp&#x60;) or on the web.
    */
   @JsonAdapter(CreatedEnum.Adapter.class)
   public enum CreatedEnum {
     API("api"),
+    
+    MCP("mcp"),
     
     WEB("web");
 
@@ -108,11 +110,13 @@ public class SellerOrderChannel {
   private CreatedEnum created;
 
   /**
-   * Whether you accepted the order through this API or elsewhere, or null while it is not accepted.
+   * Whether you accepted the order through this API (&#x60;api&#x60;), through its MCP server (&#x60;mcp&#x60;) or elsewhere (&#x60;web&#x60;), or null while it is not accepted.
    */
   @JsonAdapter(AcceptedEnum.Adapter.class)
   public enum AcceptedEnum {
     API("api"),
+    
+    MCP("mcp"),
     
     WEB("web");
 
@@ -173,7 +177,7 @@ public class SellerOrderChannel {
   }
 
   /**
-   * Whether the order was placed through this API or on the web.
+   * Whether the order was placed through this API (&#x60;api&#x60;), through its MCP server (&#x60;mcp&#x60;) or on the web.
    * @return created
    */
   @javax.annotation.Nonnull
@@ -192,7 +196,7 @@ public class SellerOrderChannel {
   }
 
   /**
-   * Whether you accepted the order through this API or elsewhere, or null while it is not accepted.
+   * Whether you accepted the order through this API (&#x60;api&#x60;), through its MCP server (&#x60;mcp&#x60;) or elsewhere (&#x60;web&#x60;), or null while it is not accepted.
    * @return accepted
    */
   @javax.annotation.Nullable

@@ -34,9 +34,9 @@ namespace Growwer.Api.Model
     public partial class OrderChannel : IValidatableObject
     {
         /// <summary>
-        /// Whether the order was placed through this API or on the web.
+        /// Whether the order was placed through this API (&#x60;api&#x60;), through its MCP server (&#x60;mcp&#x60;) or on the web.
         /// </summary>
-        /// <value>Whether the order was placed through this API or on the web.</value>
+        /// <value>Whether the order was placed through this API (&#x60;api&#x60;), through its MCP server (&#x60;mcp&#x60;) or on the web.</value>
         [JsonConverter(typeof(StringEnumConverter))]
         public enum CreatedEnum
         {
@@ -47,17 +47,23 @@ namespace Growwer.Api.Model
             Api = 1,
 
             /// <summary>
+            /// Enum Mcp for value: mcp
+            /// </summary>
+            [EnumMember(Value = "mcp")]
+            Mcp = 2,
+
+            /// <summary>
             /// Enum Web for value: web
             /// </summary>
             [EnumMember(Value = "web")]
-            Web = 2
+            Web = 3
         }
 
 
         /// <summary>
-        /// Whether the order was placed through this API or on the web.
+        /// Whether the order was placed through this API (&#x60;api&#x60;), through its MCP server (&#x60;mcp&#x60;) or on the web.
         /// </summary>
-        /// <value>Whether the order was placed through this API or on the web.</value>
+        /// <value>Whether the order was placed through this API (&#x60;api&#x60;), through its MCP server (&#x60;mcp&#x60;) or on the web.</value>
         [DataMember(Name = "created", IsRequired = true, EmitDefaultValue = true)]
         public CreatedEnum Created { get; set; }
         /// <summary>
@@ -71,7 +77,7 @@ namespace Growwer.Api.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="OrderChannel" /> class.
         /// </summary>
-        /// <param name="created">Whether the order was placed through this API or on the web. (required).</param>
+        /// <param name="created">Whether the order was placed through this API (&#x60;api&#x60;), through its MCP server (&#x60;mcp&#x60;) or on the web. (required).</param>
         public OrderChannel(CreatedEnum created = default)
         {
             this.Created = created;

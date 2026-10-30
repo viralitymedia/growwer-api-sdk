@@ -230,6 +230,7 @@ class OrderChannel implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     public const CREATED_API = 'api';
+    public const CREATED_MCP = 'mcp';
     public const CREATED_WEB = 'web';
 
     /**
@@ -241,6 +242,7 @@ class OrderChannel implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         return [
             self::CREATED_API,
+            self::CREATED_MCP,
             self::CREATED_WEB,
         ];
     }
@@ -330,7 +332,7 @@ class OrderChannel implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets created
      *
-     * @param string $created Whether the order was placed through this API or on the web.
+     * @param string $created Whether the order was placed through this API (`api`), through its MCP server (`mcp`) or on the web.
      *
      * @return self
      */

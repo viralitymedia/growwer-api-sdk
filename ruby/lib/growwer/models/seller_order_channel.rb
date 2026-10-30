@@ -15,10 +15,10 @@ require 'time'
 
 module Growwer
   class SellerOrderChannel < ApiModelBase
-    # Whether the order was placed through this API or on the web.
+    # Whether the order was placed through this API (`api`), through its MCP server (`mcp`) or on the web.
     attr_accessor :created
 
-    # Whether you accepted the order through this API or elsewhere, or null while it is not accepted.
+    # Whether you accepted the order through this API (`api`), through its MCP server (`mcp`) or elsewhere (`web`), or null while it is not accepted.
     attr_accessor :accepted
 
     class EnumAttributeValidator
@@ -122,9 +122,9 @@ module Growwer
     def valid?
       warn '[DEPRECATED] the `valid?` method is obsolete'
       return false if @created.nil?
-      created_validator = EnumAttributeValidator.new('String', ["api", "web"])
+      created_validator = EnumAttributeValidator.new('String', ["api", "mcp", "web"])
       return false unless created_validator.valid?(@created)
-      accepted_validator = EnumAttributeValidator.new('String', ["api", "web"])
+      accepted_validator = EnumAttributeValidator.new('String', ["api", "mcp", "web"])
       return false unless accepted_validator.valid?(@accepted)
       true
     end
@@ -132,7 +132,7 @@ module Growwer
     # Custom attribute writer method checking allowed values (enum).
     # @param [Object] created Object to be assigned
     def created=(created)
-      validator = EnumAttributeValidator.new('String', ["api", "web"])
+      validator = EnumAttributeValidator.new('String', ["api", "mcp", "web"])
       unless validator.valid?(created)
         fail ArgumentError, "invalid value for \"created\", must be one of #{validator.allowable_values}."
       end
@@ -142,7 +142,7 @@ module Growwer
     # Custom attribute writer method checking allowed values (enum).
     # @param [Object] accepted Object to be assigned
     def accepted=(accepted)
-      validator = EnumAttributeValidator.new('String', ["api", "web"])
+      validator = EnumAttributeValidator.new('String', ["api", "mcp", "web"])
       unless validator.valid?(accepted)
         fail ArgumentError, "invalid value for \"accepted\", must be one of #{validator.allowable_values}."
       end

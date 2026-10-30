@@ -142,7 +142,7 @@ public class ApiClient {
         json = new JSON();
 
         // Set default User-Agent.
-        setUserAgent("growwer-java/1.1.1");
+        setUserAgent("growwer-java/2.0.0");
 
         authentications = new HashMap<String, Authentication>();
     }

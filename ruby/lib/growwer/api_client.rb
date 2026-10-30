@@ -34,7 +34,7 @@ module Growwer
     # @option config [Configuration] Configuration for initializing the object, default to Configuration.default
     def initialize(config = Configuration.default)
       @config = config
-      @user_agent = "growwer-ruby/1.1.1"
+      @user_agent = "growwer-ruby/2.0.0"
       @default_headers = {
         'Content-Type' => 'application/json',
         'User-Agent' => @user_agent

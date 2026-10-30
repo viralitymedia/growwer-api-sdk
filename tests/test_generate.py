@@ -108,7 +108,7 @@ class GoTestRegenerationTest(unittest.TestCase):
     def test_regeneration_refreshes_go_tests_and_preserves_existing_files(self):
         result, test, preserved, temporary_outputs = self.run_generator(0)
         self.assertEqual(0, result.returncode, result.stdout + result.stderr)
-        self.assertEqual("updated three-result test github.com/viralitymedia/growwer-api-sdk/go", test)
+        self.assertEqual("updated three-result test github.com/viralitymedia/growwer-api-sdk/go/v2", test)
         self.assertEqual("preserve existing files", preserved)
         self.assertEqual(["go.json"], [path.name for path in temporary_outputs])
 
@@ -167,12 +167,12 @@ class GoGenerationInputsTest(unittest.TestCase):
         (self.root / "go/README.md").write_text("edited by hand")
         self.generate()
         self.assertEqual("edited by hand", (self.root / "go/README.md").read_text())
-        self.assertEqual("generated github.com/viralitymedia/growwer-api-sdk/go", (self.root / "go/client.go").read_text())
+        self.assertEqual("generated github.com/viralitymedia/growwer-api-sdk/go/v2", (self.root / "go/client.go").read_text())
         self.assertEqual("README.md\n", (self.root / "go/.openapi-generator-ignore").read_text())
 
     def test_tidy_keeps_the_testify_release_the_committed_go_mod_names(self):
         (self.root / "go/go.mod").write_text(
-            "module github.com/viralitymedia/growwer-api-sdk/go\n\ngo 1.23\n\n"
+            "module github.com/viralitymedia/growwer-api-sdk/go/v2\n\ngo 1.23\n\n"
             "require (\n\tgithub.com/stretchr/testify v1.11.1\n\tgopkg.in/validator.v2 v2.0.1\n)\n"
         )
         self.assertEqual(

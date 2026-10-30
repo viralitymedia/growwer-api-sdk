@@ -28,7 +28,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/viralitymedia/growwer-api-sdk/go"
+	openapiclient "github.com/viralitymedia/growwer-api-sdk/go/v2"
 )
 
 func main() {
@@ -101,7 +101,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/viralitymedia/growwer-api-sdk/go"
+	openapiclient "github.com/viralitymedia/growwer-api-sdk/go/v2"
 )
 
 func main() {
@@ -175,7 +175,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/viralitymedia/growwer-api-sdk/go"
+	openapiclient "github.com/viralitymedia/growwer-api-sdk/go/v2"
 )
 
 func main() {
@@ -248,7 +248,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/viralitymedia/growwer-api-sdk/go"
+	openapiclient "github.com/viralitymedia/growwer-api-sdk/go/v2"
 )
 
 func main() {

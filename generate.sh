@@ -364,6 +364,7 @@ for name in sorted(listed(previous_list) - listed(current_list)):
     # work of OpenAPI Generator. Corrected here from sdks.json, before the PHP root manifest is
     # derived from php/composer.json. The Python manifests also get their dependency floors raised
     # past the releases with open advisories, which no generator option sets either.
+    # The TypeScript manifest gets its Node floor here for the same reason.
     python3 scripts/package-metadata.py "${target}"
   fi
 

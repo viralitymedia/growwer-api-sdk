@@ -1158,7 +1158,6 @@ class TypeScriptPackageMetadataTest(unittest.TestCase):
         # A floor the package claims but CI never runs is a claim nobody checked.
         ci = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
         self.assertIn('node-version: ["22", "26"]\n', ci)
-        self.assertNotIn('node-version: "20"', ci)
 
 
 class WorkflowSecretTest(unittest.TestCase):

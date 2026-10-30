@@ -101,7 +101,7 @@ class Configuration
      *
      * @var string
      */
-    protected $userAgent = 'growwer-php/1.1.1';
+    protected $userAgent = 'growwer-php/2.0.0';
 
     /**
      * Debug switch (default set to false)

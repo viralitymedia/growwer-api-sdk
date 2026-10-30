@@ -67,7 +67,7 @@ Add this dependency to your project's POM:
 <dependency>
   <groupId>com.growwer</groupId>
   <artifactId>growwer-api</artifactId>
-  <version>1.1.1</version>
+  <version>2.0.0</version>
   <scope>compile</scope>
 </dependency>
 ```
@@ -83,7 +83,7 @@ Add this dependency to your project's build file:
   }
 
   dependencies {
-     implementation "com.growwer:growwer-api:1.1.1"
+     implementation "com.growwer:growwer-api:2.0.0"
   }
 ```
 
@@ -97,7 +97,7 @@ mvn clean package
 
 Then manually install the following JARs:
 
-* `target/growwer-api-1.1.1.jar`
+* `target/growwer-api-2.0.0.jar`
 * `target/lib/*.jar`
 
 ## Getting Started

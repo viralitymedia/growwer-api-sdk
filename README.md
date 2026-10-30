@@ -172,6 +172,25 @@ var me = new AccountApi(config).GetMe();
 ```
 </details>
 
+## Changes in 2.0.0
+
+**Two changes break code written for 1.1.1**, and neither comes from the API. Python, PHP, Java, C#
+and Ruby need no change:
+
+- **TypeScript:** `@growwer/api` now declares Node 22 or newer. Browsers are not affected.
+- **Go:** the module moves to `github.com/viralitymedia/growwer-api-sdk/go/v2`, because Go requires
+  a second major version to carry `/v2`. Update every import and run
+  `go get github.com/viralitymedia/growwer-api-sdk/go/v2@v2.0.0`. The package is still `growwer`,
+  and the old path stays at 1.1.1.
+
+The contract adds one enum value and has no breaking change: no path, field or type moved.
+
+- **Channel `mcp`.** `Order.channel.created`, `SellerOrder.channel.created` and
+  `SellerOrder.channel.accepted` can now be `mcp`, for an order placed or accepted through the MCP
+  server. The Python and Java clients of 1.1.1 refuse that value when they read such an order; this
+  release accepts it. Code that switches over every channel needs a case for it, and in C# the
+  numeric value of `Web` moves from 2 to 3.
+
 ## Changes in 1.1.1
 
 No code written for 1.1.0 breaks. The contract changes only in what the API documents and in one

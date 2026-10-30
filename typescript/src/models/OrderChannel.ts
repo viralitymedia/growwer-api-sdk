@@ -20,7 +20,7 @@ import { mapValues } from '../runtime';
  */
 export interface OrderChannel {
     /**
-     * Whether the order was placed through this API or on the web.
+     * Whether the order was placed through this API (`api`), through its MCP server (`mcp`) or on the web.
      * @type {OrderChannelCreatedEnum}
      * @memberof OrderChannel
      */
@@ -33,6 +33,7 @@ export interface OrderChannel {
  */
 export const OrderChannelCreatedEnum = {
     Api: 'api',
+    Mcp: 'mcp',
     Web: 'web'
 } as const;
 export type OrderChannelCreatedEnum = typeof OrderChannelCreatedEnum[keyof typeof OrderChannelCreatedEnum];

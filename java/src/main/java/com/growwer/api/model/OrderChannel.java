@@ -51,11 +51,13 @@ import com.growwer.api.JSON;
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.24.0")
 public class OrderChannel {
   /**
-   * Whether the order was placed through this API or on the web.
+   * Whether the order was placed through this API (&#x60;api&#x60;), through its MCP server (&#x60;mcp&#x60;) or on the web.
    */
   @JsonAdapter(CreatedEnum.Adapter.class)
   public enum CreatedEnum {
     API("api"),
+    
+    MCP("mcp"),
     
     WEB("web");
 
@@ -116,7 +118,7 @@ public class OrderChannel {
   }
 
   /**
-   * Whether the order was placed through this API or on the web.
+   * Whether the order was placed through this API (&#x60;api&#x60;), through its MCP server (&#x60;mcp&#x60;) or on the web.
    * @return created
    */
   @javax.annotation.Nonnull

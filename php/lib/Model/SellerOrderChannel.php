@@ -236,8 +236,10 @@ class SellerOrderChannel implements ModelInterface, ArrayAccess, \JsonSerializab
     }
 
     public const CREATED_API = 'api';
+    public const CREATED_MCP = 'mcp';
     public const CREATED_WEB = 'web';
     public const ACCEPTED_API = 'api';
+    public const ACCEPTED_MCP = 'mcp';
     public const ACCEPTED_WEB = 'web';
 
     /**
@@ -249,6 +251,7 @@ class SellerOrderChannel implements ModelInterface, ArrayAccess, \JsonSerializab
     {
         return [
             self::CREATED_API,
+            self::CREATED_MCP,
             self::CREATED_WEB,
         ];
     }
@@ -262,6 +265,7 @@ class SellerOrderChannel implements ModelInterface, ArrayAccess, \JsonSerializab
     {
         return [
             self::ACCEPTED_API,
+            self::ACCEPTED_MCP,
             self::ACCEPTED_WEB,
         ];
     }
@@ -364,7 +368,7 @@ class SellerOrderChannel implements ModelInterface, ArrayAccess, \JsonSerializab
     /**
      * Sets created
      *
-     * @param string $created Whether the order was placed through this API or on the web.
+     * @param string $created Whether the order was placed through this API (`api`), through its MCP server (`mcp`) or on the web.
      *
      * @return self
      */
@@ -401,7 +405,7 @@ class SellerOrderChannel implements ModelInterface, ArrayAccess, \JsonSerializab
     /**
      * Sets accepted
      *
-     * @param string|null $accepted Whether you accepted the order through this API or elsewhere, or null while it is not accepted.
+     * @param string|null $accepted Whether you accepted the order through this API (`api`), through its MCP server (`mcp`) or elsewhere (`web`), or null while it is not accepted.
      *
      * @return self
      */

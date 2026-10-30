@@ -13309,9 +13309,11 @@ components:
         created: api
       properties:
         created:
-          description: Whether the order was placed through this API or on the web.
+          description: "Whether the order was placed through this API (`api`), through\
+            \ its MCP server (`mcp`) or on the web."
           enum:
           - api
+          - mcp
           - web
           type: string
       required:
@@ -13357,16 +13359,20 @@ components:
         accepted: api
       properties:
         created:
-          description: Whether the order was placed through this API or on the web.
+          description: "Whether the order was placed through this API (`api`), through\
+            \ its MCP server (`mcp`) or on the web."
           enum:
           - api
+          - mcp
           - web
           type: string
         accepted:
-          description: "Whether you accepted the order through this API or elsewhere,\
-            \ or null while it is not accepted."
+          description: "Whether you accepted the order through this API (`api`), through\
+            \ its MCP server (`mcp`) or elsewhere (`web`), or null while it is not\
+            \ accepted."
           enum:
           - api
+          - mcp
           - web
           - null
           nullable: true

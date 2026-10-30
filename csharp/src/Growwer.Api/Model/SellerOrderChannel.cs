@@ -34,9 +34,9 @@ namespace Growwer.Api.Model
     public partial class SellerOrderChannel : IValidatableObject
     {
         /// <summary>
-        /// Whether the order was placed through this API or on the web.
+        /// Whether the order was placed through this API (&#x60;api&#x60;), through its MCP server (&#x60;mcp&#x60;) or on the web.
         /// </summary>
-        /// <value>Whether the order was placed through this API or on the web.</value>
+        /// <value>Whether the order was placed through this API (&#x60;api&#x60;), through its MCP server (&#x60;mcp&#x60;) or on the web.</value>
         [JsonConverter(typeof(StringEnumConverter))]
         public enum CreatedEnum
         {
@@ -47,23 +47,29 @@ namespace Growwer.Api.Model
             Api = 1,
 
             /// <summary>
+            /// Enum Mcp for value: mcp
+            /// </summary>
+            [EnumMember(Value = "mcp")]
+            Mcp = 2,
+
+            /// <summary>
             /// Enum Web for value: web
             /// </summary>
             [EnumMember(Value = "web")]
-            Web = 2
+            Web = 3
         }
 
 
         /// <summary>
-        /// Whether the order was placed through this API or on the web.
+        /// Whether the order was placed through this API (&#x60;api&#x60;), through its MCP server (&#x60;mcp&#x60;) or on the web.
         /// </summary>
-        /// <value>Whether the order was placed through this API or on the web.</value>
+        /// <value>Whether the order was placed through this API (&#x60;api&#x60;), through its MCP server (&#x60;mcp&#x60;) or on the web.</value>
         [DataMember(Name = "created", IsRequired = true, EmitDefaultValue = true)]
         public CreatedEnum Created { get; set; }
         /// <summary>
-        /// Whether you accepted the order through this API or elsewhere, or null while it is not accepted.
+        /// Whether you accepted the order through this API (&#x60;api&#x60;), through its MCP server (&#x60;mcp&#x60;) or elsewhere (&#x60;web&#x60;), or null while it is not accepted.
         /// </summary>
-        /// <value>Whether you accepted the order through this API or elsewhere, or null while it is not accepted.</value>
+        /// <value>Whether you accepted the order through this API (&#x60;api&#x60;), through its MCP server (&#x60;mcp&#x60;) or elsewhere (&#x60;web&#x60;), or null while it is not accepted.</value>
         [JsonConverter(typeof(StringEnumConverter))]
         public enum AcceptedEnum
         {
@@ -74,17 +80,23 @@ namespace Growwer.Api.Model
             Api = 1,
 
             /// <summary>
+            /// Enum Mcp for value: mcp
+            /// </summary>
+            [EnumMember(Value = "mcp")]
+            Mcp = 2,
+
+            /// <summary>
             /// Enum Web for value: web
             /// </summary>
             [EnumMember(Value = "web")]
-            Web = 2
+            Web = 3
         }
 
 
         /// <summary>
-        /// Whether you accepted the order through this API or elsewhere, or null while it is not accepted.
+        /// Whether you accepted the order through this API (&#x60;api&#x60;), through its MCP server (&#x60;mcp&#x60;) or elsewhere (&#x60;web&#x60;), or null while it is not accepted.
         /// </summary>
-        /// <value>Whether you accepted the order through this API or elsewhere, or null while it is not accepted.</value>
+        /// <value>Whether you accepted the order through this API (&#x60;api&#x60;), through its MCP server (&#x60;mcp&#x60;) or elsewhere (&#x60;web&#x60;), or null while it is not accepted.</value>
         [DataMember(Name = "accepted", IsRequired = true, EmitDefaultValue = true)]
         public AcceptedEnum? Accepted { get; set; }
         /// <summary>
@@ -98,8 +110,8 @@ namespace Growwer.Api.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="SellerOrderChannel" /> class.
         /// </summary>
-        /// <param name="created">Whether the order was placed through this API or on the web. (required).</param>
-        /// <param name="accepted">Whether you accepted the order through this API or elsewhere, or null while it is not accepted. (required).</param>
+        /// <param name="created">Whether the order was placed through this API (&#x60;api&#x60;), through its MCP server (&#x60;mcp&#x60;) or on the web. (required).</param>
+        /// <param name="accepted">Whether you accepted the order through this API (&#x60;api&#x60;), through its MCP server (&#x60;mcp&#x60;) or elsewhere (&#x60;web&#x60;), or null while it is not accepted. (required).</param>
         public SellerOrderChannel(CreatedEnum created = default, AcceptedEnum? accepted = default)
         {
             this.Created = created;

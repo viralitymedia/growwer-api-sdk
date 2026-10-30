@@ -21,7 +21,7 @@ var _ MappedNullable = &OrderChannel{}
 
 // OrderChannel struct for OrderChannel
 type OrderChannel struct {
-	// Whether the order was placed through this API or on the web.
+	// Whether the order was placed through this API (`api`), through its MCP server (`mcp`) or on the web.
 	Created string `json:"created"`
 	AdditionalProperties map[string]interface{}
 }

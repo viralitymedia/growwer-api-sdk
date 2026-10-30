@@ -28,14 +28,14 @@ class OrderChannel(BaseModel):
     """
     OrderChannel
     """ # noqa: E501
-    created: StrictStr = Field(description="Whether the order was placed through this API or on the web.")
+    created: StrictStr = Field(description="Whether the order was placed through this API (`api`), through its MCP server (`mcp`) or on the web.")
     __properties: ClassVar[List[str]] = ["created"]
 
     @field_validator('created')
     def created_validate_enum(cls, value):
         """Validates the enum"""
-        if value not in set(['api', 'web']):
-            raise ValueError("must be one of enum values ('api', 'web')")
+        if value not in set(['api', 'mcp', 'web']):
+            raise ValueError("must be one of enum values ('api', 'mcp', 'web')")
         return value
 
     model_config = ConfigDict(

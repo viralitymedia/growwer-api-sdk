@@ -34,7 +34,8 @@ name: Release
 #
 # Packagist and the Go module proxy need no job at all: Packagist watches the repository through
 # its GitHub webhook, and the Go proxy resolves whatever tags exist. Go is the reason `tag-go`
-# runs: a module in a subdirectory is versioned by a `go/vX.Y.Z` tag, not by `vX.Y.Z`.
+# runs: a module in a subdirectory is versioned by a `go/vX.Y.Z` tag, not by `vX.Y.Z`. A tag on a new
+# major resolves only once GO_MODULE in generate.sh ends in that major.
 
 on:
   push:
@@ -184,7 +185,8 @@ jobs:
           MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
 
   # Go resolves a module in a subdirectory by a tag carrying that subdirectory as a prefix. Without
-  # this, `go get github.com/viralitymedia/growwer-api-sdk/go@v1.2.0` finds nothing at all.
+  # this, `go get github.com/viralitymedia/growwer-api-sdk/go/v2@v2.0.0` finds nothing at all. The
+  # module stays in `go/`, so the tag does not carry the `/v2` of its module path.
   tag-go:
     needs: verify
     runs-on: ubuntu-latest

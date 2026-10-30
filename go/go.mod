@@ -1,4 +1,4 @@
-module github.com/viralitymedia/growwer-api-sdk/go
+module github.com/viralitymedia/growwer-api-sdk/go/v2
 
 go 1.23
 

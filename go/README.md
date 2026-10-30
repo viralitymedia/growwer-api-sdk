@@ -42,7 +42,7 @@ For more information, please visit [https://growwer.com/contact/](https://growwe
 Import the package in a go file in your project and run `go mod tidy`:
 
 ```go
-import growwer "github.com/viralitymedia/growwer-api-sdk/go"
+import growwer "github.com/viralitymedia/growwer-api-sdk/go/v2"
 ```
 
 To use a proxy, set the environment variable `HTTP_PROXY`:

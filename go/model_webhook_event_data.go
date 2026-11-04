@@ -116,11 +116,6 @@ func (dst *WebhookEventData) UnmarshalJSON(data []byte) error {
         } else {
             return fmt.Errorf("data failed to match schemas in oneOf(WebhookEventData)")
         }
-        if err != nil {
-            return fmt.Errorf("data failed to match schemas in oneOf(WebhookEventData): %v", err)
-        } else {
-            return fmt.Errorf("data failed to match schemas in oneOf(WebhookEventData)")
-        }
 	}
 }
 

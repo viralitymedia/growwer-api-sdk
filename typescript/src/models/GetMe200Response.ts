@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Growwer API
- * The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters without spaces) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601. 
+ * The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters without spaces) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Test mode: a test key (`gw_sk_test_` plus 43 characters) works on your account\'s test data alone, apart from the real catalogue: test projects, orders and files, and a test wallet that starts at 1,000.00 EUR. Every response to a test key carries `Growwer-Mode: test`, and an id of the other mode answers 404 as a missing object would. - A test order is validated and debited from the test wallet as a live one   is. A simulated seller accepts it a minute later and delivers it two   minutes after that; you approve the delivery or request an update. - The Test helpers top the test wallet up, move a test order on at once and   reset your test data. A live key on them gets 403 `test_mode_only`. - A test key on the seller and managed service operations, on a project\'s   catalogue writes and on media requests gets 403   `not_available_in_test_mode`. - Idempotency keys are scoped per mode: the same `Idempotency-Key` sent with   a live and a test key never replays the other mode\'s response.  Webhooks: a subscription receives the events of its mode, signed as Standard Webhooks. Your orders\' events and `balance.low` are live: creating a subscription with a test key gets 403 `not_available_in_test_mode` for now. `x-webhooks` lists every event Growwer POSTs and its payload; the WebhookEvent schema describes the headers, the signature and the retries.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601. 
  *
  * The version of the OpenAPI document: 1
  * Contact: support@growwer.com
@@ -89,7 +89,7 @@ export interface GetMe200Response {
      * @type {GetMe200ResponseSeller}
      * @memberof GetMe200Response
      */
-    seller: GetMe200ResponseSeller;
+    seller: GetMe200ResponseSeller | null;
     /**
      * 
      * @type {GetMe200ResponseCatalogue}
@@ -102,7 +102,24 @@ export interface GetMe200Response {
      * @memberof GetMe200Response
      */
     managedService: GetMe200ResponseManagedService;
+    /**
+     * The mode of the key you called with. `live` works on your real account; `test` works in test mode, where nothing you do reaches real sellers, money or orders. Every response to a test key also carries the header `Growwer-Mode: test`.
+     * @type {GetMe200ResponseModeEnum}
+     * @memberof GetMe200Response
+     */
+    mode: GetMe200ResponseModeEnum;
 }
+
+
+/**
+ * @export
+ */
+export const GetMe200ResponseModeEnum = {
+    Live: 'live',
+    Test: 'test'
+} as const;
+export type GetMe200ResponseModeEnum = typeof GetMe200ResponseModeEnum[keyof typeof GetMe200ResponseModeEnum];
+
 
 /**
  * Check if a given object implements the GetMe200Response interface.
@@ -117,6 +134,7 @@ export function instanceOfGetMe200Response(value: object): value is GetMe200Resp
     if (!('seller' in value) || value['seller'] === undefined) return false;
     if (!('catalogue' in value) || value['catalogue'] === undefined) return false;
     if (!('managedService' in value) || value['managedService'] === undefined) return false;
+    if (!('mode' in value) || value['mode'] === undefined) return false;
     return true;
 }
 
@@ -139,6 +157,7 @@ export function GetMe200ResponseFromJSONTyped(json: any, ignoreDiscriminator: bo
         'seller': GetMe200ResponseSellerFromJSON(json['seller']),
         'catalogue': GetMe200ResponseCatalogueFromJSON(json['catalogue']),
         'managedService': GetMe200ResponseManagedServiceFromJSON(json['managedService']),
+        'mode': json['mode'],
     };
 }
 
@@ -162,6 +181,7 @@ export function GetMe200ResponseToJSONTyped(value?: GetMe200Response | null, ign
         'seller': GetMe200ResponseSellerToJSON(value['seller']),
         'catalogue': GetMe200ResponseCatalogueToJSON(value['catalogue']),
         'managedService': GetMe200ResponseManagedServiceToJSON(value['managedService']),
+        'mode': value['mode'],
     };
 }
 

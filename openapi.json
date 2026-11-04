@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Growwer API",
-    "description": "The Growwer customer API. Authenticate every call with an API key created on\nyour profile page, sent as `Authorization: Bearer <key>`. A read key can call\nevery GET operation; writes need a read and write key and an\n`Idempotency-Key` header.\n\nIdempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII\ncharacters without spaces) for each operation and reuse it only to retry that same\noperation. Keys belong to your account, not to one API key.\n- A successful write is stored for 30 days: a retry with the same key and\n  the same request replays its response with `Idempotent-Replayed: true`\n  and does nothing again.\n- A refused write (4xx) has no effect and releases its key: once you fix the\n  cause, retry with the same key and the write runs.\n- A failed write (5xx) may have taken effect, so it is never run again under\n  its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it\n  took effect before retrying with a new key.\n- A retry while the first request is still running gets 409\n  `idempotency_request_in_progress`. A request still running after 5 minutes\n  is treated as failed: a retry gets 409 `idempotency_outcome_unknown`.\n- The same key with a different request (method, path, query or body) gets\n  409 `idempotency_key_reused`. A write without the header gets 400\n  `idempotency_key_required`.\n\nEvery response carries `X-Request-Id`. Errors share one shape,\n`{code, message, requestId, details?}`. Money is integer cents plus a\ncurrency code and dates are ISO-8601.\n",
+    "description": "The Growwer customer API. Authenticate every call with an API key created on\nyour profile page, sent as `Authorization: Bearer <key>`. A read key can call\nevery GET operation; writes need a read and write key and an\n`Idempotency-Key` header.\n\nIdempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII\ncharacters without spaces) for each operation and reuse it only to retry that same\noperation. Keys belong to your account, not to one API key.\n- A successful write is stored for 30 days: a retry with the same key and\n  the same request replays its response with `Idempotent-Replayed: true`\n  and does nothing again.\n- A refused write (4xx) has no effect and releases its key: once you fix the\n  cause, retry with the same key and the write runs.\n- A failed write (5xx) may have taken effect, so it is never run again under\n  its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it\n  took effect before retrying with a new key.\n- A retry while the first request is still running gets 409\n  `idempotency_request_in_progress`. A request still running after 5 minutes\n  is treated as failed: a retry gets 409 `idempotency_outcome_unknown`.\n- The same key with a different request (method, path, query or body) gets\n  409 `idempotency_key_reused`. A write without the header gets 400\n  `idempotency_key_required`.\n\nTest mode: a test key (`gw_sk_test_` plus 43 characters) works on your\naccount's test data alone, apart from the real catalogue: test projects,\norders and files, and a test wallet that starts at 1,000.00 EUR. Every\nresponse to a test key carries `Growwer-Mode: test`, and an id of the other\nmode answers 404 as a missing object would.\n- A test order is validated and debited from the test wallet as a live one\n  is. A simulated seller accepts it a minute later and delivers it two\n  minutes after that; you approve the delivery or request an update.\n- The Test helpers top the test wallet up, move a test order on at once and\n  reset your test data. A live key on them gets 403 `test_mode_only`.\n- A test key on the seller and managed service operations, on a project's\n  catalogue writes and on media requests gets 403\n  `not_available_in_test_mode`.\n- Idempotency keys are scoped per mode: the same `Idempotency-Key` sent with\n  a live and a test key never replays the other mode's response.\n\nWebhooks: a subscription receives the events of its mode, signed as Standard\nWebhooks. Your orders' events and `balance.low` are live: creating a\nsubscription with a test key gets 403 `not_available_in_test_mode` for now.\n`x-webhooks` lists every event Growwer POSTs and its payload; the\nWebhookEvent schema describes the headers, the signature and the retries.\n\nEvery response carries `X-Request-Id`. Errors share one shape,\n`{code, message, requestId, details?}`. Money is integer cents plus a\ncurrency code and dates are ISO-8601.\n",
     "termsOfService": "https://growwer.com/legal/terms-of-use/",
     "contact": {
       "name": "Growwer Support",
@@ -28,7 +28,7 @@
           "Account"
         ],
         "summary": "Your account",
-        "description": "Profile basics, the buyer and seller balances, whether your seller account is restricted, whether the catalogue is open to you, and whether you have a managed service.",
+        "description": "Profile basics, the buyer and seller balances, whether your seller account is restricted, whether the catalogue is open to you, whether you have a managed service, and whether the key you called with is live or test. A test key reads its test wallet as the buyer balance (1,000.00 EUR until test orders and top-ups move it), never your real balance, and no seller side.",
         "operationId": "getMe",
         "responses": {
           "200": {
@@ -45,7 +45,8 @@
                     "buyer",
                     "seller",
                     "catalogue",
-                    "managedService"
+                    "managedService",
+                    "mode"
                   ],
                   "properties": {
                     "id": {
@@ -80,6 +81,7 @@
                       "type": "object"
                     },
                     "seller": {
+                      "description": "Your seller side. Null to a test key: selling is not available in test mode, so a test key reads neither your seller balance nor its status.",
                       "required": [
                         "balance",
                         "restricted",
@@ -105,7 +107,8 @@
                           "nullable": true
                         }
                       },
-                      "type": "object"
+                      "type": "object",
+                      "nullable": true
                     },
                     "catalogue": {
                       "required": [
@@ -143,6 +146,14 @@
                         }
                       },
                       "type": "object"
+                    },
+                    "mode": {
+                      "description": "The mode of the key you called with. `live` works on your real account; `test` works in test mode, where nothing you do reaches real sellers, money or orders. Every response to a test key also carries the header `Growwer-Mode: test`.",
+                      "type": "string",
+                      "enum": [
+                        "live",
+                        "test"
+                      ]
                     }
                   },
                   "type": "object"
@@ -657,7 +668,7 @@
           "Catalogue"
         ],
         "summary": "Restore a discarded media for a project",
-        "description": "Restores a media you discarded for one of your projects. Restoring one that is not discarded changes nothing. It works for any media, even one the catalogue no longer shows.",
+        "description": "Restores a media you discarded for one of your projects. Restoring one that is not discarded, or an id no media has, changes nothing and answers the same. It works for any media, even one the catalogue no longer shows.",
         "operationId": "undiscardMedia",
         "parameters": [
           {
@@ -783,7 +794,7 @@
           "Catalogue"
         ],
         "summary": "Remove a media from the favourites of a project",
-        "description": "Removes a media from the favourites of one of your projects. Removing one that is not a favourite changes nothing. It works for any media, even one the catalogue no longer shows.",
+        "description": "Removes a media from the favourites of one of your projects. Removing one that is not a favourite, or an id no media has, changes nothing and answers the same. It works for any media, even one the catalogue no longer shows.",
         "operationId": "unfavouriteMedia",
         "parameters": [
           {
@@ -5887,6 +5898,284 @@
         }
       }
     },
+    "/api/v1/test-helpers/orders/{id}/advance": {
+      "post": {
+        "tags": [
+          "Test helpers"
+        ],
+        "summary": "Advance a test order",
+        "description": "Test keys only. Moves one of your test orders at once to `to`, without waiting for the simulated seller: `accepted` or `rejected` (by the seller, from `pending_acceptance`), `draft_delivered` (the sample draft, from `pending_draft` or `pending_draft_update`), `draft_update_requested` (as if you sent the draft back, from `pending_draft_review`), `published` (delivered for your review, from `pending_order_delivery`, `scheduled` or `pending_order_delivery_update`), `update_requested` (as if you sent the delivery back, from `pending_order_delivery_review`) or `cancelled_by_growwer` (from any state that is not finished). The order and your test wallet change as that move changes them live, a rejection or a cancellation refunding the price, and the simulated seller carries on from the new state. A post with a future `scheduledPublicationDate` waits in `scheduled` until that date once the simulated seller delivers it; `published` skips the wait. A target its state does not allow answers 409 `invalid_transition` with the targets it allows. A live key gets 403 `test_mode_only`.",
+        "operationId": "advanceTestOrder",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "to"
+                ],
+                "properties": {
+                  "to": {
+                    "description": "The state to move the test order to.",
+                    "type": "string",
+                    "enum": [
+                      "accepted",
+                      "rejected",
+                      "published",
+                      "update_requested",
+                      "draft_delivered",
+                      "draft_update_requested",
+                      "cancelled_by_growwer"
+                    ]
+                  }
+                },
+                "type": "object",
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The test order, moved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "description": "The key is read-only (code `insufficient_capability`), or it is a live key (code `test_mode_only`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "description": "The order's state does not allow `to` (code `invalid_transition`, with `details.validTargets`, the targets it allows, possibly none), or the `Idempotency-Key` conflicts (codes `idempotency_key_reused`, `idempotency_request_in_progress`, `idempotency_outcome_unknown`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The body is not valid (code `validation_failed`): a `to` that is not one of the targets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/test-helpers/reset": {
+      "post": {
+        "tags": [
+          "Test helpers"
+        ],
+        "summary": "Reset your test data",
+        "description": "Test keys only. Deletes your test projects, orders and uploaded test files, and returns your test wallet to its opening balance of 1,000.00 EUR with no movements. Your API keys and webhook subscriptions stay, and nothing of your live account changes. It takes no body. A live key gets 403 `test_mode_only`.",
+        "operationId": "resetTestData",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Your test data is deleted and your test wallet is back at 1,000.00 EUR."
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "description": "The key is read-only (code `insufficient_capability`), or it is a live key (code `test_mode_only`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The `Idempotency-Key` conflicts (codes `idempotency_key_reused`, `idempotency_request_in_progress`, `idempotency_outcome_unknown`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/test-helpers/wallet/top-up": {
+      "post": {
+        "tags": [
+          "Test helpers"
+        ],
+        "summary": "Top up your test wallet",
+        "description": "Test keys only. Credits your test wallet, the buyer wallet a test key spends from, with fictitious money: more than nothing and at most 10,000.00 EUR per call. It never touches your real wallets, takes no payment and issues no invoice; the movement shows in GET /wallets/buyer/transactions for a test key as a confirmed `deposit`. A live key gets 403 `test_mode_only`.",
+        "operationId": "topUpTestWallet",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "amount"
+                ],
+                "properties": {
+                  "amount": {
+                    "description": "What to credit, in EUR: from 1 to 1000000 cents.",
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Money"
+                      }
+                    ]
+                  }
+                },
+                "type": "object",
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Your test wallet, credited.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "balance",
+                    "topUpUrl"
+                  ],
+                  "properties": {
+                    "balance": {
+                      "$ref": "#/components/schemas/Balance"
+                    },
+                    "topUpUrl": {
+                      "description": "The wallet page where a live buyer tops up, as GET /wallets/buyer gives it.",
+                      "type": "string",
+                      "format": "uri"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "description": "The key is read-only (code `insufficient_capability`), or it is a live key (code `test_mode_only`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The `Idempotency-Key` conflicts (codes `idempotency_key_reused`, `idempotency_request_in_progress`, `idempotency_outcome_unknown`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The body is not valid (code `validation_failed`): an `amount` that is not EUR, not more than nothing, or above 10,000.00 EUR.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        }
+      }
+    },
     "/api/v1/wallets/buyer/transactions/{id}/document": {
       "get": {
         "tags": [
@@ -6048,6 +6337,712 @@
           },
           "422": {
             "$ref": "#/components/responses/ValidationFailed"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/webhooks": {
+      "get": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "List your webhook subscriptions",
+        "description": "Your webhook subscriptions in the mode of the key, newest first, disabled ones included. A live key lists the live ones and a test key the test ones.",
+        "operationId": "listWebhooks",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Subscriptions per page, 1 to 100.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "Subscriptions to skip.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "minimum": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A page of your subscriptions and how many you have in all.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "items",
+                    "total"
+                  ],
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Webhook"
+                      }
+                    },
+                    "total": {
+                      "type": "integer"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationFailed"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Create a webhook subscription",
+        "description": "Subscribes an HTTPS URL to the events you list. Growwer then POSTs each event to it, signed as Standard Webhooks signs (`webhook-id`, `webhook-timestamp`, `webhook-signature`) with the `secret` this answer carries. The secret is shown only here and on POST /webhooks/{id}/rotate-secret: store it now. A replay of this request under its `Idempotency-Key` answers the subscription without it.\n\nThe URL must be HTTPS and its host must resolve to public addresses only: a loopback, private, link-local, multicast or metadata address is refused with 422 `webhook_url_not_public`, a host that does not resolve with 422 `webhook_url_unresolvable`. `lowBalanceThreshold` is required with `balance.low` and refused without it. An account has at most 20 subscriptions per mode. Test keys get 403 `not_available_in_test_mode` for now.",
+        "operationId": "createWebhook",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "url",
+                  "events"
+                ],
+                "properties": {
+                  "url": {
+                    "description": "An HTTPS URL of at most 2048 characters, without a backslash or credentials. Its host is an IP address or a domain name of two labels or more, such as hooks.example.com, with one trailing dot allowed; a single-label host such as localhost is refused (`validation_failed` on `url`). The host is checked, and resolved at each delivery, in lower case and with a Unicode name in punycode, the form a delivery connects to.",
+                    "type": "string",
+                    "format": "uri",
+                    "maxLength": 2048
+                  },
+                  "events": {
+                    "description": "The events to send, at least one.",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/WebhookEventType"
+                    },
+                    "minItems": 1,
+                    "uniqueItems": true
+                  },
+                  "lowBalanceThreshold": {
+                    "description": "With `balance.low`: the available buyer balance below which the event fires, in EUR.",
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Money"
+                      }
+                    ]
+                  },
+                  "description": {
+                    "description": "A note of yours, at most 255 characters.",
+                    "type": "string",
+                    "nullable": true,
+                    "maxLength": 255
+                  }
+                },
+                "type": "object",
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The subscription and its signing secret.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebhookWithSecret"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "409": {
+            "description": "The account already has 20 subscriptions in this mode (code `webhook_limit_reached`, with `details.limit`), or the `Idempotency-Key` conflicts (codes `idempotency_key_reused`, `idempotency_request_in_progress`, `idempotency_outcome_unknown`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The body is not valid (code `validation_failed`, also for a URL whose host is a single-label name), or the URL does not resolve or resolves to an address that is not public (codes `webhook_url_unresolvable`, `webhook_url_not_public`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/webhooks/{id}": {
+      "get": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Get a webhook subscription",
+        "description": "One of your webhook subscriptions, without its secret. A subscription of the other mode is not found.",
+        "operationId": "getWebhook",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The subscription.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The subscription.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Webhook"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Delete a webhook subscription",
+        "description": "Deletes one of your webhook subscriptions and its delivery log. Deliveries still pending are not sent.",
+        "operationId": "deleteWebhook",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The subscription.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "The subscription was deleted."
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/IdempotencyConflict"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Edit a webhook subscription",
+        "description": "Changes only the fields you send. A new `url` is checked as on create. Dropping `balance.low` from `events` drops the threshold with it. `enabled: false` disables the subscription, which then gets no events; `enabled: true` enables it again, including one Growwer disabled because its endpoint answered 410 or failed for 5 days, and forgets its failures.",
+        "operationId": "updateWebhook",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The subscription.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "url": {
+                    "description": "An HTTPS URL of at most 2048 characters, without a backslash or credentials. Its host is an IP address or a domain name of two labels or more, such as hooks.example.com, with one trailing dot allowed; a single-label host such as localhost is refused (`validation_failed` on `url`). The host is checked, and resolved at each delivery, in lower case and with a Unicode name in punycode, the form a delivery connects to.",
+                    "type": "string",
+                    "format": "uri",
+                    "maxLength": 2048
+                  },
+                  "events": {
+                    "description": "The events to send, at least one; replaces the list.",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/WebhookEventType"
+                    },
+                    "minItems": 1,
+                    "uniqueItems": true
+                  },
+                  "lowBalanceThreshold": {
+                    "description": "With `balance.low`: the available buyer balance below which the event fires, in EUR. Null removes it.",
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/MoneyOrNull"
+                      }
+                    ]
+                  },
+                  "description": {
+                    "description": "A note of yours, at most 255 characters. Null removes it.",
+                    "type": "string",
+                    "nullable": true,
+                    "maxLength": 255
+                  },
+                  "enabled": {
+                    "description": "Whether the subscription gets events.",
+                    "type": "boolean"
+                  }
+                },
+                "type": "object",
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The subscription as edited.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Webhook"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/IdempotencyConflict"
+          },
+          "422": {
+            "description": "The body is not valid (code `validation_failed`, also for a URL whose host is a single-label name), or the new URL does not resolve or resolves to an address that is not public (codes `webhook_url_unresolvable`, `webhook_url_not_public`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/webhooks/{id}/deliveries": {
+      "get": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "List the deliveries of a webhook subscription",
+        "description": "The events sent to the subscription in the last 30 days, newest first, each with its status and its latest 10 attempts: when, the status code your endpoint answered, how long it took and the start of its response body. Older deliveries are deleted.",
+        "operationId": "listWebhookDeliveries",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The subscription.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Deliveries per page, 1 to 100.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "Deliveries to skip.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "minimum": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A page of the deliveries and how many there are in the last 30 days.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "items",
+                    "total"
+                  ],
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/WebhookDelivery"
+                      }
+                    },
+                    "total": {
+                      "type": "integer"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationFailed"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/webhooks/{id}/deliveries/{deliveryId}/redeliver": {
+      "post": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Redeliver a webhook event",
+        "description": "Queues a delivery that has succeeded or failed again, in a new round of retries, and answers it. It sends the same event with the same `webhook-id`, so a consumer that dedupes by it handles it once. Deliveries are kept 30 days. A delivery still pending, being sent or waiting for its next retry, answers 409 `webhook_delivery_pending` and takes none of the hour's sends; so does a redelivery while the subscription has 10 test events and redeliveries pending, its limit for a redelivery, given in `details.limit`. The pending deliveries of events never redelivered do not count. A subscription takes at most 10 test events and redeliveries an hour: past them it answers 429 `webhook_send_limit_reached` with `Retry-After`. A disabled subscription answers 409 `webhook_disabled`.",
+        "operationId": "redeliverWebhook",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The subscription.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "deliveryId",
+            "in": "path",
+            "description": "The delivery.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "The delivery, queued again.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebhookDelivery"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "description": "The subscription is disabled (code `webhook_disabled`), the delivery is still pending or the subscription already has 10 test events and redeliveries pending, its limit in `details.limit` (code `webhook_delivery_pending`), or the `Idempotency-Key` conflicts (codes `idempotency_key_reused`, `idempotency_request_in_progress`, `idempotency_outcome_unknown`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/webhooks/{id}/rotate-secret": {
+      "post": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Rotate a webhook secret",
+        "description": "Gives the subscription a new signing secret and answers it: it is shown only here, so store it now. For 24 hours, until `previousSecretExpiresAt`, every delivery carries two signatures in `webhook-signature`, one with each secret, so you can switch without missing an event; after that only the new secret signs. A replay of this request under its `Idempotency-Key` answers the subscription without the secret.",
+        "operationId": "rotateWebhookSecret",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The subscription.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The subscription and its new signing secret.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebhookWithSecret"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "description": "Another request rotated the secret at the same time and its secret is the one in force (code `webhook_secret_rotation_conflict`), or the `Idempotency-Key` conflicts (codes `idempotency_key_reused`, `idempotency_request_in_progress`, `idempotency_outcome_unknown`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/webhooks/{id}/test": {
+      "post": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Send a test event",
+        "description": "Queues a `webhook.test` event for the subscription, whatever events it lists, and answers its delivery: follow it on GET /webhooks/{id}/deliveries. It is signed, retried and logged as any event. It normally supersedes the subscription's earlier test events still pending: their deliveries fail and are not retried, so a test right after fixing the endpoint does not wait behind them; one that cannot be failed then is failed by the next test. A subscription takes at most 10 test events and redeliveries an hour: past them it answers 429 `webhook_send_limit_reached` with `Retry-After`. A disabled subscription answers 409 `webhook_disabled`. A test event that cannot be recorded answers 503 `webhook_test_unavailable`: nothing was sent, the attempt counts toward the hourly limit, and a retry needs a new `Idempotency-Key`.",
+        "operationId": "sendWebhookTest",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The subscription.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "The delivery of the test event, queued.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebhookDelivery"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "description": "The subscription is disabled (code `webhook_disabled`), or the `Idempotency-Key` conflicts (codes `idempotency_key_reused`, `idempotency_request_in_progress`, `idempotency_outcome_unknown`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           },
           "429": {
             "$ref": "#/components/responses/TooManyRequests"
@@ -7018,6 +8013,354 @@
           "createdAt": {
             "type": "string",
             "format": "date-time"
+          }
+        },
+        "type": "object"
+      },
+      "WebhookEventType": {
+        "description": "An event a subscription can list. `webhook.test` is sent only by POST /webhooks/{id}/test and cannot be listed.",
+        "type": "string",
+        "enum": [
+          "order.created",
+          "order.accepted",
+          "order.rejected",
+          "order.published",
+          "order.update_requested",
+          "order.completed",
+          "order.cancelled",
+          "balance.low"
+        ]
+      },
+      "Webhook": {
+        "required": [
+          "id",
+          "url",
+          "events",
+          "lowBalanceThreshold",
+          "description",
+          "enabled",
+          "disabledReason",
+          "failingSince",
+          "previousSecretExpiresAt",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WebhookEventType"
+            }
+          },
+          "lowBalanceThreshold": {
+            "description": "With `balance.low`, the available buyer balance below which it fires; null otherwise.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MoneyOrNull"
+              }
+            ]
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "enabled": {
+            "description": "Whether the subscription gets events.",
+            "type": "boolean"
+          },
+          "disabledReason": {
+            "description": "Why it is disabled, null while enabled. `by_user`, through PATCH /webhooks/{id}; `endpoint_gone`, its endpoint answered 410; `failing`, every delivery failed for 5 days, and the account owner was emailed.",
+            "type": "string",
+            "nullable": true,
+            "enum": [
+              "by_user",
+              "endpoint_gone",
+              "failing",
+              null
+            ]
+          },
+          "failingSince": {
+            "description": "Since when its deliveries have failed without one succeeding, null while they succeed. At 5 days it is disabled. The check runs at each failed attempt, so a subscription whose `failingSince` is already more than 5 days old, say one that had no event for a while, is disabled at its next failed attempt, without the retries that delivery would otherwise get.",
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "previousSecretExpiresAt": {
+            "description": "Until when the secret replaced by the last rotation still signs beside the new one, null when it no longer does.",
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "type": "object"
+      },
+      "WebhookWithSecret": {
+        "description": "A subscription with its signing secret, which only create and rotate-secret answer.",
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Webhook"
+          },
+          {
+            "properties": {
+              "secret": {
+                "description": "The signing secret, `whsec_` and the base64 of 32 random bytes. Shown only in this answer, and absent when the request is replayed under its `Idempotency-Key` (or the MCP tool under its `requestId`), since the secret is never stored.",
+                "type": "string",
+                "example": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw"
+              }
+            },
+            "type": "object"
+          }
+        ]
+      },
+      "WebhookDeliveryAttempt": {
+        "required": [
+          "attemptedAt",
+          "statusCode",
+          "durationMs",
+          "responseBody",
+          "error"
+        ],
+        "properties": {
+          "attemptedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "statusCode": {
+            "description": "The HTTP status your endpoint answered, null when it did not answer. Only 2xx succeeds; a redirect is not followed and fails.",
+            "type": "integer",
+            "nullable": true
+          },
+          "durationMs": {
+            "description": "How long the attempt took, in milliseconds. It gives up after 15 seconds.",
+            "type": "integer"
+          },
+          "responseBody": {
+            "description": "Up to the first 1024 bytes of the response body, null when it did not answer.",
+            "type": "string",
+            "nullable": true
+          },
+          "error": {
+            "description": "Why there is no status, null when it answered. `address_not_allowed`, its host resolved to, or connected to, an address that is not public.",
+            "type": "string",
+            "nullable": true,
+            "enum": [
+              "address_not_allowed",
+              "timeout",
+              "connection_failed",
+              null
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "WebhookDelivery": {
+        "required": [
+          "id",
+          "eventId",
+          "eventType",
+          "status",
+          "attemptCount",
+          "nextAttemptAt",
+          "createdAt",
+          "attempts"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "eventId": {
+            "description": "The event's id, sent as `webhook-id` on every attempt and redelivery.",
+            "type": "string",
+            "format": "uuid"
+          },
+          "eventType": {
+            "type": "string",
+            "enum": [
+              "order.created",
+              "order.accepted",
+              "order.rejected",
+              "order.published",
+              "order.update_requested",
+              "order.completed",
+              "order.cancelled",
+              "balance.low",
+              "webhook.test"
+            ]
+          },
+          "status": {
+            "description": "`pending` while it is sent or retried, `succeeded` once an attempt got a 2xx, `failed` once the retries ran out, the endpoint answered 410 or the subscription was disabled.",
+            "type": "string",
+            "enum": [
+              "pending",
+              "succeeded",
+              "failed"
+            ]
+          },
+          "attemptCount": {
+            "description": "How many attempts it took, redeliveries included.",
+            "type": "integer"
+          },
+          "nextAttemptAt": {
+            "description": "When the next retry is due, null when none is.",
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "attempts": {
+            "description": "The latest 10 attempts, newest first.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WebhookDeliveryAttempt"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "WebhookEvent": {
+        "description": "What Growwer POSTs to a subscription's URL. OpenAPI 3.0, which this document follows, has no `webhooks` section: `x-webhooks` lists each event in the shape of OpenAPI 3.1's, with this envelope and the event's `data`. The headers are Standard Webhooks': `webhook-id` (the event's `id`, the same on every retry and redelivery), `webhook-timestamp` (Unix seconds of the attempt) and `webhook-signature`, space-separated `v1,<base64>` entries, each an HMAC-SHA256 with a secret's bytes (the base64 after `whsec_`) over `webhook-id.webhook-timestamp.body`; for 24 hours after a rotation there are two. Answer 2xx within 15 seconds; anything else, a redirect included, is retried with jitter, up to 10 attempts within 72 hours of the first, honouring `Retry-After` on 429 and 503 within those 72 hours. Events are delivered at least once and in no guaranteed order: dedupe by `webhook-id` and order by `createdAt`.",
+        "required": [
+          "id",
+          "type",
+          "createdAt",
+          "apiVersion",
+          "mode",
+          "data"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "order.created",
+              "order.accepted",
+              "order.rejected",
+              "order.published",
+              "order.update_requested",
+              "order.completed",
+              "order.cancelled",
+              "balance.low",
+              "webhook.test"
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "apiVersion": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          },
+          "mode": {
+            "description": "The mode of the subscription it is sent to.",
+            "type": "string",
+            "enum": [
+              "live",
+              "test"
+            ]
+          },
+          "data": {
+            "description": "What the event is about: an OrderEventData for the `order.*` events, a BalanceLowEventData for `balance.low` and a WebhookTestEventData for `webhook.test`.",
+            "type": "object",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OrderEventData"
+              },
+              {
+                "$ref": "#/components/schemas/BalanceLowEventData"
+              },
+              {
+                "$ref": "#/components/schemas/WebhookTestEventData"
+              }
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "OrderEventData": {
+        "description": "The `data` of an `order.*` event: the order as GET /orders/{id} answers it at the time of the event. Order by its `updatedAt` when events arrive out of order.",
+        "required": [
+          "order"
+        ],
+        "properties": {
+          "order": {
+            "$ref": "#/components/schemas/Order"
+          }
+        },
+        "type": "object"
+      },
+      "BalanceLowEventData": {
+        "description": "The `data` of a `balance.low` event.",
+        "required": [
+          "wallet",
+          "threshold"
+        ],
+        "properties": {
+          "wallet": {
+            "description": "Your buyer wallet once the debit was made.",
+            "required": [
+              "availableBalance",
+              "currency"
+            ],
+            "properties": {
+              "availableBalance": {
+                "$ref": "#/components/schemas/Money"
+              },
+              "currency": {
+                "description": "The currency of the wallet.",
+                "type": "string",
+                "example": "EUR"
+              }
+            },
+            "type": "object"
+          },
+          "threshold": {
+            "description": "The subscription's `lowBalanceThreshold` that the balance dropped below.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Money"
+              }
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "WebhookTestEventData": {
+        "description": "The `data` of a `webhook.test` event.",
+        "required": [
+          "webhookId"
+        ],
+        "properties": {
+          "webhookId": {
+            "description": "The subscription it was sent to.",
+            "type": "string",
+            "format": "uuid"
           }
         },
         "type": "object"
@@ -8715,7 +10058,7 @@
         }
       },
       "TooManyRequests": {
-        "description": "Over the rate limit (code `rate_limit_exceeded`), or too many failed authentications (code `too_many_failed_authentications`): with this key from this address, or from this address with any key; a valid key is never refused for it. On the catalogue operations, also when the response would take the account beyond the units of the catalogue it may spend per UTC day (code `catalogue_daily_cap_reached`): each new media costs one unit and a response that holds no new media, an empty one or a count included, costs one unless the same request was answered today while the media lists, topics and language of its project stayed as they were, which is free; `details.remaining` says how many units still fit today, `details.limit` is the daily cap that applies and `details.tier` is `full`, or `trial` for an account without a recent completed order, whose quota rises to the full cap after one; `Retry-After` is the time to the next UTC midnight, and a request already answered today stays readable. On the managed service requests, also when you sent as many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`): `Retry-After` is the time to the next UTC midnight. On POST /seller/medias, also when you sent as many medias that are already registered as you may per UTC day (code `media_duplicate_limit_reached`): `Retry-After` is the time to the next UTC midnight, and medias not registered yet are still accepted.",
+        "description": "Over the rate limit (code `rate_limit_exceeded`), or too many failed authentications (code `too_many_failed_authentications`): with this key from this address, or from this address with any key; a valid key is never refused for it. On the catalogue operations, also when the response would take the account beyond the units of the catalogue it may spend per UTC day (code `catalogue_daily_cap_reached`): each new media costs one unit and a response that holds no new media, an empty one or a count included, costs one unless the same request was answered today while the media lists, topics and language of its project stayed as they were, which is free; `details.remaining` says how many units still fit today, `details.limit` is the daily cap that applies and `details.tier` is `full`, or `trial` for an account without a recent completed order, whose quota rises to the full cap after one; `Retry-After` is the time to the next UTC midnight, and a request already answered today stays readable. On the managed service requests, also when you sent as many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`): `Retry-After` is the time to the next UTC midnight. On POST /seller/medias, also when you sent as many medias that are already registered as you may per UTC day (code `media_duplicate_limit_reached`): `Retry-After` is the time to the next UTC midnight, and medias not registered yet are still accepted. On POST /webhooks/{id}/test and POST /webhooks/{id}/deliveries/{deliveryId}/redeliver, also when the subscription took 10 test events and redeliveries in the last hour (code `webhook_send_limit_reached`): `details.limit` is that limit and `Retry-After` the time until the next one fits.",
         "headers": {
           "Retry-After": {
             "$ref": "#/components/headers/RetryAfter"
@@ -8730,7 +10073,7 @@
         }
       },
       "ServiceUnavailable": {
-        "description": "The rate limiter cannot be reached, so the call is refused (code `rate_limit_unavailable`), or a stored file cannot be read right now (code `storage_unavailable`). Retry later.",
+        "description": "The rate limiter cannot be reached, so the call is refused (code `rate_limit_unavailable`), or a stored file cannot be read right now (code `storage_unavailable`). On POST /webhooks/{id}/test, also when the test event cannot be recorded, so nothing was sent (code `webhook_test_unavailable`): the attempt still counts toward the 10 test events and redeliveries an hour, and a retry needs a new `Idempotency-Key`. Retry later.",
         "headers": {
           "Retry-After": {
             "$ref": "#/components/headers/RetryAfter"
@@ -9193,6 +10536,10 @@
       "description": "Upload the documents that a later write, such as an order's briefing, references."
     },
     {
+      "name": "Webhooks",
+      "description": "Subscribe your endpoints to events, rotate their secrets and follow their deliveries."
+    },
+    {
       "name": "Projects",
       "description": "Create, edit and delete the projects you buy for."
     },
@@ -9231,6 +10578,10 @@
     {
       "name": "Seller wallet",
       "description": "Your seller balance, its movements and documents, and your withdrawals."
+    },
+    {
+      "name": "Test helpers",
+      "description": "Test keys only. Top up your test wallet and reset your test data."
     }
   ],
   "x-tagGroups": [
@@ -9238,7 +10589,8 @@
       "name": "General",
       "tags": [
         "Account",
-        "Files"
+        "Files",
+        "Webhooks"
       ]
     },
     {
@@ -9260,6 +10612,392 @@
         "Seller orders",
         "Seller wallet"
       ]
+    },
+    {
+      "name": "Testing",
+      "tags": [
+        "Test helpers"
+      ]
     }
-  ]
+  ],
+  "x-webhooks": {
+    "order.created": {
+      "post": {
+        "summary": "order.created",
+        "description": "An order of yours was created, from any channel.",
+        "tags": [
+          "Webhooks"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/WebhookEvent"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "order.created"
+                        ]
+                      },
+                      "data": {
+                        "$ref": "#/components/schemas/OrderEventData"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx within 15 seconds acknowledges the event; anything else is retried."
+          }
+        }
+      }
+    },
+    "order.accepted": {
+      "post": {
+        "summary": "order.accepted",
+        "description": "The seller accepted an order of yours.",
+        "tags": [
+          "Webhooks"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/WebhookEvent"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "order.accepted"
+                        ]
+                      },
+                      "data": {
+                        "$ref": "#/components/schemas/OrderEventData"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx within 15 seconds acknowledges the event; anything else is retried."
+          }
+        }
+      }
+    },
+    "order.rejected": {
+      "post": {
+        "summary": "order.rejected",
+        "description": "The seller rejected an order of yours.",
+        "tags": [
+          "Webhooks"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/WebhookEvent"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "order.rejected"
+                        ]
+                      },
+                      "data": {
+                        "$ref": "#/components/schemas/OrderEventData"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx within 15 seconds acknowledges the event; anything else is retried."
+          }
+        }
+      }
+    },
+    "order.published": {
+      "post": {
+        "summary": "order.published",
+        "description": "The seller delivered an order of yours, first or after an update you requested: it is `pending_order_delivery_review`, waiting for your review. It also fires when the seller refuses an update you requested and the order is back in `pending_order_delivery_review`.",
+        "tags": [
+          "Webhooks"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/WebhookEvent"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "order.published"
+                        ]
+                      },
+                      "data": {
+                        "$ref": "#/components/schemas/OrderEventData"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx within 15 seconds acknowledges the event; anything else is retried."
+          }
+        }
+      }
+    },
+    "order.update_requested": {
+      "post": {
+        "summary": "order.update_requested",
+        "description": "An update was requested on the delivery of an order of yours.",
+        "tags": [
+          "Webhooks"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/WebhookEvent"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "order.update_requested"
+                        ]
+                      },
+                      "data": {
+                        "$ref": "#/components/schemas/OrderEventData"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx within 15 seconds acknowledges the event; anything else is retried."
+          }
+        }
+      }
+    },
+    "order.completed": {
+      "post": {
+        "summary": "order.completed",
+        "description": "The delivery of an order of yours was approved: the order is complete.",
+        "tags": [
+          "Webhooks"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/WebhookEvent"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "order.completed"
+                        ]
+                      },
+                      "data": {
+                        "$ref": "#/components/schemas/OrderEventData"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx within 15 seconds acknowledges the event; anything else is retried."
+          }
+        }
+      }
+    },
+    "order.cancelled": {
+      "post": {
+        "summary": "order.cancelled",
+        "description": "An order of yours was cancelled, by you or by Growwer.",
+        "tags": [
+          "Webhooks"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/WebhookEvent"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "order.cancelled"
+                        ]
+                      },
+                      "data": {
+                        "$ref": "#/components/schemas/OrderEventData"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx within 15 seconds acknowledges the event; anything else is retried."
+          }
+        }
+      }
+    },
+    "balance.low": {
+      "post": {
+        "summary": "balance.low",
+        "description": "A debit took your available buyer balance from at or above the subscription's `lowBalanceThreshold` to below it. It fires again only after the balance was back at or above the threshold.",
+        "tags": [
+          "Webhooks"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/WebhookEvent"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "balance.low"
+                        ]
+                      },
+                      "data": {
+                        "$ref": "#/components/schemas/BalanceLowEventData"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx within 15 seconds acknowledges the event; anything else is retried."
+          }
+        }
+      }
+    },
+    "webhook.test": {
+      "post": {
+        "summary": "webhook.test",
+        "description": "Sent only by POST /webhooks/{id}/test, to that subscription, whatever it lists.",
+        "tags": [
+          "Webhooks"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/WebhookEvent"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "webhook.test"
+                        ]
+                      },
+                      "data": {
+                        "$ref": "#/components/schemas/WebhookTestEventData"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx within 15 seconds acknowledges the event; anything else is retried."
+          }
+        }
+      }
+    }
+  }
 }

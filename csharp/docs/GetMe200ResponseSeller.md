@@ -1,4 +1,5 @@
 # Growwer.Api.Model.GetMe200ResponseSeller
+Your seller side. Null to a test key: selling is not available in test mode, so a test key reads neither your seller balance nor its status.
 
 ## Properties
 

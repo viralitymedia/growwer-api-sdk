@@ -23,6 +23,28 @@ operation. Keys belong to your account, not to one API key.
   409 `idempotency_key_reused`. A write without the header gets 400
   `idempotency_key_required`.
 
+Test mode: a test key (`gw_sk_test_` plus 43 characters) works on your
+account's test data alone, apart from the real catalogue: test projects,
+orders and files, and a test wallet that starts at 1,000.00 EUR. Every
+response to a test key carries `Growwer-Mode: test`, and an id of the other
+mode answers 404 as a missing object would.
+- A test order is validated and debited from the test wallet as a live one
+  is. A simulated seller accepts it a minute later and delivers it two
+  minutes after that; you approve the delivery or request an update.
+- The Test helpers top the test wallet up, move a test order on at once and
+  reset your test data. A live key on them gets 403 `test_mode_only`.
+- A test key on the seller and managed service operations, on a project's
+  catalogue writes and on media requests gets 403
+  `not_available_in_test_mode`.
+- Idempotency keys are scoped per mode: the same `Idempotency-Key` sent with
+  a live and a test key never replays the other mode's response.
+
+Webhooks: a subscription receives the events of its mode, signed as Standard
+Webhooks. Your orders' events and `balance.low` are live: creating a
+subscription with a test key gets 403 `not_available_in_test_mode` for now.
+`x-webhooks` lists every event Growwer POSTs and its payload; the
+WebhookEvent schema describes the headers, the signature and the retries.
+
 Every response carries `X-Request-Id`. Errors share one shape,
 `{code, message, requestId, details?}`. Money is integer cents plus a
 currency code and dates are ISO-8601.
@@ -236,12 +258,27 @@ Class | Method | HTTP request | Description
 *SellerWalletApi* | [**GetSellerWallet**](docs/SellerWalletApi.md#getsellerwallet) | **GET** /api/v1/wallets/seller | Get your seller wallet
 *SellerWalletApi* | [**ListSellerTransactions**](docs/SellerWalletApi.md#listsellertransactions) | **GET** /api/v1/wallets/seller/transactions | List your seller wallet movements
 *SellerWalletApi* | [**ListWithdrawals**](docs/SellerWalletApi.md#listwithdrawals) | **GET** /api/v1/withdrawals | List your withdrawals
+*TestHelpersApi* | [**AdvanceTestOrder**](docs/TestHelpersApi.md#advancetestorder) | **POST** /api/v1/test-helpers/orders/{id}/advance | Advance a test order
+*TestHelpersApi* | [**ResetTestData**](docs/TestHelpersApi.md#resettestdata) | **POST** /api/v1/test-helpers/reset | Reset your test data
+*TestHelpersApi* | [**TopUpTestWallet**](docs/TestHelpersApi.md#topuptestwallet) | **POST** /api/v1/test-helpers/wallet/top-up | Top up your test wallet
+*WebhooksApi* | [**CreateWebhook**](docs/WebhooksApi.md#createwebhook) | **POST** /api/v1/webhooks | Create a webhook subscription
+*WebhooksApi* | [**DeleteWebhook**](docs/WebhooksApi.md#deletewebhook) | **DELETE** /api/v1/webhooks/{id} | Delete a webhook subscription
+*WebhooksApi* | [**GetWebhook**](docs/WebhooksApi.md#getwebhook) | **GET** /api/v1/webhooks/{id} | Get a webhook subscription
+*WebhooksApi* | [**ListWebhookDeliveries**](docs/WebhooksApi.md#listwebhookdeliveries) | **GET** /api/v1/webhooks/{id}/deliveries | List the deliveries of a webhook subscription
+*WebhooksApi* | [**ListWebhooks**](docs/WebhooksApi.md#listwebhooks) | **GET** /api/v1/webhooks | List your webhook subscriptions
+*WebhooksApi* | [**RedeliverWebhook**](docs/WebhooksApi.md#redeliverwebhook) | **POST** /api/v1/webhooks/{id}/deliveries/{deliveryId}/redeliver | Redeliver a webhook event
+*WebhooksApi* | [**RotateWebhookSecret**](docs/WebhooksApi.md#rotatewebhooksecret) | **POST** /api/v1/webhooks/{id}/rotate-secret | Rotate a webhook secret
+*WebhooksApi* | [**SendWebhookTest**](docs/WebhooksApi.md#sendwebhooktest) | **POST** /api/v1/webhooks/{id}/test | Send a test event
+*WebhooksApi* | [**UpdateWebhook**](docs/WebhooksApi.md#updatewebhook) | **PATCH** /api/v1/webhooks/{id} | Edit a webhook subscription
 
 
 <a id="documentation-for-models"></a>
 ## Documentation for Models
 
+ - [Model.AdvanceTestOrderRequest](docs/AdvanceTestOrderRequest.md)
  - [Model.Balance](docs/Balance.md)
+ - [Model.BalanceLowEventData](docs/BalanceLowEventData.md)
+ - [Model.BalanceLowEventDataWallet](docs/BalanceLowEventDataWallet.md)
  - [Model.CatalogueMedia](docs/CatalogueMedia.md)
  - [Model.CatalogueMediaFlashOffer](docs/CatalogueMediaFlashOffer.md)
  - [Model.CatalogueMediaMetrics](docs/CatalogueMediaMetrics.md)
@@ -256,6 +293,7 @@ Class | Method | HTTP request | Description
  - [Model.CreateSavedFilterRequest](docs/CreateSavedFilterRequest.md)
  - [Model.CreateSellerMediaRequest](docs/CreateSellerMediaRequest.md)
  - [Model.CreateSellerMediaRequestPostOffer](docs/CreateSellerMediaRequestPostOffer.md)
+ - [Model.CreateWebhookRequest](docs/CreateWebhookRequest.md)
  - [Model.Error](docs/Error.md)
  - [Model.GetBuyerWallet200Response](docs/GetBuyerWallet200Response.md)
  - [Model.GetMe200Response](docs/GetMe200Response.md)
@@ -280,6 +318,8 @@ Class | Method | HTTP request | Description
  - [Model.ListSellerMedias200Response](docs/ListSellerMedias200Response.md)
  - [Model.ListSellerOrders200Response](docs/ListSellerOrders200Response.md)
  - [Model.ListSellerTransactions200Response](docs/ListSellerTransactions200Response.md)
+ - [Model.ListWebhookDeliveries200Response](docs/ListWebhookDeliveries200Response.md)
+ - [Model.ListWebhooks200Response](docs/ListWebhooks200Response.md)
  - [Model.ListWithdrawals200Response](docs/ListWithdrawals200Response.md)
  - [Model.ManagedServiceCampaign](docs/ManagedServiceCampaign.md)
  - [Model.ManagedServiceCampaignProject](docs/ManagedServiceCampaignProject.md)
@@ -308,6 +348,7 @@ Class | Method | HTTP request | Description
  - [Model.OrderEstimate](docs/OrderEstimate.md)
  - [Model.OrderEstimateRequest](docs/OrderEstimateRequest.md)
  - [Model.OrderEstimateRequestBriefing](docs/OrderEstimateRequestBriefing.md)
+ - [Model.OrderEventData](docs/OrderEventData.md)
  - [Model.OrderLink](docs/OrderLink.md)
  - [Model.OrderLinkRequest](docs/OrderLinkRequest.md)
  - [Model.OrderMedia](docs/OrderMedia.md)
@@ -346,6 +387,8 @@ Class | Method | HTTP request | Description
  - [Model.SellerOrderRejectionReason](docs/SellerOrderRejectionReason.md)
  - [Model.SellerPostOrderBriefing](docs/SellerPostOrderBriefing.md)
  - [Model.SellerTransaction](docs/SellerTransaction.md)
+ - [Model.TopUpTestWallet200Response](docs/TopUpTestWallet200Response.md)
+ - [Model.TopUpTestWalletRequest](docs/TopUpTestWalletRequest.md)
  - [Model.Transaction](docs/Transaction.md)
  - [Model.UpdateProjectRequest](docs/UpdateProjectRequest.md)
  - [Model.UpdateSellerMediaRequest](docs/UpdateSellerMediaRequest.md)
@@ -354,7 +397,16 @@ Class | Method | HTTP request | Description
  - [Model.UpdateSellerMediaRequestLinkAdditionOfferPricingOptionsInner](docs/UpdateSellerMediaRequestLinkAdditionOfferPricingOptionsInner.md)
  - [Model.UpdateSellerMediaRequestPostOffer](docs/UpdateSellerMediaRequestPostOffer.md)
  - [Model.UpdateSellerMediaRequestPostOfferPricingOptionsInner](docs/UpdateSellerMediaRequestPostOfferPricingOptionsInner.md)
+ - [Model.UpdateWebhookRequest](docs/UpdateWebhookRequest.md)
  - [Model.UploadFile201Response](docs/UploadFile201Response.md)
+ - [Model.Webhook](docs/Webhook.md)
+ - [Model.WebhookDelivery](docs/WebhookDelivery.md)
+ - [Model.WebhookDeliveryAttempt](docs/WebhookDeliveryAttempt.md)
+ - [Model.WebhookEvent](docs/WebhookEvent.md)
+ - [Model.WebhookEventData](docs/WebhookEventData.md)
+ - [Model.WebhookEventType](docs/WebhookEventType.md)
+ - [Model.WebhookTestEventData](docs/WebhookTestEventData.md)
+ - [Model.WebhookWithSecret](docs/WebhookWithSecret.md)
  - [Model.Withdrawal](docs/Withdrawal.md)
 
 

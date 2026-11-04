@@ -53,7 +53,8 @@
         "packageName": "growwer",
         "isGoSubmodule": true,
         "withGoMod": true,
-        "disallowAdditionalPropertiesIfNotPresent": false
+        "disallowAdditionalPropertiesIfNotPresent": false,
+        "enumClassPrefix": true
       }
     },
     {

@@ -21,14 +21,14 @@ type WebhookEventType string
 
 // List of WebhookEventType
 const (
-	ORDER_CREATED WebhookEventType = "order.created"
-	ORDER_ACCEPTED WebhookEventType = "order.accepted"
-	ORDER_REJECTED WebhookEventType = "order.rejected"
-	ORDER_PUBLISHED WebhookEventType = "order.published"
-	ORDER_UPDATE_REQUESTED WebhookEventType = "order.update_requested"
-	ORDER_COMPLETED WebhookEventType = "order.completed"
-	ORDER_CANCELLED WebhookEventType = "order.cancelled"
-	BALANCE_LOW WebhookEventType = "balance.low"
+	WEBHOOKEVENTTYPE_ORDER_CREATED WebhookEventType = "order.created"
+	WEBHOOKEVENTTYPE_ORDER_ACCEPTED WebhookEventType = "order.accepted"
+	WEBHOOKEVENTTYPE_ORDER_REJECTED WebhookEventType = "order.rejected"
+	WEBHOOKEVENTTYPE_ORDER_PUBLISHED WebhookEventType = "order.published"
+	WEBHOOKEVENTTYPE_ORDER_UPDATE_REQUESTED WebhookEventType = "order.update_requested"
+	WEBHOOKEVENTTYPE_ORDER_COMPLETED WebhookEventType = "order.completed"
+	WEBHOOKEVENTTYPE_ORDER_CANCELLED WebhookEventType = "order.cancelled"
+	WEBHOOKEVENTTYPE_BALANCE_LOW WebhookEventType = "balance.low"
 )
 
 // All allowed values of WebhookEventType enum

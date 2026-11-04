@@ -333,9 +333,9 @@ func TestAWebhookTestEventParsesWithFieldsThisClientDoesNotKnow(t *testing.T) {
 func TestCreateWebhookSendsTheBodyAndKeyAndReadsTheSecret(t *testing.T) {
 	client, transport := answer(201, fixture(t, "webhook-with-secret.json"), nil)
 	events := []growwer.WebhookEventType{
-		growwer.ORDER_CREATED,
-		growwer.ORDER_COMPLETED,
-		growwer.BALANCE_LOW,
+		growwer.WEBHOOKEVENTTYPE_ORDER_CREATED,
+		growwer.WEBHOOKEVENTTYPE_ORDER_COMPLETED,
+		growwer.WEBHOOKEVENTTYPE_BALANCE_LOW,
 	}
 	body := growwer.NewCreateWebhookRequest("https://hooks.shop.example/growwer", events)
 	body.SetLowBalanceThreshold(growwer.Money{Amount: 5000, Currency: "EUR"})

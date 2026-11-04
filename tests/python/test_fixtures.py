@@ -13,25 +13,33 @@ import uuid
 import urllib3
 
 from growwer import ApiClient, Configuration
-from growwer.api import AccountApi, BuyerOrdersApi, CatalogueApi, SellerMediasApi
+from growwer.api import AccountApi, BuyerOrdersApi, CatalogueApi, SellerMediasApi, WebhooksApi
 from growwer.exceptions import ApiException
 from growwer.models import (
+    BalanceLowEventData,
     CatalogueMedia,
     CatalogueOfferOrNull,
+    CreateWebhookRequest,
     Error,
     GetMe200Response,
     LinkAdditionOrderBriefing,
     ListOrders200Response,
+    Money,
     Order,
+    OrderEventData,
     PostOrderBriefing,
     MoneyOrNull,
     SellerFeesOrNull,
     SellerMedia,
+    WebhookEvent,
+    WebhookTestEventData,
+    WebhookWithSecret,
 )
 
 FIXTURES = pathlib.Path(__file__).resolve().parent.parent / "fixtures"
 MEDIA_ID = uuid.UUID("c1d2e3f4-a5b6-4c7d-8e9f-a0b1c2d3e4f5")
 ORDER_ID = uuid.UUID("0b9c6a4e-6f1d-4c39-9a51-2f5d7c1e8a01")
+WEBHOOK_ID = uuid.UUID("9d4c3f5b-6e7a-4b82-9d2e-3f4a5b6c7d8e")
 
 
 def fixture(name):
@@ -46,9 +54,11 @@ class FakePool:
             body=body, status=status, headers=headers, preload_content=True
         )
         self.requests = []
+        self.bodies = []
 
     def request(self, method, url, **kwargs):
         self.requests.append((method, url, kwargs.get("headers", {})))
+        self.bodies.append(kwargs.get("body"))
         return self.response
 
 
@@ -77,6 +87,16 @@ class FixtureTest(unittest.TestCase):
         self.assertTrue(me.catalogue.eligible)
         self.assertEqual(me.catalogue.daily_cap, 5000)
         self.assertIsNone(me.catalogue.remaining_today)
+        self.assertEqual(me.mode, "live")
+
+    def test_get_me_with_a_test_key_reads_test_mode_and_no_seller(self):
+        me = AccountApi(self.client(200, fixture("me-test-key.json"))).get_me()
+
+        self.assertIsInstance(me, GetMe200Response)
+        self.assertEqual(me.mode, "test")
+        self.assertIsNone(me.seller)
+        self.assertEqual(me.buyer.balance.available.amount, 100000)
+        self.assertTrue(me.catalogue.eligible)
 
     def test_base_url_is_overridable(self):
         client = ApiClient(Configuration(host="https://sandbox.example", access_token="test-key"))
@@ -195,6 +215,75 @@ class FixtureTest(unittest.TestCase):
         self.assertIsInstance(media.competitive_fees, SellerFeesOrNull)
         self.assertEqual(media.competitive_fees.fee_when_seller_writes_post.amount, 5400)
         self.assertIsNone(media.competitive_fees.fee_when_seller_does_not_write_post)
+
+    def test_order_event_parses_with_fields_this_client_does_not_know(self):
+        event = WebhookEvent.from_json(fixture("webhook-order-created.json"))
+
+        self.assertEqual(event.id, uuid.UUID("6a1f0c2e-3b4d-4e5f-8a9b-0c1d2e3f4a5b"))
+        self.assertEqual(event.type, "order.created")
+        self.assertEqual(event.mode, "live")
+        self.assertEqual(event.api_version, "v1")
+        self.assertEqual(event.created_at, datetime.datetime(2026, 10, 1, 9, 30, 5, tzinfo=datetime.timezone.utc))
+        data = event.data.actual_instance
+        self.assertIsInstance(data, OrderEventData)
+        self.assertIsInstance(data.order, Order)
+        self.assertEqual(data.order.id, ORDER_ID)
+        self.assertEqual(data.order.state, "pending_acceptance")
+        self.assertEqual(data.order.price.amount, 12500)
+        self.assertIsInstance(data.order.briefing.actual_instance, PostOrderBriefing)
+
+    def test_balance_low_event_parses_with_fields_this_client_does_not_know(self):
+        event = WebhookEvent.from_json(fixture("webhook-balance-low.json"))
+
+        self.assertEqual(event.type, "balance.low")
+        self.assertEqual(event.mode, "live")
+        data = event.data.actual_instance
+        self.assertIsInstance(data, BalanceLowEventData)
+        self.assertEqual(data.wallet.available_balance.amount, 4500)
+        self.assertEqual(data.wallet.currency, "EUR")
+        self.assertEqual(data.threshold.amount, 5000)
+
+    def test_webhook_test_event_parses_with_fields_this_client_does_not_know(self):
+        event = WebhookEvent.from_json(fixture("webhook-test.json"))
+
+        self.assertEqual(event.type, "webhook.test")
+        self.assertEqual(event.mode, "live")
+        data = event.data.actual_instance
+        self.assertIsInstance(data, WebhookTestEventData)
+        self.assertEqual(data.webhook_id, WEBHOOK_ID)
+
+    def test_create_webhook_sends_the_body_and_key_and_reads_the_secret(self):
+        api = WebhooksApi(self.client(201, fixture("webhook-with-secret.json")))
+
+        webhook = api.create_webhook(
+            "create-webhook-1",
+            CreateWebhookRequest(
+                url="https://hooks.shop.example/growwer",
+                events=["order.created", "order.completed", "balance.low"],
+                low_balance_threshold=Money(amount=5000, currency="EUR"),
+            ),
+        )
+
+        method, url, headers = self.sent()
+        self.assertEqual(method, "POST")
+        self.assertEqual(url, "https://tool.growwer.com/api/v1/webhooks")
+        self.assertEqual(headers["Idempotency-Key"], "create-webhook-1")
+        self.assertEqual(
+            json.loads(self.pool.bodies[0]),
+            {
+                "url": "https://hooks.shop.example/growwer",
+                "events": ["order.created", "order.completed", "balance.low"],
+                "lowBalanceThreshold": {"amount": 5000, "currency": "EUR"},
+            },
+        )
+        self.assertIsInstance(webhook, WebhookWithSecret)
+        self.assertEqual(webhook.id, WEBHOOK_ID)
+        self.assertTrue(webhook.secret.startswith("whsec_"))
+        self.assertEqual(webhook.events, ["order.created", "order.completed", "balance.low"])
+        self.assertEqual(webhook.low_balance_threshold.amount, 5000)
+        self.assertTrue(webhook.enabled)
+        self.assertIsNone(webhook.disabled_reason)
+        self.assertIsNone(webhook.failing_since)
 
     def test_error_envelope_is_readable_from_the_exception(self):
         api = CatalogueApi(

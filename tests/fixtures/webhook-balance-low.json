@@ -1,0 +1,16 @@
+{
+  "id": "7b2a1d3f-4c5e-4f60-9b0c-1d2e3f4a5b6c",
+  "type": "balance.low",
+  "createdAt": "2026-10-03T14:00:00+00:00",
+  "apiVersion": "v1",
+  "mode": "live",
+  "data": {
+    "wallet": {
+      "availableBalance": {"amount": 4500, "currency": "EUR"},
+      "currency": "EUR"
+    },
+    "threshold": {"amount": 5000, "currency": "EUR"},
+    "addedLater": {"note": "a field a later contract adds to the event data"}
+  },
+  "addedLater": "a field a later contract adds to the envelope"
+}

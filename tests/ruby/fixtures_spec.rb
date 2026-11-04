@@ -10,6 +10,7 @@ require 'growwer'
 FIXTURES = File.expand_path('../fixtures', __dir__)
 MEDIA_ID = 'c1d2e3f4-a5b6-4c7d-8e9f-a0b1c2d3e4f5'
 ORDER_ID = '0b9c6a4e-6f1d-4c39-9a51-2f5d7c1e8a01'
+WEBHOOK_ID = '9d4c3f5b-6e7a-4b82-9d2e-3f4a5b6c7d8e'
 
 # Answers every request with one canned response and records it. Faraday's own test adapter is not
 # used because it ignores `on_data`, through which the client reads a download; a streamed response
@@ -55,6 +56,11 @@ RSpec.describe 'Growwer fixtures' do
     @sent.first
   end
 
+  # A webhook body parsed the way a receiver parses it, without the API client.
+  def event(name)
+    Growwer::WebhookEvent.build_from_hash(JSON.parse(fixture(name)))
+  end
+
   it 'calls production for getMe with the bearer key' do
     me = Growwer::AccountApi.new(answer(200, fixture('me.json'))).get_me
 
@@ -68,6 +74,16 @@ RSpec.describe 'Growwer fixtures' do
     expect(me.catalogue.eligible).to be(true)
     expect(me.catalogue.daily_cap).to eq(5000)
     expect(me.catalogue.remaining_today).to be_nil
+    expect(me.mode).to eq('live')
+  end
+
+  it 'reads test mode and no seller from getMe with a test key' do
+    me = Growwer::AccountApi.new(answer(200, fixture('me-test-key.json'))).get_me
+
+    expect(me.mode).to eq('test')
+    expect(me.seller).to be_nil
+    expect(me.buyer.balance.available.amount).to eq(100_000)
+    expect(me.catalogue.eligible).to be(true)
   end
 
   it 'lets the base URL be overridden' do
@@ -216,5 +232,70 @@ RSpec.describe 'Growwer fixtures' do
 
     expect(sent.url.path).to eq("/api/v1/orders/#{ORDER_ID}/briefing")
     expect(downloaded.b).to eq(body.b)
+  end
+
+  it 'parses an order event with fields this client does not know' do
+    webhook_event = event('webhook-order-created.json')
+
+    expect(webhook_event).to be_a(Growwer::WebhookEvent)
+    expect(webhook_event.id).to eq('6a1f0c2e-3b4d-4e5f-8a9b-0c1d2e3f4a5b')
+    expect(webhook_event.type).to eq('order.created')
+    expect(webhook_event.mode).to eq('live')
+    expect(webhook_event.api_version).to eq('v1')
+    expect(webhook_event.created_at).to eq(Time.utc(2026, 10, 1, 9, 30, 5))
+    expect(webhook_event.data).to be_a(Growwer::OrderEventData)
+    order = webhook_event.data.order
+    expect(order).to be_a(Growwer::Order)
+    expect(order.id).to eq(ORDER_ID)
+    expect(order.state).to eq('pending_acceptance')
+    expect(order.price.amount).to eq(12_500)
+    expect(order.briefing).to be_a(Growwer::PostOrderBriefing)
+  end
+
+  it 'parses a balance.low event with fields this client does not know' do
+    webhook_event = event('webhook-balance-low.json')
+
+    expect(webhook_event.type).to eq('balance.low')
+    expect(webhook_event.mode).to eq('live')
+    expect(webhook_event.data).to be_a(Growwer::BalanceLowEventData)
+    expect(webhook_event.data.wallet.available_balance.amount).to eq(4500)
+    expect(webhook_event.data.wallet.currency).to eq('EUR')
+    expect(webhook_event.data.threshold.amount).to eq(5000)
+  end
+
+  it 'parses a webhook.test event with fields this client does not know' do
+    webhook_event = event('webhook-test.json')
+
+    expect(webhook_event.type).to eq('webhook.test')
+    expect(webhook_event.mode).to eq('live')
+    expect(webhook_event.data).to be_a(Growwer::WebhookTestEventData)
+    expect(webhook_event.data.webhook_id).to eq(WEBHOOK_ID)
+  end
+
+  it 'sends the body and key of createWebhook and reads the secret' do
+    request = Growwer::CreateWebhookRequest.new(
+      url: 'https://hooks.shop.example/growwer',
+      events: %w[order.created order.completed balance.low],
+      low_balance_threshold: Growwer::Money.new(amount: 5000, currency: 'EUR')
+    )
+
+    webhook = Growwer::WebhooksApi.new(answer(201, fixture('webhook-with-secret.json'))).create_webhook('create-webhook-1', request)
+
+    expect(sent.method).to eq(:post)
+    expect(sent.url.to_s).to eq('https://tool.growwer.com/api/v1/webhooks')
+    expect(sent.request_headers['Idempotency-Key']).to eq('create-webhook-1')
+    expect(JSON.parse(sent.request_body)).to eq(
+      'url' => 'https://hooks.shop.example/growwer',
+      'events' => %w[order.created order.completed balance.low],
+      'lowBalanceThreshold' => { 'amount' => 5000, 'currency' => 'EUR' }
+    )
+    expect(webhook).to be_a(Growwer::WebhookWithSecret)
+    expect(webhook.id).to eq(WEBHOOK_ID)
+    expect(webhook.secret).to start_with('whsec_')
+    expect(webhook.events).to eq(%w[order.created order.completed balance.low])
+    expect(webhook.low_balance_threshold.amount).to eq(5000)
+    expect(webhook.enabled).to be(true)
+    expect(webhook.disabled_reason).to be_nil
+    expect(webhook.failing_since).to be_nil
   end
 end

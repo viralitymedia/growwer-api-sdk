@@ -4,14 +4,19 @@ import com.growwer.api.api.AccountApi;
 import com.growwer.api.api.BuyerOrdersApi;
 import com.growwer.api.api.CatalogueApi;
 import com.growwer.api.api.SellerMediasApi;
+import com.growwer.api.api.WebhooksApi;
+import com.growwer.api.model.BalanceLowEventData;
 import com.growwer.api.model.CatalogueMedia;
 import com.growwer.api.model.CatalogueOfferOrNull;
 import com.growwer.api.model.CataloguePostOffer;
+import com.growwer.api.model.CreateWebhookRequest;
 import com.growwer.api.model.GetMe200Response;
 import com.growwer.api.model.LinkAdditionOrderBriefing;
 import com.growwer.api.model.ListOrders200Response;
+import com.growwer.api.model.Money;
 import com.growwer.api.model.MoneyOrNull;
 import com.growwer.api.model.Order;
+import com.growwer.api.model.OrderEventData;
 import com.growwer.api.model.PostOrderBriefing;
 import com.growwer.api.model.SellerFeesOrNull;
 import com.growwer.api.model.SellerMedia;
@@ -19,14 +24,21 @@ import com.growwer.api.model.SellerMediaPostOfferPricingOptionsInner;
 import com.growwer.api.model.UpdateSellerMediaRequest;
 import com.growwer.api.model.UpdateSellerMediaRequestPostOffer;
 import com.growwer.api.model.UpdateSellerMediaRequestPostOfferPricingOptionsInner;
+import com.growwer.api.model.WebhookEvent;
+import com.growwer.api.model.WebhookEventType;
+import com.growwer.api.model.WebhookTestEventData;
+import com.growwer.api.model.WebhookWithSecret;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.io.File;
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -50,11 +62,16 @@ public class FixtureTest {
     private static final Path FIXTURES = Path.of("tests", "fixtures");
     private static final UUID MEDIA_ID = UUID.fromString("c1d2e3f4-a5b6-4c7d-8e9f-a0b1c2d3e4f5");
     private static final UUID ORDER_ID = UUID.fromString("0b9c6a4e-6f1d-4c39-9a51-2f5d7c1e8a01");
+    private static final UUID WEBHOOK_ID = UUID.fromString("9d4c3f5b-6e7a-4b82-9d2e-3f4a5b6c7d8e");
 
     private final List<Request> sent = new ArrayList<>();
 
     private static byte[] fixture(String name) throws Exception {
         return Files.readAllBytes(FIXTURES.resolve(name));
+    }
+
+    private static WebhookEvent event(String name) throws Exception {
+        return WebhookEvent.fromJson(new String(fixture(name), StandardCharsets.UTF_8));
     }
 
     private static void equal(String name, Object actual, Object expected) {
@@ -112,6 +129,16 @@ public class FixtureTest {
         equal("eligible", me.getCatalogue().getEligible(), true);
         equal("dailyCap", me.getCatalogue().getDailyCap(), 5000);
         equal("remainingToday", me.getCatalogue().getRemainingToday(), null);
+        equal("mode", me.getMode(), GetMe200Response.ModeEnum.LIVE);
+    }
+
+    void getMeWithATestKeyReadsTestModeAndNoSeller() throws Exception {
+        GetMe200Response me = new AccountApi(answer(fixture("me-test-key.json"))).getMe();
+
+        equal("mode", me.getMode(), GetMe200Response.ModeEnum.TEST);
+        equal("seller", me.getSeller(), null);
+        equal("available", me.getBuyer().getBalance().getAvailable().getAmount(), 100000);
+        equal("eligible", me.getCatalogue().getEligible(), true);
     }
 
     void theBaseUrlIsOverridable() throws Exception {
@@ -260,6 +287,71 @@ public class FixtureTest {
         equal("fee", option.getAsJsonObject("feeWhenSellerWritesPost").get("amount").getAsInt(), 6000);
     }
 
+    void anOrderEventParsesWithFieldsThisClientDoesNotKnow() throws Exception {
+        WebhookEvent event = event("webhook-order-created.json");
+
+        equal("id", event.getId(), UUID.fromString("6a1f0c2e-3b4d-4e5f-8a9b-0c1d2e3f4a5b"));
+        equal("type", event.getType(), WebhookEvent.TypeEnum.ORDER_CREATED);
+        equal("mode", event.getMode(), WebhookEvent.ModeEnum.LIVE);
+        equal("apiVersion", event.getApiVersion(), WebhookEvent.ApiVersionEnum.V1);
+        equal("createdAt", event.getCreatedAt().toInstant(),
+            OffsetDateTime.of(2026, 10, 1, 9, 30, 5, 0, ZoneOffset.UTC).toInstant());
+        equal("data member", event.getData().getActualInstance() instanceof OrderEventData, true);
+        Order order = event.getData().getOrderEventData().getOrder();
+        equal("order id", order.getId(), ORDER_ID);
+        equal("order state", order.getState(), "pending_acceptance");
+        equal("order price", order.getPrice().getAmount(), 12500);
+        equal("order title", order.getBriefing().getPostOrderBriefing().getTitle(), "Choosing running shoes");
+    }
+
+    void aBalanceLowEventParsesWithFieldsThisClientDoesNotKnow() throws Exception {
+        WebhookEvent event = event("webhook-balance-low.json");
+
+        equal("type", event.getType(), WebhookEvent.TypeEnum.BALANCE_LOW);
+        equal("mode", event.getMode(), WebhookEvent.ModeEnum.LIVE);
+        equal("data member", event.getData().getActualInstance() instanceof BalanceLowEventData, true);
+        BalanceLowEventData data = event.getData().getBalanceLowEventData();
+        equal("availableBalance", data.getWallet().getAvailableBalance().getAmount(), 4500);
+        equal("currency", data.getWallet().getCurrency(), "EUR");
+        equal("threshold", data.getThreshold().getAmount(), 5000);
+    }
+
+    void aWebhookTestEventParsesWithFieldsThisClientDoesNotKnow() throws Exception {
+        WebhookEvent event = event("webhook-test.json");
+
+        equal("type", event.getType(), WebhookEvent.TypeEnum.WEBHOOK_TEST);
+        equal("mode", event.getMode(), WebhookEvent.ModeEnum.LIVE);
+        equal("data member", event.getData().getActualInstance() instanceof WebhookTestEventData, true);
+        equal("webhookId", event.getData().getWebhookTestEventData().getWebhookId(), WEBHOOK_ID);
+    }
+
+    void createWebhookSendsTheBodyAndKeyAndReadsTheSecret() throws Exception {
+        Set<WebhookEventType> events = new LinkedHashSet<>(List.of(
+            WebhookEventType.ORDER_CREATED, WebhookEventType.ORDER_COMPLETED, WebhookEventType.BALANCE_LOW));
+        CreateWebhookRequest request = new CreateWebhookRequest()
+            .url(URI.create("https://hooks.shop.example/growwer"))
+            .events(events)
+            .lowBalanceThreshold(new Money().amount(5000).currency("EUR"));
+
+        WebhookWithSecret webhook = new WebhooksApi(answer(201, fixture("webhook-with-secret.json"), "application/json"))
+            .createWebhook("create-webhook-1", request);
+
+        equal("method", sent().method(), "POST");
+        equal("url", sent().url().toString(), "https://tool.growwer.com/api/v1/webhooks");
+        equal("Idempotency-Key", sent().header("Idempotency-Key"), "create-webhook-1");
+        equal("body", sentBody(), JsonParser.parseString(
+            "{\"url\":\"https://hooks.shop.example/growwer\","
+                + "\"events\":[\"order.created\",\"order.completed\",\"balance.low\"],"
+                + "\"lowBalanceThreshold\":{\"amount\":5000,\"currency\":\"EUR\"}}").getAsJsonObject());
+        equal("id", webhook.getId(), WEBHOOK_ID);
+        equal("secret prefix", webhook.getSecret().startsWith("whsec_"), true);
+        equal("events", webhook.getEvents(), List.copyOf(events));
+        equal("lowBalanceThreshold", webhook.getLowBalanceThreshold().getAmount(), 5000);
+        equal("enabled", webhook.getEnabled(), true);
+        equal("disabledReason", webhook.getDisabledReason(), null);
+        equal("failingSince", webhook.getFailingSince(), null);
+    }
+
     void theErrorEnvelopeIsReadableFromTheException() throws Exception {
         CatalogueApi api = new CatalogueApi(answer(429, fixture("error.json"), "application/json",
             "Retry-After", "3600", "X-Request-Id", "0b8f6c2e-4a1d-4f3b-9c7e-5d2a8e1f6b34"));
@@ -301,6 +393,7 @@ public class FixtureTest {
         FixtureTest test = new FixtureTest();
         Map<String, Case> cases = new java.util.LinkedHashMap<>();
         cases.put("getMe calls production with the bearer key", test::getMeCallsProductionWithTheBearerKey);
+        cases.put("getMe with a test key reads test mode and no seller", test::getMeWithATestKeyReadsTestModeAndNoSeller);
         cases.put("the base URL is overridable", test::theBaseUrlIsOverridable);
         cases.put("listOrders reads items and total, with both order types", test::listOrdersReadsItemsAndTotalWithBothOrderTypes);
         cases.put("an order with fields this client does not know still deserialises", test::anOrderWithFieldsThisClientDoesNotKnowStillDeserialises);
@@ -310,6 +403,10 @@ public class FixtureTest {
         cases.put("a seller media reads null competitiveFees", test::aSellerMediaReadsNullCompetitiveFees);
         cases.put("a seller media reads competitiveFees with one side null", test::aSellerMediaReadsCompetitiveFeesWithOneSideNull);
         cases.put("a partial seller media update sends only the properties set", test::aPartialSellerMediaUpdateSendsOnlyThePropertiesSet);
+        cases.put("an order event parses with fields this client does not know", test::anOrderEventParsesWithFieldsThisClientDoesNotKnow);
+        cases.put("a balance.low event parses with fields this client does not know", test::aBalanceLowEventParsesWithFieldsThisClientDoesNotKnow);
+        cases.put("a webhook.test event parses with fields this client does not know", test::aWebhookTestEventParsesWithFieldsThisClientDoesNotKnow);
+        cases.put("createWebhook sends the body and key and reads the secret", test::createWebhookSendsTheBodyAndKeyAndReadsTheSecret);
         cases.put("the error envelope is readable from the ApiException", test::theErrorEnvelopeIsReadableFromTheException);
         cases.put("a binary download returns the exact bytes", test::aBinaryDownloadReturnsTheExactBytes);
         for (Map.Entry<String, Case> entry : cases.entrySet()) {

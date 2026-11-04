@@ -1,0 +1,41 @@
+{
+  "id": "6a1f0c2e-3b4d-4e5f-8a9b-0c1d2e3f4a5b",
+  "type": "order.created",
+  "createdAt": "2026-10-01T09:30:05+00:00",
+  "apiVersion": "v1",
+  "mode": "live",
+  "data": {
+    "order": {
+      "id": "0b9c6a4e-6f1d-4c39-9a51-2f5d7c1e8a01",
+      "reference": "GW-1001",
+      "type": "post",
+      "state": "pending_acceptance",
+      "pendingAction": "seller",
+      "price": {"amount": 12500, "currency": "EUR"},
+      "project": {"id": "7f3e2d1c-0b9a-4876-9543-210fedcba987", "url": "https://shop.example"},
+      "media": {"id": "c1d2e3f4-a5b6-4c7d-8e9f-a0b1c2d3e4f5", "url": "https://blog.example"},
+      "createdAt": "2026-10-01T09:30:00+00:00",
+      "updatedAt": "2026-10-01T09:30:00+00:00",
+      "scheduledPublicationDate": null,
+      "delivery": null,
+      "briefing": {
+        "title": "Choosing running shoes",
+        "language": "es",
+        "links": [
+          {"targetUrl": "https://shop.example/running-shoes", "anchor": "running shoes", "type": "dofollow"}
+        ],
+        "extraServices": [],
+        "additionalInfo": null,
+        "hasProposedDraft": false
+      },
+      "draft": null,
+      "stateHistory": [
+        {"state": "pending_acceptance", "date": "2026-10-01T09:30:00+00:00", "reason": null}
+      ],
+      "channel": {"created": "api"},
+      "addedLater": {"note": "a field a later contract adds to the order", "count": 3}
+    },
+    "addedLater": {"note": "a field a later contract adds to the event data"}
+  },
+  "addedLater": "a field a later contract adds to the envelope"
+}

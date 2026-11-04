@@ -189,10 +189,16 @@ path, field or type moved.
   without a null check no longer type-checks under `strictNullChecks`.
 - **Python, PHP, Java, C# and Ruby:** the types still compile, but code that reads `me.seller`'s
   fields without a null check fails at run time on a test key.
-- **Python and Ruby:** a `GetMe200Response` built by hand without `mode`, as test mocks often are,
-  now fails validation. **C#:** the constructor gains `mode` as its last parameter. It still
-  refuses a `null` `seller` with an `ArgumentNullException`, though reading a response with a null
-  `seller` works; to build one by hand, assign `Seller = null` after constructing it.
+- **Mocks and recorded responses without `mode`:** a `getMe` JSON recorded before 2.1.0 now fails
+  to parse in Go, Java, C# and Python, Python also refuses a `GetMe200Response` built by hand
+  without it, and a TypeScript object-literal mock without it no longer type-checks. PHP and Ruby
+  still read and build one; only their `valid()` (PHP), `valid?` and `list_invalid_properties`
+  (Ruby) flag the missing `mode`.
+- **Kotlin, on the Java artifact:** `getSeller()` is now `@Nullable` instead of `@Nonnull`, so
+  `me.seller.holidayEndDate` no longer compiles; use `me.seller?.holidayEndDate`.
+- **C#:** the constructor gains `mode` as its last parameter. It still refuses a `null` `seller`
+  with an `ArgumentNullException`, though reading a response with a null `seller` works; to build
+  one by hand, assign `Seller = null` after constructing it.
 
 What changes:
 
@@ -857,10 +863,15 @@ to get the key, and compute the HMAC-SHA256 of `<webhook-id>.<webhook-timestamp>
 base64 of your HMAC equals one of them, compared in constant time, and refuse a
 `webhook-timestamp` (Unix seconds) more than 5 minutes from your clock.
 
-**New event types.** The [enum limitation](#forward-compatibility) applies to `WebhookEvent.type`:
-the Python, PHP, Java, C# and Ruby clients refuse an event type they were not generated with. A
-subscription gets only the events it lists, plus `webhook.test`, so list a new event only once
-your client is on a release that knows it.
+**New event types.** The [enum limitation](#forward-compatibility) applies to webhooks twice.
+`WebhookEvent.type`: the Python, PHP, Java, C# and Ruby clients refuse an event type they were not
+generated with. A subscription gets only the events it lists, plus `webhook.test`, so list a new
+event only once your client is on a release that knows it. `Webhook.events`, the events a
+subscription lists: every client except TypeScript, Go included, refuses a subscription that lists
+an event it was not generated with. Once such an event is subscribed anywhere on your account, by
+the MCP tool or a newer client for example, a 2.1.0 client fails `listWebhooks`, `getWebhook`,
+`updateWebhook` and `rotateWebhookSecret` for it. Upgrade every client that manages your
+subscriptions before anything subscribes to a new event.
 
 ### Test mode
 
@@ -931,8 +942,10 @@ offline fixture tests under [`tests/`](tests/) prove it for each language on eve
 
 **Known limitation: enum values.** A new value in an existing enum field is not tolerated
 everywhere. The Python, PHP, Java, C# and Ruby clients refuse a value they were not generated with,
-and the whole response fails to deserialise. Go and TypeScript hold enum fields as plain strings
-and pass a new value through. The generator's `enumUnknownDefaultCase` option would map unknown
+and the whole response fails to deserialise. TypeScript passes a new value through. Go holds enum
+fields as plain strings and passes a new value through, except `WebhookEventType` (in
+`Webhook.events`), the one enum with a Go type of its own, which checks its value on unmarshal and
+errors on an unknown one. The generator's `enumUnknownDefaultCase` option would map unknown
 values to a sentinel instead; it is not enabled. Upgrade to the release that follows an enum change
 before the API starts sending the new value to you.
 

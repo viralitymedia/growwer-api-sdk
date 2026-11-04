@@ -4,7 +4,8 @@
 [![Release](https://github.com/viralitymedia/growwer-api-sdk/actions/workflows/release.yml/badge.svg)](https://github.com/viralitymedia/growwer-api-sdk/actions/workflows/release.yml)
 
 Official clients for the [Growwer](https://growwer.com) customer API: your account, projects,
-orders, the media catalogue, your seller medias and orders, wallets and the managed service.
+orders, the media catalogue, your seller medias and orders, wallets, the managed service, webhook
+subscriptions and the test mode helpers.
 
 Every client here is **generated from the OpenAPI contract the API itself publishes**, so they say
 what the running service does rather than what a handwritten wrapper remembers about it. One
@@ -38,6 +39,9 @@ of it. Copy it then and keep it where you keep any other secret. If you lose it,
 create another; a revoked key stops working at once.
 
 Send it as a bearer token on every request: `Authorization: Bearer <key>`.
+
+The same page creates **test keys**, which start with `gw_sk_test_` and work on test data apart
+from your real account: see [Test mode](#test-mode).
 
 ## First call
 
@@ -171,6 +175,44 @@ var config = new Configuration
 var me = new AccountApi(config).GetMe();
 ```
 </details>
+
+## Changes in 2.1.0
+
+**Some code written for 2.0.0 breaks** even though this is a minor version: `getMe` now answers a
+required `mode`, and its `seller` can be `null`, which it is for a [test key](#test-mode). No other
+path, field or type moved.
+
+- **Go:** `GetMe200Response.Seller` is now a `NullableGetMe200ResponseSeller`: read it with
+  `me.Seller.Get()`, which returns `nil` for a test key. `NewGetMe200Response` takes
+  `seller` as a `NullableGetMe200ResponseSeller` and gains `mode` as its last parameter.
+- **TypeScript:** `me.seller` is `GetMe200ResponseSeller | null`, so code that reads its fields
+  without a null check no longer type-checks under `strictNullChecks`.
+- **Python, PHP, Java, C# and Ruby:** the types still compile, but code that reads `me.seller`'s
+  fields without a null check fails at run time on a test key.
+- **Python and Ruby:** a `GetMe200Response` built by hand without `mode`, as test mocks often are,
+  now fails validation. **C#:** the constructor gains `mode` as its last parameter. It still
+  refuses a `null` `seller` with an `ArgumentNullException`, though reading a response with a null
+  `seller` works; to build one by hand, assign `Seller = null` after constructing it.
+
+What changes:
+
+- **Webhooks.** `WebhooksApi` subscribes your HTTPS endpoints to events and follows their
+  deliveries: `listWebhooks`, `createWebhook`, `getWebhook`, `updateWebhook`, `deleteWebhook`,
+  `listWebhookDeliveries`, `redeliverWebhook`, `rotateWebhookSecret` and `sendWebhookTest`. The
+  `WebhookEvent` model parses what Growwer POSTs: its `data` is an `OrderEventData`, a
+  `BalanceLowEventData` or a `WebhookTestEventData`. See [Webhooks](#webhooks).
+- **Test mode.** Test keys (`gw_sk_test_`) work on test data apart from your real account, and
+  `getMe` says which mode a key is in. `TestHelpersApi` adds `topUpTestWallet`,
+  `advanceTestOrder` and `resetTestData`, for test keys only. See [Test mode](#test-mode).
+- New models: `Webhook`, `WebhookWithSecret`, `WebhookEventType`, `WebhookDelivery`,
+  `WebhookDeliveryAttempt`, `WebhookEvent`, `WebhookEventData`, `OrderEventData`,
+  `BalanceLowEventData`, `BalanceLowEventDataWallet`, `WebhookTestEventData`,
+  `CreateWebhookRequest`, `UpdateWebhookRequest`, `ListWebhooks200Response`,
+  `ListWebhookDeliveries200Response`, `AdvanceTestOrderRequest`, `TopUpTestWalletRequest` and
+  `TopUpTestWallet200Response`.
+- In TypeScript and Java, `events` in `CreateWebhookRequest` and `UpdateWebhookRequest` is a `Set`,
+  because the contract allows each event once: in TypeScript,
+  `new Set<WebhookEventType>(["order.completed"])`.
 
 ## Changes in 2.0.0
 
@@ -476,10 +518,377 @@ the page.
 
 ### Following changes
 
-Orders are polled, not pushed. Call `GET /orders` (or `GET /seller/orders` for the orders on your
-medias) with `sort=updatedAt` and `updatedSince` set to the `updatedAt` of the last order you saw:
-an order moves to the end of that list each time it changes state. `updatedAt` changes on state
-changes only.
+Poll for changes. Call `GET /orders` (or `GET /seller/orders` for the orders on your medias) with
+`sort=updatedAt` and `updatedSince` set to the `updatedAt` of the last order you saw: an order
+moves to the end of that list each time it changes state. `updatedAt` changes on state changes
+only.
+
+[Webhooks](#webhooks) push the changes of the orders you place as they happen, but keep the poll
+as the fallback. It is the only way to follow:
+
+- **Test orders**: a test key cannot subscribe to webhooks yet.
+- **The orders on your medias**: webhooks cover the orders you place, not `GET /seller/orders`.
+- **What a subscription missed**: events while it was disabled, because its endpoint failed for 5
+  days (`failing`) or for another reason, and deliveries older than 30 days, which are deleted and
+  cannot be redelivered.
+
+### Webhooks
+
+A webhook subscription has Growwer POST events to an HTTPS endpoint of yours as they happen:
+
+- `order.created`, `order.accepted`, `order.rejected`, `order.published`,
+  `order.update_requested`, `order.completed` and `order.cancelled`, for the orders you place.
+- `balance.low`, when a debit takes your available buyer balance below the threshold you set.
+- `webhook.test`, which `sendWebhookTest` sends to check your endpoint.
+
+**Subscriptions are live only, for now.** `createWebhook` with a test key answers
+`403 not_available_in_test_mode`; follow test orders by [polling](#following-changes).
+
+**Subscribe** with `createWebhook`. `lowBalanceThreshold` is required with `balance.low`, and an
+account holds at most 20 subscriptions per mode (`409 webhook_limit_reached`). The answer carries
+the signing `secret`, `whsec_` and a base64 key, **once**: store it then. A replay under the same
+`Idempotency-Key` answers the subscription without it. `rotateWebhookSecret` issues a new secret;
+for 24 hours, until `previousSecretExpiresAt`, both sign every delivery, so you can switch without
+missing an event.
+
+```python
+import uuid
+
+from growwer.api import WebhooksApi
+from growwer.models import CreateWebhookRequest, Money
+
+webhook = WebhooksApi(client).create_webhook(
+    idempotency_key=str(uuid.uuid4()),
+    create_webhook_request=CreateWebhookRequest(
+        url="https://hooks.example.com/growwer",
+        events=["order.published", "order.completed", "balance.low"],
+        low_balance_threshold=Money(amount=5000, currency="EUR"),
+    ),
+)
+save_secret(webhook.id, webhook.secret)
+```
+
+In TypeScript and Java, `events` is a `Set`.
+
+**Receive** each event this way:
+
+1. **Verify the signature** over the raw body, exactly as received, before you parse it. Each
+   delivery carries the [Standard Webhooks](https://www.standardwebhooks.com/) headers
+   `webhook-id`, `webhook-timestamp` and `webhook-signature`. Answer a delivery that fails the
+   check with a 4xx and do not act on it.
+2. **Answer 2xx within 15 seconds**, and do the work afterwards, from a queue for instance.
+   Anything else, a redirect or a timeout included, is retried with jitter: up to 10 attempts
+   within 72 hours of the first, honouring `Retry-After` on 429 and 503. An endpoint answering
+   `410` disables the subscription (`endpoint_gone`). So do 5 days of failures (`failing`), and
+   the account owner is emailed. `updateWebhook` with `enabled: true` enables it again.
+3. **Dedupe by `webhook-id`.** It is the event's `id`, the same on every retry and redelivery, and
+   events are delivered at least once.
+4. **Order by `createdAt`**, since events arrive in no guaranteed order. For an order, compare its
+   `updatedAt` with the last one you handled.
+
+`listWebhookDeliveries` shows the last 30 days of deliveries with their attempts, and
+`redeliverWebhook` sends one again with the same `webhook-id`.
+
+**Verify with the Standard Webhooks library** for your language. Each one takes the `whsec_`
+secret as `createWebhook` answers it, accepts any of the signatures in `webhook-signature`, and
+refuses a `webhook-timestamp` more than 5 minutes from now. Growwer ships no verifier of its own.
+
+| Language | Package | Install |
+|---|---|---|
+| Python | [`standardwebhooks`](https://pypi.org/project/standardwebhooks/) | `pip install standardwebhooks` |
+| TypeScript | [`standardwebhooks`](https://www.npmjs.com/package/standardwebhooks) | `npm install standardwebhooks` |
+| PHP | [`standard-webhooks/standard-webhooks`](https://packagist.org/packages/standard-webhooks/standard-webhooks) | `composer require standard-webhooks/standard-webhooks` |
+| Go | [`github.com/standard-webhooks/standard-webhooks/libraries`](https://pkg.go.dev/github.com/standard-webhooks/standard-webhooks/libraries/go) | `go get github.com/standard-webhooks/standard-webhooks/libraries` |
+| Java | [`com.standardwebhooks:standardwebhooks`](https://central.sonatype.com/artifact/com.standardwebhooks/standardwebhooks) | Maven or Gradle |
+| .NET | [`StandardWebhooks.StandardWebhooks`](https://www.nuget.org/packages/StandardWebhooks.StandardWebhooks) | `dotnet add package StandardWebhooks.StandardWebhooks` |
+| Ruby | [`standardwebhooks`](https://rubygems.org/gems/standardwebhooks) | `gem install standardwebhooks` |
+
+On NuGet, the package named `StandardWebhooks` alone is a different, third-party one.
+
+Then **parse the body into `WebhookEvent`**. Its `type` names the event, its `mode` the mode of
+the subscription, and its `data` is one of three models:
+
+- `OrderEventData` for the `order.*` events: `order`, the order as `GET /orders/{id}` answers it at
+  the time of the event.
+- `BalanceLowEventData` for `balance.low`: `wallet`, the buyer wallet after the debit, and
+  `threshold`.
+- `WebhookTestEventData` for `webhook.test`: `webhookId`, the subscription it was sent to.
+
+`secret` below is the `whsec_` secret you stored, and `body` the raw request body.
+
+<details open>
+<summary><strong>Python</strong></summary>
+
+```python
+from standardwebhooks.webhooks import Webhook, WebhookVerificationError
+
+from growwer.models import BalanceLowEventData, OrderEventData, WebhookEvent
+
+verifier = Webhook(secret)
+
+def receive(body: bytes, headers) -> int:
+    try:
+        verifier.verify(body, headers)  # any mapping of the request headers
+    except WebhookVerificationError:
+        return 400
+    event = WebhookEvent.from_json(body.decode())
+    data = event.data.actual_instance
+    if isinstance(data, OrderEventData):
+        handle_order(event.id, data.order)
+    elif isinstance(data, BalanceLowEventData):
+        handle_low_balance(event.id, data.wallet.available_balance)
+    return 204
+```
+</details>
+
+<details>
+<summary><strong>TypeScript</strong></summary>
+
+```ts
+import { Webhook } from "standardwebhooks"
+import { WebhookEventFromJSON, type BalanceLowEventData, type OrderEventData } from "@growwer/api"
+
+const verifier = new Webhook(secret)
+
+// headers: the request headers as a plain object of strings
+function receive(body: string, headers: Record<string, string>): number {
+  let payload: unknown
+  try {
+    payload = verifier.verify(body, headers) // answers the parsed JSON
+  } catch {
+    return 400
+  }
+  const event = WebhookEventFromJSON(payload)
+  if (event.type === "balance.low") {
+    handleLowBalance(event.id, (event.data as BalanceLowEventData).wallet.availableBalance)
+  } else if (event.type.startsWith("order.")) {
+    handleOrder(event.id, (event.data as OrderEventData).order)
+  }
+  return 204
+}
+```
+
+`data` is a union of the three models: narrow it by `type`.
+</details>
+
+<details>
+<summary><strong>PHP</strong></summary>
+
+```php
+use Growwer\Api\Model\WebhookEvent;
+use Growwer\Api\ObjectSerializer;
+use StandardWebhooks\Exception\WebhookVerificationException;
+use StandardWebhooks\Webhook;
+
+$body = file_get_contents('php://input');
+try {
+    // The library reads these three lower-case keys.
+    (new Webhook($secret))->verify($body, [
+        'webhook-id' => $_SERVER['HTTP_WEBHOOK_ID'] ?? null,
+        'webhook-timestamp' => $_SERVER['HTTP_WEBHOOK_TIMESTAMP'] ?? null,
+        'webhook-signature' => $_SERVER['HTTP_WEBHOOK_SIGNATURE'] ?? null,
+    ]);
+} catch (WebhookVerificationException $exception) {
+    http_response_code(400);
+    exit;
+}
+
+/** @var WebhookEvent $event */
+$event = ObjectSerializer::deserialize(json_decode($body), WebhookEvent::class);
+$data = $event->getData();
+if ($event->getType() === 'balance.low') {
+    handleLowBalance($event->getId(), $data->getWallet()->getAvailableBalance());
+} elseif ($data->getOrder() !== null) {
+    handleOrder($event->getId(), $data->getOrder());
+}
+http_response_code(204);
+```
+
+`data` is one `WebhookEventData` with the fields of all three models; those of the other two are
+`null`.
+</details>
+
+<details>
+<summary><strong>Go</strong></summary>
+
+```go
+import (
+	"encoding/json"
+	"io"
+	"log"
+	"net/http"
+
+	standardwebhooks "github.com/standard-webhooks/standard-webhooks/libraries/go"
+	growwer "github.com/viralitymedia/growwer-api-sdk/go/v2"
+)
+
+verifier, err := standardwebhooks.NewWebhook(secret)
+if err != nil {
+	log.Fatal(err)
+}
+
+http.HandleFunc("/growwer", func(w http.ResponseWriter, r *http.Request) {
+	body, err := io.ReadAll(r.Body)
+	if err != nil || verifier.Verify(body, r.Header) != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	var event growwer.WebhookEvent
+	if err := json.Unmarshal(body, &event); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	switch {
+	case event.Data.OrderEventData != nil:
+		handleOrder(event.Id, event.Data.OrderEventData.Order)
+	case event.Data.BalanceLowEventData != nil:
+		handleLowBalance(event.Id, event.Data.BalanceLowEventData.Wallet.AvailableBalance)
+	}
+	w.WriteHeader(http.StatusNoContent)
+})
+```
+
+Exactly one of `event.Data`'s pointers is set.
+</details>
+
+<details>
+<summary><strong>Java</strong></summary>
+
+```java
+import com.growwer.api.model.BalanceLowEventData;
+import com.growwer.api.model.OrderEventData;
+import com.growwer.api.model.WebhookEvent;
+import com.standardwebhooks.Webhook;
+import com.standardwebhooks.exceptions.WebhookVerificationException;
+
+Webhook verifier = new Webhook(secret);
+
+// headers: a Map<String, List<String>> of the request headers, or java.net.http.HttpHeaders
+try {
+    verifier.verify(body, headers);
+} catch (WebhookVerificationException e) {
+    return 400;
+}
+WebhookEvent event = WebhookEvent.fromJson(body);
+Object data = event.getData().getActualInstance();
+if (data instanceof OrderEventData) {
+    handleOrder(event.getId(), ((OrderEventData) data).getOrder());
+} else if (data instanceof BalanceLowEventData) {
+    handleLowBalance(event.getId(), ((BalanceLowEventData) data).getWallet().getAvailableBalance());
+}
+return 204;
+```
+</details>
+
+<details>
+<summary><strong>C#</strong></summary>
+
+```csharp
+using System.Net;
+using Growwer.Api.Model;
+using Newtonsoft.Json;
+using StandardWebhooks.Exceptions;
+
+// Qualified, since Growwer.Api.Model has a Webhook model too.
+var verifier = new StandardWebhooks.Webhook(secret);
+
+// Copy the three headers from your framework's request.
+var headers = new WebHeaderCollection
+{
+    { "webhook-id", request.Headers["webhook-id"] },
+    { "webhook-timestamp", request.Headers["webhook-timestamp"] },
+    { "webhook-signature", request.Headers["webhook-signature"] },
+};
+try
+{
+    verifier.Verify(body, headers);
+}
+catch (WebhookVerificationException)
+{
+    return 400;
+}
+
+var webhookEvent = JsonConvert.DeserializeObject<WebhookEvent>(body);
+switch (webhookEvent.Data.ActualInstance)
+{
+    case OrderEventData data:
+        HandleOrder(webhookEvent.Id, data.Order);
+        break;
+    case BalanceLowEventData data:
+        HandleLowBalance(webhookEvent.Id, data.Wallet.AvailableBalance);
+        break;
+}
+return 204;
+```
+</details>
+
+<details>
+<summary><strong>Ruby</strong></summary>
+
+```ruby
+require "growwer"
+require "json"
+require "standardwebhooks"
+
+verifier = StandardWebhooks::Webhook.new(secret)
+
+begin
+  # The library reads these three lower-case keys; this is Rack's request.
+  verifier.verify(body, {
+    "webhook-id" => request.get_header("HTTP_WEBHOOK_ID"),
+    "webhook-timestamp" => request.get_header("HTTP_WEBHOOK_TIMESTAMP"),
+    "webhook-signature" => request.get_header("HTTP_WEBHOOK_SIGNATURE"),
+  })
+rescue StandardWebhooks::WebhookVerificationError
+  return 400
+end
+
+event = Growwer::WebhookEvent.build_from_hash(JSON.parse(body))
+case event.data
+when Growwer::OrderEventData then handle_order(event.id, event.data.order)
+when Growwer::BalanceLowEventData then handle_low_balance(event.id, event.data.wallet.available_balance)
+end
+```
+</details>
+
+**What the libraries check**, should you verify by hand: base64-decode the secret after `whsec_`
+to get the key, and compute the HMAC-SHA256 of `<webhook-id>.<webhook-timestamp>.<body>` with it.
+`webhook-signature` holds space-separated `v1,<base64>` entries. Accept the delivery when the
+base64 of your HMAC equals one of them, compared in constant time, and refuse a
+`webhook-timestamp` (Unix seconds) more than 5 minutes from your clock.
+
+**New event types.** The [enum limitation](#forward-compatibility) applies to `WebhookEvent.type`:
+the Python, PHP, Java, C# and Ruby clients refuse an event type they were not generated with. A
+subscription gets only the events it lists, plus `webhook.test`, so list a new event only once
+your client is on a release that knows it.
+
+### Test mode
+
+A **test key** (`gw_sk_test_` and 43 characters, created on the same API keys page) works on your
+account's test data alone: test projects, orders and files, and a test wallet that starts at
+1,000.00 EUR. It reads the real catalogue, and nothing it does reaches real sellers, money or
+orders. It is told apart in three ways:
+
+- `getMe` answers `mode: "test"` for a test key and `"live"` for a live one, and `seller: null`,
+  since selling is not available in test mode.
+- Every response to a test key carries the header `Growwer-Mode: test`.
+- An id of the other mode answers `404`, as a missing object would.
+
+A test order is validated and debited from the test wallet as a live one is. A simulated seller
+accepts it a minute later and delivers it two minutes after that; you approve the delivery or
+request an update. `Idempotency-Key`s are scoped per mode: the same key sent with a live and a
+test key never replays the other mode's response.
+
+`TestHelpersApi` serves test keys only; a live key on it answers `403 test_mode_only`:
+
+- `topUpTestWallet` credits the test wallet, up to 10,000.00 EUR per call.
+- `advanceTestOrder` moves a test order on at once, without waiting for the simulated seller.
+- `resetTestData` deletes your test projects, orders and files and returns the test wallet to
+  1,000.00 EUR. Your API keys and webhook subscriptions stay.
+
+A test key answers `403 not_available_in_test_mode` on the seller and managed service operations,
+on a project's catalogue writes, on media requests and, for now, on creating a webhook
+subscription.
 
 ### Money and dates
 

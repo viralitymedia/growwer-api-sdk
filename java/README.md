@@ -44,8 +44,9 @@ mode answers 404 as a missing object would.
   a live and a test key never replays the other mode's response.
 
 Webhooks: a subscription receives the events of its mode, signed as Standard
-Webhooks. Your orders' events and `balance.low` are live: creating a
-subscription with a test key gets 403 `not_available_in_test_mode` for now.
+Webhooks. A subscription created with a live key gets the events of your
+orders and your wallet; one created with a test key gets those of your test
+orders and test wallet, with `mode: test`, and never a live event.
 `x-webhooks` lists every event Growwer POSTs and its payload; the
 WebhookEvent schema describes the headers, the signature and the retries.
 

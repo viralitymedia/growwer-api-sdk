@@ -22,7 +22,7 @@ Create a webhook subscription
 
 Subscribes an HTTPS URL to the events you list. Growwer then POSTs each event to it, signed as Standard Webhooks signs (`webhook-id`, `webhook-timestamp`, `webhook-signature`) with the `secret` this answer carries. The secret is shown only here and on POST /webhooks/{id}/rotate-secret: store it now. A replay of this request under its `Idempotency-Key` answers the subscription without it.
 
-The URL must be HTTPS and its host must resolve to public addresses only: a loopback, private, link-local, multicast or metadata address is refused with 422 `webhook_url_not_public`, a host that does not resolve with 422 `webhook_url_unresolvable`. `lowBalanceThreshold` is required with `balance.low` and refused without it. An account has at most 20 subscriptions per mode. Test keys get 403 `not_available_in_test_mode` for now.
+The URL must be HTTPS and its host must resolve to public addresses only: a loopback, private, link-local, multicast or metadata address is refused with 422 `webhook_url_not_public`, a host that does not resolve with 422 `webhook_url_unresolvable`. `lowBalanceThreshold` is required with `balance.low` and refused without it. An account has at most 20 subscriptions per mode. A test key subscribes in test mode: its subscriptions get the events of its test orders and test wallet, never live ones.
 
 ### Example
 

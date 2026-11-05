@@ -532,7 +532,6 @@ only.
 [Webhooks](#webhooks) push the changes of the orders you place as they happen, but keep the poll
 as the fallback. It is the only way to follow:
 
-- **Test orders**: a test key cannot subscribe to webhooks yet.
 - **The orders on your medias**: webhooks cover the orders you place, not `GET /seller/orders`.
 - **What a subscription missed**: events while it was disabled, because its endpoint failed for 5
   days (`failing`) or for another reason, and deliveries older than 30 days, which are deleted and
@@ -547,8 +546,9 @@ A webhook subscription has Growwer POST events to an HTTPS endpoint of yours as 
 - `balance.low`, when a debit takes your available buyer balance below the threshold you set.
 - `webhook.test`, which `sendWebhookTest` sends to check your endpoint.
 
-**Subscriptions are live only, for now.** `createWebhook` with a test key answers
-`403 not_available_in_test_mode`; follow test orders by [polling](#following-changes).
+**A subscription receives the events of its key's mode.** One created with a live key gets the
+events of your orders and your wallet. One created with a [test key](#test-mode) gets those of your
+test orders and test wallet, each with `mode: "test"`, and never a live event.
 
 **Subscribe** with `createWebhook`. `lowBalanceThreshold` is required with `balance.low`, and an
 account holds at most 20 subscriptions per mode (`409 webhook_limit_reached`). The answer carries
@@ -898,8 +898,8 @@ test key never replays the other mode's response.
   1,000.00 EUR. Your API keys and webhook subscriptions stay.
 
 A test key answers `403 not_available_in_test_mode` on the seller and managed service operations,
-on a project's catalogue writes, on media requests and, for now, on creating a webhook
-subscription.
+on a project's catalogue writes and on media requests. It can subscribe to webhooks: its
+subscriptions get the events of its test orders and test wallet.
 
 ### Money and dates
 

@@ -45,8 +45,9 @@ info:
       a live and a test key never replays the other mode's response.
 
     Webhooks: a subscription receives the events of its mode, signed as Standard
-    Webhooks. Your orders' events and `balance.low` are live: creating a
-    subscription with a test key gets 403 `not_available_in_test_mode` for now.
+    Webhooks. A subscription created with a live key gets the events of your
+    orders and your wallet; one created with a test key gets those of your test
+    orders and test wallet, with `mode: test`, and never a live event.
     `x-webhooks` lists every event Growwer POSTs and its payload; the
     WebhookEvent schema describes the headers, the signature and the retries.
 
@@ -9581,7 +9582,7 @@ paths:
       description: |-
         Subscribes an HTTPS URL to the events you list. Growwer then POSTs each event to it, signed as Standard Webhooks signs (`webhook-id`, `webhook-timestamp`, `webhook-signature`) with the `secret` this answer carries. The secret is shown only here and on POST /webhooks/{id}/rotate-secret: store it now. A replay of this request under its `Idempotency-Key` answers the subscription without it.
 
-        The URL must be HTTPS and its host must resolve to public addresses only: a loopback, private, link-local, multicast or metadata address is refused with 422 `webhook_url_not_public`, a host that does not resolve with 422 `webhook_url_unresolvable`. `lowBalanceThreshold` is required with `balance.low` and refused without it. An account has at most 20 subscriptions per mode. Test keys get 403 `not_available_in_test_mode` for now.
+        The URL must be HTTPS and its host must resolve to public addresses only: a loopback, private, link-local, multicast or metadata address is refused with 422 `webhook_url_not_public`, a host that does not resolve with 422 `webhook_url_unresolvable`. `lowBalanceThreshold` is required with `balance.low` and refused without it. An account has at most 20 subscriptions per mode. A test key subscribes in test mode: its subscriptions get the events of its test orders and test wallet, never live ones.
       operationId: createWebhook
       parameters:
       - description: "A new key for each write, reused only to retry that same write.\

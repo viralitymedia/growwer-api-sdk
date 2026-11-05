@@ -13,7 +13,7 @@
 /**
  * Growwer API
  *
- * The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters without spaces) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601.
+ * The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters without spaces) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Test mode: a test key (`gw_sk_test_` plus 43 characters) works on your account's test data alone, apart from the real catalogue: test projects, orders and files, and a test wallet that starts at 1,000.00 EUR. Every response to a test key carries `Growwer-Mode: test`, and an id of the other mode answers 404 as a missing object would. - A test order is validated and debited from the test wallet as a live one   is. A simulated seller accepts it a minute later and delivers it two   minutes after that; you approve the delivery or request an update. - The Test helpers top the test wallet up, move a test order on at once and   reset your test data. A live key on them gets 403 `test_mode_only`. - A test key on the seller and managed service operations, on a project's   catalogue writes and on media requests gets 403   `not_available_in_test_mode`. - Idempotency keys are scoped per mode: the same `Idempotency-Key` sent with   a live and a test key never replays the other mode's response.  Webhooks: a subscription receives the events of its mode, signed as Standard Webhooks. Your orders' events and `balance.low` are live: creating a subscription with a test key gets 403 `not_available_in_test_mode` for now. `x-webhooks` lists every event Growwer POSTs and its payload; the WebhookEvent schema describes the headers, the signature and the retries.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601.
  *
  * The version of the OpenAPI document: 1
  * Contact: support@growwer.com
@@ -66,7 +66,8 @@ class GetMe200Response implements ModelInterface, ArrayAccess, \JsonSerializable
         'buyer' => '\Growwer\Api\Model\GetMe200ResponseBuyer',
         'seller' => '\Growwer\Api\Model\GetMe200ResponseSeller',
         'catalogue' => '\Growwer\Api\Model\GetMe200ResponseCatalogue',
-        'managed_service' => '\Growwer\Api\Model\GetMe200ResponseManagedService'
+        'managed_service' => '\Growwer\Api\Model\GetMe200ResponseManagedService',
+        'mode' => 'string'
     ];
 
     /**
@@ -85,7 +86,8 @@ class GetMe200Response implements ModelInterface, ArrayAccess, \JsonSerializable
         'buyer' => null,
         'seller' => null,
         'catalogue' => null,
-        'managed_service' => null
+        'managed_service' => null,
+        'mode' => null
     ];
 
     /**
@@ -100,9 +102,10 @@ class GetMe200Response implements ModelInterface, ArrayAccess, \JsonSerializable
         'language' => false,
         'created_at' => false,
         'buyer' => false,
-        'seller' => false,
+        'seller' => true,
         'catalogue' => false,
-        'managed_service' => false
+        'managed_service' => false,
+        'mode' => false
     ];
 
     /**
@@ -199,7 +202,8 @@ class GetMe200Response implements ModelInterface, ArrayAccess, \JsonSerializable
         'buyer' => 'buyer',
         'seller' => 'seller',
         'catalogue' => 'catalogue',
-        'managed_service' => 'managedService'
+        'managed_service' => 'managedService',
+        'mode' => 'mode'
     ];
 
     /**
@@ -216,7 +220,8 @@ class GetMe200Response implements ModelInterface, ArrayAccess, \JsonSerializable
         'buyer' => 'setBuyer',
         'seller' => 'setSeller',
         'catalogue' => 'setCatalogue',
-        'managed_service' => 'setManagedService'
+        'managed_service' => 'setManagedService',
+        'mode' => 'setMode'
     ];
 
     /**
@@ -233,7 +238,8 @@ class GetMe200Response implements ModelInterface, ArrayAccess, \JsonSerializable
         'buyer' => 'getBuyer',
         'seller' => 'getSeller',
         'catalogue' => 'getCatalogue',
-        'managed_service' => 'getManagedService'
+        'managed_service' => 'getManagedService',
+        'mode' => 'getMode'
     ];
 
     /**
@@ -277,6 +283,21 @@ class GetMe200Response implements ModelInterface, ArrayAccess, \JsonSerializable
         return self::$openAPIModelName;
     }
 
+    public const MODE_LIVE = 'live';
+    public const MODE_TEST = 'test';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public function getModeAllowableValues()
+    {
+        return [
+            self::MODE_LIVE,
+            self::MODE_TEST,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -302,6 +323,7 @@ class GetMe200Response implements ModelInterface, ArrayAccess, \JsonSerializable
         $this->setIfExists('seller', $data ?? [], null);
         $this->setIfExists('catalogue', $data ?? [], null);
         $this->setIfExists('managed_service', $data ?? [], null);
+        $this->setIfExists('mode', $data ?? [], null);
     }
 
     /**
@@ -349,8 +371,8 @@ class GetMe200Response implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['buyer'] === null) {
             $invalidProperties[] = "'buyer' can't be null";
         }
-        if ($this->container['seller'] === null) {
-            $invalidProperties[] = "'seller' can't be null";
+        if ($this->container['seller'] === null && !$this->isNullableSetToNull('seller')) {
+            $invalidProperties[] = "'seller' is required";
         }
         if ($this->container['catalogue'] === null) {
             $invalidProperties[] = "'catalogue' can't be null";
@@ -358,6 +380,18 @@ class GetMe200Response implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['managed_service'] === null) {
             $invalidProperties[] = "'managed_service' can't be null";
         }
+        if ($this->container['mode'] === null) {
+            $invalidProperties[] = "'mode' can't be null";
+        }
+        $allowedValues = $this->getModeAllowableValues();
+        if (!is_null($this->container['mode']) && !in_array($this->container['mode'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'mode', must be one of '%s'",
+                $this->container['mode'],
+                implode("', '", $allowedValues)
+            );
+        }
+
         return $invalidProperties;
     }
 
@@ -538,7 +572,7 @@ class GetMe200Response implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets seller
      *
-     * @return \Growwer\Api\Model\GetMe200ResponseSeller
+     * @return \Growwer\Api\Model\GetMe200ResponseSeller|null
      */
     public function getSeller()
     {
@@ -548,14 +582,21 @@ class GetMe200Response implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets seller
      *
-     * @param \Growwer\Api\Model\GetMe200ResponseSeller $seller seller
+     * @param \Growwer\Api\Model\GetMe200ResponseSeller|null $seller seller
      *
      * @return self
      */
     public function setSeller($seller)
     {
         if (is_null($seller)) {
-            throw new \InvalidArgumentException('non-nullable seller cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'seller');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('seller', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         $this->container['seller'] = $seller;
 
@@ -612,6 +653,43 @@ class GetMe200Response implements ModelInterface, ArrayAccess, \JsonSerializable
             throw new \InvalidArgumentException('non-nullable managed_service cannot be null');
         }
         $this->container['managed_service'] = $managed_service;
+
+        return $this;
+    }
+
+    /**
+     * Gets mode
+     *
+     * @return string
+     */
+    public function getMode()
+    {
+        return $this->container['mode'];
+    }
+
+    /**
+     * Sets mode
+     *
+     * @param string $mode The mode of the key you called with. `live` works on your real account; `test` works in test mode, where nothing you do reaches real sellers, money or orders. Every response to a test key also carries the header `Growwer-Mode: test`.
+     *
+     * @return self
+     */
+    public function setMode($mode)
+    {
+        if (is_null($mode)) {
+            throw new \InvalidArgumentException('non-nullable mode cannot be null');
+        }
+        $allowedValues = $this->getModeAllowableValues();
+        if (!in_array($mode, $allowedValues, true)) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    "Invalid value '%s' for 'mode', must be one of '%s'",
+                    $mode,
+                    implode("', '", $allowedValues)
+                )
+            );
+        }
+        $this->container['mode'] = $mode;
 
         return $this;
     }

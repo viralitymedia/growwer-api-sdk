@@ -12,8 +12,16 @@ import {
   ModelErrorFromJSON,
   ResponseError,
   SellerMediasApi,
+  WebhookEventFromJSON,
+  WebhooksApi,
 } from '../../typescript/dist';
-import type { LinkAdditionOrderBriefing, PostOrderBriefing } from '../../typescript/dist';
+import type {
+  BalanceLowEventData,
+  LinkAdditionOrderBriefing,
+  OrderEventData,
+  PostOrderBriefing,
+  WebhookTestEventData,
+} from '../../typescript/dist';
 
 // Node globals, declared here so the test needs no @types/node beside the package's own toolchain.
 declare function require(id: string): any;
@@ -27,15 +35,22 @@ const path = require('node:path');
 const FIXTURES = path.join(__dirname, '..', 'fixtures');
 const MEDIA_ID = 'c1d2e3f4-a5b6-4c7d-8e9f-a0b1c2d3e4f5';
 const ORDER_ID = '0b9c6a4e-6f1d-4c39-9a51-2f5d7c1e8a01';
+const WEBHOOK_ID = '9d4c3f5b-6e7a-4b82-9d2e-3f4a5b6c7d8e';
 const POST_BRIEFING_FIELDS = ['additionalInfo', 'extraServices', 'hasProposedDraft', 'language', 'links', 'title'];
 
 function fixture(name: string): Uint8Array {
   return new Uint8Array(fs.readFileSync(path.join(FIXTURES, name)));
 }
 
+function fixtureJson(name: string): unknown {
+  return JSON.parse(fs.readFileSync(path.join(FIXTURES, name), 'utf8'));
+}
+
 interface Sent {
   url: string;
+  method?: string;
   headers: Record<string, string>;
+  body?: unknown;
 }
 
 // A configuration whose every call is answered with one canned response, recording what was sent.
@@ -50,7 +65,12 @@ function answer(
     basePath,
     accessToken: 'test-key',
     fetchApi: async (url: RequestInfo | URL, init?: RequestInit) => {
-      sent.push({ url: String(url), headers: (init?.headers ?? {}) as Record<string, string> });
+      sent.push({
+        url: String(url),
+        method: init?.method,
+        headers: (init?.headers ?? {}) as Record<string, string>,
+        body: init?.body,
+      });
       // TypeScript 5.7+ types a Node buffer view as Uint8Array<ArrayBufferLike>, which BodyInit omits.
       return new Response(body as unknown as BodyInit, { status, headers });
     },
@@ -67,10 +87,22 @@ const tests: Array<[string, () => Promise<void>]> = [
     assert.equal(sent[0].headers.Authorization, 'Bearer test-key');
     assert.equal(me.buyer.balance.available.amount, 250000);
     assert.equal(me.buyer.balance.available.currency, 'EUR');
-    assert.equal(me.seller.holidayEndDate, null);
+    assert.notEqual(me.seller, null);
+    assert.equal(me.seller!.holidayEndDate, null);
     assert.equal(me.catalogue.eligible, true);
     assert.equal(me.catalogue.dailyCap, 5000);
     assert.equal(me.catalogue.remainingToday, null);
+    assert.equal(me.mode, 'live');
+  }],
+
+  ['getMe with a test key reads test mode and no seller', async () => {
+    const sent: Sent[] = [];
+    const me = await new AccountApi(answer(sent, 200, fixture('me-test-key.json'))).getMe();
+
+    assert.equal(me.mode, 'test');
+    assert.equal(me.seller, null);
+    assert.equal(me.buyer.balance.available.amount, 100000);
+    assert.equal(me.catalogue.eligible, true);
   }],
 
   ['the base URL is overridable', async () => {
@@ -205,6 +237,73 @@ const tests: Array<[string, () => Promise<void>]> = [
     assert.notEqual(media.competitiveFees, null);
     assert.equal(media.competitiveFees!.feeWhenSellerWritesPost?.amount, 5400);
     assert.equal(media.competitiveFees!.feeWhenSellerDoesNotWritePost, null);
+  }],
+
+  ['an order event parses with fields this client does not know', async () => {
+    const event = WebhookEventFromJSON(fixtureJson('webhook-order-created.json'));
+
+    assert.equal(event.id, '6a1f0c2e-3b4d-4e5f-8a9b-0c1d2e3f4a5b');
+    assert.equal(event.type, 'order.created');
+    assert.equal(event.mode, 'live');
+    assert.equal(event.apiVersion, 'v1');
+    assert.equal(event.createdAt.toISOString(), '2026-10-01T09:30:05.000Z');
+    // Read through the order member, which keeps only the fields it declares.
+    assert.deepEqual(Object.keys(event.data), ['order']);
+    const data = event.data as OrderEventData;
+    assert.equal(data.order.id, ORDER_ID);
+    assert.equal(data.order.state, 'pending_acceptance');
+    assert.equal(data.order.price.amount, 12500);
+    assert.equal((data.order.briefing as PostOrderBriefing).title, 'Choosing running shoes');
+  }],
+
+  ['a balance.low event parses with fields this client does not know', async () => {
+    const event = WebhookEventFromJSON(fixtureJson('webhook-balance-low.json'));
+
+    assert.equal(event.type, 'balance.low');
+    assert.equal(event.mode, 'live');
+    assert.deepEqual(Object.keys(event.data).sort(), ['threshold', 'wallet']);
+    const data = event.data as BalanceLowEventData;
+    assert.equal(data.wallet.availableBalance.amount, 4500);
+    assert.equal(data.wallet.currency, 'EUR');
+    assert.equal(data.threshold.amount, 5000);
+  }],
+
+  ['a webhook.test event parses with fields this client does not know', async () => {
+    const event = WebhookEventFromJSON(fixtureJson('webhook-test.json'));
+
+    assert.equal(event.type, 'webhook.test');
+    assert.equal(event.mode, 'live');
+    assert.deepEqual(Object.keys(event.data), ['webhookId']);
+    assert.equal((event.data as WebhookTestEventData).webhookId, WEBHOOK_ID);
+  }],
+
+  ['createWebhook sends the body and key and reads the secret', async () => {
+    const sent: Sent[] = [];
+    const webhook = await new WebhooksApi(answer(sent, 201, fixture('webhook-with-secret.json'))).createWebhook({
+      idempotencyKey: 'create-webhook-1',
+      createWebhookRequest: {
+        url: 'https://hooks.shop.example/growwer',
+        events: new Set(['order.created', 'order.completed', 'balance.low'] as const),
+        lowBalanceThreshold: { amount: 5000, currency: 'EUR' },
+      },
+    });
+
+    assert.equal(sent.length, 1);
+    assert.equal(sent[0].method, 'POST');
+    assert.equal(sent[0].url, 'https://tool.growwer.com/api/v1/webhooks');
+    assert.equal(sent[0].headers['Idempotency-Key'], 'create-webhook-1');
+    assert.deepEqual(JSON.parse(String(sent[0].body)), {
+      url: 'https://hooks.shop.example/growwer',
+      events: ['order.created', 'order.completed', 'balance.low'],
+      lowBalanceThreshold: { amount: 5000, currency: 'EUR' },
+    });
+    assert.equal(webhook.id, WEBHOOK_ID);
+    assert.ok(webhook.secret?.startsWith('whsec_'), webhook.secret);
+    assert.deepEqual(webhook.events, ['order.created', 'order.completed', 'balance.low']);
+    assert.equal(webhook.lowBalanceThreshold?.amount, 5000);
+    assert.equal(webhook.enabled, true);
+    assert.equal(webhook.disabledReason, null);
+    assert.equal(webhook.failingSince, null);
   }],
 
   ['the error envelope is readable from the ResponseError', async () => {

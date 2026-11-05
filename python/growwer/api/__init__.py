@@ -13,4 +13,6 @@ from growwer.api.seller_account_api import SellerAccountApi
 from growwer.api.seller_medias_api import SellerMediasApi
 from growwer.api.seller_orders_api import SellerOrdersApi
 from growwer.api.seller_wallet_api import SellerWalletApi
+from growwer.api.test_helpers_api import TestHelpersApi
+from growwer.api.webhooks_api import WebhooksApi
 

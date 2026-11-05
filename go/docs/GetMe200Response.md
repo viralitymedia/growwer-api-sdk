@@ -10,15 +10,16 @@ Name | Type | Description | Notes
 **Language** | **string** | The language Growwer writes to you in. | 
 **CreatedAt** | **time.Time** |  | 
 **Buyer** | [**GetMe200ResponseBuyer**](GetMe200ResponseBuyer.md) |  | 
-**Seller** | [**GetMe200ResponseSeller**](GetMe200ResponseSeller.md) |  | 
+**Seller** | [**NullableGetMe200ResponseSeller**](GetMe200ResponseSeller.md) |  | 
 **Catalogue** | [**GetMe200ResponseCatalogue**](GetMe200ResponseCatalogue.md) |  | 
 **ManagedService** | [**GetMe200ResponseManagedService**](GetMe200ResponseManagedService.md) |  | 
+**Mode** | **string** | The mode of the key you called with. &#x60;live&#x60; works on your real account; &#x60;test&#x60; works in test mode, where nothing you do reaches real sellers, money or orders. Every response to a test key also carries the header &#x60;Growwer-Mode: test&#x60;. | 
 
 ## Methods
 
 ### NewGetMe200Response
 
-`func NewGetMe200Response(id string, email string, firstName string, language string, createdAt time.Time, buyer GetMe200ResponseBuyer, seller GetMe200ResponseSeller, catalogue GetMe200ResponseCatalogue, managedService GetMe200ResponseManagedService, ) *GetMe200Response`
+`func NewGetMe200Response(id string, email string, firstName string, language string, createdAt time.Time, buyer GetMe200ResponseBuyer, seller NullableGetMe200ResponseSeller, catalogue GetMe200ResponseCatalogue, managedService GetMe200ResponseManagedService, mode string, ) *GetMe200Response`
 
 NewGetMe200Response instantiates a new GetMe200Response object
 This constructor will assign default values to properties that have it defined,
@@ -173,6 +174,16 @@ and a boolean to check if the value has been set.
 SetSeller sets Seller field to given value.
 
 
+### SetSellerNil
+
+`func (o *GetMe200Response) SetSellerNil(b bool)`
+
+ SetSellerNil sets the value for Seller to be an explicit nil
+
+### UnsetSeller
+`func (o *GetMe200Response) UnsetSeller()`
+
+UnsetSeller ensures that no value is present for Seller, not even an explicit nil
 ### GetCatalogue
 
 `func (o *GetMe200Response) GetCatalogue() GetMe200ResponseCatalogue`
@@ -211,6 +222,26 @@ and a boolean to check if the value has been set.
 `func (o *GetMe200Response) SetManagedService(v GetMe200ResponseManagedService)`
 
 SetManagedService sets ManagedService field to given value.
+
+
+### GetMode
+
+`func (o *GetMe200Response) GetMode() string`
+
+GetMode returns the Mode field if non-nil, zero value otherwise.
+
+### GetModeOk
+
+`func (o *GetMe200Response) GetModeOk() (*string, bool)`
+
+GetModeOk returns a tuple with the Mode field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetMode
+
+`func (o *GetMe200Response) SetMode(v string)`
+
+SetMode sets Mode field to given value.
 
 
 

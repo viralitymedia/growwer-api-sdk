@@ -1,4 +1,4 @@
-# @growwer/api@2.0.0
+# @growwer/api@2.1.0
 
 A TypeScript SDK client for the tool.growwer.com API.
 
@@ -117,11 +117,26 @@ All URIs are relative to *https://tool.growwer.com*
 *SellerWalletApi* | [**getSellerWallet**](docs/SellerWalletApi.md#getsellerwallet) | **GET** /api/v1/wallets/seller | Get your seller wallet
 *SellerWalletApi* | [**listSellerTransactions**](docs/SellerWalletApi.md#listsellertransactions) | **GET** /api/v1/wallets/seller/transactions | List your seller wallet movements
 *SellerWalletApi* | [**listWithdrawals**](docs/SellerWalletApi.md#listwithdrawals) | **GET** /api/v1/withdrawals | List your withdrawals
+*TestHelpersApi* | [**advanceTestOrder**](docs/TestHelpersApi.md#advancetestorderoperation) | **POST** /api/v1/test-helpers/orders/{id}/advance | Advance a test order
+*TestHelpersApi* | [**resetTestData**](docs/TestHelpersApi.md#resettestdata) | **POST** /api/v1/test-helpers/reset | Reset your test data
+*TestHelpersApi* | [**topUpTestWallet**](docs/TestHelpersApi.md#topuptestwalletoperation) | **POST** /api/v1/test-helpers/wallet/top-up | Top up your test wallet
+*WebhooksApi* | [**createWebhook**](docs/WebhooksApi.md#createwebhookoperation) | **POST** /api/v1/webhooks | Create a webhook subscription
+*WebhooksApi* | [**deleteWebhook**](docs/WebhooksApi.md#deletewebhook) | **DELETE** /api/v1/webhooks/{id} | Delete a webhook subscription
+*WebhooksApi* | [**getWebhook**](docs/WebhooksApi.md#getwebhook) | **GET** /api/v1/webhooks/{id} | Get a webhook subscription
+*WebhooksApi* | [**listWebhookDeliveries**](docs/WebhooksApi.md#listwebhookdeliveries) | **GET** /api/v1/webhooks/{id}/deliveries | List the deliveries of a webhook subscription
+*WebhooksApi* | [**listWebhooks**](docs/WebhooksApi.md#listwebhooks) | **GET** /api/v1/webhooks | List your webhook subscriptions
+*WebhooksApi* | [**redeliverWebhook**](docs/WebhooksApi.md#redeliverwebhook) | **POST** /api/v1/webhooks/{id}/deliveries/{deliveryId}/redeliver | Redeliver a webhook event
+*WebhooksApi* | [**rotateWebhookSecret**](docs/WebhooksApi.md#rotatewebhooksecret) | **POST** /api/v1/webhooks/{id}/rotate-secret | Rotate a webhook secret
+*WebhooksApi* | [**sendWebhookTest**](docs/WebhooksApi.md#sendwebhooktest) | **POST** /api/v1/webhooks/{id}/test | Send a test event
+*WebhooksApi* | [**updateWebhook**](docs/WebhooksApi.md#updatewebhookoperation) | **PATCH** /api/v1/webhooks/{id} | Edit a webhook subscription
 
 
 ### Models
 
+- [AdvanceTestOrderRequest](docs/AdvanceTestOrderRequest.md)
 - [Balance](docs/Balance.md)
+- [BalanceLowEventData](docs/BalanceLowEventData.md)
+- [BalanceLowEventDataWallet](docs/BalanceLowEventDataWallet.md)
 - [CatalogueMedia](docs/CatalogueMedia.md)
 - [CatalogueMediaFlashOffer](docs/CatalogueMediaFlashOffer.md)
 - [CatalogueMediaMetrics](docs/CatalogueMediaMetrics.md)
@@ -136,6 +151,7 @@ All URIs are relative to *https://tool.growwer.com*
 - [CreateSavedFilterRequest](docs/CreateSavedFilterRequest.md)
 - [CreateSellerMediaRequest](docs/CreateSellerMediaRequest.md)
 - [CreateSellerMediaRequestPostOffer](docs/CreateSellerMediaRequestPostOffer.md)
+- [CreateWebhookRequest](docs/CreateWebhookRequest.md)
 - [GetBuyerWallet200Response](docs/GetBuyerWallet200Response.md)
 - [GetMe200Response](docs/GetMe200Response.md)
 - [GetMe200ResponseBuyer](docs/GetMe200ResponseBuyer.md)
@@ -159,6 +175,8 @@ All URIs are relative to *https://tool.growwer.com*
 - [ListSellerMedias200Response](docs/ListSellerMedias200Response.md)
 - [ListSellerOrders200Response](docs/ListSellerOrders200Response.md)
 - [ListSellerTransactions200Response](docs/ListSellerTransactions200Response.md)
+- [ListWebhookDeliveries200Response](docs/ListWebhookDeliveries200Response.md)
+- [ListWebhooks200Response](docs/ListWebhooks200Response.md)
 - [ListWithdrawals200Response](docs/ListWithdrawals200Response.md)
 - [ManagedServiceCampaign](docs/ManagedServiceCampaign.md)
 - [ManagedServiceCampaignProject](docs/ManagedServiceCampaignProject.md)
@@ -188,6 +206,7 @@ All URIs are relative to *https://tool.growwer.com*
 - [OrderEstimate](docs/OrderEstimate.md)
 - [OrderEstimateRequest](docs/OrderEstimateRequest.md)
 - [OrderEstimateRequestBriefing](docs/OrderEstimateRequestBriefing.md)
+- [OrderEventData](docs/OrderEventData.md)
 - [OrderLink](docs/OrderLink.md)
 - [OrderLinkRequest](docs/OrderLinkRequest.md)
 - [OrderMedia](docs/OrderMedia.md)
@@ -226,6 +245,8 @@ All URIs are relative to *https://tool.growwer.com*
 - [SellerOrderRejectionReason](docs/SellerOrderRejectionReason.md)
 - [SellerPostOrderBriefing](docs/SellerPostOrderBriefing.md)
 - [SellerTransaction](docs/SellerTransaction.md)
+- [TopUpTestWallet200Response](docs/TopUpTestWallet200Response.md)
+- [TopUpTestWalletRequest](docs/TopUpTestWalletRequest.md)
 - [Transaction](docs/Transaction.md)
 - [UpdateProjectRequest](docs/UpdateProjectRequest.md)
 - [UpdateSellerMediaRequest](docs/UpdateSellerMediaRequest.md)
@@ -234,7 +255,16 @@ All URIs are relative to *https://tool.growwer.com*
 - [UpdateSellerMediaRequestLinkAdditionOfferPricingOptionsInner](docs/UpdateSellerMediaRequestLinkAdditionOfferPricingOptionsInner.md)
 - [UpdateSellerMediaRequestPostOffer](docs/UpdateSellerMediaRequestPostOffer.md)
 - [UpdateSellerMediaRequestPostOfferPricingOptionsInner](docs/UpdateSellerMediaRequestPostOfferPricingOptionsInner.md)
+- [UpdateWebhookRequest](docs/UpdateWebhookRequest.md)
 - [UploadFile201Response](docs/UploadFile201Response.md)
+- [Webhook](docs/Webhook.md)
+- [WebhookDelivery](docs/WebhookDelivery.md)
+- [WebhookDeliveryAttempt](docs/WebhookDeliveryAttempt.md)
+- [WebhookEvent](docs/WebhookEvent.md)
+- [WebhookEventData](docs/WebhookEventData.md)
+- [WebhookEventType](docs/WebhookEventType.md)
+- [WebhookTestEventData](docs/WebhookTestEventData.md)
+- [WebhookWithSecret](docs/WebhookWithSecret.md)
 - [Withdrawal](docs/Withdrawal.md)
 
 ### Authorization
@@ -254,7 +284,7 @@ and is automatically generated by the
 [OpenAPI Generator](https://openapi-generator.tech) project:
 
 - API version: `1`
-- Package version: `2.0.0`
+- Package version: `2.1.0`
 - Generator version: `7.24.0`
 - Build package: `org.openapitools.codegen.languages.TypeScriptFetchClientCodegen`
 

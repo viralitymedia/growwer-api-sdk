@@ -14,7 +14,7 @@ All URIs are relative to *https://tool.growwer.com*
 
 Your account
 
-Profile basics, the buyer and seller balances, whether your seller account is restricted, whether the catalogue is open to you, and whether you have a managed service.
+Profile basics, the buyer and seller balances, whether your seller account is restricted, whether the catalogue is open to you, whether you have a managed service, and whether the key you called with is live or test. A test key reads its test wallet as the buyer balance (1,000.00 EUR until test orders and top-ups move it), never your real balance, and no seller side.
 
 ### Examples
 

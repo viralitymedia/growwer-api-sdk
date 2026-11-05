@@ -1,6 +1,6 @@
 /*
  * Growwer API
- * The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters without spaces) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601. 
+ * The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters without spaces) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Test mode: a test key (`gw_sk_test_` plus 43 characters) works on your account's test data alone, apart from the real catalogue: test projects, orders and files, and a test wallet that starts at 1,000.00 EUR. Every response to a test key carries `Growwer-Mode: test`, and an id of the other mode answers 404 as a missing object would. - A test order is validated and debited from the test wallet as a live one   is. A simulated seller accepts it a minute later and delivers it two   minutes after that; you approve the delivery or request an update. - The Test helpers top the test wallet up, move a test order on at once and   reset your test data. A live key on them gets 403 `test_mode_only`. - A test key on the seller and managed service operations, on a project's   catalogue writes and on media requests gets 403   `not_available_in_test_mode`. - Idempotency keys are scoped per mode: the same `Idempotency-Key` sent with   a live and a test key never replays the other mode's response.  Webhooks: a subscription receives the events of its mode, signed as Standard Webhooks. Your orders' events and `balance.low` are live: creating a subscription with a test key gets 403 `not_available_in_test_mode` for now. `x-webhooks` lists every event Growwer POSTs and its payload; the WebhookEvent schema describes the headers, the signature and the retries.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601. 
  *
  * The version of the OpenAPI document: 1
  * Contact: support@growwer.com
@@ -96,7 +96,10 @@ public class JSON {
         gsonBuilder.registerTypeAdapter(OffsetDateTime.class, offsetDateTimeTypeAdapter);
         gsonBuilder.registerTypeAdapter(LocalDate.class, localDateTypeAdapter);
         gsonBuilder.registerTypeAdapter(byte[].class, byteArrayAdapter);
+        gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.AdvanceTestOrderRequest.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.Balance.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.BalanceLowEventData.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.BalanceLowEventDataWallet.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.CatalogueMedia.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.CatalogueMediaFlashOffer.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.CatalogueMediaMetrics.CustomTypeAdapterFactory());
@@ -111,6 +114,7 @@ public class JSON {
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.CreateSavedFilterRequest.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.CreateSellerMediaRequest.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.CreateSellerMediaRequestPostOffer.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.CreateWebhookRequest.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.Error.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.GetBuyerWallet200Response.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.GetMe200Response.CustomTypeAdapterFactory());
@@ -135,6 +139,8 @@ public class JSON {
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.ListSellerMedias200Response.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.ListSellerOrders200Response.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.ListSellerTransactions200Response.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.ListWebhookDeliveries200Response.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.ListWebhooks200Response.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.ListWithdrawals200Response.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.ManagedServiceCampaign.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.ManagedServiceCampaignProject.CustomTypeAdapterFactory());
@@ -163,6 +169,7 @@ public class JSON {
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.OrderEstimate.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.OrderEstimateRequest.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.OrderEstimateRequestBriefing.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.OrderEventData.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.OrderLink.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.OrderLinkRequest.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.OrderMedia.CustomTypeAdapterFactory());
@@ -201,6 +208,8 @@ public class JSON {
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.SellerOrderRejectionReason.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.SellerPostOrderBriefing.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.SellerTransaction.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.TopUpTestWallet200Response.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.TopUpTestWalletRequest.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.Transaction.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.UpdateProjectRequest.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.UpdateSellerMediaRequest.CustomTypeAdapterFactory());
@@ -209,7 +218,15 @@ public class JSON {
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.UpdateSellerMediaRequestLinkAdditionOfferPricingOptionsInner.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.UpdateSellerMediaRequestPostOffer.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.UpdateSellerMediaRequestPostOfferPricingOptionsInner.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.UpdateWebhookRequest.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.UploadFile201Response.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.Webhook.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.WebhookDelivery.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.WebhookDeliveryAttempt.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.WebhookEvent.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.WebhookEventData.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.WebhookTestEventData.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.WebhookWithSecret.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.Withdrawal.CustomTypeAdapterFactory());
         gson = gsonBuilder.create();
     }

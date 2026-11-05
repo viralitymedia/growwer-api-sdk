@@ -538,7 +538,7 @@ undiscardMedia($id, $media_id, $idempotency_key)
 
 Restore a discarded media for a project
 
-Restores a media you discarded for one of your projects. Restoring one that is not discarded changes nothing. It works for any media, even one the catalogue no longer shows.
+Restores a media you discarded for one of your projects. Restoring one that is not discarded, or an id no media has, changes nothing and answers the same. It works for any media, even one the catalogue no longer shows.
 
 ### Example
 
@@ -601,7 +601,7 @@ unfavouriteMedia($id, $media_id, $idempotency_key)
 
 Remove a media from the favourites of a project
 
-Removes a media from the favourites of one of your projects. Removing one that is not a favourite changes nothing. It works for any media, even one the catalogue no longer shows.
+Removes a media from the favourites of one of your projects. Removing one that is not a favourite, or an id no media has, changes nothing and answers the same. It works for any media, even one the catalogue no longer shows.
 
 ### Example
 

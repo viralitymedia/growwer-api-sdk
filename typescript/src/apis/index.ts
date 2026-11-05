@@ -12,3 +12,5 @@ export * from './SellerAccountApi';
 export * from './SellerMediasApi';
 export * from './SellerOrdersApi';
 export * from './SellerWalletApi';
+export * from './TestHelpersApi';
+export * from './WebhooksApi';

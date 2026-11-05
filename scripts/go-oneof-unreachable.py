@@ -1,9 +1,10 @@
 """Removes the unreachable copy of the no-match branch the Go generator writes into oneOf models.
 
 OpenAPI Generator 7.24.0's Go oneOf template emits the "data failed to match schemas in oneOf(X)"
-if/else twice in a row inside UnmarshalJSON. Both branches of the first copy return, so the second
-can never run, and `go vet` rejects the package with "unreachable code". The template offers no
-option for it, so the duplicate is dropped here after every run; behaviour is unchanged.
+if/else once per member inside UnmarshalJSON, one copy after another. Both branches of the first
+copy return, so the others can never run, and `go vet` rejects the package with "unreachable code".
+The template offers no option for it, so every copy after the first is dropped here after every run;
+behaviour is unchanged.
 
 When a generator upgrade stops emitting the duplicate, nothing matches and this step fails, so the
 step is removed then rather than kept as a silent no-op.
@@ -20,7 +21,7 @@ DUPLICATED = re.compile(
     r"[ \t]+\} else \{\n"
     r"[ \t]+return fmt\.Errorf\(\"data failed to match schemas in oneOf\((?P=name)\)\"\)\n"
     r"(?P=indent)\}\n)"
-    r"(?P=block)"
+    r"(?:(?P=block))+"
 )
 
 fixed = []

@@ -8,17 +8,25 @@ use Growwer\Api\Api\AccountApi;
 use Growwer\Api\Api\BuyerOrdersApi;
 use Growwer\Api\Api\CatalogueApi;
 use Growwer\Api\Api\SellerMediasApi;
+use Growwer\Api\Api\WebhooksApi;
 use Growwer\Api\ApiException;
 use Growwer\Api\Configuration;
 use Growwer\Api\Model\CatalogueMedia;
 use Growwer\Api\Model\CatalogueOfferOrNull;
+use Growwer\Api\Model\CreateWebhookRequest;
 use Growwer\Api\Model\Error;
 use Growwer\Api\Model\GetMe200Response;
 use Growwer\Api\Model\ListOrders200Response;
+use Growwer\Api\Model\Money;
 use Growwer\Api\Model\MoneyOrNull;
 use Growwer\Api\Model\Order;
 use Growwer\Api\Model\SellerFeesOrNull;
 use Growwer\Api\Model\SellerMedia;
+use Growwer\Api\Model\WebhookEvent;
+use Growwer\Api\Model\WebhookEventData;
+use Growwer\Api\Model\WebhookEventType;
+use Growwer\Api\Model\WebhookWithSecret;
+use Growwer\Api\ObjectSerializer;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
@@ -37,6 +45,7 @@ final class FixtureTest extends TestCase
 {
     private const MEDIA_ID = 'c1d2e3f4-a5b6-4c7d-8e9f-a0b1c2d3e4f5';
     private const ORDER_ID = '0b9c6a4e-6f1d-4c39-9a51-2f5d7c1e8a01';
+    private const WEBHOOK_ID = '9d4c3f5b-6e7a-4b82-9d2e-3f4a5b6c7d8e';
 
     /** @var list<array{request: RequestInterface}> */
     private array $history = [];
@@ -57,6 +66,15 @@ final class FixtureTest extends TestCase
         $stack->push(Middleware::history($this->history));
 
         return [new Client(['handler' => $stack]), (new Configuration())->setAccessToken('test-key')];
+    }
+
+    private static function event(string $name): WebhookEvent
+    {
+        $event = ObjectSerializer::deserialize(json_decode(self::fixture($name)), WebhookEvent::class);
+        self::assertInstanceOf(WebhookEvent::class, $event);
+        self::assertInstanceOf(WebhookEventData::class, $event->getData());
+
+        return $event;
     }
 
     private function sent(): RequestInterface
@@ -80,6 +98,18 @@ final class FixtureTest extends TestCase
         self::assertTrue($me->getCatalogue()->getEligible());
         self::assertSame(5000, $me->getCatalogue()->getDailyCap());
         self::assertNull($me->getCatalogue()->getRemainingToday());
+        self::assertSame('live', $me->getMode());
+    }
+
+    public function testGetMeWithATestKeyReadsTestModeAndNoSeller(): void
+    {
+        $me = (new AccountApi(...$this->answer(200, self::fixture('me-test-key.json'))))->getMe();
+
+        self::assertInstanceOf(GetMe200Response::class, $me);
+        self::assertSame('test', $me->getMode());
+        self::assertNull($me->getSeller());
+        self::assertSame(100000, $me->getBuyer()->getBalance()->getAvailable()->getAmount());
+        self::assertTrue($me->getCatalogue()->getEligible());
     }
 
     public function testTheBaseUrlIsOverridable(): void
@@ -214,6 +244,87 @@ final class FixtureTest extends TestCase
         self::assertInstanceOf(SellerFeesOrNull::class, $fees);
         self::assertSame(5400, $fees->getFeeWhenSellerWritesPost()->getAmount());
         self::assertNull($fees->getFeeWhenSellerDoesNotWritePost());
+    }
+
+    public function testAnOrderEventParsesWithFieldsThisClientDoesNotKnow(): void
+    {
+        $event = self::event('webhook-order-created.json');
+
+        self::assertSame('6a1f0c2e-3b4d-4e5f-8a9b-0c1d2e3f4a5b', $event->getId());
+        self::assertSame('order.created', $event->getType());
+        self::assertSame('live', $event->getMode());
+        self::assertSame('v1', $event->getApiVersion());
+        self::assertEquals(new \DateTime('2026-10-01T09:30:05+00:00'), $event->getCreatedAt());
+        // The oneOf is one merged model: the order member's field is set and the others' are not.
+        $data = $event->getData();
+        self::assertInstanceOf(Order::class, $data->getOrder());
+        self::assertNull($data->getWallet());
+        self::assertNull($data->getThreshold());
+        self::assertNull($data->getWebhookId());
+        self::assertSame(self::ORDER_ID, $data->getOrder()->getId());
+        self::assertSame('pending_acceptance', $data->getOrder()->getState());
+        self::assertSame(12500, $data->getOrder()->getPrice()->getAmount());
+        self::assertSame('Choosing running shoes', $data->getOrder()->getBriefing()->getTitle());
+    }
+
+    public function testABalanceLowEventParsesWithFieldsThisClientDoesNotKnow(): void
+    {
+        $event = self::event('webhook-balance-low.json');
+
+        self::assertSame('balance.low', $event->getType());
+        self::assertSame('live', $event->getMode());
+        $data = $event->getData();
+        self::assertNull($data->getOrder());
+        self::assertNull($data->getWebhookId());
+        self::assertSame(4500, $data->getWallet()->getAvailableBalance()->getAmount());
+        self::assertSame('EUR', $data->getWallet()->getCurrency());
+        self::assertSame(5000, $data->getThreshold()->getAmount());
+    }
+
+    public function testAWebhookTestEventParsesWithFieldsThisClientDoesNotKnow(): void
+    {
+        $event = self::event('webhook-test.json');
+
+        self::assertSame('webhook.test', $event->getType());
+        self::assertSame('live', $event->getMode());
+        $data = $event->getData();
+        self::assertNull($data->getOrder());
+        self::assertNull($data->getWallet());
+        self::assertNull($data->getThreshold());
+        self::assertSame(self::WEBHOOK_ID, $data->getWebhookId());
+    }
+
+    public function testCreateWebhookSendsTheBodyAndKeyAndReadsTheSecret(): void
+    {
+        $events = [WebhookEventType::ORDER_CREATED, WebhookEventType::ORDER_COMPLETED, WebhookEventType::BALANCE_LOW];
+        $webhook = (new WebhooksApi(...$this->answer(201, self::fixture('webhook-with-secret.json'))))->createWebhook(
+            'create-webhook-1',
+            new CreateWebhookRequest([
+                'url' => 'https://hooks.shop.example/growwer',
+                'events' => $events,
+                'low_balance_threshold' => new Money(['amount' => 5000, 'currency' => 'EUR']),
+            ]),
+        );
+
+        self::assertSame('POST', $this->sent()->getMethod());
+        self::assertSame('https://tool.growwer.com/api/v1/webhooks', (string) $this->sent()->getUri());
+        self::assertSame('create-webhook-1', $this->sent()->getHeaderLine('Idempotency-Key'));
+        self::assertSame(
+            [
+                'url' => 'https://hooks.shop.example/growwer',
+                'events' => ['order.created', 'order.completed', 'balance.low'],
+                'lowBalanceThreshold' => ['amount' => 5000, 'currency' => 'EUR'],
+            ],
+            json_decode((string) $this->sent()->getBody(), true),
+        );
+        self::assertInstanceOf(WebhookWithSecret::class, $webhook);
+        self::assertSame(self::WEBHOOK_ID, $webhook->getId());
+        self::assertStringStartsWith('whsec_', (string) $webhook->getSecret());
+        self::assertSame($events, $webhook->getEvents());
+        self::assertSame(5000, $webhook->getLowBalanceThreshold()->getAmount());
+        self::assertTrue($webhook->getEnabled());
+        self::assertNull($webhook->getDisabledReason());
+        self::assertNull($webhook->getFailingSince());
     }
 
     public function testTheErrorEnvelopeIsReadableFromTheException(): void

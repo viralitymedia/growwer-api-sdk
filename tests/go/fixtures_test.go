@@ -7,6 +7,7 @@ package fixtures
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"errors"
 	"io"
 	"net/http"
@@ -22,7 +23,8 @@ import (
 
 const (
 	mediaID = "c1d2e3f4-a5b6-4c7d-8e9f-a0b1c2d3e4f5"
-	orderID = "0b9c6a4e-6f1d-4c39-9a51-2f5d7c1e8a01"
+	orderID   = "0b9c6a4e-6f1d-4c39-9a51-2f5d7c1e8a01"
+	webhookID = "9d4c3f5b-6e7a-4b82-9d2e-3f4a5b6c7d8e"
 )
 
 func fixture(t *testing.T, name string) []byte {
@@ -101,10 +103,27 @@ func TestGetMeCallsProductionWithTheBearerKey(t *testing.T) {
 	equal(t, "Authorization", request.Header.Get("Authorization"), "Bearer test-key")
 	equal(t, "available", me.Buyer.Balance.Available.Amount, int32(250000))
 	equal(t, "currency", me.Buyer.Balance.Available.Currency, "EUR")
-	equal(t, "holidayEndDate set", me.Seller.HolidayEndDate.Get() == nil, true)
+	if me.Seller.Get() == nil {
+		t.Fatal("seller = nil, want the live key's seller side")
+	}
+	equal(t, "holidayEndDate set", me.Seller.Get().HolidayEndDate.Get() == nil, true)
 	equal(t, "eligible", me.Catalogue.Eligible, true)
 	equal(t, "dailyCap", me.Catalogue.DailyCap, int32(5000))
 	equal(t, "remainingToday set", me.Catalogue.RemainingToday.Get() == nil, true)
+	equal(t, "mode", me.Mode, "live")
+}
+
+func TestGetMeWithATestKeyReadsTestModeAndNoSeller(t *testing.T) {
+	client, _ := answer(200, fixture(t, "me-test-key.json"), nil)
+
+	me, _, err := client.AccountAPI.GetMe(authorised()).Execute()
+	check(t, err)
+
+	equal(t, "mode", me.Mode, "test")
+	equal(t, "seller set", me.Seller.IsSet(), true)
+	equal(t, "seller nil", me.Seller.Get() == nil, true)
+	equal(t, "available", me.Buyer.Balance.Available.Amount, int32(100000))
+	equal(t, "eligible", me.Catalogue.Eligible, true)
 }
 
 func TestTheBaseUrlIsOverridable(t *testing.T) {
@@ -260,6 +279,100 @@ func TestASellerMediaReadsCompetitiveFeesWithOneSideNull(t *testing.T) {
 	}
 	equal(t, "feeWhenSellerWritesPost", fees.FeeWhenSellerWritesPost.Get().Amount, int32(5400))
 	equal(t, "feeWhenSellerDoesNotWritePost", fees.FeeWhenSellerDoesNotWritePost.Get() == nil, true)
+}
+
+func TestAnOrderEventParsesWithFieldsThisClientDoesNotKnow(t *testing.T) {
+	var event growwer.WebhookEvent
+	check(t, json.Unmarshal(fixture(t, "webhook-order-created.json"), &event))
+
+	equal(t, "id", event.Id, "6a1f0c2e-3b4d-4e5f-8a9b-0c1d2e3f4a5b")
+	equal(t, "type", event.Type, "order.created")
+	equal(t, "mode", event.Mode, "live")
+	equal(t, "apiVersion", event.ApiVersion, "v1")
+	equal(t, "createdAt", event.CreatedAt.Equal(time.Date(2026, 10, 1, 9, 30, 5, 0, time.UTC)), true)
+	if event.Data.OrderEventData == nil || event.Data.BalanceLowEventData != nil || event.Data.WebhookTestEventData != nil {
+		t.Fatalf("data = %#v, want an OrderEventData only", event.Data)
+	}
+	order := event.Data.OrderEventData.Order
+	equal(t, "order id", order.Id, orderID)
+	equal(t, "order state", order.State, "pending_acceptance")
+	equal(t, "order price", order.Price.Amount, int32(12500))
+	if order.Briefing.PostOrderBriefing == nil {
+		t.Fatalf("briefing = %#v, want a PostOrderBriefing", order.Briefing)
+	}
+	equal(t, "order title", *order.Briefing.PostOrderBriefing.Title.Get(), "Choosing running shoes")
+}
+
+func TestABalanceLowEventParsesWithFieldsThisClientDoesNotKnow(t *testing.T) {
+	var event growwer.WebhookEvent
+	check(t, json.Unmarshal(fixture(t, "webhook-balance-low.json"), &event))
+
+	equal(t, "type", event.Type, "balance.low")
+	equal(t, "mode", event.Mode, "live")
+	if event.Data.BalanceLowEventData == nil || event.Data.OrderEventData != nil || event.Data.WebhookTestEventData != nil {
+		t.Fatalf("data = %#v, want a BalanceLowEventData only", event.Data)
+	}
+	data := event.Data.BalanceLowEventData
+	equal(t, "availableBalance", data.Wallet.AvailableBalance.Amount, int32(4500))
+	equal(t, "currency", data.Wallet.Currency, "EUR")
+	equal(t, "threshold", data.Threshold.Amount, int32(5000))
+}
+
+func TestAWebhookTestEventParsesWithFieldsThisClientDoesNotKnow(t *testing.T) {
+	var event growwer.WebhookEvent
+	check(t, json.Unmarshal(fixture(t, "webhook-test.json"), &event))
+
+	equal(t, "type", event.Type, "webhook.test")
+	equal(t, "mode", event.Mode, "live")
+	if event.Data.WebhookTestEventData == nil || event.Data.OrderEventData != nil || event.Data.BalanceLowEventData != nil {
+		t.Fatalf("data = %#v, want a WebhookTestEventData only", event.Data)
+	}
+	equal(t, "webhookId", event.Data.WebhookTestEventData.WebhookId, webhookID)
+}
+
+func TestCreateWebhookSendsTheBodyAndKeyAndReadsTheSecret(t *testing.T) {
+	client, transport := answer(201, fixture(t, "webhook-with-secret.json"), nil)
+	events := []growwer.WebhookEventType{
+		growwer.WEBHOOKEVENTTYPE_ORDER_CREATED,
+		growwer.WEBHOOKEVENTTYPE_ORDER_COMPLETED,
+		growwer.WEBHOOKEVENTTYPE_BALANCE_LOW,
+	}
+	body := growwer.NewCreateWebhookRequest("https://hooks.shop.example/growwer", events)
+	body.SetLowBalanceThreshold(growwer.Money{Amount: 5000, Currency: "EUR"})
+
+	webhook, _, err := client.WebhooksAPI.CreateWebhook(authorised()).
+		IdempotencyKey("create-webhook-1").
+		CreateWebhookRequest(*body).
+		Execute()
+	check(t, err)
+
+	request := sent(t, transport)
+	equal(t, "method", request.Method, "POST")
+	equal(t, "url", request.URL.String(), "https://tool.growwer.com/api/v1/webhooks")
+	equal(t, "Idempotency-Key", request.Header.Get("Idempotency-Key"), "create-webhook-1")
+	if request.GetBody == nil {
+		t.Fatal("the request body cannot be read back")
+	}
+	reader, err := request.GetBody()
+	check(t, err)
+	var sentBody map[string]interface{}
+	check(t, json.NewDecoder(reader).Decode(&sentBody))
+	equal(t, "body", sentBody, map[string]interface{}{
+		"url":                 "https://hooks.shop.example/growwer",
+		"events":              []interface{}{"order.created", "order.completed", "balance.low"},
+		"lowBalanceThreshold": map[string]interface{}{"amount": float64(5000), "currency": "EUR"},
+	})
+
+	equal(t, "id", webhook.Id, webhookID)
+	equal(t, "secret prefix", strings.HasPrefix(webhook.GetSecret(), "whsec_"), true)
+	equal(t, "events", webhook.Events, events)
+	if webhook.LowBalanceThreshold.Get() == nil {
+		t.Fatal("lowBalanceThreshold = nil, want 5000")
+	}
+	equal(t, "lowBalanceThreshold", webhook.LowBalanceThreshold.Get().Amount, int32(5000))
+	equal(t, "enabled", webhook.Enabled, true)
+	equal(t, "disabledReason set", webhook.DisabledReason.Get() == nil, true)
+	equal(t, "failingSince set", webhook.FailingSince.Get() == nil, true)
 }
 
 func TestTheErrorEnvelopeIsReadableFromTheError(t *testing.T) {

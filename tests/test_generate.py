@@ -579,6 +579,65 @@ class ContractSyncTest(unittest.TestCase):
         self.assertFalse(leftover)
 
 
+class GoOneOfUnreachableTest(unittest.TestCase):
+    """scripts/go-oneof-unreachable.py leaves one copy of the no-match branch the Go oneOf template
+    repeats, however many copies it wrote, so `go vet` finds no unreachable code."""
+
+    NO_MATCH = (
+        "        if err != nil {{\n"
+        "            return fmt.Errorf(\"data failed to match schemas in oneOf({name}): %v\", err)\n"
+        "        }} else {{\n"
+        "            return fmt.Errorf(\"data failed to match schemas in oneOf({name})\")\n"
+        "        }}\n"
+    )
+    MODEL = "\t}} else {{ // no match\n{branches}\t}}\n}}\n"
+
+    def model(self, name, copies):
+        return self.MODEL.format(branches=self.NO_MATCH.format(name=name) * copies)
+
+    def run_script(self, models):
+        with tempfile.TemporaryDirectory(prefix="growwer-go-oneof-test-") as directory:
+            root = Path(directory)
+            (root / "scripts").mkdir()
+            shutil.copyfile(ROOT / "scripts/go-oneof-unreachable.py", root / "scripts/go-oneof-unreachable.py")
+            folder = root / "go"
+            folder.mkdir()
+            for name, text in models.items():
+                (folder / f"model_{name}.go").write_text(text)
+            result = subprocess.run(
+                [sys.executable, "scripts/go-oneof-unreachable.py"],
+                cwd=root,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            return result, {path.stem: path.read_text() for path in folder.glob("*.go")}
+
+    def test_every_repeated_copy_is_dropped_whatever_the_number_of_members(self):
+        unrelated = "type Project struct {}\n"
+        result, models = self.run_script({
+            "order_briefing": self.model("OrderBriefing", 2),
+            "webhook_event_data": self.model("WebhookEventData", 3),
+            "project": unrelated,
+        })
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        self.assertEqual(self.model("OrderBriefing", 1), models["model_order_briefing"])
+        self.assertEqual(self.model("WebhookEventData", 1), models["model_webhook_event_data"])
+        self.assertEqual(unrelated, models["model_project"])
+        self.assertIn("model_order_briefing.go, model_webhook_event_data.go", result.stdout)
+
+    def test_a_generator_that_no_longer_repeats_the_branch_fails_the_run(self):
+        result, models = self.run_script({"order_briefing": self.model("OrderBriefing", 1)})
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("remove scripts/go-oneof-unreachable.py", result.stderr)
+        self.assertEqual(self.model("OrderBriefing", 1), models["model_order_briefing"])
+
+    def test_the_committed_go_client_has_one_no_match_branch_per_one_of_model(self):
+        for path in (ROOT / "go").glob("model_*.go"):
+            text = path.read_text(encoding="utf-8")
+            self.assertLessEqual(text.count("data failed to match schemas in oneOf("), 2, path.name)
+
+
 class RubyOneOfUnknownKeysTest(unittest.TestCase):
     """scripts/ruby-oneof-unknown-keys.py drops the oneOf check that refuses unknown keys, but only
     while every member stays distinguishable without it."""

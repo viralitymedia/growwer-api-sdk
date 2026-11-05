@@ -1,6 +1,6 @@
 /*
  * Growwer API
- * The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters without spaces) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601. 
+ * The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters without spaces) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Test mode: a test key (`gw_sk_test_` plus 43 characters) works on your account's test data alone, apart from the real catalogue: test projects, orders and files, and a test wallet that starts at 1,000.00 EUR. Every response to a test key carries `Growwer-Mode: test`, and an id of the other mode answers 404 as a missing object would. - A test order is validated and debited from the test wallet as a live one   is. A simulated seller accepts it a minute later and delivers it two   minutes after that; you approve the delivery or request an update. - The Test helpers top the test wallet up, move a test order on at once and   reset your test data. A live key on them gets 403 `test_mode_only`. - A test key on the seller and managed service operations, on a project's   catalogue writes and on media requests gets 403   `not_available_in_test_mode`. - Idempotency keys are scoped per mode: the same `Idempotency-Key` sent with   a live and a test key never replays the other mode's response.  Webhooks: a subscription receives the events of its mode, signed as Standard Webhooks. Your orders' events and `balance.low` are live: creating a subscription with a test key gets 403 `not_available_in_test_mode` for now. `x-webhooks` lists every event Growwer POSTs and its payload; the WebhookEvent schema describes the headers, the signature and the retries.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601. 
  *
  * The version of the OpenAPI document: 1
  * Contact: support@growwer.com
@@ -88,7 +88,7 @@ public class GetMe200Response {
 
   public static final String SERIALIZED_NAME_SELLER = "seller";
   @SerializedName(SERIALIZED_NAME_SELLER)
-  @javax.annotation.Nonnull
+  @javax.annotation.Nullable
   private GetMe200ResponseSeller seller;
 
   public static final String SERIALIZED_NAME_CATALOGUE = "catalogue";
@@ -100,6 +100,63 @@ public class GetMe200Response {
   @SerializedName(SERIALIZED_NAME_MANAGED_SERVICE)
   @javax.annotation.Nonnull
   private GetMe200ResponseManagedService managedService;
+
+  /**
+   * The mode of the key you called with. &#x60;live&#x60; works on your real account; &#x60;test&#x60; works in test mode, where nothing you do reaches real sellers, money or orders. Every response to a test key also carries the header &#x60;Growwer-Mode: test&#x60;.
+   */
+  @JsonAdapter(ModeEnum.Adapter.class)
+  public enum ModeEnum {
+    LIVE("live"),
+    
+    TEST("test");
+
+    private String value;
+
+    ModeEnum(String value) {
+      this.value = value;
+    }
+
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    public static ModeEnum fromValue(String value) {
+      for (ModeEnum b : ModeEnum.values()) {
+        if (b.value.equals(value)) {
+          return b;
+        }
+      }
+      throw new IllegalArgumentException("Unexpected value '" + value + "'");
+    }
+
+    public static class Adapter extends TypeAdapter<ModeEnum> {
+      @Override
+      public void write(final JsonWriter jsonWriter, final ModeEnum enumeration) throws IOException {
+        jsonWriter.value(enumeration.getValue());
+      }
+
+      @Override
+      public ModeEnum read(final JsonReader jsonReader) throws IOException {
+        String value =  jsonReader.nextString();
+        return ModeEnum.fromValue(value);
+      }
+    }
+
+    public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      String value = jsonElement.getAsString();
+      ModeEnum.fromValue(value);
+    }
+  }
+
+  public static final String SERIALIZED_NAME_MODE = "mode";
+  @SerializedName(SERIALIZED_NAME_MODE)
+  @javax.annotation.Nonnull
+  private ModeEnum mode;
 
   public GetMe200Response() {
   }
@@ -218,7 +275,7 @@ public class GetMe200Response {
   }
 
 
-  public GetMe200Response seller(@javax.annotation.Nonnull GetMe200ResponseSeller seller) {
+  public GetMe200Response seller(@javax.annotation.Nullable GetMe200ResponseSeller seller) {
     this.seller = seller;
     return this;
   }
@@ -227,12 +284,12 @@ public class GetMe200Response {
    * Get seller
    * @return seller
    */
-  @javax.annotation.Nonnull
+  @javax.annotation.Nullable
   public GetMe200ResponseSeller getSeller() {
     return seller;
   }
 
-  public void setSeller(@javax.annotation.Nonnull GetMe200ResponseSeller seller) {
+  public void setSeller(@javax.annotation.Nullable GetMe200ResponseSeller seller) {
     this.seller = seller;
   }
 
@@ -272,6 +329,25 @@ public class GetMe200Response {
 
   public void setManagedService(@javax.annotation.Nonnull GetMe200ResponseManagedService managedService) {
     this.managedService = managedService;
+  }
+
+
+  public GetMe200Response mode(@javax.annotation.Nonnull ModeEnum mode) {
+    this.mode = mode;
+    return this;
+  }
+
+  /**
+   * The mode of the key you called with. &#x60;live&#x60; works on your real account; &#x60;test&#x60; works in test mode, where nothing you do reaches real sellers, money or orders. Every response to a test key also carries the header &#x60;Growwer-Mode: test&#x60;.
+   * @return mode
+   */
+  @javax.annotation.Nonnull
+  public ModeEnum getMode() {
+    return mode;
+  }
+
+  public void setMode(@javax.annotation.Nonnull ModeEnum mode) {
+    this.mode = mode;
   }
 
   /**
@@ -337,13 +413,14 @@ public class GetMe200Response {
         Objects.equals(this.buyer, getMe200Response.buyer) &&
         Objects.equals(this.seller, getMe200Response.seller) &&
         Objects.equals(this.catalogue, getMe200Response.catalogue) &&
-        Objects.equals(this.managedService, getMe200Response.managedService)&&
+        Objects.equals(this.managedService, getMe200Response.managedService) &&
+        Objects.equals(this.mode, getMe200Response.mode)&&
         Objects.equals(this.additionalProperties, getMe200Response.additionalProperties);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, email, firstName, language, createdAt, buyer, seller, catalogue, managedService, additionalProperties);
+    return Objects.hash(id, email, firstName, language, createdAt, buyer, seller, catalogue, managedService, mode, additionalProperties);
   }
 
   @Override
@@ -359,6 +436,7 @@ public class GetMe200Response {
     sb.append("    seller: ").append(toIndentedString(seller)).append("\n");
     sb.append("    catalogue: ").append(toIndentedString(catalogue)).append("\n");
     sb.append("    managedService: ").append(toIndentedString(managedService)).append("\n");
+    sb.append("    mode: ").append(toIndentedString(mode)).append("\n");
     sb.append("    additionalProperties: ").append(toIndentedString(additionalProperties)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -378,10 +456,10 @@ public class GetMe200Response {
 
   static {
     // a set of all properties/fields (JSON key names)
-    openapiFields = new HashSet<String>(Arrays.asList("id", "email", "firstName", "language", "createdAt", "buyer", "seller", "catalogue", "managedService"));
+    openapiFields = new HashSet<String>(Arrays.asList("id", "email", "firstName", "language", "createdAt", "buyer", "seller", "catalogue", "managedService", "mode"));
 
     // a set of required properties/fields (JSON key names)
-    openapiRequiredFields = new HashSet<String>(Arrays.asList("id", "email", "firstName", "language", "createdAt", "buyer", "seller", "catalogue", "managedService"));
+    openapiRequiredFields = new HashSet<String>(Arrays.asList("id", "email", "firstName", "language", "createdAt", "buyer", "seller", "catalogue", "managedService", "mode"));
   }
 
   /**
@@ -418,12 +496,19 @@ public class GetMe200Response {
       }
       // validate the required field `buyer`
       GetMe200ResponseBuyer.validateJsonElement(jsonObj.get("buyer"));
+      if (jsonObj.get("seller") != null && !jsonObj.get("seller").isJsonNull()) {
       // validate the required field `seller`
       GetMe200ResponseSeller.validateJsonElement(jsonObj.get("seller"));
+      }
       // validate the required field `catalogue`
       GetMe200ResponseCatalogue.validateJsonElement(jsonObj.get("catalogue"));
       // validate the required field `managedService`
       GetMe200ResponseManagedService.validateJsonElement(jsonObj.get("managedService"));
+      if (!jsonObj.get("mode").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `mode` to be a primitive type in the JSON string but got `%s`", jsonObj.get("mode").toString()));
+      }
+      // validate the required field `mode`
+      ModeEnum.validateJsonElement(jsonObj.get("mode"));
   }
 
   public static class CustomTypeAdapterFactory implements TypeAdapterFactory {

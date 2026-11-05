@@ -15,6 +15,7 @@ Name | Type
 `seller` | [GetMe200ResponseSeller](GetMe200ResponseSeller.md)
 `catalogue` | [GetMe200ResponseCatalogue](GetMe200ResponseCatalogue.md)
 `managedService` | [GetMe200ResponseManagedService](GetMe200ResponseManagedService.md)
+`mode` | string
 
 ## Example
 
@@ -32,6 +33,7 @@ const example = {
   "seller": null,
   "catalogue": null,
   "managedService": null,
+  "mode": null,
 } satisfies GetMe200Response
 
 console.log(example)

@@ -25,6 +25,7 @@ internal static class Program
     private static readonly Guid MediaId = Guid.Parse("c1d2e3f4-a5b6-4c7d-8e9f-a0b1c2d3e4f5");
     private static readonly Guid OrderId = Guid.Parse("0b9c6a4e-6f1d-4c39-9a51-2f5d7c1e8a01");
     private static readonly Guid ProjectId = Guid.Parse("5e0c2b7a-3d4f-4a1b-9c8d-7e6f5a4b3c2d");
+    private static readonly Guid WebhookId = Guid.Parse("9d4c3f5b-6e7a-4b82-9d2e-3f4a5b6c7d8e");
 
     private static readonly List<HttpRequestMessage> Sent = new List<HttpRequestMessage>();
     private static readonly List<string> SentBodies = new List<string>();
@@ -122,6 +123,86 @@ internal static class Program
         Equal("eligible", me.Catalogue.Eligible, true);
         Equal("dailyCap", me.Catalogue.DailyCap, 5000);
         Equal("remainingToday", me.Catalogue.RemainingToday, null);
+        Equal("mode", me.Mode, GetMe200Response.ModeEnum.Live);
+    }
+
+    private static void GetMeWithATestKeyReadsTestModeAndNoSeller()
+    {
+        GetMe200Response me = new AccountApi(Answer(Fixture("me-test-key.json")), Key()).GetMe();
+
+        Equal("mode", me.Mode, GetMe200Response.ModeEnum.Test);
+        Equal("seller", me.Seller, null);
+        Equal("available", me.Buyer.Balance.Available.Amount, 100000);
+        Equal("eligible", me.Catalogue.Eligible, true);
+    }
+
+    private static WebhookEvent Event(string name) =>
+        JsonConvert.DeserializeObject<WebhookEvent>(File.ReadAllText(Path.Combine(Fixtures, name)));
+
+    private static void AnOrderEventParsesWithFieldsThisClientDoesNotKnow()
+    {
+        WebhookEvent webhookEvent = Event("webhook-order-created.json");
+
+        Equal("id", webhookEvent.Id, Guid.Parse("6a1f0c2e-3b4d-4e5f-8a9b-0c1d2e3f4a5b"));
+        Equal("type", webhookEvent.Type, WebhookEvent.TypeEnum.OrderCreated);
+        Equal("mode", webhookEvent.Mode, WebhookEvent.ModeEnum.Live);
+        Equal("apiVersion", webhookEvent.ApiVersion, WebhookEvent.ApiVersionEnum.V1);
+        Equal("createdAt", webhookEvent.CreatedAt.ToUniversalTime(), new DateTime(2026, 10, 1, 9, 30, 5, DateTimeKind.Utc));
+        Equal("data type", webhookEvent.Data.ActualInstance.GetType(), typeof(OrderEventData));
+        Order order = webhookEvent.Data.GetOrderEventData().Order;
+        Equal("order id", order.Id, OrderId);
+        Equal("order state", order.State, "pending_acceptance");
+        Equal("order price", order.Price.Amount, 12500);
+        Equal("briefing type", order.Briefing.ActualInstance.GetType(), typeof(PostOrderBriefing));
+    }
+
+    private static void ABalanceLowEventParsesWithFieldsThisClientDoesNotKnow()
+    {
+        WebhookEvent webhookEvent = Event("webhook-balance-low.json");
+
+        Equal("type", webhookEvent.Type, WebhookEvent.TypeEnum.BalanceLow);
+        Equal("mode", webhookEvent.Mode, WebhookEvent.ModeEnum.Live);
+        Equal("data type", webhookEvent.Data.ActualInstance.GetType(), typeof(BalanceLowEventData));
+        BalanceLowEventData data = webhookEvent.Data.GetBalanceLowEventData();
+        Equal("availableBalance", data.Wallet.AvailableBalance.Amount, 4500);
+        Equal("currency", data.Wallet.Currency, "EUR");
+        Equal("threshold", data.Threshold.Amount, 5000);
+    }
+
+    private static void AWebhookTestEventParsesWithFieldsThisClientDoesNotKnow()
+    {
+        WebhookEvent webhookEvent = Event("webhook-test.json");
+
+        Equal("type", webhookEvent.Type, WebhookEvent.TypeEnum.WebhookTest);
+        Equal("mode", webhookEvent.Mode, WebhookEvent.ModeEnum.Live);
+        Equal("data type", webhookEvent.Data.ActualInstance.GetType(), typeof(WebhookTestEventData));
+        Equal("webhookId", webhookEvent.Data.GetWebhookTestEventData().WebhookId, WebhookId);
+    }
+
+    private static void CreateWebhookSendsTheBodyAndKeyAndReadsTheSecret()
+    {
+        WebhookWithSecret webhook = new WebhooksApi(Answer(HttpStatusCode.Created, Fixture("webhook-with-secret.json"), "application/json"), Key())
+            .CreateWebhook("create-webhook-1", new CreateWebhookRequest(
+                url: "https://hooks.shop.example/growwer",
+                events: new List<WebhookEventType> { WebhookEventType.OrderCreated, WebhookEventType.OrderCompleted, WebhookEventType.BalanceLow },
+                lowBalanceThreshold: new Money(amount: 5000, currency: "EUR")));
+
+        Equal("method", SentRequest().Method, HttpMethod.Post);
+        Equal("url", SentRequest().RequestUri.ToString(), "https://tool.growwer.com/api/v1/webhooks");
+        Equal("Idempotency-Key", string.Join(",", SentRequest().Headers.GetValues("Idempotency-Key")), "create-webhook-1");
+        JObject body = SentBody();
+        Keys("request keys", body, "url", "events", "lowBalanceThreshold");
+        Equal("body url", (string)body["url"], "https://hooks.shop.example/growwer");
+        Equal("body events", string.Join(",", body["events"].Select(item => (string)item)), "order.created,order.completed,balance.low");
+        Equal("body threshold amount", (int)body["lowBalanceThreshold"]["amount"], 5000);
+        Equal("body threshold currency", (string)body["lowBalanceThreshold"]["currency"], "EUR");
+        Equal("id", webhook.Id, WebhookId);
+        Equal("secret prefix", webhook.Secret.StartsWith("whsec_", StringComparison.Ordinal), true);
+        Equal("events", string.Join(",", webhook.Events), "OrderCreated,OrderCompleted,BalanceLow");
+        Equal("lowBalanceThreshold", webhook.LowBalanceThreshold.Amount, 5000);
+        Equal("enabled", webhook.Enabled, true);
+        Equal("disabledReason", webhook.DisabledReason, null);
+        Equal("failingSince", webhook.FailingSince, null);
     }
 
     private static void TheBaseUrlIsOverridable()
@@ -359,6 +440,7 @@ internal static class Program
         var cases = new List<(string Name, Action Run)>
         {
             ("getMe calls production with the bearer key", GetMeCallsProductionWithTheBearerKey),
+            ("getMe with a test key reads test mode and no seller", GetMeWithATestKeyReadsTestModeAndNoSeller),
             ("the base URL is overridable", TheBaseUrlIsOverridable),
             ("listOrders reads items and total, with both order types", ListOrdersReadsItemsAndTotalWithBothOrderTypes),
             ("an order with fields this client does not know still deserialises", AnOrderWithFieldsThisClientDoesNotKnowStillDeserialises),
@@ -374,6 +456,10 @@ internal static class Program
             ("a seller media update sends a linkAdditionOffer set to null", ASellerMediaUpdateSendsALinkAdditionOfferSetToNull),
             ("the error envelope is readable from the ApiException", TheErrorEnvelopeIsReadableFromTheException),
             ("a binary download returns the exact bytes", ABinaryDownloadReturnsTheExactBytes),
+            ("an order event parses with fields this client does not know", AnOrderEventParsesWithFieldsThisClientDoesNotKnow),
+            ("a balance.low event parses with fields this client does not know", ABalanceLowEventParsesWithFieldsThisClientDoesNotKnow),
+            ("a webhook.test event parses with fields this client does not know", AWebhookTestEventParsesWithFieldsThisClientDoesNotKnow),
+            ("createWebhook sends the body and key and reads the secret", CreateWebhookSendsTheBodyAndKeyAndReadsTheSecret),
         };
         int failed = 0;
         foreach (var (name, run) in cases)

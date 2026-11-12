@@ -184,19 +184,23 @@ answers `409 no_competitive_fees`. No path or type moved.
 
 - **`applySellerMediaCompetitiveFees` answers 200 when there is nothing to lower.** It used to answer
   `409 no_competitive_fees` when Growwer had no suggestion for the media; now it answers 200 with the
-  media unchanged, so code that handled that 409 never sees it, and a 200 no longer means a fee
-  changed. Read `competitiveFees` first, which is null when there is nothing to lower, or compare
-  the fees it answers with the ones you had. A 409 is now only an `Idempotency-Key` conflict. What
-  the call sets changed too: it lowers each link type's fees on its own and never raises one, so
-  after it a link type's fee can be below `competitiveFees`.
+  media unchanged, so code that handled that 409 never sees it: a 200 now also answers when Growwer
+  has no suggestion. Read `competitiveFees` first, which is null when there is nothing to lower, or
+  compare the fees it answers with the ones you had. A 409 is now only an `Idempotency-Key`
+  conflict. What the call sets changed too: it lowers each link type's fees on its own and never
+  raises one, so after it a link type's fee can be below `competitiveFees`.
 - **Go:** `NewSellerMedia` gains `competitiveFeesByLinkType` between `competitiveFees` and
-  `createdAt`.
+  `createdAt`. A nil `CompetitiveFeesByLinkType` is dropped when a `SellerMedia` is marshalled, and
+  the client then refuses that JSON, because the key is required: to cache or mock a seller media
+  read with a null list, set an empty slice before marshalling it (it reads back as an empty list,
+  not nil), or keep the raw JSON.
 - **C#:** the `SellerMedia` constructor gains `competitiveFeesByLinkType` before `createdAt`, so a
-  call that passes `createdAt` by position no longer compiles. It refuses a `null`
-  `competitiveFeesByLinkType` with an `ArgumentNullException`, though reading a response with a null
-  one works; to build one by hand, assign `CompetitiveFeesByLinkType = null` after constructing it.
+  call that passes `createdAt` by position no longer compiles. Any call that does not pass a
+  non-null `competitiveFeesByLinkType`, named arguments included, compiles and throws an
+  `ArgumentNullException`, though reading a response with a null one works; to build one with a null
+  list by hand, pass a list, then set `CompetitiveFeesByLinkType = null`.
 - **Mocks and recorded responses without `competitiveFeesByLinkType`:** a seller media JSON recorded
-  before 2.2.0 now fails to parse in Go, Java and C#. Python still reads one, as a null list, but
+  before 2.2.0 now fails to parse in Go, Java and C#. Python still reads one, as `None`, but
   refuses a `SellerMedia` built by hand without it, and a TypeScript object-literal mock without it
   no longer type-checks; TypeScript's `SellerMediaFromJSON` reads a missing one as null, and
   `instanceOfSellerMedia` answers false for it. PHP and Ruby read and build one as before, and their

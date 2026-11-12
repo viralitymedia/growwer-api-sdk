@@ -205,6 +205,24 @@ internal static class Program
         Equal("failingSince", webhook.FailingSince, null);
     }
 
+    private static void UpdateWebhookLeavesOutTheAmountDecimalOfAMoneyItRead()
+    {
+        WebhookWithSecret read = new WebhooksApi(Answer(Fixture("webhook-with-secret.json")), Key())
+            .RotateWebhookSecret(WebhookId, "rotate-webhook-1");
+        MoneyOrNull threshold = read.LowBalanceThreshold;
+        Equal("read amountDecimal", threshold.AmountDecimal, "50.00");
+
+        new WebhooksApi(Answer(Fixture("webhook-with-secret.json")), Key())
+            .UpdateWebhook(WebhookId, "update-webhook-1", new UpdateWebhookRequest(lowBalanceThreshold: threshold));
+
+        Equal("method", SentRequest().Method, HttpMethod.Patch);
+        Equal("url", SentRequest().RequestUri.ToString(), $"https://tool.growwer.com/api/v1/webhooks/{WebhookId}");
+        JObject sentThreshold = (JObject)SentBody()["lowBalanceThreshold"];
+        Keys("threshold keys", sentThreshold, "amount", "currency");
+        Equal("threshold amount", (int)sentThreshold["amount"], 5000);
+        Equal("threshold currency", (string)sentThreshold["currency"], "EUR");
+    }
+
     private static void TheBaseUrlIsOverridable()
     {
         Configuration configuration = Key();
@@ -318,12 +336,14 @@ internal static class Program
         SellerMedia media = new SellerMediasApi(Answer(Fixture("seller-media.json")), Key()).GetSellerMedia(MediaId);
 
         Equal("competitiveFees", media.CompetitiveFees, null);
+        Equal("competitiveFeesByLinkType", media.CompetitiveFeesByLinkType, null);
         Equal("linkAdditionOffer", media.LinkAdditionOffer, null);
         SellerMediaPostOfferPricingOptionsInner option = media.PostOffer.PricingOptions[0];
         Equal("feeWhenSellerWritesPost", option.FeeWhenSellerWritesPost.Amount, 6000);
         Equal("feeWhenSellerDoesNotWritePost", option.FeeWhenSellerDoesNotWritePost, null);
         Equal("currentCost", option.CurrentCost, null);
         Equal("extra cost", media.PostOffer.ExtraServices[0].Cost.Amount, 1500);
+        Equal("extra cost amountDecimal", media.PostOffer.ExtraServices[0].Cost.AmountDecimal, "15.00");
     }
 
     private static void ASellerMediaReadsCompetitiveFeesWithOneSideNull()
@@ -338,6 +358,28 @@ internal static class Program
         }
         Equal("feeWhenSellerWritesPost", fees.FeeWhenSellerWritesPost.Amount, 5400);
         Equal("feeWhenSellerDoesNotWritePost", fees.FeeWhenSellerDoesNotWritePost, null);
+    }
+
+    private static void ASellerMediaReadsCompetitiveFeesByLinkTypePerLinkType()
+    {
+        SellerMedia media = new SellerMediasApi(Answer(Fixture("seller-media-competitive-fees-by-link-type.json")), Key())
+            .GetSellerMedia(MediaId);
+
+        List<SellerMediaCompetitiveFeesByLinkTypeInner> fees = media.CompetitiveFeesByLinkType;
+        if (fees == null || fees.Count != 2)
+        {
+            throw new Exception($"competitiveFeesByLinkType: got {fees?.Count.ToString() ?? "null"} entries, want 2");
+        }
+        Equal("first linkType", fees[0].LinkType, SellerMediaCompetitiveFeesByLinkTypeInner.LinkTypeEnum.Dofollow);
+        Equal("first feeWhenSellerWritesPost", fees[0].FeeWhenSellerWritesPost.Amount, 5400);
+        Equal("first feeWhenSellerWritesPost amountDecimal", fees[0].FeeWhenSellerWritesPost.AmountDecimal, "54.00");
+        Equal("first feeWhenSellerDoesNotWritePost", fees[0].FeeWhenSellerDoesNotWritePost, null);
+        Equal("second linkType", fees[1].LinkType, SellerMediaCompetitiveFeesByLinkTypeInner.LinkTypeEnum.Nofollow);
+        Equal("second feeWhenSellerWritesPost", fees[1].FeeWhenSellerWritesPost, null);
+        Equal("second feeWhenSellerDoesNotWritePost", fees[1].FeeWhenSellerDoesNotWritePost.Amount, 3600);
+        Equal("second feeWhenSellerDoesNotWritePost amountDecimal", fees[1].FeeWhenSellerDoesNotWritePost.AmountDecimal, "36.00");
+        Equal("competitiveFees feeWhenSellerWritesPost", media.CompetitiveFees.FeeWhenSellerWritesPost.Amount, 5400);
+        Equal("competitiveFees feeWhenSellerDoesNotWritePost", media.CompetitiveFees.FeeWhenSellerDoesNotWritePost.Amount, 3600);
     }
 
     private static void TheErrorEnvelopeIsReadableFromTheException()
@@ -450,6 +492,7 @@ internal static class Program
             ("a project media reads an AI keyword with a null source", AProjectMediaReadsAnAiKeywordWithANullSource),
             ("a seller media reads null competitiveFees", ASellerMediaReadsNullCompetitiveFees),
             ("a seller media reads competitiveFees with one side null", ASellerMediaReadsCompetitiveFeesWithOneSideNull),
+            ("a seller media reads competitiveFeesByLinkType per link type", ASellerMediaReadsCompetitiveFeesByLinkTypePerLinkType),
             ("a project update with only a name leaves the country out", AProjectUpdateWithOnlyANameLeavesTheCountryOut),
             ("a project update sends a country set to null", AProjectUpdateSendsACountrySetToNull),
             ("a seller media update without a linkAdditionOffer leaves it out", ASellerMediaUpdateWithoutALinkAdditionOfferLeavesItOut),
@@ -460,6 +503,7 @@ internal static class Program
             ("a balance.low event parses with fields this client does not know", ABalanceLowEventParsesWithFieldsThisClientDoesNotKnow),
             ("a webhook.test event parses with fields this client does not know", AWebhookTestEventParsesWithFieldsThisClientDoesNotKnow),
             ("createWebhook sends the body and key and reads the secret", CreateWebhookSendsTheBodyAndKeyAndReadsTheSecret),
+            ("updateWebhook leaves out the amountDecimal of a Money it read", UpdateWebhookLeavesOutTheAmountDecimalOfAMoneyItRead),
         };
         int failed = 0;
         foreach (var (name, run) in cases)

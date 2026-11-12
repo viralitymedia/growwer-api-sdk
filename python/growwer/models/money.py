@@ -3,7 +3,7 @@
 """
     Growwer API
 
-    The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters without spaces) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Test mode: a test key (`gw_sk_test_` plus 43 characters) works on your account's test data alone, apart from the real catalogue: test projects, orders and files, and a test wallet that starts at 1,000.00 EUR. Every response to a test key carries `Growwer-Mode: test`, and an id of the other mode answers 404 as a missing object would. - A test order is validated and debited from the test wallet as a live one   is. A simulated seller accepts it a minute later and delivers it two   minutes after that; you approve the delivery or request an update. - The Test helpers top the test wallet up, move a test order on at once and   reset your test data. A live key on them gets 403 `test_mode_only`. - A test key on the seller and managed service operations, on a project's   catalogue writes and on media requests gets 403   `not_available_in_test_mode`. - Idempotency keys are scoped per mode: the same `Idempotency-Key` sent with   a live and a test key never replays the other mode's response.  Webhooks: a subscription receives the events of its mode, signed as Standard Webhooks. A subscription created with a live key gets the events of your orders and your wallet; one created with a test key gets those of your test orders and test wallet, with `mode: test`, and never a live event. `x-webhooks` lists every event Growwer POSTs and its payload; the WebhookEvent schema describes the headers, the signature and the retries.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601. 
+    The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters without spaces) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Test mode: a test key (`gw_sk_test_` plus 43 characters) works on your account's test data alone, apart from the real catalogue: test projects, orders and files, and a test wallet that starts at 1,000.00 EUR. Every response to a test key carries `Growwer-Mode: test`, and an id of the other mode answers 404 as a missing object would. - A test order is validated and debited from the test wallet as a live one   is. A simulated seller accepts it a minute later and delivers it two   minutes after that; you approve the delivery or request an update. - The Test helpers top the test wallet up, move a test order on at once and   reset your test data. A live key on them gets 403 `test_mode_only`. - A test key on the seller and managed service operations, on a project's   catalogue writes and on media requests gets 403   `not_available_in_test_mode`. - Idempotency keys are scoped per mode: the same `Idempotency-Key` sent with   a live and a test key never replays the other mode's response.  Webhooks: a subscription receives the events of its mode, signed as Standard Webhooks. A subscription created with a live key gets the events of your orders and your wallet; one created with a test key gets those of your test orders and test wallet, with `mode: test`, and never a live event. `x-webhooks` lists every event Growwer POSTs and its payload; the WebhookEvent schema describes the headers, the signature and the retries.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code (12500 is 125.00 EUR), answered with `amountDecimal`, the same amount as an exact decimal string (\"125.00\"); dates are ISO-8601. 
 
     The version of the OpenAPI document: 1
     Contact: support@growwer.com
@@ -19,7 +19,7 @@ import re  # noqa: F401
 import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
-from typing import Any, ClassVar, Dict, List
+from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 from pydantic_core import to_jsonable_python
@@ -28,9 +28,10 @@ class Money(BaseModel):
     """
     Money
     """ # noqa: E501
-    amount: StrictInt = Field(description="Integer cents.", json_schema_extra={"examples": [12500]})
+    amount: StrictInt = Field(description="Integer cents: 12500 is 125.00 EUR.", json_schema_extra={"examples": [12500]})
     currency: StrictStr = Field(description="ISO 4217 currency code.", json_schema_extra={"examples": ["EUR"]})
-    __properties: ClassVar[List[str]] = ["amount", "currency"]
+    amount_decimal: Optional[StrictStr] = Field(default=None, description="Exact decimal of `amount` in major units: \"125.00\". An input may only echo it unchanged.", alias="amountDecimal", json_schema_extra={"examples": ["125.00"]})
+    __properties: ClassVar[List[str]] = ["amount", "currency", "amountDecimal"]
 
     model_config = ConfigDict(
         validate_by_name=True,
@@ -62,8 +63,10 @@ class Money(BaseModel):
         * `None` is only added to the output dict for nullable fields that
           were set at model initialization. Other fields with value `None`
           are ignored.
+        * OpenAPI `readOnly` fields are excluded.
         """
         excluded_fields: Set[str] = set([
+            "amount_decimal",
         ])
 
         _dict = self.model_dump(
@@ -84,7 +87,8 @@ class Money(BaseModel):
 
         _obj = cls.model_validate({
             "amount": obj.get("amount"),
-            "currency": obj.get("currency")
+            "currency": obj.get("currency"),
+            "amountDecimal": obj.get("amountDecimal")
         })
         return _obj
 

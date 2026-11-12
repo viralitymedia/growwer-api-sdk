@@ -8,6 +8,7 @@ Name | Type
 ------------ | -------------
 `amount` | number
 `currency` | string
+`amountDecimal` | string
 
 ## Example
 
@@ -18,6 +19,7 @@ import type { MoneyOrNull } from '@growwer/api'
 const example = {
   "amount": 12500,
   "currency": EUR,
+  "amountDecimal": 125.00,
 } satisfies MoneyOrNull
 
 console.log(example)

@@ -110,6 +110,7 @@ docs/SellerAccountApi.md
 docs/SellerFees.md
 docs/SellerFeesOrNull.md
 docs/SellerMedia.md
+docs/SellerMediaCompetitiveFeesByLinkTypeInner.md
 docs/SellerMediaFlashOffer.md
 docs/SellerMediaLinkAdditionOffer.md
 docs/SellerMediaLinkAdditionOfferPricingOptionsInner.md
@@ -269,6 +270,7 @@ lib/growwer/models/saved_filter_notifications.rb
 lib/growwer/models/seller_fees.rb
 lib/growwer/models/seller_fees_or_null.rb
 lib/growwer/models/seller_media.rb
+lib/growwer/models/seller_media_competitive_fees_by_link_type_inner.rb
 lib/growwer/models/seller_media_flash_offer.rb
 lib/growwer/models/seller_media_link_addition_offer.rb
 lib/growwer/models/seller_media_link_addition_offer_pricing_options_inner.rb

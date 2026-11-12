@@ -4,8 +4,9 @@
 
 | Name | Type | Description | Notes |
 | ---- | ---- | ----------- | ----- |
-| **amount** | **Integer** | Integer cents. |  |
+| **amount** | **Integer** | Integer cents: 12500 is 125.00 EUR. |  |
 | **currency** | **String** | ISO 4217 currency code. |  |
+| **amount_decimal** | **String** | Exact decimal of &#x60;amount&#x60; in major units: \&quot;125.00\&quot;. An input may only echo it unchanged. | [optional][readonly] |
 
 ## Example
 
@@ -14,7 +15,8 @@ require 'growwer'
 
 instance = Growwer::Money.new(
   amount: 12500,
-  currency: EUR
+  currency: EUR,
+  amount_decimal: 125.00
 )
 ```
 

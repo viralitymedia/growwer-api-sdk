@@ -3,7 +3,7 @@
 """
     Growwer API
 
-    The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters without spaces) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Test mode: a test key (`gw_sk_test_` plus 43 characters) works on your account's test data alone, apart from the real catalogue: test projects, orders and files, and a test wallet that starts at 1,000.00 EUR. Every response to a test key carries `Growwer-Mode: test`, and an id of the other mode answers 404 as a missing object would. - A test order is validated and debited from the test wallet as a live one   is. A simulated seller accepts it a minute later and delivers it two   minutes after that; you approve the delivery or request an update. - The Test helpers top the test wallet up, move a test order on at once and   reset your test data. A live key on them gets 403 `test_mode_only`. - A test key on the seller and managed service operations, on a project's   catalogue writes and on media requests gets 403   `not_available_in_test_mode`. - Idempotency keys are scoped per mode: the same `Idempotency-Key` sent with   a live and a test key never replays the other mode's response.  Webhooks: a subscription receives the events of its mode, signed as Standard Webhooks. A subscription created with a live key gets the events of your orders and your wallet; one created with a test key gets those of your test orders and test wallet, with `mode: test`, and never a live event. `x-webhooks` lists every event Growwer POSTs and its payload; the WebhookEvent schema describes the headers, the signature and the retries.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601. 
+    The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters without spaces) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Test mode: a test key (`gw_sk_test_` plus 43 characters) works on your account's test data alone, apart from the real catalogue: test projects, orders and files, and a test wallet that starts at 1,000.00 EUR. Every response to a test key carries `Growwer-Mode: test`, and an id of the other mode answers 404 as a missing object would. - A test order is validated and debited from the test wallet as a live one   is. A simulated seller accepts it a minute later and delivers it two   minutes after that; you approve the delivery or request an update. - The Test helpers top the test wallet up, move a test order on at once and   reset your test data. A live key on them gets 403 `test_mode_only`. - A test key on the seller and managed service operations, on a project's   catalogue writes and on media requests gets 403   `not_available_in_test_mode`. - Idempotency keys are scoped per mode: the same `Idempotency-Key` sent with   a live and a test key never replays the other mode's response.  Webhooks: a subscription receives the events of its mode, signed as Standard Webhooks. A subscription created with a live key gets the events of your orders and your wallet; one created with a test key gets those of your test orders and test wallet, with `mode: test`, and never a live event. `x-webhooks` lists every event Growwer POSTs and its payload; the WebhookEvent schema describes the headers, the signature and the retries.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code (12500 is 125.00 EUR), answered with `amountDecimal`, the same amount as an exact decimal string (\"125.00\"); dates are ISO-8601. 
 
     The version of the OpenAPI document: 1
     Contact: support@growwer.com
@@ -23,6 +23,7 @@ from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, Strict
 from typing import Any, ClassVar, Dict, List, Optional
 from uuid import UUID
 from growwer.models.seller_fees_or_null import SellerFeesOrNull
+from growwer.models.seller_media_competitive_fees_by_link_type_inner import SellerMediaCompetitiveFeesByLinkTypeInner
 from growwer.models.seller_media_flash_offer import SellerMediaFlashOffer
 from growwer.models.seller_media_link_addition_offer import SellerMediaLinkAdditionOffer
 from growwer.models.seller_media_post_offer import SellerMediaPostOffer
@@ -52,9 +53,10 @@ class SellerMedia(BaseModel):
     flash_offer: Optional[SellerMediaFlashOffer] = Field(alias="flashOffer")
     post_offer: SellerMediaPostOffer = Field(alias="postOffer")
     link_addition_offer: Optional[SellerMediaLinkAdditionOffer] = Field(alias="linkAdditionOffer")
-    competitive_fees: Optional[SellerFeesOrNull] = Field(description="The post fees Growwer suggests to sell more, as the seller media page does, or null when it suggests none. A side Growwer finds no competitive fee for is null: unlike the page, it never shows the fixed fee the page falls back to. POST /seller/medias/{id}/apply-competitive-fees sets them.", alias="competitiveFees")
+    competitive_fees: Optional[SellerFeesOrNull] = Field(description="The post fees Growwer suggests to sell more, as the seller media pages do, or null when it suggests none: for each side, the highest fee POST /seller/medias/{id}/apply-competitive-fees would set on that side, else null. The apply lowers, per link type, a fee above the highest whole-euro fee that lists the media at least 1 EUR below its cheapest price on the marketplaces Growwer compares with to that fee, and lowers by 1 EUR one fee of a link type that then still does not list the media at least 1 EUR below that price. It never raises a fee. Where it lowers several link types, this is the highest per side across them, so a link type's own new fee can be lower: `competitiveFeesByLinkType` gives the fees the apply sets on each link type.", alias="competitiveFees")
+    competitive_fees_by_link_type: Optional[List[SellerMediaCompetitiveFeesByLinkTypeInner]] = Field(description="The fees POST /seller/medias/{id}/apply-competitive-fees would set, per link type: one entry per link type it lowers, in the order dofollow, nofollow, citation, or null when it suggests none (exactly when `competitiveFees` is null). Per side, the highest of these is `competitiveFees`.", alias="competitiveFeesByLinkType")
     created_at: datetime = Field(alias="createdAt")
-    __properties: ClassVar[List[str]] = ["id", "domain", "url", "typology", "state", "deactivationStrikes", "country", "language", "topics", "bannedTopics", "providerComments", "publicationRate", "averageDaysToPublication", "numPublishedOrders", "onHoliday", "flashOffer", "postOffer", "linkAdditionOffer", "competitiveFees", "createdAt"]
+    __properties: ClassVar[List[str]] = ["id", "domain", "url", "typology", "state", "deactivationStrikes", "country", "language", "topics", "bannedTopics", "providerComments", "publicationRate", "averageDaysToPublication", "numPublishedOrders", "onHoliday", "flashOffer", "postOffer", "linkAdditionOffer", "competitiveFees", "competitiveFeesByLinkType", "createdAt"]
 
     @field_validator('typology')
     def typology_validate_enum(cls, value):
@@ -121,6 +123,13 @@ class SellerMedia(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of competitive_fees
         if self.competitive_fees:
             _dict['competitiveFees'] = self.competitive_fees.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of each item in competitive_fees_by_link_type (list)
+        _items = []
+        if self.competitive_fees_by_link_type:
+            for _item_competitive_fees_by_link_type in self.competitive_fees_by_link_type:
+                if _item_competitive_fees_by_link_type:
+                    _items.append(_item_competitive_fees_by_link_type.to_dict())
+            _dict['competitiveFeesByLinkType'] = _items
         # set to None if country (nullable) is None
         # and model_fields_set contains the field
         if self.country is None and "country" in self.model_fields_set:
@@ -156,6 +165,11 @@ class SellerMedia(BaseModel):
         if self.competitive_fees is None and "competitive_fees" in self.model_fields_set:
             _dict['competitiveFees'] = None
 
+        # set to None if competitive_fees_by_link_type (nullable) is None
+        # and model_fields_set contains the field
+        if self.competitive_fees_by_link_type is None and "competitive_fees_by_link_type" in self.model_fields_set:
+            _dict['competitiveFeesByLinkType'] = None
+
         return _dict
 
     @classmethod
@@ -187,6 +201,7 @@ class SellerMedia(BaseModel):
             "postOffer": SellerMediaPostOffer.from_dict(obj["postOffer"]) if obj.get("postOffer") is not None else None,
             "linkAdditionOffer": SellerMediaLinkAdditionOffer.from_dict(obj["linkAdditionOffer"]) if obj.get("linkAdditionOffer") is not None else None,
             "competitiveFees": SellerFeesOrNull.from_dict(obj["competitiveFees"]) if obj.get("competitiveFees") is not None else None,
+            "competitiveFeesByLinkType": [SellerMediaCompetitiveFeesByLinkTypeInner.from_dict(_item) for _item in obj["competitiveFeesByLinkType"]] if obj.get("competitiveFeesByLinkType") is not None else None,
             "createdAt": obj.get("createdAt")
         })
         return _obj

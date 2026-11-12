@@ -95,6 +95,7 @@ export * from './SavedFilterNotifications';
 export * from './SellerFees';
 export * from './SellerFeesOrNull';
 export * from './SellerMedia';
+export * from './SellerMediaCompetitiveFeesByLinkTypeInner';
 export * from './SellerMediaFlashOffer';
 export * from './SellerMediaLinkAdditionOffer';
 export * from './SellerMediaLinkAdditionOfferPricingOptionsInner';

@@ -1,6 +1,6 @@
 /*
  * Growwer API
- * The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters without spaces) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Test mode: a test key (`gw_sk_test_` plus 43 characters) works on your account's test data alone, apart from the real catalogue: test projects, orders and files, and a test wallet that starts at 1,000.00 EUR. Every response to a test key carries `Growwer-Mode: test`, and an id of the other mode answers 404 as a missing object would. - A test order is validated and debited from the test wallet as a live one   is. A simulated seller accepts it a minute later and delivers it two   minutes after that; you approve the delivery or request an update. - The Test helpers top the test wallet up, move a test order on at once and   reset your test data. A live key on them gets 403 `test_mode_only`. - A test key on the seller and managed service operations, on a project's   catalogue writes and on media requests gets 403   `not_available_in_test_mode`. - Idempotency keys are scoped per mode: the same `Idempotency-Key` sent with   a live and a test key never replays the other mode's response.  Webhooks: a subscription receives the events of its mode, signed as Standard Webhooks. A subscription created with a live key gets the events of your orders and your wallet; one created with a test key gets those of your test orders and test wallet, with `mode: test`, and never a live event. `x-webhooks` lists every event Growwer POSTs and its payload; the WebhookEvent schema describes the headers, the signature and the retries.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601. 
+ * The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters without spaces) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Test mode: a test key (`gw_sk_test_` plus 43 characters) works on your account's test data alone, apart from the real catalogue: test projects, orders and files, and a test wallet that starts at 1,000.00 EUR. Every response to a test key carries `Growwer-Mode: test`, and an id of the other mode answers 404 as a missing object would. - A test order is validated and debited from the test wallet as a live one   is. A simulated seller accepts it a minute later and delivers it two   minutes after that; you approve the delivery or request an update. - The Test helpers top the test wallet up, move a test order on at once and   reset your test data. A live key on them gets 403 `test_mode_only`. - A test key on the seller and managed service operations, on a project's   catalogue writes and on media requests gets 403   `not_available_in_test_mode`. - Idempotency keys are scoped per mode: the same `Idempotency-Key` sent with   a live and a test key never replays the other mode's response.  Webhooks: a subscription receives the events of its mode, signed as Standard Webhooks. A subscription created with a live key gets the events of your orders and your wallet; one created with a test key gets those of your test orders and test wallet, with `mode: test`, and never a live event. `x-webhooks` lists every event Growwer POSTs and its payload; the WebhookEvent schema describes the headers, the signature and the retries.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code (12500 is 125.00 EUR), answered with `amountDecimal`, the same amount as an exact decimal string (\"125.00\"); dates are ISO-8601. 
  *
  * The version of the OpenAPI document: 1
  * Contact: support@growwer.com
@@ -60,7 +60,19 @@ public class Money {
   @javax.annotation.Nonnull
   private String currency;
 
+  public static final String SERIALIZED_NAME_AMOUNT_DECIMAL = "amountDecimal";
+  @SerializedName(SERIALIZED_NAME_AMOUNT_DECIMAL)
+  @javax.annotation.Nullable
+  private String amountDecimal;
+
   public Money() {
+  }
+
+  public Money(
+     String amountDecimal
+  ) {
+    this();
+    this.amountDecimal = amountDecimal;
   }
 
   public Money amount(@javax.annotation.Nonnull Integer amount) {
@@ -69,7 +81,7 @@ public class Money {
   }
 
   /**
-   * Integer cents.
+   * Integer cents: 12500 is 125.00 EUR.
    * @return amount
    */
   @javax.annotation.Nonnull
@@ -99,6 +111,17 @@ public class Money {
   public void setCurrency(@javax.annotation.Nonnull String currency) {
     this.currency = currency;
   }
+
+
+  /**
+   * Exact decimal of &#x60;amount&#x60; in major units: \&quot;125.00\&quot;. An input may only echo it unchanged.
+   * @return amountDecimal
+   */
+  @javax.annotation.Nullable
+  public String getAmountDecimal() {
+    return amountDecimal;
+  }
+
 
   /**
    * A container for additional, undeclared properties.
@@ -156,13 +179,14 @@ public class Money {
     }
     Money money = (Money) o;
     return Objects.equals(this.amount, money.amount) &&
-        Objects.equals(this.currency, money.currency)&&
+        Objects.equals(this.currency, money.currency) &&
+        Objects.equals(this.amountDecimal, money.amountDecimal)&&
         Objects.equals(this.additionalProperties, money.additionalProperties);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(amount, currency, additionalProperties);
+    return Objects.hash(amount, currency, amountDecimal, additionalProperties);
   }
 
   @Override
@@ -171,6 +195,7 @@ public class Money {
     sb.append("class Money {\n");
     sb.append("    amount: ").append(toIndentedString(amount)).append("\n");
     sb.append("    currency: ").append(toIndentedString(currency)).append("\n");
+    sb.append("    amountDecimal: ").append(toIndentedString(amountDecimal)).append("\n");
     sb.append("    additionalProperties: ").append(toIndentedString(additionalProperties)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -190,7 +215,7 @@ public class Money {
 
   static {
     // a set of all properties/fields (JSON key names)
-    openapiFields = new HashSet<String>(Arrays.asList("amount", "currency"));
+    openapiFields = new HashSet<String>(Arrays.asList("amount", "currency", "amountDecimal"));
 
     // a set of required properties/fields (JSON key names)
     openapiRequiredFields = new HashSet<String>(Arrays.asList("amount", "currency"));
@@ -218,6 +243,9 @@ public class Money {
         JsonObject jsonObj = jsonElement.getAsJsonObject();
       if (!jsonObj.get("currency").isJsonPrimitive()) {
         throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `currency` to be a primitive type in the JSON string but got `%s`", jsonObj.get("currency").toString()));
+      }
+      if ((jsonObj.get("amountDecimal") != null && !jsonObj.get("amountDecimal").isJsonNull()) && !jsonObj.get("amountDecimal").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `amountDecimal` to be a primitive type in the JSON string but got `%s`", jsonObj.get("amountDecimal").toString()));
       }
   }
 

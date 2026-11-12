@@ -20,10 +20,12 @@ import com.growwer.api.model.OrderEventData;
 import com.growwer.api.model.PostOrderBriefing;
 import com.growwer.api.model.SellerFeesOrNull;
 import com.growwer.api.model.SellerMedia;
+import com.growwer.api.model.SellerMediaCompetitiveFeesByLinkTypeInner;
 import com.growwer.api.model.SellerMediaPostOfferPricingOptionsInner;
 import com.growwer.api.model.UpdateSellerMediaRequest;
 import com.growwer.api.model.UpdateSellerMediaRequestPostOffer;
 import com.growwer.api.model.UpdateSellerMediaRequestPostOfferPricingOptionsInner;
+import com.growwer.api.model.UpdateWebhookRequest;
 import com.growwer.api.model.WebhookEvent;
 import com.growwer.api.model.WebhookEventType;
 import com.growwer.api.model.WebhookTestEventData;
@@ -248,12 +250,14 @@ public class FixtureTest {
         SellerMedia media = new SellerMediasApi(answer(fixture("seller-media.json"))).getSellerMedia(MEDIA_ID);
 
         equal("competitiveFees", media.getCompetitiveFees(), null);
+        equal("competitiveFeesByLinkType", media.getCompetitiveFeesByLinkType(), null);
         equal("linkAdditionOffer", media.getLinkAdditionOffer(), null);
         SellerMediaPostOfferPricingOptionsInner option = media.getPostOffer().getPricingOptions().get(0);
         equal("feeWhenSellerWritesPost", option.getFeeWhenSellerWritesPost().getAmount(), 6000);
         equal("feeWhenSellerDoesNotWritePost", option.getFeeWhenSellerDoesNotWritePost(), null);
         equal("currentCost", option.getCurrentCost(), null);
         equal("extra cost", media.getPostOffer().getExtraServices().get(0).getCost().getAmount(), 1500);
+        equal("extra cost amountDecimal", media.getPostOffer().getExtraServices().get(0).getCost().getAmountDecimal(), "15.00");
     }
 
     void aSellerMediaReadsCompetitiveFeesWithOneSideNull() throws Exception {
@@ -266,6 +270,26 @@ public class FixtureTest {
         }
         equal("feeWhenSellerWritesPost", fees.getFeeWhenSellerWritesPost().getAmount(), 5400);
         equal("feeWhenSellerDoesNotWritePost", fees.getFeeWhenSellerDoesNotWritePost(), null);
+    }
+
+    void aSellerMediaReadsCompetitiveFeesByLinkTypePerLinkType() throws Exception {
+        SellerMedia media = new SellerMediasApi(answer(fixture("seller-media-competitive-fees-by-link-type.json")))
+            .getSellerMedia(MEDIA_ID);
+
+        List<SellerMediaCompetitiveFeesByLinkTypeInner> fees = media.getCompetitiveFeesByLinkType();
+        if (fees == null || fees.size() != 2) {
+            throw new AssertionError("competitiveFeesByLinkType: got " + fees + ", want 2 entries");
+        }
+        equal("first linkType", fees.get(0).getLinkType(), SellerMediaCompetitiveFeesByLinkTypeInner.LinkTypeEnum.DOFOLLOW);
+        equal("first feeWhenSellerWritesPost", fees.get(0).getFeeWhenSellerWritesPost().getAmount(), 5400);
+        equal("first feeWhenSellerWritesPost amountDecimal", fees.get(0).getFeeWhenSellerWritesPost().getAmountDecimal(), "54.00");
+        equal("first feeWhenSellerDoesNotWritePost", fees.get(0).getFeeWhenSellerDoesNotWritePost(), null);
+        equal("second linkType", fees.get(1).getLinkType(), SellerMediaCompetitiveFeesByLinkTypeInner.LinkTypeEnum.NOFOLLOW);
+        equal("second feeWhenSellerWritesPost", fees.get(1).getFeeWhenSellerWritesPost(), null);
+        equal("second feeWhenSellerDoesNotWritePost", fees.get(1).getFeeWhenSellerDoesNotWritePost().getAmount(), 3600);
+        equal("second feeWhenSellerDoesNotWritePost amountDecimal", fees.get(1).getFeeWhenSellerDoesNotWritePost().getAmountDecimal(), "36.00");
+        equal("competitiveFees feeWhenSellerWritesPost", media.getCompetitiveFees().getFeeWhenSellerWritesPost().getAmount(), 5400);
+        equal("competitiveFees feeWhenSellerDoesNotWritePost", media.getCompetitiveFees().getFeeWhenSellerDoesNotWritePost().getAmount(), 3600);
     }
 
     // A PATCH sends only what the caller set: an empty list for a property left alone would clear the
@@ -352,6 +376,21 @@ public class FixtureTest {
         equal("failingSince", webhook.getFailingSince(), null);
     }
 
+    void updateWebhookSendsTheAmountDecimalOfAMoneyItRead() throws Exception {
+        WebhookWithSecret read = new WebhooksApi(answer(fixture("webhook-with-secret.json")))
+            .rotateWebhookSecret(WEBHOOK_ID, "rotate-webhook-1");
+        MoneyOrNull threshold = read.getLowBalanceThreshold();
+        equal("read amountDecimal", threshold.getAmountDecimal(), "50.00");
+
+        new WebhooksApi(answer(fixture("webhook-with-secret.json")))
+            .updateWebhook(WEBHOOK_ID, "update-webhook-1", new UpdateWebhookRequest().lowBalanceThreshold(threshold));
+
+        equal("method", sent().method(), "PATCH");
+        equal("url", sent().url().toString(), "https://tool.growwer.com/api/v1/webhooks/" + WEBHOOK_ID);
+        equal("body", sentBody(), JsonParser.parseString(
+            "{\"lowBalanceThreshold\":{\"amount\":5000,\"currency\":\"EUR\",\"amountDecimal\":\"50.00\"}}").getAsJsonObject());
+    }
+
     void theErrorEnvelopeIsReadableFromTheException() throws Exception {
         CatalogueApi api = new CatalogueApi(answer(429, fixture("error.json"), "application/json",
             "Retry-After", "3600", "X-Request-Id", "0b8f6c2e-4a1d-4f3b-9c7e-5d2a8e1f6b34"));
@@ -402,11 +441,13 @@ public class FixtureTest {
         cases.put("a catalogue media reads a null linkType beside present offers", test::aCatalogueMediaReadsANullLinkTypeBesidePresentOffers);
         cases.put("a seller media reads null competitiveFees", test::aSellerMediaReadsNullCompetitiveFees);
         cases.put("a seller media reads competitiveFees with one side null", test::aSellerMediaReadsCompetitiveFeesWithOneSideNull);
+        cases.put("a seller media reads competitiveFeesByLinkType per link type", test::aSellerMediaReadsCompetitiveFeesByLinkTypePerLinkType);
         cases.put("a partial seller media update sends only the properties set", test::aPartialSellerMediaUpdateSendsOnlyThePropertiesSet);
         cases.put("an order event parses with fields this client does not know", test::anOrderEventParsesWithFieldsThisClientDoesNotKnow);
         cases.put("a balance.low event parses with fields this client does not know", test::aBalanceLowEventParsesWithFieldsThisClientDoesNotKnow);
         cases.put("a webhook.test event parses with fields this client does not know", test::aWebhookTestEventParsesWithFieldsThisClientDoesNotKnow);
         cases.put("createWebhook sends the body and key and reads the secret", test::createWebhookSendsTheBodyAndKeyAndReadsTheSecret);
+        cases.put("updateWebhook sends the amountDecimal of a Money it read", test::updateWebhookSendsTheAmountDecimalOfAMoneyItRead);
         cases.put("the error envelope is readable from the ApiException", test::theErrorEnvelopeIsReadableFromTheException);
         cases.put("a binary download returns the exact bytes", test::aBinaryDownloadReturnsTheExactBytes);
         for (Map.Entry<String, Case> entry : cases.entrySet()) {

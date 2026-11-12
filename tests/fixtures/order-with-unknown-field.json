@@ -4,7 +4,7 @@
   "type": "post",
   "state": "pending_order_delivery",
   "pendingAction": "seller",
-  "price": {"amount": 12500, "currency": "EUR"},
+  "price": {"amount": 12500, "currency": "EUR", "amountDecimal": "125.00"},
   "project": {"id": "7f3e2d1c-0b9a-4876-9543-210fedcba987", "url": "https://shop.example"},
   "media": {"id": "c1d2e3f4-a5b6-4c7d-8e9f-a0b1c2d3e4f5", "url": "https://blog.example"},
   "createdAt": "2026-10-01T09:30:00+00:00",

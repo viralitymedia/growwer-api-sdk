@@ -13,7 +13,7 @@
 /**
  * Growwer API
  *
- * The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters without spaces) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Test mode: a test key (`gw_sk_test_` plus 43 characters) works on your account's test data alone, apart from the real catalogue: test projects, orders and files, and a test wallet that starts at 1,000.00 EUR. Every response to a test key carries `Growwer-Mode: test`, and an id of the other mode answers 404 as a missing object would. - A test order is validated and debited from the test wallet as a live one   is. A simulated seller accepts it a minute later and delivers it two   minutes after that; you approve the delivery or request an update. - The Test helpers top the test wallet up, move a test order on at once and   reset your test data. A live key on them gets 403 `test_mode_only`. - A test key on the seller and managed service operations, on a project's   catalogue writes and on media requests gets 403   `not_available_in_test_mode`. - Idempotency keys are scoped per mode: the same `Idempotency-Key` sent with   a live and a test key never replays the other mode's response.  Webhooks: a subscription receives the events of its mode, signed as Standard Webhooks. A subscription created with a live key gets the events of your orders and your wallet; one created with a test key gets those of your test orders and test wallet, with `mode: test`, and never a live event. `x-webhooks` lists every event Growwer POSTs and its payload; the WebhookEvent schema describes the headers, the signature and the retries.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code and dates are ISO-8601.
+ * The Growwer customer API. Authenticate every call with an API key created on your profile page, sent as `Authorization: Bearer <key>`. A read key can call every GET operation; writes need a read and write key and an `Idempotency-Key` header.  Idempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII characters without spaces) for each operation and reuse it only to retry that same operation. Keys belong to your account, not to one API key. - A successful write is stored for 30 days: a retry with the same key and   the same request replays its response with `Idempotent-Replayed: true`   and does nothing again. - A refused write (4xx) has no effect and releases its key: once you fix the   cause, retry with the same key and the write runs. - A failed write (5xx) may have taken effect, so it is never run again under   its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it   took effect before retrying with a new key. - A retry while the first request is still running gets 409   `idempotency_request_in_progress`. A request still running after 5 minutes   is treated as failed: a retry gets 409 `idempotency_outcome_unknown`. - The same key with a different request (method, path, query or body) gets   409 `idempotency_key_reused`. A write without the header gets 400   `idempotency_key_required`.  Test mode: a test key (`gw_sk_test_` plus 43 characters) works on your account's test data alone, apart from the real catalogue: test projects, orders and files, and a test wallet that starts at 1,000.00 EUR. Every response to a test key carries `Growwer-Mode: test`, and an id of the other mode answers 404 as a missing object would. - A test order is validated and debited from the test wallet as a live one   is. A simulated seller accepts it a minute later and delivers it two   minutes after that; you approve the delivery or request an update. - The Test helpers top the test wallet up, move a test order on at once and   reset your test data. A live key on them gets 403 `test_mode_only`. - A test key on the seller and managed service operations, on a project's   catalogue writes and on media requests gets 403   `not_available_in_test_mode`. - Idempotency keys are scoped per mode: the same `Idempotency-Key` sent with   a live and a test key never replays the other mode's response.  Webhooks: a subscription receives the events of its mode, signed as Standard Webhooks. A subscription created with a live key gets the events of your orders and your wallet; one created with a test key gets those of your test orders and test wallet, with `mode: test`, and never a live event. `x-webhooks` lists every event Growwer POSTs and its payload; the WebhookEvent schema describes the headers, the signature and the retries.  Every response carries `X-Request-Id`. Errors share one shape, `{code, message, requestId, details?}`. Money is integer cents plus a currency code (12500 is 125.00 EUR), answered with `amountDecimal`, the same amount as an exact decimal string (\"125.00\"); dates are ISO-8601.
  *
  * The version of the OpenAPI document: 1
  * Contact: support@growwer.com
@@ -78,6 +78,7 @@ class SellerMedia implements ModelInterface, ArrayAccess, \JsonSerializable
         'post_offer' => '\Growwer\Api\Model\SellerMediaPostOffer',
         'link_addition_offer' => '\Growwer\Api\Model\SellerMediaLinkAdditionOffer',
         'competitive_fees' => '\Growwer\Api\Model\SellerFeesOrNull',
+        'competitive_fees_by_link_type' => '\Growwer\Api\Model\SellerMediaCompetitiveFeesByLinkTypeInner[]',
         'created_at' => '\DateTime'
     ];
 
@@ -108,6 +109,7 @@ class SellerMedia implements ModelInterface, ArrayAccess, \JsonSerializable
         'post_offer' => null,
         'link_addition_offer' => null,
         'competitive_fees' => null,
+        'competitive_fees_by_link_type' => null,
         'created_at' => 'date-time'
     ];
 
@@ -136,6 +138,7 @@ class SellerMedia implements ModelInterface, ArrayAccess, \JsonSerializable
         'post_offer' => false,
         'link_addition_offer' => true,
         'competitive_fees' => true,
+        'competitive_fees_by_link_type' => true,
         'created_at' => false
     ];
 
@@ -244,6 +247,7 @@ class SellerMedia implements ModelInterface, ArrayAccess, \JsonSerializable
         'post_offer' => 'postOffer',
         'link_addition_offer' => 'linkAdditionOffer',
         'competitive_fees' => 'competitiveFees',
+        'competitive_fees_by_link_type' => 'competitiveFeesByLinkType',
         'created_at' => 'createdAt'
     ];
 
@@ -272,6 +276,7 @@ class SellerMedia implements ModelInterface, ArrayAccess, \JsonSerializable
         'post_offer' => 'setPostOffer',
         'link_addition_offer' => 'setLinkAdditionOffer',
         'competitive_fees' => 'setCompetitiveFees',
+        'competitive_fees_by_link_type' => 'setCompetitiveFeesByLinkType',
         'created_at' => 'setCreatedAt'
     ];
 
@@ -300,6 +305,7 @@ class SellerMedia implements ModelInterface, ArrayAccess, \JsonSerializable
         'post_offer' => 'getPostOffer',
         'link_addition_offer' => 'getLinkAdditionOffer',
         'competitive_fees' => 'getCompetitiveFees',
+        'competitive_fees_by_link_type' => 'getCompetitiveFeesByLinkType',
         'created_at' => 'getCreatedAt'
     ];
 
@@ -413,6 +419,7 @@ class SellerMedia implements ModelInterface, ArrayAccess, \JsonSerializable
         $this->setIfExists('post_offer', $data ?? [], null);
         $this->setIfExists('link_addition_offer', $data ?? [], null);
         $this->setIfExists('competitive_fees', $data ?? [], null);
+        $this->setIfExists('competitive_fees_by_link_type', $data ?? [], null);
         $this->setIfExists('created_at', $data ?? [], null);
     }
 
@@ -517,6 +524,9 @@ class SellerMedia implements ModelInterface, ArrayAccess, \JsonSerializable
         }
         if ($this->container['competitive_fees'] === null && !$this->isNullableSetToNull('competitive_fees')) {
             $invalidProperties[] = "'competitive_fees' is required";
+        }
+        if ($this->container['competitive_fees_by_link_type'] === null && !$this->isNullableSetToNull('competitive_fees_by_link_type')) {
+            $invalidProperties[] = "'competitive_fees_by_link_type' is required";
         }
         if ($this->container['created_at'] === null) {
             $invalidProperties[] = "'created_at' can't be null";
@@ -1097,7 +1107,7 @@ class SellerMedia implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets competitive_fees
      *
-     * @param \Growwer\Api\Model\SellerFeesOrNull|null $competitive_fees The post fees Growwer suggests to sell more, as the seller media page does, or null when it suggests none. A side Growwer finds no competitive fee for is null: unlike the page, it never shows the fixed fee the page falls back to. POST /seller/medias/{id}/apply-competitive-fees sets them.
+     * @param \Growwer\Api\Model\SellerFeesOrNull|null $competitive_fees The post fees Growwer suggests to sell more, as the seller media pages do, or null when it suggests none: for each side, the highest fee POST /seller/medias/{id}/apply-competitive-fees would set on that side, else null. The apply lowers, per link type, a fee above the highest whole-euro fee that lists the media at least 1 EUR below its cheapest price on the marketplaces Growwer compares with to that fee, and lowers by 1 EUR one fee of a link type that then still does not list the media at least 1 EUR below that price. It never raises a fee. Where it lowers several link types, this is the highest per side across them, so a link type's own new fee can be lower: `competitiveFeesByLinkType` gives the fees the apply sets on each link type.
      *
      * @return self
      */
@@ -1114,6 +1124,40 @@ class SellerMedia implements ModelInterface, ArrayAccess, \JsonSerializable
             }
         }
         $this->container['competitive_fees'] = $competitive_fees;
+
+        return $this;
+    }
+
+    /**
+     * Gets competitive_fees_by_link_type
+     *
+     * @return \Growwer\Api\Model\SellerMediaCompetitiveFeesByLinkTypeInner[]|null
+     */
+    public function getCompetitiveFeesByLinkType()
+    {
+        return $this->container['competitive_fees_by_link_type'];
+    }
+
+    /**
+     * Sets competitive_fees_by_link_type
+     *
+     * @param \Growwer\Api\Model\SellerMediaCompetitiveFeesByLinkTypeInner[]|null $competitive_fees_by_link_type The fees POST /seller/medias/{id}/apply-competitive-fees would set, per link type: one entry per link type it lowers, in the order dofollow, nofollow, citation, or null when it suggests none (exactly when `competitiveFees` is null). Per side, the highest of these is `competitiveFees`.
+     *
+     * @return self
+     */
+    public function setCompetitiveFeesByLinkType($competitive_fees_by_link_type)
+    {
+        if (is_null($competitive_fees_by_link_type)) {
+            array_push($this->openAPINullablesSetToNull, 'competitive_fees_by_link_type');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('competitive_fees_by_link_type', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['competitive_fees_by_link_type'] = $competitive_fees_by_link_type;
 
         return $this;
     }

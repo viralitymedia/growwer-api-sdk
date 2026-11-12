@@ -4,8 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Amount** | **int32** | Integer cents. | 
+**Amount** | **int32** | Integer cents: 12500 is 125.00 EUR. | 
 **Currency** | **string** | ISO 4217 currency code. | 
+**AmountDecimal** | Pointer to **string** | Exact decimal of &#x60;amount&#x60; in major units: \&quot;125.00\&quot;. An input may only echo it unchanged. | [optional] [readonly] 
 
 ## Methods
 
@@ -65,6 +66,31 @@ and a boolean to check if the value has been set.
 
 SetCurrency sets Currency field to given value.
 
+
+### GetAmountDecimal
+
+`func (o *Money) GetAmountDecimal() string`
+
+GetAmountDecimal returns the AmountDecimal field if non-nil, zero value otherwise.
+
+### GetAmountDecimalOk
+
+`func (o *Money) GetAmountDecimalOk() (*string, bool)`
+
+GetAmountDecimalOk returns a tuple with the AmountDecimal field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetAmountDecimal
+
+`func (o *Money) SetAmountDecimal(v string)`
+
+SetAmountDecimal sets AmountDecimal field to given value.
+
+### HasAmountDecimal
+
+`func (o *Money) HasAmountDecimal() bool`
+
+HasAmountDecimal returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

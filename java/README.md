@@ -52,7 +52,8 @@ WebhookEvent schema describes the headers, the signature and the retries.
 
 Every response carries `X-Request-Id`. Errors share one shape,
 `{code, message, requestId, details?}`. Money is integer cents plus a
-currency code and dates are ISO-8601.
+currency code (12500 is 125.00 EUR), answered with `amountDecimal`, the same
+amount as an exact decimal string (\"125.00\"); dates are ISO-8601.
 
 
   For more information, please visit [https://growwer.com/contact/](https://growwer.com/contact/)
@@ -90,7 +91,7 @@ Add this dependency to your project's POM:
 <dependency>
   <groupId>com.growwer</groupId>
   <artifactId>growwer-api</artifactId>
-  <version>2.1.0</version>
+  <version>2.2.0</version>
   <scope>compile</scope>
 </dependency>
 ```
@@ -106,7 +107,7 @@ Add this dependency to your project's build file:
   }
 
   dependencies {
-     implementation "com.growwer:growwer-api:2.1.0"
+     implementation "com.growwer:growwer-api:2.2.0"
   }
 ```
 
@@ -120,7 +121,7 @@ mvn clean package
 
 Then manually install the following JARs:
 
-* `target/growwer-api-2.1.0.jar`
+* `target/growwer-api-2.2.0.jar`
 * `target/lib/*.jar`
 
 ## Getting Started
@@ -213,7 +214,7 @@ Class | Method | HTTP request | Description
 *SavedFiltersApi* | [**deleteSavedFilter**](docs/SavedFiltersApi.md#deleteSavedFilter) | **DELETE** /api/v1/projects/{id}/saved-filters/{filterId} | Delete a saved filter
 *SavedFiltersApi* | [**listSavedFilters**](docs/SavedFiltersApi.md#listSavedFilters) | **GET** /api/v1/projects/{id}/saved-filters | List the saved filters of a project
 *SellerAccountApi* | [**putSellerHoliday**](docs/SellerAccountApi.md#putSellerHoliday) | **PUT** /api/v1/seller/holiday | Set your holiday
-*SellerMediasApi* | [**applySellerMediaCompetitiveFees**](docs/SellerMediasApi.md#applySellerMediaCompetitiveFees) | **POST** /api/v1/seller/medias/{id}/apply-competitive-fees | Set the competitive fees Growwer suggests
+*SellerMediasApi* | [**applySellerMediaCompetitiveFees**](docs/SellerMediasApi.md#applySellerMediaCompetitiveFees) | **POST** /api/v1/seller/medias/{id}/apply-competitive-fees | Lower your fees to the competitive fees Growwer suggests
 *SellerMediasApi* | [**createSellerMedia**](docs/SellerMediasApi.md#createSellerMedia) | **POST** /api/v1/seller/medias | Register a media you sell on
 *SellerMediasApi* | [**deleteSellerMedia**](docs/SellerMediasApi.md#deleteSellerMedia) | **DELETE** /api/v1/seller/medias/{id} | Delete a media you sell on
 *SellerMediasApi* | [**getSellerMedia**](docs/SellerMediasApi.md#getSellerMedia) | **GET** /api/v1/seller/medias/{id} | Get a media you sell on
@@ -347,6 +348,7 @@ Class | Method | HTTP request | Description
  - [SellerFees](docs/SellerFees.md)
  - [SellerFeesOrNull](docs/SellerFeesOrNull.md)
  - [SellerMedia](docs/SellerMedia.md)
+ - [SellerMediaCompetitiveFeesByLinkTypeInner](docs/SellerMediaCompetitiveFeesByLinkTypeInner.md)
  - [SellerMediaFlashOffer](docs/SellerMediaFlashOffer.md)
  - [SellerMediaLinkAdditionOffer](docs/SellerMediaLinkAdditionOffer.md)
  - [SellerMediaLinkAdditionOfferPricingOptionsInner](docs/SellerMediaLinkAdditionOfferPricingOptionsInner.md)

@@ -6,10 +6,10 @@
   "mode": "live",
   "data": {
     "wallet": {
-      "availableBalance": {"amount": 4500, "currency": "EUR"},
+      "availableBalance": {"amount": 4500, "currency": "EUR", "amountDecimal": "45.00"},
       "currency": "EUR"
     },
-    "threshold": {"amount": 5000, "currency": "EUR"},
+    "threshold": {"amount": 5000, "currency": "EUR", "amountDecimal": "50.00"},
     "addedLater": {"note": "a field a later contract adds to the event data"}
   },
   "addedLater": "a field a later contract adds to the envelope"

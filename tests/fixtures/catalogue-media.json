@@ -19,11 +19,11 @@
   "onHoliday": false,
   "flashOffer": null,
   "postOffer": {
-    "price": {"amount": 9000, "currency": "EUR"},
+    "price": {"amount": 9000, "currency": "EUR", "amountDecimal": "90.00"},
     "linkType": "dofollow",
     "prices": {
-      "dofollow": {"amount": 9000, "currency": "EUR"},
-      "nofollow": {"amount": 7000, "currency": "EUR"}
+      "dofollow": {"amount": 9000, "currency": "EUR", "amountDecimal": "90.00"},
+      "nofollow": {"amount": 7000, "currency": "EUR", "amountDecimal": "70.00"}
     },
     "previousPrice": null,
     "advertisingLabel": false,

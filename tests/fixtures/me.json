@@ -6,14 +6,14 @@
   "createdAt": "2025-03-14T08:15:00+00:00",
   "buyer": {
     "balance": {
-      "available": {"amount": 250000, "currency": "EUR"},
-      "pending": {"amount": 12500, "currency": "EUR"}
+      "available": {"amount": 250000, "currency": "EUR", "amountDecimal": "2500.00"},
+      "pending": {"amount": 12500, "currency": "EUR", "amountDecimal": "125.00"}
     }
   },
   "seller": {
     "balance": {
-      "available": {"amount": 0, "currency": "EUR"},
-      "pending": {"amount": 0, "currency": "EUR"}
+      "available": {"amount": 0, "currency": "EUR", "amountDecimal": "0.00"},
+      "pending": {"amount": 0, "currency": "EUR", "amountDecimal": "0.00"}
     },
     "restricted": false,
     "onHoliday": false,

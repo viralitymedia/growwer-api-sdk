@@ -20,6 +20,7 @@ import type {
   LinkAdditionOrderBriefing,
   OrderEventData,
   PostOrderBriefing,
+  SellerMediaCompetitiveFeesByLinkTypeInner,
   WebhookTestEventData,
 } from '../../typescript/dist';
 
@@ -221,12 +222,14 @@ const tests: Array<[string, () => Promise<void>]> = [
       .getSellerMedia({ id: MEDIA_ID });
 
     assert.equal(media.competitiveFees, null);
+    assert.equal(media.competitiveFeesByLinkType, null);
     assert.equal(media.linkAdditionOffer, null);
     const option = media.postOffer.pricingOptions[0];
     assert.equal(option.feeWhenSellerWritesPost?.amount, 6000);
     assert.equal(option.feeWhenSellerDoesNotWritePost, null);
     assert.equal(option.currentCost, null);
     assert.equal(media.postOffer.extraServices[0].cost.amount, 1500);
+    assert.equal(media.postOffer.extraServices[0].cost.amountDecimal, '15.00');
   }],
 
   ['a seller media reads competitiveFees with one side null', async () => {
@@ -237,6 +240,24 @@ const tests: Array<[string, () => Promise<void>]> = [
     assert.notEqual(media.competitiveFees, null);
     assert.equal(media.competitiveFees!.feeWhenSellerWritesPost?.amount, 5400);
     assert.equal(media.competitiveFees!.feeWhenSellerDoesNotWritePost, null);
+  }],
+
+  ['a seller media reads competitiveFeesByLinkType per link type', async () => {
+    const sent: Sent[] = [];
+    const media = await new SellerMediasApi(answer(sent, 200, fixture('seller-media-competitive-fees-by-link-type.json')))
+      .getSellerMedia({ id: MEDIA_ID });
+
+    const fees: SellerMediaCompetitiveFeesByLinkTypeInner[] | null = media.competitiveFeesByLinkType;
+    assert.notEqual(fees, null);
+    assert.deepEqual(fees!.map((entry) => entry.linkType), ['dofollow', 'nofollow']);
+    assert.equal(fees![0].feeWhenSellerWritesPost?.amount, 5400);
+    assert.equal(fees![0].feeWhenSellerWritesPost?.amountDecimal, '54.00');
+    assert.equal(fees![0].feeWhenSellerDoesNotWritePost, null);
+    assert.equal(fees![1].feeWhenSellerWritesPost, null);
+    assert.equal(fees![1].feeWhenSellerDoesNotWritePost?.amount, 3600);
+    assert.equal(fees![1].feeWhenSellerDoesNotWritePost?.amountDecimal, '36.00');
+    assert.equal(media.competitiveFees?.feeWhenSellerWritesPost?.amount, 5400);
+    assert.equal(media.competitiveFees?.feeWhenSellerDoesNotWritePost?.amount, 3600);
   }],
 
   ['an order event parses with fields this client does not know', async () => {
@@ -304,6 +325,27 @@ const tests: Array<[string, () => Promise<void>]> = [
     assert.equal(webhook.enabled, true);
     assert.equal(webhook.disabledReason, null);
     assert.equal(webhook.failingSince, null);
+  }],
+
+  ['updateWebhook leaves out the amountDecimal of a Money it read', async () => {
+    const read = await new WebhooksApi(answer([], 200, fixture('webhook-with-secret.json')))
+      .rotateWebhookSecret({ id: WEBHOOK_ID, idempotencyKey: 'rotate-webhook-1' });
+    const threshold = read.lowBalanceThreshold;
+    assert.equal(threshold?.amountDecimal, '50.00');
+
+    const sent: Sent[] = [];
+    await new WebhooksApi(answer(sent, 200, fixture('webhook-with-secret.json'))).updateWebhook({
+      id: WEBHOOK_ID,
+      idempotencyKey: 'update-webhook-1',
+      updateWebhookRequest: { lowBalanceThreshold: threshold },
+    });
+
+    assert.equal(sent.length, 1);
+    assert.equal(sent[0].method, 'PATCH');
+    assert.equal(sent[0].url, `https://tool.growwer.com/api/v1/webhooks/${WEBHOOK_ID}`);
+    assert.deepEqual(JSON.parse(String(sent[0].body)), {
+      lowBalanceThreshold: { amount: 5000, currency: 'EUR' },
+    });
   }],
 
   ['the error envelope is readable from the ResponseError', async () => {

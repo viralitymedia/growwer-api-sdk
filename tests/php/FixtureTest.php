@@ -22,6 +22,8 @@ use Growwer\Api\Model\MoneyOrNull;
 use Growwer\Api\Model\Order;
 use Growwer\Api\Model\SellerFeesOrNull;
 use Growwer\Api\Model\SellerMedia;
+use Growwer\Api\Model\SellerMediaCompetitiveFeesByLinkTypeInner;
+use Growwer\Api\Model\UpdateWebhookRequest;
 use Growwer\Api\Model\WebhookEvent;
 use Growwer\Api\Model\WebhookEventData;
 use Growwer\Api\Model\WebhookEventType;
@@ -227,12 +229,15 @@ final class FixtureTest extends TestCase
 
         self::assertInstanceOf(SellerMedia::class, $media);
         self::assertNull($media->getCompetitiveFees());
+        self::assertNull($media->getCompetitiveFeesByLinkType());
+        self::assertSame([], $media->listInvalidProperties());
         self::assertNull($media->getLinkAdditionOffer());
         $option = $media->getPostOffer()->getPricingOptions()[0];
         self::assertSame(6000, $option->getFeeWhenSellerWritesPost()->getAmount());
         self::assertNull($option->getFeeWhenSellerDoesNotWritePost());
         self::assertNull($option->getCurrentCost());
         self::assertSame(1500, $media->getPostOffer()->getExtraServices()[0]->getCost()->getAmount());
+        self::assertSame('15.00', $media->getPostOffer()->getExtraServices()[0]->getCost()->getAmountDecimal());
     }
 
     public function testASellerMediaReadsCompetitiveFeesWithOneSideNull(): void
@@ -240,10 +245,33 @@ final class FixtureTest extends TestCase
         $media = (new SellerMediasApi(...$this->answer(200, self::fixture('seller-media-competitive-fees.json'))))
             ->getSellerMedia(self::MEDIA_ID);
 
+        self::assertSame([], $media->listInvalidProperties());
         $fees = $media->getCompetitiveFees();
         self::assertInstanceOf(SellerFeesOrNull::class, $fees);
         self::assertSame(5400, $fees->getFeeWhenSellerWritesPost()->getAmount());
         self::assertNull($fees->getFeeWhenSellerDoesNotWritePost());
+    }
+
+    public function testASellerMediaReadsCompetitiveFeesByLinkTypePerLinkType(): void
+    {
+        $media = (new SellerMediasApi(...$this->answer(200, self::fixture('seller-media-competitive-fees-by-link-type.json'))))
+            ->getSellerMedia(self::MEDIA_ID);
+
+        self::assertSame([], $media->listInvalidProperties());
+        $fees = $media->getCompetitiveFeesByLinkType();
+        self::assertCount(2, $fees);
+        self::assertContainsOnlyInstancesOf(SellerMediaCompetitiveFeesByLinkTypeInner::class, $fees);
+        self::assertSame('dofollow', $fees[0]->getLinkType());
+        self::assertInstanceOf(MoneyOrNull::class, $fees[0]->getFeeWhenSellerWritesPost());
+        self::assertSame(5400, $fees[0]->getFeeWhenSellerWritesPost()->getAmount());
+        self::assertSame('54.00', $fees[0]->getFeeWhenSellerWritesPost()->getAmountDecimal());
+        self::assertNull($fees[0]->getFeeWhenSellerDoesNotWritePost());
+        self::assertSame('nofollow', $fees[1]->getLinkType());
+        self::assertNull($fees[1]->getFeeWhenSellerWritesPost());
+        self::assertSame(3600, $fees[1]->getFeeWhenSellerDoesNotWritePost()->getAmount());
+        self::assertSame('36.00', $fees[1]->getFeeWhenSellerDoesNotWritePost()->getAmountDecimal());
+        self::assertSame(5400, $media->getCompetitiveFees()->getFeeWhenSellerWritesPost()->getAmount());
+        self::assertSame(3600, $media->getCompetitiveFees()->getFeeWhenSellerDoesNotWritePost()->getAmount());
     }
 
     public function testAnOrderEventParsesWithFieldsThisClientDoesNotKnow(): void
@@ -325,6 +353,27 @@ final class FixtureTest extends TestCase
         self::assertTrue($webhook->getEnabled());
         self::assertNull($webhook->getDisabledReason());
         self::assertNull($webhook->getFailingSince());
+    }
+
+    public function testUpdateWebhookSendsTheAmountDecimalOfAMoneyItRead(): void
+    {
+        $read = (new WebhooksApi(...$this->answer(200, self::fixture('webhook-with-secret.json'))))
+            ->rotateWebhookSecret(self::WEBHOOK_ID, 'rotate-webhook-1');
+        $threshold = $read->getLowBalanceThreshold();
+        self::assertSame('50.00', $threshold->getAmountDecimal());
+
+        (new WebhooksApi(...$this->answer(200, self::fixture('webhook-with-secret.json'))))->updateWebhook(
+            self::WEBHOOK_ID,
+            'update-webhook-1',
+            new UpdateWebhookRequest(['low_balance_threshold' => $threshold]),
+        );
+
+        self::assertSame('PATCH', $this->sent()->getMethod());
+        self::assertSame('https://tool.growwer.com/api/v1/webhooks/' . self::WEBHOOK_ID, (string) $this->sent()->getUri());
+        self::assertSame(
+            ['lowBalanceThreshold' => ['amount' => 5000, 'currency' => 'EUR', 'amountDecimal' => '50.00']],
+            json_decode((string) $this->sent()->getBody(), true),
+        );
     }
 
     public function testTheErrorEnvelopeIsReadableFromTheException(): void

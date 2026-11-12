@@ -26,6 +26,7 @@ Name | Type
 `postOffer` | [SellerMediaPostOffer](SellerMediaPostOffer.md)
 `linkAdditionOffer` | [SellerMediaLinkAdditionOffer](SellerMediaLinkAdditionOffer.md)
 `competitiveFees` | [SellerFeesOrNull](SellerFeesOrNull.md)
+`competitiveFeesByLinkType` | [Array&lt;SellerMediaCompetitiveFeesByLinkTypeInner&gt;](SellerMediaCompetitiveFeesByLinkTypeInner.md)
 `createdAt` | Date
 
 ## Example
@@ -54,6 +55,7 @@ const example = {
   "postOffer": null,
   "linkAdditionOffer": null,
   "competitiveFees": null,
+  "competitiveFeesByLinkType": null,
   "createdAt": null,
 } satisfies SellerMedia
 

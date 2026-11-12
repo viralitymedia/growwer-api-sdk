@@ -41,7 +41,7 @@ namespace Growwer.Api.Model
         /// <param name="lowBalanceThreshold">With &#x60;balance.low&#x60;: the available buyer balance below which the event fires, in EUR. Null removes it..</param>
         /// <param name="description">A note of yours, at most 255 characters. Null removes it..</param>
         /// <param name="enabled">Whether the subscription gets events..</param>
-        public UpdateWebhookRequest(string url = default, List<WebhookEventType> events = default, MoneyOrNull lowBalanceThreshold = default, string description = default, bool enabled = default)
+        public UpdateWebhookRequest(string url = default, List<WebhookEventType> events = default, MoneyOrNull lowBalanceThreshold = default, string description = default, bool? enabled = default)
         {
             this.Url = url;
             this.Events = events;
@@ -57,7 +57,11 @@ namespace Growwer.Api.Model
             {
                 this._flagDescription = true;
             }
-            this.Enabled = enabled;
+            // a null "enabled" leaves Enabled unset, so it is not sent
+            if (enabled != null)
+            {
+                this.Enabled = enabled.Value;
+            }
         }
 
         /// <summary>
@@ -133,7 +137,27 @@ namespace Growwer.Api.Model
         /// </summary>
         /// <value>Whether the subscription gets events.</value>
         [DataMember(Name = "enabled", EmitDefaultValue = true)]
-        public bool Enabled { get; set; }
+        public bool Enabled
+        {
+            get { return _Enabled; }
+            set
+            {
+                _Enabled = value;
+                _flagEnabled = true;
+            }
+        }
+        private bool _Enabled;
+        private bool _flagEnabled;
+
+        /// <summary>
+        /// Returns true once Enabled has been set, so that a property left unset is left out of
+        /// the request rather than sent as false, which the API reads as a value.
+        /// </summary>
+        /// <returns>true once Enabled has been set (boolean)</returns>
+        public bool ShouldSerializeEnabled()
+        {
+            return _flagEnabled;
+        }
 
         /// <summary>
         /// Returns the string presentation of the object

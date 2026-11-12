@@ -14,10 +14,19 @@ Newtonsoft.Json writes it only when `ShouldSerialize<Property>()` returns that f
 not null, so `new UpdateProjectRequest(name: "x")` sends the name alone, while `Country = null` set
 through the property still sends the null.
 
-The properties come from the contract: each one not in its schema's `required` and nullable, by
-itself or through the schema its `$ref` or single `allOf` names, in a schema a JSON request body
-uses, the component schemas it references and the inline objects under it. An inline object lands
-in a class named after its path (updateSellerMedia_request_linkAdditionOffer ->
+The template marks an optional boolean `EmitDefaultValue = true` too, nullable or not, and a `bool`
+left unset is false, so every webhook update carried `enabled: false` and disabled the subscription.
+An optional, non-nullable boolean gets the same flag, and its constructor parameter becomes `bool?`
+so that the constructor can tell an argument left out from false: it raises the flag only for a
+value, so `new UpdateWebhookRequest(url: "...")` leaves `enabled` out, while `enabled: false` as an
+argument or `Enabled = false` through the property sends it. The property stays a `bool`. No other
+non-nullable value type needs this: the template writes those `EmitDefaultValue = false`, so an
+unset one is left out already.
+
+The properties come from the contract: each one not in its schema's `required` that is nullable or
+a boolean, by itself or through the schema its `$ref` or single `allOf` names, in a schema a JSON
+request body uses, the component schemas it references and the inline objects under it. An inline
+object lands in a class named after its path (updateSellerMedia_request_linkAdditionOffer ->
 UpdateSellerMediaRequestLinkAdditionOffer, array items with `_inner`), unless sdks.json's
 inlineSchemaNameMappings pins another name. A model or declaration that cannot be found fails the
 run rather than leaving one unpatched, and a run over its own output changes nothing. When a
@@ -58,8 +67,14 @@ def nullable(definition):
     return bool(definition.get("nullable")) or (target is not None and bool(schemas.get(target, {}).get("nullable")))
 
 
+def boolean(definition):
+    target = referenced(definition)
+    return (schemas.get(target, {}) if target is not None else definition).get("type") == "boolean"
+
+
 def own_optional_nullables(schema):
-    """The optional, nullable properties a schema's class declares, its allOf parents' included."""
+    """(property, kind) for each optional property a schema's class declares, its allOf parents'
+    included, that is nullable (kind "nullable") or a boolean that is not (kind "boolean")."""
     required = set(schema.get("required", []))
     for part in schema.get("allOf", []):
         required |= set(part.get("required", []))
@@ -69,8 +84,12 @@ def own_optional_nullables(schema):
             found += own_optional_nullables(schemas[part["$ref"].rsplit("/", 1)[-1]])
             continue
         for prop, definition in part.get("properties", {}).items():
-            if isinstance(definition, dict) and prop not in required and nullable(definition):
-                found.append(prop)
+            if not isinstance(definition, dict) or prop in required:
+                continue
+            if nullable(definition):
+                found.append((prop, "nullable"))
+            elif boolean(definition):
+                found.append((prop, "boolean"))
     return found
 
 
@@ -86,7 +105,8 @@ def holds_inline_object(schema):
 
 
 def request_optional_nullables():
-    """Yields (class name, property) for each optional, nullable property a JSON request can carry."""
+    """Yields (class name, property, kind) for each optional property a JSON request can carry that
+    is nullable or a boolean, as own_optional_nullables tells them apart."""
     visited = set()
 
     def walk(schema, inline_name):
@@ -98,8 +118,8 @@ def request_optional_nullables():
                 visited.add(target)
                 yield from walk(schemas[target], target)
             return
-        for prop in own_optional_nullables(schema):
-            yield class_name(inline_name), prop
+        for prop, kind in own_optional_nullables(schema):
+            yield class_name(inline_name), prop, kind
         for keyword in ("allOf", "oneOf", "anyOf"):
             for part in schema.get(keyword, []):
                 if "$ref" in part:
@@ -126,13 +146,13 @@ def request_optional_nullables():
                     yield from walk(content.get("schema"), f"{operation['operationId']}_request")
 
 
-patched = []
-already = []
-for name, prop in sorted(set(request_optional_nullables())):
+patched = {"nullable": [], "boolean": []}
+already = {"nullable": [], "boolean": []}
+for name, prop, contract_kind in sorted(set(request_optional_nullables())):
     model = MODELS / f"{name}.cs"
     if not model.exists():
         raise SystemExit(
-            f"no C# model {model.name} for the optional, nullable {name}.{prop}: "
+            f"no C# model {model.name} for the optional, {contract_kind} {name}.{prop}: "
             "pin the class the generator chose with inlineSchemaNameMappings in sdks.json"
         )
     text = model.read_text(encoding="utf-8")
@@ -143,15 +163,18 @@ for name, prop in sorted(set(request_optional_nullables())):
     match = declaration.search(text)
     if match is None:
         if re.search(member + r"[ \t]*public [^\n]+? \w+\n[ \t]*\{\n[ \t]*get \{ return _\w+; \}", text):
-            already.append(f"{name}.{prop}")
+            already[contract_kind].append(f"{name}.{prop}")
             continue
         if f'[DataMember(Name = "{prop}", EmitDefaultValue = false)]' in text:
             # The generator leaves this one out when unset by itself now.
             continue
-        raise SystemExit(f"{model.name}: no optional, nullable property declaration for {prop} to patch")
+        raise SystemExit(f"{model.name}: no optional, {contract_kind} property declaration for {prop} to patch")
     indent, kind, member_name = match["indent"], match["type"], match["property"]
+    if contract_kind == "boolean" and kind != "bool":
+        raise SystemExit(f"{model.name}: the optional boolean {member_name} is declared {kind}, not bool")
     if f"ShouldSerialize{member_name}(" in text:
         raise SystemExit(f"{model.name}: {member_name} already has a ShouldSerialize{member_name} method")
+    unset = "false" if contract_kind == "boolean" else "null"
     replacement = (
         f"{match['attributes']}"
         f"{indent}public {kind} {member_name}\n"
@@ -168,7 +191,7 @@ for name, prop in sorted(set(request_optional_nullables())):
         f"\n"
         f"{indent}/// <summary>\n"
         f"{indent}/// Returns true once {member_name} has been set, so that a property left unset is left out of\n"
-        f"{indent}/// the request rather than sent as null, which the API reads as a value.\n"
+        f"{indent}/// the request rather than sent as {unset}, which the API reads as a value.\n"
         f"{indent}/// </summary>\n"
         f"{indent}/// <returns>true once {member_name} has been set (boolean)</returns>\n"
         f"{indent}public bool ShouldSerialize{member_name}()\n"
@@ -181,24 +204,43 @@ for name, prop in sorted(set(request_optional_nullables())):
     assignments = assignment.findall(text)
     if len(assignments) != 1:
         raise SystemExit(f"{model.name}: expected one constructor assignment to {member_name}, found {len(assignments)}")
-    text = assignment.sub(
-        lambda found: (
-            f"{found['indent']}// a null \"{found['argument']}\" leaves {member_name} unset, so it is not sent\n"
-            f"{found['indent']}this._{member_name} = {found['argument']};\n"
-            f"{found['indent']}if (this.{member_name} != null)\n"
-            f"{found['indent']}{{\n"
-            f"{found['indent']}    this._flag{member_name} = true;\n"
-            f"{found['indent']}}}"
-        ),
-        text,
-    )
+    if contract_kind == "boolean":
+        # A bool argument cannot tell "left out" from false, so the parameter takes a null for that.
+        argument = assignments[0][1]
+        text, count = re.subn(rf"\bbool {re.escape(argument)} = default\b", f"bool? {argument} = default", text)
+        if count != 1:
+            raise SystemExit(f"{model.name}: expected one constructor parameter bool {argument}, found {count}")
+        text = assignment.sub(
+            lambda found: (
+                f"{found['indent']}// a null \"{found['argument']}\" leaves {member_name} unset, so it is not sent\n"
+                f"{found['indent']}if ({found['argument']} != null)\n"
+                f"{found['indent']}{{\n"
+                f"{found['indent']}    this.{member_name} = {found['argument']}.Value;\n"
+                f"{found['indent']}}}"
+            ),
+            text,
+        )
+    else:
+        text = assignment.sub(
+            lambda found: (
+                f"{found['indent']}// a null \"{found['argument']}\" leaves {member_name} unset, so it is not sent\n"
+                f"{found['indent']}this._{member_name} = {found['argument']};\n"
+                f"{found['indent']}if (this.{member_name} != null)\n"
+                f"{found['indent']}{{\n"
+                f"{found['indent']}    this._flag{member_name} = true;\n"
+                f"{found['indent']}}}"
+            ),
+            text,
+        )
     model.write_text(text, encoding="utf-8")
-    patched.append(f"{name}.{member_name}")
+    patched[contract_kind].append(f"{name}.{member_name}")
 
-if not patched and not already:
+if not any(patched.values()) and not any(already.values()):
     raise SystemExit(
-        "no optional, nullable C# request property is left to patch: remove "
+        "no optional, nullable or boolean C# request property is left to patch: remove "
         "scripts/csharp-optional-nullables.py and its call in generate.sh"
     )
 
-print(f"    optional nullables: {', '.join(patched) or 'already patched'}")
+for contract_kind, label in (("nullable", "optional nullables"), ("boolean", "optional booleans")):
+    if patched[contract_kind] or already[contract_kind]:
+        print(f"    {label}: {', '.join(patched[contract_kind]) or 'already patched'}")

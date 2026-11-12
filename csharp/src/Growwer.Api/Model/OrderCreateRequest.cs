@@ -77,7 +77,7 @@ namespace Growwer.Api.Model
         /// <param name="draftReviewable">Whether you review the draft before it is published. Defaults to false..</param>
         /// <param name="proposedDraftFileId">A file uploaded with POST /files to propose your own draft. The estimate checks it without using it up..</param>
         /// <param name="expectedPrice">The &#x60;price&#x60; POST /orders/estimate answered. Only EUR is accepted. In cents, as the estimate answered it: 1800 is 18.00 EUR. (required).</param>
-        public OrderCreateRequest(TypeEnum type = default, Guid projectId = default, Guid mediaId = default, OrderEstimateRequestBriefing briefing = default, DateOnly scheduledPublicationDate = default, bool draftReviewable = default, Guid proposedDraftFileId = default, Money expectedPrice = default)
+        public OrderCreateRequest(TypeEnum type = default, Guid projectId = default, Guid mediaId = default, OrderEstimateRequestBriefing briefing = default, DateOnly scheduledPublicationDate = default, bool? draftReviewable = default, Guid proposedDraftFileId = default, Money expectedPrice = default)
         {
             this.Type = type;
             this.ProjectId = projectId;
@@ -95,7 +95,11 @@ namespace Growwer.Api.Model
             }
             this.ExpectedPrice = expectedPrice;
             this.ScheduledPublicationDate = scheduledPublicationDate;
-            this.DraftReviewable = draftReviewable;
+            // a null "draftReviewable" leaves DraftReviewable unset, so it is not sent
+            if (draftReviewable != null)
+            {
+                this.DraftReviewable = draftReviewable.Value;
+            }
             this.ProposedDraftFileId = proposedDraftFileId;
             this.AdditionalProperties = new Dictionary<string, object>();
         }
@@ -132,7 +136,27 @@ namespace Growwer.Api.Model
         /// </summary>
         /// <value>Whether you review the draft before it is published. Defaults to false.</value>
         [DataMember(Name = "draftReviewable", EmitDefaultValue = true)]
-        public bool DraftReviewable { get; set; }
+        public bool DraftReviewable
+        {
+            get { return _DraftReviewable; }
+            set
+            {
+                _DraftReviewable = value;
+                _flagDraftReviewable = true;
+            }
+        }
+        private bool _DraftReviewable;
+        private bool _flagDraftReviewable;
+
+        /// <summary>
+        /// Returns true once DraftReviewable has been set, so that a property left unset is left out of
+        /// the request rather than sent as false, which the API reads as a value.
+        /// </summary>
+        /// <returns>true once DraftReviewable has been set (boolean)</returns>
+        public bool ShouldSerializeDraftReviewable()
+        {
+            return _flagDraftReviewable;
+        }
 
         /// <summary>
         /// A file uploaded with POST /files to propose your own draft. The estimate checks it without using it up.

@@ -755,8 +755,8 @@ class RubyOneOfUnknownKeysTest(unittest.TestCase):
 
 
 class CSharpOptionalNullablesTest(unittest.TestCase):
-    """scripts/csharp-optional-nullables.py makes the C# client leave an optional, nullable request
-    property out of the body until it is set, instead of sending it as null."""
+    """scripts/csharp-optional-nullables.py makes the C# client leave an optional, nullable or boolean
+    request property out of the body until it is set, instead of sending it as null or false."""
 
     @staticmethod
     def model(name, members):
@@ -1053,6 +1053,10 @@ class CSharpOptionalNullablesTest(unittest.TestCase):
                 regular.replace("bool enabled = default", "bool? enabled = default"),
                 "expected one constructor parameter bool enabled, found 0",
             ),
+            "a default(bool) constructor parameter": (
+                regular.replace("bool enabled = default", "bool enabled = default(bool)"),
+                "expected one constructor parameter bool enabled, found 0",
+            ),
             "no constructor assignment": (
                 regular.replace("            this.Enabled = enabled;\n", ""),
                 "expected one constructor assignment to Enabled, found 0",
@@ -1078,13 +1082,48 @@ class CSharpOptionalNullablesTest(unittest.TestCase):
         self.assertEqual(once, twice)
         self.assertIn("optional booleans: already patched", twice_result.stdout)
 
-    def test_a_generator_that_already_leaves_an_unset_boolean_out_fails_the_run(self):
+    def test_a_generator_that_leaves_out_an_unset_bool_fails_the_run_since_false_could_never_be_sent(self):
         body = {"type": "object", "properties": {"enabled": {"type": "boolean"}}}
         models = {"UpdateProjectRequest": self.model("UpdateProjectRequest", [("enabled", "bool", False)])}
         result, patched = self.run_script(self.contract(body), models)
         self.assertNotEqual(0, result.returncode)
-        self.assertIn("remove scripts/csharp-optional-nullables.py", result.stderr)
+        self.assertIn(
+            "UpdateProjectRequest.cs: the optional boolean enabled has EmitDefaultValue = false on a bool: "
+            "false can never be sent",
+            result.stderr,
+        )
         self.assertEqual(models, patched)
+
+    def test_a_generator_that_already_leaves_an_unset_nullable_bool_out_fails_the_run(self):
+        body = {"type": "object", "properties": {"enabled": {"type": "boolean"}}}
+        models = {"UpdateProjectRequest": self.model("UpdateProjectRequest", [("enabled", "bool?", False)])}
+        result, patched = self.run_script(self.contract(body), models)
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("remove scripts/csharp-optional-nullables.py and its call in generate.sh", result.stderr)
+        self.assertEqual(models, patched)
+
+    def test_a_generator_that_leaves_out_one_kind_alone_fails_the_run_naming_its_branch(self):
+        body = {
+            "type": "object",
+            "properties": {"country": {"type": "string", "nullable": True}, "enabled": {"type": "boolean"}},
+        }
+        cases = {
+            "boolean": [("country", "string", True), ("enabled", "bool?", False)],
+            "nullable": [("country", "string", False), ("enabled", "bool", True)],
+        }
+        for kind, members in cases.items():
+            with self.subTest(kind=kind):
+                models = {"UpdateProjectRequest": self.model("UpdateProjectRequest", members)}
+                result, patched = self.run_script(self.contract(body), models)
+                self.assertNotEqual(0, result.returncode)
+                self.assertIn(
+                    f"no optional, {kind} C# request property is left to patch: remove the {kind} branch "
+                    "of scripts/csharp-optional-nullables.py",
+                    result.stderr,
+                )
+                self.assertNotIn("and its call in generate.sh", result.stderr)
+                # The other kind is patchable, but a run that fails writes no model.
+                self.assertEqual(models, patched)
 
     def test_a_body_sent_as_form_fields_is_left_alone(self):
         models = {"UpdateProjectRequest": self.model("UpdateProjectRequest", self.PROJECT_MEMBERS)}

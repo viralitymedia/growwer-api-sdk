@@ -1,4 +1,4 @@
-"""Keeps the C# client from sending null for an optional, nullable request property left unset.
+"""Keeps the C# client from sending an optional, nullable or boolean request property left unset.
 
 OpenAPI Generator 7.24.0's csharp model template (httpclient library) marks a nullable property
 `EmitDefaultValue = true`, so that a null the caller sets reaches the API. It does so for an
@@ -31,7 +31,10 @@ UpdateSellerMediaRequestLinkAdditionOffer, array items with `_inner`), unless sd
 inlineSchemaNameMappings pins another name. A model or declaration that cannot be found fails the
 run rather than leaving one unpatched, and a run over its own output changes nothing. When a
 generator upgrade omits these properties itself (`EmitDefaultValue = false`), nothing is left to
-patch and this step fails, so it is removed then rather than kept as a silent no-op.
+patch and this step fails, so it is removed then rather than kept as a silent no-op; when it omits
+only one kind, the run fails naming that kind's branch, to be removed alone. A boolean it omits
+must be declared `bool?`: on a `bool`, `EmitDefaultValue = false` leaves false out as well, so
+false could never be sent, and the run fails. A run that fails writes no model.
 """
 
 import json
@@ -148,15 +151,19 @@ def request_optional_nullables():
 
 patched = {"nullable": [], "boolean": []}
 already = {"nullable": [], "boolean": []}
+found = set()
+# Written once every property is checked, so that a run that fails leaves every model as it was.
+texts = {}
 for name, prop, contract_kind in sorted(set(request_optional_nullables())):
+    found.add(contract_kind)
     model = MODELS / f"{name}.cs"
     if not model.exists():
         raise SystemExit(
             f"no C# model {model.name} for the optional, {contract_kind} {name}.{prop}: "
             "pin the class the generator chose with inlineSchemaNameMappings in sdks.json"
         )
-    text = model.read_text(encoding="utf-8")
-    member = r"[ \t]*\[DataMember\(Name = \"" + re.escape(prop) + r"\", EmitDefaultValue = true\)\]\n(?:[ \t]*\[[^\n]*\]\n)*"
+    text = texts[model] if model in texts else model.read_text(encoding="utf-8")
+    member =r"[ \t]*\[DataMember\(Name = \"" + re.escape(prop) + r"\", EmitDefaultValue = true\)\]\n(?:[ \t]*\[[^\n]*\]\n)*"
     declaration = re.compile(
         r"(?P<attributes>" + member + r")(?P<indent>[ \t]*)public (?P<type>[^\n]+?) (?P<property>\w+) \{ get; set; \}\n"
     )
@@ -165,7 +172,16 @@ for name, prop, contract_kind in sorted(set(request_optional_nullables())):
         if re.search(member + r"[ \t]*public [^\n]+? \w+\n[ \t]*\{\n[ \t]*get \{ return _\w+; \}", text):
             already[contract_kind].append(f"{name}.{prop}")
             continue
-        if f'[DataMember(Name = "{prop}", EmitDefaultValue = false)]' in text:
+        omitted = re.search(
+            member.replace("EmitDefaultValue = true", "EmitDefaultValue = false") + r"[ \t]*public (?P<type>[^\n]+?) \w+",
+            text,
+        )
+        if omitted is not None:
+            if contract_kind == "boolean" and omitted["type"] == "bool":
+                raise SystemExit(
+                    f"{model.name}: the optional boolean {prop} has EmitDefaultValue = false on a bool: "
+                    "false can never be sent"
+                )
             # The generator leaves this one out when unset by itself now.
             continue
         raise SystemExit(f"{model.name}: no optional, {contract_kind} property declaration for {prop} to patch")
@@ -207,7 +223,7 @@ for name, prop, contract_kind in sorted(set(request_optional_nullables())):
     if contract_kind == "boolean":
         # A bool argument cannot tell "left out" from false, so the parameter takes a null for that.
         argument = assignments[0][1]
-        text, count = re.subn(rf"\bbool {re.escape(argument)} = default\b", f"bool? {argument} = default", text)
+        text, count = re.subn(rf"\bbool {re.escape(argument)} = default(?=[,)])", f"bool? {argument} = default", text)
         if count != 1:
             raise SystemExit(f"{model.name}: expected one constructor parameter bool {argument}, found {count}")
         text = assignment.sub(
@@ -232,7 +248,7 @@ for name, prop, contract_kind in sorted(set(request_optional_nullables())):
             ),
             text,
         )
-    model.write_text(text, encoding="utf-8")
+    texts[model] = text
     patched[contract_kind].append(f"{name}.{member_name}")
 
 if not any(patched.values()) and not any(already.values()):
@@ -240,6 +256,18 @@ if not any(patched.values()) and not any(already.values()):
         "no optional, nullable or boolean C# request property is left to patch: remove "
         "scripts/csharp-optional-nullables.py and its call in generate.sh"
     )
+obsolete = sorted(kind for kind in found if not patched[kind] and not already[kind])
+if obsolete:
+    raise SystemExit(
+        "; ".join(
+            f"no optional, {kind} C# request property is left to patch: remove the {kind} branch "
+            "of scripts/csharp-optional-nullables.py"
+            for kind in obsolete
+        )
+    )
+
+for model, text in texts.items():
+    model.write_text(text, encoding="utf-8")
 
 for contract_kind, label in (("nullable", "optional nullables"), ("boolean", "optional booleans")):
     if patched[contract_kind] or already[contract_kind]:

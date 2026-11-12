@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 **ScheduledPublicationDate** | Pointer to **string** | The day to publish on, at least a few days ahead as the web requires. | [optional] 
 **DraftReviewable** | Pointer to **bool** | Whether you review the draft before it is published. Defaults to false. | [optional] 
 **ProposedDraftFileId** | Pointer to **string** | A file uploaded with POST /files to propose your own draft. The estimate checks it without using it up. | [optional] 
-**ExpectedPrice** | [**Money**](Money.md) | The &#x60;price&#x60; POST /orders/estimate answered. Only EUR is accepted. | 
+**ExpectedPrice** | [**Money**](Money.md) | The &#x60;price&#x60; POST /orders/estimate answered. Only EUR is accepted. In cents, as the estimate answered it: 1800 is 18.00 EUR. | 
 
 ## Methods
 

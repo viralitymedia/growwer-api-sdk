@@ -6,7 +6,7 @@ All URIs are relative to https://tool.growwer.com, except if the operation defin
 
 | Method | HTTP request | Description |
 | ------------- | ------------- | ------------- |
-| [**applySellerMediaCompetitiveFees()**](SellerMediasApi.md#applySellerMediaCompetitiveFees) | **POST** /api/v1/seller/medias/{id}/apply-competitive-fees | Set the competitive fees Growwer suggests |
+| [**applySellerMediaCompetitiveFees()**](SellerMediasApi.md#applySellerMediaCompetitiveFees) | **POST** /api/v1/seller/medias/{id}/apply-competitive-fees | Lower your fees to the competitive fees Growwer suggests |
 | [**createSellerMedia()**](SellerMediasApi.md#createSellerMedia) | **POST** /api/v1/seller/medias | Register a media you sell on |
 | [**deleteSellerMedia()**](SellerMediasApi.md#deleteSellerMedia) | **DELETE** /api/v1/seller/medias/{id} | Delete a media you sell on |
 | [**getSellerMedia()**](SellerMediasApi.md#getSellerMedia) | **GET** /api/v1/seller/medias/{id} | Get a media you sell on |
@@ -20,9 +20,9 @@ All URIs are relative to https://tool.growwer.com, except if the operation defin
 applySellerMediaCompetitiveFees($id, $idempotency_key): \Growwer\Api\Model\SellerMedia
 ```
 
-Set the competitive fees Growwer suggests
+Lower your fees to the competitive fees Growwer suggests
 
-Sets your post fees for the media to the competitive fees Growwer suggests, the `competitiveFees` of GET /seller/medias/{id}, as the button on the media edit page does. Each link type you offer gets the suggested fee on each side it already has a fee for; no link type gains a side it did not offer.  Two differences from the page: a side Growwer has no suggestion for keeps your fee (the page clears it), and the fixed fee the page falls back to when it cannot find a competitive one is never applied (the page applies it). When neither side has a suggestion, nothing changes and the answer is 409 `no_competitive_fees`. When your fees already are the suggested ones, or the suggestion is only for a side none of your link types offers, nothing changes and the answer is 200.  The fees set are your base fees: a running flash offer keeps discounting them. As with a fee edit, a change of the price may cancel the managed-service proposals accepted for the media whose price it changes. Send no body, or an empty object.
+Lowers your post fees for the media to the competitive fees Growwer suggests, per link type. On each side, a fee above the highest whole-euro fee that lists the media at least 1 EUR below its cheapest price on the marketplaces Growwer compares with is lowered to that fee, and a link type that then still does not list the media at least 1 EUR below that price has one of its fees lowered by 1 EUR, which does. GET /seller/medias/{id} shows, per side, the highest fee this sets on that side as `competitiveFees`, and the fees it sets on each link type it lowers as `competitiveFeesByLinkType`. Only fees above their suggestion change: a fee is never raised, a cheaper link type keeps its fee, no link type gains a side it did not offer, and a side without a suggestion keeps your fee.  When there is no suggestion (Growwer sets the media's prices, it is not listed on a marketplace Growwer compares with, it already lists below its price there, or no fee would bring it below), or your fees already are at or below the suggested ones, nothing changes and the answer is 200 with the media as it is.  The fees set are your base fees: a running flash offer keeps discounting them. As with a fee edit, a change of the price may cancel the managed-service proposals accepted for the media whose price it changes. Send no body, or an empty object.
 
 ### Example
 

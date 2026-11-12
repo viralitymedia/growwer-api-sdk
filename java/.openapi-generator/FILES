@@ -109,6 +109,7 @@ docs/SellerAccountApi.md
 docs/SellerFees.md
 docs/SellerFeesOrNull.md
 docs/SellerMedia.md
+docs/SellerMediaCompetitiveFeesByLinkTypeInner.md
 docs/SellerMediaFlashOffer.md
 docs/SellerMediaLinkAdditionOffer.md
 docs/SellerMediaLinkAdditionOfferPricingOptionsInner.md
@@ -288,6 +289,7 @@ src/main/java/com/growwer/api/model/SavedFilterNotifications.java
 src/main/java/com/growwer/api/model/SellerFees.java
 src/main/java/com/growwer/api/model/SellerFeesOrNull.java
 src/main/java/com/growwer/api/model/SellerMedia.java
+src/main/java/com/growwer/api/model/SellerMediaCompetitiveFeesByLinkTypeInner.java
 src/main/java/com/growwer/api/model/SellerMediaFlashOffer.java
 src/main/java/com/growwer/api/model/SellerMediaLinkAdditionOffer.java
 src/main/java/com/growwer/api/model/SellerMediaLinkAdditionOfferPricingOptionsInner.java

@@ -94,7 +94,7 @@ All URIs are relative to *https://tool.growwer.com*
 *SavedFiltersApi* | [**deleteSavedFilter**](docs/SavedFiltersApi.md#deletesavedfilter) | **DELETE** /api/v1/projects/{id}/saved-filters/{filterId} | Delete a saved filter
 *SavedFiltersApi* | [**listSavedFilters**](docs/SavedFiltersApi.md#listsavedfilters) | **GET** /api/v1/projects/{id}/saved-filters | List the saved filters of a project
 *SellerAccountApi* | [**putSellerHoliday**](docs/SellerAccountApi.md#putsellerholidayoperation) | **PUT** /api/v1/seller/holiday | Set your holiday
-*SellerMediasApi* | [**applySellerMediaCompetitiveFees**](docs/SellerMediasApi.md#applysellermediacompetitivefees) | **POST** /api/v1/seller/medias/{id}/apply-competitive-fees | Set the competitive fees Growwer suggests
+*SellerMediasApi* | [**applySellerMediaCompetitiveFees**](docs/SellerMediasApi.md#applysellermediacompetitivefees) | **POST** /api/v1/seller/medias/{id}/apply-competitive-fees | Lower your fees to the competitive fees Growwer suggests
 *SellerMediasApi* | [**createSellerMedia**](docs/SellerMediasApi.md#createsellermediaoperation) | **POST** /api/v1/seller/medias | Register a media you sell on
 *SellerMediasApi* | [**deleteSellerMedia**](docs/SellerMediasApi.md#deletesellermedia) | **DELETE** /api/v1/seller/medias/{id} | Delete a media you sell on
 *SellerMediasApi* | [**getSellerMedia**](docs/SellerMediasApi.md#getsellermedia) | **GET** /api/v1/seller/medias/{id} | Get a media you sell on
@@ -228,6 +228,7 @@ All URIs are relative to *https://tool.growwer.com*
 - [SellerFees](docs/SellerFees.md)
 - [SellerFeesOrNull](docs/SellerFeesOrNull.md)
 - [SellerMedia](docs/SellerMedia.md)
+- [SellerMediaCompetitiveFeesByLinkTypeInner](docs/SellerMediaCompetitiveFeesByLinkTypeInner.md)
 - [SellerMediaFlashOffer](docs/SellerMediaFlashOffer.md)
 - [SellerMediaLinkAdditionOffer](docs/SellerMediaLinkAdditionOffer.md)
 - [SellerMediaLinkAdditionOfferPricingOptionsInner](docs/SellerMediaLinkAdditionOfferPricingOptionsInner.md)

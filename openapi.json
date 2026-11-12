@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Growwer API",
-    "description": "The Growwer customer API. Authenticate every call with an API key created on\nyour profile page, sent as `Authorization: Bearer <key>`. A read key can call\nevery GET operation; writes need a read and write key and an\n`Idempotency-Key` header.\n\nIdempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII\ncharacters without spaces) for each operation and reuse it only to retry that same\noperation. Keys belong to your account, not to one API key.\n- A successful write is stored for 30 days: a retry with the same key and\n  the same request replays its response with `Idempotent-Replayed: true`\n  and does nothing again.\n- A refused write (4xx) has no effect and releases its key: once you fix the\n  cause, retry with the same key and the write runs.\n- A failed write (5xx) may have taken effect, so it is never run again under\n  its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it\n  took effect before retrying with a new key.\n- A retry while the first request is still running gets 409\n  `idempotency_request_in_progress`. A request still running after 5 minutes\n  is treated as failed: a retry gets 409 `idempotency_outcome_unknown`.\n- The same key with a different request (method, path, query or body) gets\n  409 `idempotency_key_reused`. A write without the header gets 400\n  `idempotency_key_required`.\n\nTest mode: a test key (`gw_sk_test_` plus 43 characters) works on your\naccount's test data alone, apart from the real catalogue: test projects,\norders and files, and a test wallet that starts at 1,000.00 EUR. Every\nresponse to a test key carries `Growwer-Mode: test`, and an id of the other\nmode answers 404 as a missing object would.\n- A test order is validated and debited from the test wallet as a live one\n  is. A simulated seller accepts it a minute later and delivers it two\n  minutes after that; you approve the delivery or request an update.\n- The Test helpers top the test wallet up, move a test order on at once and\n  reset your test data. A live key on them gets 403 `test_mode_only`.\n- A test key on the seller and managed service operations, on a project's\n  catalogue writes and on media requests gets 403\n  `not_available_in_test_mode`.\n- Idempotency keys are scoped per mode: the same `Idempotency-Key` sent with\n  a live and a test key never replays the other mode's response.\n\nWebhooks: a subscription receives the events of its mode, signed as Standard\nWebhooks. A subscription created with a live key gets the events of your\norders and your wallet; one created with a test key gets those of your test\norders and test wallet, with `mode: test`, and never a live event.\n`x-webhooks` lists every event Growwer POSTs and its payload; the\nWebhookEvent schema describes the headers, the signature and the retries.\n\nEvery response carries `X-Request-Id`. Errors share one shape,\n`{code, message, requestId, details?}`. Money is integer cents plus a\ncurrency code and dates are ISO-8601.\n",
+    "description": "The Growwer customer API. Authenticate every call with an API key created on\nyour profile page, sent as `Authorization: Bearer <key>`. A read key can call\nevery GET operation; writes need a read and write key and an\n`Idempotency-Key` header.\n\nIdempotency: use a new `Idempotency-Key` (1 to 255 printable ASCII\ncharacters without spaces) for each operation and reuse it only to retry that same\noperation. Keys belong to your account, not to one API key.\n- A successful write is stored for 30 days: a retry with the same key and\n  the same request replays its response with `Idempotent-Replayed: true`\n  and does nothing again.\n- A refused write (4xx) has no effect and releases its key: once you fix the\n  cause, retry with the same key and the write runs.\n- A failed write (5xx) may have taken effect, so it is never run again under\n  its key: a retry gets 409 `idempotency_outcome_unknown`. Check whether it\n  took effect before retrying with a new key.\n- A retry while the first request is still running gets 409\n  `idempotency_request_in_progress`. A request still running after 5 minutes\n  is treated as failed: a retry gets 409 `idempotency_outcome_unknown`.\n- The same key with a different request (method, path, query or body) gets\n  409 `idempotency_key_reused`. A write without the header gets 400\n  `idempotency_key_required`.\n\nTest mode: a test key (`gw_sk_test_` plus 43 characters) works on your\naccount's test data alone, apart from the real catalogue: test projects,\norders and files, and a test wallet that starts at 1,000.00 EUR. Every\nresponse to a test key carries `Growwer-Mode: test`, and an id of the other\nmode answers 404 as a missing object would.\n- A test order is validated and debited from the test wallet as a live one\n  is. A simulated seller accepts it a minute later and delivers it two\n  minutes after that; you approve the delivery or request an update.\n- The Test helpers top the test wallet up, move a test order on at once and\n  reset your test data. A live key on them gets 403 `test_mode_only`.\n- A test key on the seller and managed service operations, on a project's\n  catalogue writes and on media requests gets 403\n  `not_available_in_test_mode`.\n- Idempotency keys are scoped per mode: the same `Idempotency-Key` sent with\n  a live and a test key never replays the other mode's response.\n\nWebhooks: a subscription receives the events of its mode, signed as Standard\nWebhooks. A subscription created with a live key gets the events of your\norders and your wallet; one created with a test key gets those of your test\norders and test wallet, with `mode: test`, and never a live event.\n`x-webhooks` lists every event Growwer POSTs and its payload; the\nWebhookEvent schema describes the headers, the signature and the retries.\n\nEvery response carries `X-Request-Id`. Errors share one shape,\n`{code, message, requestId, details?}`. Money is integer cents plus a\ncurrency code (12500 is 125.00 EUR), answered with `amountDecimal`, the same\namount as an exact decimal string (\"125.00\"); dates are ISO-8601.\n",
     "termsOfService": "https://growwer.com/legal/terms-of-use/",
     "contact": {
       "name": "Growwer Support",
@@ -3695,8 +3695,8 @@
         "tags": [
           "Seller medias"
         ],
-        "summary": "Set the competitive fees Growwer suggests",
-        "description": "Sets your post fees for the media to the competitive fees Growwer suggests, the `competitiveFees` of GET /seller/medias/{id}, as the button on the media edit page does. Each link type you offer gets the suggested fee on each side it already has a fee for; no link type gains a side it did not offer.\n\nTwo differences from the page: a side Growwer has no suggestion for keeps your fee (the page clears it), and the fixed fee the page falls back to when it cannot find a competitive one is never applied (the page applies it). When neither side has a suggestion, nothing changes and the answer is 409 `no_competitive_fees`. When your fees already are the suggested ones, or the suggestion is only for a side none of your link types offers, nothing changes and the answer is 200.\n\nThe fees set are your base fees: a running flash offer keeps discounting them. As with a fee edit, a change of the price may cancel the managed-service proposals accepted for the media whose price it changes. Send no body, or an empty object.",
+        "summary": "Lower your fees to the competitive fees Growwer suggests",
+        "description": "Lowers your post fees for the media to the competitive fees Growwer suggests, per link type. On each side, a fee above the highest whole-euro fee that lists the media at least 1 EUR below its cheapest price on the marketplaces Growwer compares with is lowered to that fee, and a link type that then still does not list the media at least 1 EUR below that price has one of its fees lowered by 1 EUR, which does. GET /seller/medias/{id} shows, per side, the highest fee this sets on that side as `competitiveFees`, and the fees it sets on each link type it lowers as `competitiveFeesByLinkType`. Only fees above their suggestion change: a fee is never raised, a cheaper link type keeps its fee, no link type gains a side it did not offer, and a side without a suggestion keeps your fee.\n\nWhen there is no suggestion (Growwer sets the media's prices, it is not listed on a marketplace Growwer compares with, it already lists below its price there, or no fee would bring it below), or your fees already are at or below the suggested ones, nothing changes and the answer is 200 with the media as it is.\n\nThe fees set are your base fees: a running flash offer keeps discounting them. As with a fee edit, a change of the price may cancel the managed-service proposals accepted for the media whose price it changes. Send no body, or an empty object.",
         "operationId": "applySellerMediaCompetitiveFees",
         "parameters": [
           {
@@ -3714,7 +3714,7 @@
         ],
         "responses": {
           "200": {
-            "description": "The media, with the suggested fees set.",
+            "description": "The media, with its fees above the suggested ones lowered to them, or unchanged when there were none to lower.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3743,7 +3743,7 @@
             "$ref": "#/components/responses/NotFound"
           },
           "409": {
-            "description": "Growwer has no competitive fees to suggest for the media now (code `no_competitive_fees`), or the `Idempotency-Key` conflicts (codes `idempotency_key_reused`, `idempotency_request_in_progress`, `idempotency_outcome_unknown`).",
+            "description": "The `Idempotency-Key` conflicts (codes `idempotency_key_reused`, `idempotency_request_in_progress`, `idempotency_outcome_unknown`).",
             "content": {
               "application/json": {
                 "schema": {
@@ -7095,7 +7095,7 @@
         ],
         "properties": {
           "amount": {
-            "description": "Integer cents.",
+            "description": "Integer cents: 12500 is 125.00 EUR.",
             "type": "integer",
             "example": 12500
           },
@@ -7103,6 +7103,12 @@
             "description": "ISO 4217 currency code.",
             "type": "string",
             "example": "EUR"
+          },
+          "amountDecimal": {
+            "description": "Exact decimal of `amount` in major units: \"125.00\". An input may only echo it unchanged.",
+            "type": "string",
+            "readOnly": true,
+            "example": "125.00"
           }
         },
         "type": "object"
@@ -7239,7 +7245,7 @@
         ],
         "properties": {
           "amount": {
-            "description": "Integer cents.",
+            "description": "Integer cents: 12500 is 125.00 EUR.",
             "type": "integer",
             "example": 12500
           },
@@ -7247,6 +7253,12 @@
             "description": "ISO 4217 currency code.",
             "type": "string",
             "example": "EUR"
+          },
+          "amountDecimal": {
+            "description": "Exact decimal of `amount` in major units: \"125.00\". An input may only echo it unchanged.",
+            "type": "string",
+            "readOnly": true,
+            "example": "125.00"
           }
         },
         "type": "object",
@@ -7704,6 +7716,7 @@
           "postOffer",
           "linkAdditionOffer",
           "competitiveFees",
+          "competitiveFeesByLinkType",
           "createdAt"
         ],
         "properties": {
@@ -7952,12 +7965,51 @@
             "nullable": true
           },
           "competitiveFees": {
-            "description": "The post fees Growwer suggests to sell more, as the seller media page does, or null when it suggests none. A side Growwer finds no competitive fee for is null: unlike the page, it never shows the fixed fee the page falls back to. POST /seller/medias/{id}/apply-competitive-fees sets them.",
+            "description": "The post fees Growwer suggests to sell more, as the seller media pages do, or null when it suggests none: for each side, the highest fee POST /seller/medias/{id}/apply-competitive-fees would set on that side, else null. The apply lowers, per link type, a fee above the highest whole-euro fee that lists the media at least 1 EUR below its cheapest price on the marketplaces Growwer compares with to that fee, and lowers by 1 EUR one fee of a link type that then still does not list the media at least 1 EUR below that price. It never raises a fee. Where it lowers several link types, this is the highest per side across them, so a link type's own new fee can be lower: `competitiveFeesByLinkType` gives the fees the apply sets on each link type.",
             "allOf": [
               {
                 "$ref": "#/components/schemas/SellerFeesOrNull"
               }
             ]
+          },
+          "competitiveFeesByLinkType": {
+            "description": "The fees POST /seller/medias/{id}/apply-competitive-fees would set, per link type: one entry per link type it lowers, in the order dofollow, nofollow, citation, or null when it suggests none (exactly when `competitiveFees` is null). Per side, the highest of these is `competitiveFees`.",
+            "type": "array",
+            "items": {
+              "required": [
+                "linkType",
+                "feeWhenSellerWritesPost",
+                "feeWhenSellerDoesNotWritePost"
+              ],
+              "properties": {
+                "linkType": {
+                  "type": "string",
+                  "enum": [
+                    "dofollow",
+                    "nofollow",
+                    "citation"
+                  ]
+                },
+                "feeWhenSellerWritesPost": {
+                  "description": "The fee the apply sets for a post you write on this link type, or null when it keeps your fee on that side.",
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/MoneyOrNull"
+                    }
+                  ]
+                },
+                "feeWhenSellerDoesNotWritePost": {
+                  "description": "The fee the apply sets for a post the buyer or Growwer writes on this link type, or null when it keeps your fee on that side.",
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/MoneyOrNull"
+                    }
+                  ]
+                }
+              },
+              "type": "object"
+            },
+            "nullable": true
           },
           "createdAt": {
             "type": "string",
@@ -9132,7 +9184,7 @@
             ],
             "properties": {
               "expectedPrice": {
-                "description": "The `price` POST /orders/estimate answered. Only EUR is accepted.",
+                "description": "The `price` POST /orders/estimate answered. Only EUR is accepted. In cents, as the estimate answered it: 1800 is 18.00 EUR.",
                 "allOf": [
                   {
                     "$ref": "#/components/schemas/Money"
@@ -10048,7 +10100,7 @@
         }
       },
       "CatalogueForbidden": {
-        "description": "The catalogue is open to accounts with recent completed orders, as buyer or as seller, and to other accounts within a daily trial quota; this account has no such order and the trial quota is off (code `catalogue_requires_recent_order`). GET /me reports `catalogue.eligible` and `catalogue.dailyCap`.",
+        "description": "The catalogue is open to accounts with recent orders delivered and approved on Growwer, as buyer or as seller, and to other accounts within a daily trial quota; this account has too few such orders and the trial quota is off (code `catalogue_requires_recent_order`). The message names the threshold, which `details.minOrders` (how many orders) and `details.windowDays` (within how many days) repeat; an order counts only once it is delivered and approved. GET /me reports `catalogue.eligible` and `catalogue.dailyCap`.",
         "content": {
           "application/json": {
             "schema": {
@@ -10058,7 +10110,7 @@
         }
       },
       "TooManyRequests": {
-        "description": "Over the rate limit (code `rate_limit_exceeded`), or too many failed authentications (code `too_many_failed_authentications`): with this key from this address, or from this address with any key; a valid key is never refused for it. On the catalogue operations, also when the response would take the account beyond the units of the catalogue it may spend per UTC day (code `catalogue_daily_cap_reached`): each new media costs one unit and a response that holds no new media, an empty one or a count included, costs one unless the same request was answered today while the media lists, topics and language of its project stayed as they were, which is free; `details.remaining` says how many units still fit today, `details.limit` is the daily cap that applies and `details.tier` is `full`, or `trial` for an account without a recent completed order, whose quota rises to the full cap after one; `Retry-After` is the time to the next UTC midnight, and a request already answered today stays readable. On the managed service requests, also when you sent as many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`): `Retry-After` is the time to the next UTC midnight. On POST /seller/medias, also when you sent as many medias that are already registered as you may per UTC day (code `media_duplicate_limit_reached`): `Retry-After` is the time to the next UTC midnight, and medias not registered yet are still accepted. On POST /webhooks/{id}/test and POST /webhooks/{id}/deliveries/{deliveryId}/redeliver, also when the subscription took 10 test events and redeliveries in the last hour (code `webhook_send_limit_reached`): `details.limit` is that limit and `Retry-After` the time until the next one fits.",
+        "description": "Over the rate limit (code `rate_limit_exceeded`), or too many failed authentications (code `too_many_failed_authentications`): with this key from this address, or from this address with any key; a valid key is never refused for it. On the catalogue operations, also when the response would take the account beyond the units of the catalogue it may spend per UTC day (code `catalogue_daily_cap_reached`): each new media costs one unit and a response that holds no new media, an empty one or a count included, costs one unless the same request was answered today while the media lists, topics and language of its project stayed as they were, which is free; `details.remaining` says how many units still fit today, `details.limit` is the daily cap that applies and `details.tier` is `full`, or `trial` for an account without enough recent orders delivered and approved, whose quota rises to the full cap once it has them: a trial refusal's message names that threshold, which `details.minOrders` (how many orders) and `details.windowDays` (within how many days) repeat, and an order lifts the quota only once it is delivered and approved, so one placed today usually does not lift today's quota; `Retry-After` is the time to the next UTC midnight, and a request already answered today stays readable. On the managed service requests, also when you sent as many requests of that kind as you may per UTC day (code `managed_service_request_limit_reached`): `Retry-After` is the time to the next UTC midnight. On POST /seller/medias, also when you sent as many medias that are already registered as you may per UTC day (code `media_duplicate_limit_reached`): `Retry-After` is the time to the next UTC midnight, and medias not registered yet are still accepted. On POST /webhooks/{id}/test and POST /webhooks/{id}/deliveries/{deliveryId}/redeliver, also when the subscription took 10 test events and redeliveries in the last hour (code `webhook_send_limit_reached`): `details.limit` is that limit and `Retry-After` the time until the next one fits.",
         "headers": {
           "Retry-After": {
             "$ref": "#/components/headers/RetryAfter"

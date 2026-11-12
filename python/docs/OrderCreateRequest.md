@@ -13,7 +13,7 @@ Name | Type | Description | Notes
 **scheduled_publication_date** | **date** | The day to publish on, at least a few days ahead as the web requires. | [optional] 
 **draft_reviewable** | **bool** | Whether you review the draft before it is published. Defaults to false. | [optional] 
 **proposed_draft_file_id** | **UUID** | A file uploaded with POST /files to propose your own draft. The estimate checks it without using it up. | [optional] 
-**expected_price** | [**Money**](Money.md) | The &#x60;price&#x60; POST /orders/estimate answered. Only EUR is accepted. | 
+**expected_price** | [**Money**](Money.md) | The &#x60;price&#x60; POST /orders/estimate answered. Only EUR is accepted. In cents, as the estimate answered it: 1800 is 18.00 EUR. | 
 
 ## Example
 

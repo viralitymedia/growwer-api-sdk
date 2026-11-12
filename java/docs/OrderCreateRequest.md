@@ -15,7 +15,7 @@ An order to place, with the price you expect to pay.
 |**scheduledPublicationDate** | **LocalDate** | The day to publish on, at least a few days ahead as the web requires. |  [optional] |
 |**draftReviewable** | **Boolean** | Whether you review the draft before it is published. Defaults to false. |  [optional] |
 |**proposedDraftFileId** | **UUID** | A file uploaded with POST /files to propose your own draft. The estimate checks it without using it up. |  [optional] |
-|**expectedPrice** | [**Money**](Money.md) | The &#x60;price&#x60; POST /orders/estimate answered. Only EUR is accepted. |  |
+|**expectedPrice** | [**Money**](Money.md) | The &#x60;price&#x60; POST /orders/estimate answered. Only EUR is accepted. In cents, as the estimate answered it: 1800 is 18.00 EUR. |  |
 
 
 

@@ -22,14 +22,15 @@ Name | Type | Description | Notes
 **FlashOffer** | [**NullableSellerMediaFlashOffer**](SellerMediaFlashOffer.md) |  | 
 **PostOffer** | [**SellerMediaPostOffer**](SellerMediaPostOffer.md) |  | 
 **LinkAdditionOffer** | [**NullableSellerMediaLinkAdditionOffer**](SellerMediaLinkAdditionOffer.md) |  | 
-**CompetitiveFees** | [**NullableSellerFeesOrNull**](SellerFeesOrNull.md) | The post fees Growwer suggests to sell more, as the seller media page does, or null when it suggests none. A side Growwer finds no competitive fee for is null: unlike the page, it never shows the fixed fee the page falls back to. POST /seller/medias/{id}/apply-competitive-fees sets them. | 
+**CompetitiveFees** | [**NullableSellerFeesOrNull**](SellerFeesOrNull.md) | The post fees Growwer suggests to sell more, as the seller media pages do, or null when it suggests none: for each side, the highest fee POST /seller/medias/{id}/apply-competitive-fees would set on that side, else null. The apply lowers, per link type, a fee above the highest whole-euro fee that lists the media at least 1 EUR below its cheapest price on the marketplaces Growwer compares with to that fee, and lowers by 1 EUR one fee of a link type that then still does not list the media at least 1 EUR below that price. It never raises a fee. Where it lowers several link types, this is the highest per side across them, so a link type&#39;s own new fee can be lower: &#x60;competitiveFeesByLinkType&#x60; gives the fees the apply sets on each link type. | 
+**CompetitiveFeesByLinkType** | [**[]SellerMediaCompetitiveFeesByLinkTypeInner**](SellerMediaCompetitiveFeesByLinkTypeInner.md) | The fees POST /seller/medias/{id}/apply-competitive-fees would set, per link type: one entry per link type it lowers, in the order dofollow, nofollow, citation, or null when it suggests none (exactly when &#x60;competitiveFees&#x60; is null). Per side, the highest of these is &#x60;competitiveFees&#x60;. | 
 **CreatedAt** | **time.Time** |  | 
 
 ## Methods
 
 ### NewSellerMedia
 
-`func NewSellerMedia(id string, domain string, url string, typology string, state string, deactivationStrikes int32, country NullableString, language string, topics []int32, bannedTopics []int32, providerComments NullableString, publicationRate NullableInt32, averageDaysToPublication NullableInt32, numPublishedOrders int32, onHoliday bool, flashOffer NullableSellerMediaFlashOffer, postOffer SellerMediaPostOffer, linkAdditionOffer NullableSellerMediaLinkAdditionOffer, competitiveFees NullableSellerFeesOrNull, createdAt time.Time, ) *SellerMedia`
+`func NewSellerMedia(id string, domain string, url string, typology string, state string, deactivationStrikes int32, country NullableString, language string, topics []int32, bannedTopics []int32, providerComments NullableString, publicationRate NullableInt32, averageDaysToPublication NullableInt32, numPublishedOrders int32, onHoliday bool, flashOffer NullableSellerMediaFlashOffer, postOffer SellerMediaPostOffer, linkAdditionOffer NullableSellerMediaLinkAdditionOffer, competitiveFees NullableSellerFeesOrNull, competitiveFeesByLinkType []SellerMediaCompetitiveFeesByLinkTypeInner, createdAt time.Time, ) *SellerMedia`
 
 NewSellerMedia instantiates a new SellerMedia object
 This constructor will assign default values to properties that have it defined,
@@ -494,6 +495,36 @@ SetCompetitiveFees sets CompetitiveFees field to given value.
 `func (o *SellerMedia) UnsetCompetitiveFees()`
 
 UnsetCompetitiveFees ensures that no value is present for CompetitiveFees, not even an explicit nil
+### GetCompetitiveFeesByLinkType
+
+`func (o *SellerMedia) GetCompetitiveFeesByLinkType() []SellerMediaCompetitiveFeesByLinkTypeInner`
+
+GetCompetitiveFeesByLinkType returns the CompetitiveFeesByLinkType field if non-nil, zero value otherwise.
+
+### GetCompetitiveFeesByLinkTypeOk
+
+`func (o *SellerMedia) GetCompetitiveFeesByLinkTypeOk() (*[]SellerMediaCompetitiveFeesByLinkTypeInner, bool)`
+
+GetCompetitiveFeesByLinkTypeOk returns a tuple with the CompetitiveFeesByLinkType field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetCompetitiveFeesByLinkType
+
+`func (o *SellerMedia) SetCompetitiveFeesByLinkType(v []SellerMediaCompetitiveFeesByLinkTypeInner)`
+
+SetCompetitiveFeesByLinkType sets CompetitiveFeesByLinkType field to given value.
+
+
+### SetCompetitiveFeesByLinkTypeNil
+
+`func (o *SellerMedia) SetCompetitiveFeesByLinkTypeNil(b bool)`
+
+ SetCompetitiveFeesByLinkTypeNil sets the value for CompetitiveFeesByLinkType to be an explicit nil
+
+### UnsetCompetitiveFeesByLinkType
+`func (o *SellerMedia) UnsetCompetitiveFeesByLinkType()`
+
+UnsetCompetitiveFeesByLinkType ensures that no value is present for CompetitiveFeesByLinkType, not even an explicit nil
 ### GetCreatedAt
 
 `func (o *SellerMedia) GetCreatedAt() time.Time`

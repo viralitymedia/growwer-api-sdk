@@ -11,6 +11,6 @@ Name | Type | Description | Notes
 **scheduled_publication_date** | **\DateTime** | The day to publish on, at least a few days ahead as the web requires. | [optional]
 **draft_reviewable** | **bool** | Whether you review the draft before it is published. Defaults to false. | [optional]
 **proposed_draft_file_id** | **string** | A file uploaded with POST /files to propose your own draft. The estimate checks it without using it up. | [optional]
-**expected_price** | [**\Growwer\Api\Model\Money**](Money.md) | The &#x60;price&#x60; POST /orders/estimate answered. Only EUR is accepted. |
+**expected_price** | [**\Growwer\Api\Model\Money**](Money.md) | The &#x60;price&#x60; POST /orders/estimate answered. Only EUR is accepted. In cents, as the estimate answered it: 1800 is 18.00 EUR. |
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)

@@ -106,6 +106,7 @@ docs/SellerAccountApi.md
 docs/SellerFees.md
 docs/SellerFeesOrNull.md
 docs/SellerMedia.md
+docs/SellerMediaCompetitiveFeesByLinkTypeInner.md
 docs/SellerMediaFlashOffer.md
 docs/SellerMediaLinkAdditionOffer.md
 docs/SellerMediaLinkAdditionOfferPricingOptionsInner.md
@@ -279,6 +280,7 @@ src/Growwer.Api/Model/SavedFilterNotifications.cs
 src/Growwer.Api/Model/SellerFees.cs
 src/Growwer.Api/Model/SellerFeesOrNull.cs
 src/Growwer.Api/Model/SellerMedia.cs
+src/Growwer.Api/Model/SellerMediaCompetitiveFeesByLinkTypeInner.cs
 src/Growwer.Api/Model/SellerMediaFlashOffer.cs
 src/Growwer.Api/Model/SellerMediaLinkAdditionOffer.cs
 src/Growwer.Api/Model/SellerMediaLinkAdditionOfferPricingOptionsInner.cs

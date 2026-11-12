@@ -4,7 +4,7 @@ All URIs are relative to *https://tool.growwer.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**ApplySellerMediaCompetitiveFees**](SellerMediasAPI.md#ApplySellerMediaCompetitiveFees) | **Post** /api/v1/seller/medias/{id}/apply-competitive-fees | Set the competitive fees Growwer suggests
+[**ApplySellerMediaCompetitiveFees**](SellerMediasAPI.md#ApplySellerMediaCompetitiveFees) | **Post** /api/v1/seller/medias/{id}/apply-competitive-fees | Lower your fees to the competitive fees Growwer suggests
 [**CreateSellerMedia**](SellerMediasAPI.md#CreateSellerMedia) | **Post** /api/v1/seller/medias | Register a media you sell on
 [**DeleteSellerMedia**](SellerMediasAPI.md#DeleteSellerMedia) | **Delete** /api/v1/seller/medias/{id} | Delete a media you sell on
 [**GetSellerMedia**](SellerMediasAPI.md#GetSellerMedia) | **Get** /api/v1/seller/medias/{id} | Get a media you sell on
@@ -17,7 +17,7 @@ Method | HTTP request | Description
 
 > SellerMedia ApplySellerMediaCompetitiveFees(ctx, id).IdempotencyKey(idempotencyKey).Execute()
 
-Set the competitive fees Growwer suggests
+Lower your fees to the competitive fees Growwer suggests
 
 
 

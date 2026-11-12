@@ -105,6 +105,7 @@ docs/SellerAccountApi.md
 docs/SellerFees.md
 docs/SellerFeesOrNull.md
 docs/SellerMedia.md
+docs/SellerMediaCompetitiveFeesByLinkTypeInner.md
 docs/SellerMediaFlashOffer.md
 docs/SellerMediaLinkAdditionOffer.md
 docs/SellerMediaLinkAdditionOfferPricingOptionsInner.md
@@ -260,6 +261,7 @@ src/models/SavedFilterNotifications.ts
 src/models/SellerFees.ts
 src/models/SellerFeesOrNull.ts
 src/models/SellerMedia.ts
+src/models/SellerMediaCompetitiveFeesByLinkTypeInner.ts
 src/models/SellerMediaFlashOffer.ts
 src/models/SellerMediaLinkAdditionOffer.ts
 src/models/SellerMediaLinkAdditionOfferPricingOptionsInner.ts

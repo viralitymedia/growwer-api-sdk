@@ -112,6 +112,7 @@ docs/Model/SavedFilterNotifications.md
 docs/Model/SellerFees.md
 docs/Model/SellerFeesOrNull.md
 docs/Model/SellerMedia.md
+docs/Model/SellerMediaCompetitiveFeesByLinkTypeInner.md
 docs/Model/SellerMediaFlashOffer.md
 docs/Model/SellerMediaLinkAdditionOffer.md
 docs/Model/SellerMediaLinkAdditionOfferPricingOptionsInner.md
@@ -265,6 +266,7 @@ lib/Model/SavedFilterNotifications.php
 lib/Model/SellerFees.php
 lib/Model/SellerFeesOrNull.php
 lib/Model/SellerMedia.php
+lib/Model/SellerMediaCompetitiveFeesByLinkTypeInner.php
 lib/Model/SellerMediaFlashOffer.php
 lib/Model/SellerMediaLinkAdditionOffer.php
 lib/Model/SellerMediaLinkAdditionOfferPricingOptionsInner.php

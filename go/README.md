@@ -48,7 +48,8 @@ WebhookEvent schema describes the headers, the signature and the retries.
 
 Every response carries `X-Request-Id`. Errors share one shape,
 `{code, message, requestId, details?}`. Money is integer cents plus a
-currency code and dates are ISO-8601.
+currency code (12500 is 125.00 EUR), answered with `amountDecimal`, the same
+amount as an exact decimal string (\"125.00\"); dates are ISO-8601.
 
 
 ## Overview
@@ -166,7 +167,7 @@ Class | Method | HTTP request | Description
 *SavedFiltersAPI* | [**DeleteSavedFilter**](docs/SavedFiltersAPI.md#deletesavedfilter) | **Delete** /api/v1/projects/{id}/saved-filters/{filterId} | Delete a saved filter
 *SavedFiltersAPI* | [**ListSavedFilters**](docs/SavedFiltersAPI.md#listsavedfilters) | **Get** /api/v1/projects/{id}/saved-filters | List the saved filters of a project
 *SellerAccountAPI* | [**PutSellerHoliday**](docs/SellerAccountAPI.md#putsellerholiday) | **Put** /api/v1/seller/holiday | Set your holiday
-*SellerMediasAPI* | [**ApplySellerMediaCompetitiveFees**](docs/SellerMediasAPI.md#applysellermediacompetitivefees) | **Post** /api/v1/seller/medias/{id}/apply-competitive-fees | Set the competitive fees Growwer suggests
+*SellerMediasAPI* | [**ApplySellerMediaCompetitiveFees**](docs/SellerMediasAPI.md#applysellermediacompetitivefees) | **Post** /api/v1/seller/medias/{id}/apply-competitive-fees | Lower your fees to the competitive fees Growwer suggests
 *SellerMediasAPI* | [**CreateSellerMedia**](docs/SellerMediasAPI.md#createsellermedia) | **Post** /api/v1/seller/medias | Register a media you sell on
 *SellerMediasAPI* | [**DeleteSellerMedia**](docs/SellerMediasAPI.md#deletesellermedia) | **Delete** /api/v1/seller/medias/{id} | Delete a media you sell on
 *SellerMediasAPI* | [**GetSellerMedia**](docs/SellerMediasAPI.md#getsellermedia) | **Get** /api/v1/seller/medias/{id} | Get a media you sell on
@@ -300,6 +301,7 @@ Class | Method | HTTP request | Description
  - [SellerFees](docs/SellerFees.md)
  - [SellerFeesOrNull](docs/SellerFeesOrNull.md)
  - [SellerMedia](docs/SellerMedia.md)
+ - [SellerMediaCompetitiveFeesByLinkTypeInner](docs/SellerMediaCompetitiveFeesByLinkTypeInner.md)
  - [SellerMediaFlashOffer](docs/SellerMediaFlashOffer.md)
  - [SellerMediaLinkAdditionOffer](docs/SellerMediaLinkAdditionOffer.md)
  - [SellerMediaLinkAdditionOfferPricingOptionsInner](docs/SellerMediaLinkAdditionOfferPricingOptionsInner.md)

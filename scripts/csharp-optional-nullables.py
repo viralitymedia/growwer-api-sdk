@@ -163,7 +163,7 @@ for name, prop, contract_kind in sorted(set(request_optional_nullables())):
             "pin the class the generator chose with inlineSchemaNameMappings in sdks.json"
         )
     text = texts[model] if model in texts else model.read_text(encoding="utf-8")
-    member =r"[ \t]*\[DataMember\(Name = \"" + re.escape(prop) + r"\", EmitDefaultValue = true\)\]\n(?:[ \t]*\[[^\n]*\]\n)*"
+    member = r"[ \t]*\[DataMember\(Name = \"" + re.escape(prop) + r"\", EmitDefaultValue = true\)\]\n(?:[ \t]*\[[^\n]*\]\n)*"
     declaration = re.compile(
         r"(?P<attributes>" + member + r")(?P<indent>[ \t]*)public (?P<type>[^\n]+?) (?P<property>\w+) \{ get; set; \}\n"
     )

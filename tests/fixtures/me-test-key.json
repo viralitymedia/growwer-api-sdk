@@ -6,8 +6,8 @@
   "createdAt": "2025-03-14T08:15:00+00:00",
   "buyer": {
     "balance": {
-      "available": {"amount": 100000, "currency": "EUR"},
-      "pending": {"amount": 0, "currency": "EUR"}
+      "available": {"amount": 100000, "currency": "EUR", "amountDecimal": "1000.00"},
+      "pending": {"amount": 0, "currency": "EUR", "amountDecimal": "0.00"}
     }
   },
   "seller": null,

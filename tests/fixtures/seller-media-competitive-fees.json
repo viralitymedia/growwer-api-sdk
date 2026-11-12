@@ -21,9 +21,15 @@
     "promotedSocialNetworks": ["twitter"],
     "pricingOptions": [
       {
-        "feeWhenSellerWritesPost": {"amount": 6000, "currency": "EUR"},
+        "feeWhenSellerWritesPost": {"amount": 6000, "currency": "EUR", "amountDecimal": "60.00"},
         "feeWhenSellerDoesNotWritePost": null,
         "linkType": "dofollow",
+        "currentCost": null
+      },
+      {
+        "feeWhenSellerWritesPost": {"amount": 4500, "currency": "EUR", "amountDecimal": "45.00"},
+        "feeWhenSellerDoesNotWritePost": null,
+        "linkType": "nofollow",
         "currentCost": null
       }
     ],
@@ -31,8 +37,20 @@
   },
   "linkAdditionOffer": null,
   "competitiveFees": {
-    "feeWhenSellerWritesPost": {"amount": 5400, "currency": "EUR"},
+    "feeWhenSellerWritesPost": {"amount": 5400, "currency": "EUR", "amountDecimal": "54.00"},
     "feeWhenSellerDoesNotWritePost": null
   },
+  "competitiveFeesByLinkType": [
+    {
+      "linkType": "dofollow",
+      "feeWhenSellerWritesPost": {"amount": 5400, "currency": "EUR", "amountDecimal": "54.00"},
+      "feeWhenSellerDoesNotWritePost": null
+    },
+    {
+      "linkType": "nofollow",
+      "feeWhenSellerWritesPost": {"amount": 4200, "currency": "EUR", "amountDecimal": "42.00"},
+      "feeWhenSellerDoesNotWritePost": null
+    }
+  ],
   "createdAt": "2025-01-10T12:00:00+00:00"
 }

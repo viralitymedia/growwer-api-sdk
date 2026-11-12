@@ -19,19 +19,19 @@
   "onHoliday": false,
   "flashOffer": null,
   "postOffer": {
-    "price": {"amount": 18000, "currency": "EUR"},
+    "price": {"amount": 18000, "currency": "EUR", "amountDecimal": "180.00"},
     "linkType": null,
     "prices": {},
-    "previousPrice": {"amount": 20000, "currency": "EUR"},
+    "previousPrice": {"amount": 20000, "currency": "EUR", "amountDecimal": "200.00"},
     "advertisingLabel": true,
     "promotedSocialNetworks": [],
     "extras": {
-      "homepageListing": {"amount": 2500, "currency": "EUR"},
-      "sensitiveTopic": {"allowed": true, "extraPrice": {"amount": 3000, "currency": "EUR"}}
+      "homepageListing": {"amount": 2500, "currency": "EUR", "amountDecimal": "25.00"},
+      "sensitiveTopic": {"allowed": true, "extraPrice": {"amount": 3000, "currency": "EUR", "amountDecimal": "30.00"}}
     }
   },
   "linkAdditionOffer": {
-    "price": {"amount": 6000, "currency": "EUR"},
+    "price": {"amount": 6000, "currency": "EUR", "amountDecimal": "60.00"},
     "linkType": null,
     "prices": {},
     "previousPrice": null

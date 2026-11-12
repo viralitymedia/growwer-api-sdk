@@ -187,12 +187,14 @@ RSpec.describe 'Growwer fixtures' do
 
     expect(media).to be_a(Growwer::SellerMedia)
     expect(media.competitive_fees).to be_nil
+    expect(media.competitive_fees_by_link_type).to be_nil
     expect(media.link_addition_offer).to be_nil
     option = media.post_offer.pricing_options[0]
     expect(option.fee_when_seller_writes_post.amount).to eq(6000)
     expect(option.fee_when_seller_does_not_write_post).to be_nil
     expect(option.current_cost).to be_nil
     expect(media.post_offer.extra_services[0].cost.amount).to eq(1500)
+    expect(media.post_offer.extra_services[0].cost.amount_decimal).to eq('15.00')
   end
 
   it 'reads a seller media with competitiveFees that have one side null' do
@@ -202,6 +204,22 @@ RSpec.describe 'Growwer fixtures' do
     expect(media.competitive_fees).to be_a(Growwer::SellerFeesOrNull)
     expect(media.competitive_fees.fee_when_seller_writes_post.amount).to eq(5400)
     expect(media.competitive_fees.fee_when_seller_does_not_write_post).to be_nil
+  end
+
+  it 'reads a seller media with competitiveFeesByLinkType per link type' do
+    media = Growwer::SellerMediasApi.new(answer(200, fixture('seller-media-competitive-fees.json')))
+                                    .get_seller_media(MEDIA_ID)
+
+    fees = media.competitive_fees_by_link_type
+    expect(fees.map(&:link_type)).to eq(%w[dofollow nofollow])
+    expect(fees).to all(be_a(Growwer::SellerMediaCompetitiveFeesByLinkTypeInner))
+    expect(fees[0].fee_when_seller_writes_post).to be_a(Growwer::MoneyOrNull)
+    expect(fees[0].fee_when_seller_writes_post.amount).to eq(5400)
+    expect(fees[0].fee_when_seller_writes_post.amount_decimal).to eq('54.00')
+    expect(fees[0].fee_when_seller_does_not_write_post).to be_nil
+    expect(fees[1].fee_when_seller_writes_post.amount).to eq(4200)
+    expect(fees[1].fee_when_seller_writes_post.amount_decimal).to eq('42.00')
+    expect(fees[1].fee_when_seller_does_not_write_post).to be_nil
   end
 
   it 'makes the error envelope readable from the ApiError' do

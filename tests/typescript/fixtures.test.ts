@@ -20,6 +20,7 @@ import type {
   LinkAdditionOrderBriefing,
   OrderEventData,
   PostOrderBriefing,
+  SellerMediaCompetitiveFeesByLinkTypeInner,
   WebhookTestEventData,
 } from '../../typescript/dist';
 
@@ -221,12 +222,14 @@ const tests: Array<[string, () => Promise<void>]> = [
       .getSellerMedia({ id: MEDIA_ID });
 
     assert.equal(media.competitiveFees, null);
+    assert.equal(media.competitiveFeesByLinkType, null);
     assert.equal(media.linkAdditionOffer, null);
     const option = media.postOffer.pricingOptions[0];
     assert.equal(option.feeWhenSellerWritesPost?.amount, 6000);
     assert.equal(option.feeWhenSellerDoesNotWritePost, null);
     assert.equal(option.currentCost, null);
     assert.equal(media.postOffer.extraServices[0].cost.amount, 1500);
+    assert.equal(media.postOffer.extraServices[0].cost.amountDecimal, '15.00');
   }],
 
   ['a seller media reads competitiveFees with one side null', async () => {
@@ -237,6 +240,22 @@ const tests: Array<[string, () => Promise<void>]> = [
     assert.notEqual(media.competitiveFees, null);
     assert.equal(media.competitiveFees!.feeWhenSellerWritesPost?.amount, 5400);
     assert.equal(media.competitiveFees!.feeWhenSellerDoesNotWritePost, null);
+  }],
+
+  ['a seller media reads competitiveFeesByLinkType per link type', async () => {
+    const sent: Sent[] = [];
+    const media = await new SellerMediasApi(answer(sent, 200, fixture('seller-media-competitive-fees.json')))
+      .getSellerMedia({ id: MEDIA_ID });
+
+    const fees: SellerMediaCompetitiveFeesByLinkTypeInner[] | null = media.competitiveFeesByLinkType;
+    assert.notEqual(fees, null);
+    assert.deepEqual(fees!.map((entry) => entry.linkType), ['dofollow', 'nofollow']);
+    assert.equal(fees![0].feeWhenSellerWritesPost?.amount, 5400);
+    assert.equal(fees![0].feeWhenSellerWritesPost?.amountDecimal, '54.00');
+    assert.equal(fees![0].feeWhenSellerDoesNotWritePost, null);
+    assert.equal(fees![1].feeWhenSellerWritesPost?.amount, 4200);
+    assert.equal(fees![1].feeWhenSellerWritesPost?.amountDecimal, '42.00');
+    assert.equal(fees![1].feeWhenSellerDoesNotWritePost, null);
   }],
 
   ['an order event parses with fields this client does not know', async () => {

@@ -31,6 +31,7 @@ from growwer.models import (
     MoneyOrNull,
     SellerFeesOrNull,
     SellerMedia,
+    SellerMediaCompetitiveFeesByLinkTypeInner,
     WebhookEvent,
     WebhookTestEventData,
     WebhookWithSecret,
@@ -200,12 +201,14 @@ class FixtureTest(unittest.TestCase):
 
         self.assertIsInstance(media, SellerMedia)
         self.assertIsNone(media.competitive_fees)
+        self.assertIsNone(media.competitive_fees_by_link_type)
         self.assertIsNone(media.link_addition_offer)
         option = media.post_offer.pricing_options[0]
         self.assertEqual(option.fee_when_seller_writes_post.amount, 6000)
         self.assertIsNone(option.fee_when_seller_does_not_write_post)
         self.assertIsNone(option.current_cost)
         self.assertEqual(media.post_offer.extra_services[0].cost.amount, 1500)
+        self.assertEqual(media.post_offer.extra_services[0].cost.amount_decimal, "15.00")
 
     def test_seller_media_reads_competitive_fees_with_one_side_null(self):
         media = SellerMediasApi(
@@ -215,6 +218,22 @@ class FixtureTest(unittest.TestCase):
         self.assertIsInstance(media.competitive_fees, SellerFeesOrNull)
         self.assertEqual(media.competitive_fees.fee_when_seller_writes_post.amount, 5400)
         self.assertIsNone(media.competitive_fees.fee_when_seller_does_not_write_post)
+
+    def test_seller_media_reads_competitive_fees_per_link_type(self):
+        media = SellerMediasApi(
+            self.client(200, fixture("seller-media-competitive-fees.json"))
+        ).get_seller_media(MEDIA_ID)
+
+        fees = media.competitive_fees_by_link_type
+        self.assertEqual([entry.link_type for entry in fees], ["dofollow", "nofollow"])
+        self.assertIsInstance(fees[0], SellerMediaCompetitiveFeesByLinkTypeInner)
+        self.assertIsInstance(fees[0].fee_when_seller_writes_post, MoneyOrNull)
+        self.assertEqual(fees[0].fee_when_seller_writes_post.amount, 5400)
+        self.assertEqual(fees[0].fee_when_seller_writes_post.amount_decimal, "54.00")
+        self.assertIsNone(fees[0].fee_when_seller_does_not_write_post)
+        self.assertEqual(fees[1].fee_when_seller_writes_post.amount, 4200)
+        self.assertEqual(fees[1].fee_when_seller_writes_post.amount_decimal, "42.00")
+        self.assertIsNone(fees[1].fee_when_seller_does_not_write_post)
 
     def test_order_event_parses_with_fields_this_client_does_not_know(self):
         event = WebhookEvent.from_json(fixture("webhook-order-created.json"))

@@ -259,12 +259,14 @@ func TestASellerMediaReadsNullCompetitiveFees(t *testing.T) {
 	check(t, err)
 
 	equal(t, "competitiveFees", media.CompetitiveFees.Get() == nil, true)
+	equal(t, "competitiveFeesByLinkType", media.CompetitiveFeesByLinkType == nil, true)
 	equal(t, "linkAdditionOffer", media.LinkAdditionOffer.Get() == nil, true)
 	option := media.PostOffer.PricingOptions[0]
 	equal(t, "feeWhenSellerWritesPost", option.FeeWhenSellerWritesPost.Get().Amount, int32(6000))
 	equal(t, "feeWhenSellerDoesNotWritePost", option.FeeWhenSellerDoesNotWritePost.Get() == nil, true)
 	equal(t, "currentCost", option.CurrentCost.Get() == nil, true)
 	equal(t, "extra cost", media.PostOffer.ExtraServices[0].Cost.Amount, int32(1500))
+	equal(t, "extra cost amountDecimal", media.PostOffer.ExtraServices[0].Cost.GetAmountDecimal(), "15.00")
 }
 
 func TestASellerMediaReadsCompetitiveFeesWithOneSideNull(t *testing.T) {
@@ -279,6 +281,26 @@ func TestASellerMediaReadsCompetitiveFeesWithOneSideNull(t *testing.T) {
 	}
 	equal(t, "feeWhenSellerWritesPost", fees.FeeWhenSellerWritesPost.Get().Amount, int32(5400))
 	equal(t, "feeWhenSellerDoesNotWritePost", fees.FeeWhenSellerDoesNotWritePost.Get() == nil, true)
+}
+
+func TestASellerMediaReadsCompetitiveFeesByLinkTypePerLinkType(t *testing.T) {
+	client, _ := answer(200, fixture(t, "seller-media-competitive-fees.json"), nil)
+
+	media, _, err := client.SellerMediasAPI.GetSellerMedia(authorised(), mediaID).Execute()
+	check(t, err)
+
+	var fees []growwer.SellerMediaCompetitiveFeesByLinkTypeInner = media.CompetitiveFeesByLinkType
+	if len(fees) != 2 {
+		t.Fatalf("competitiveFeesByLinkType: got %d entries, want 2", len(fees))
+	}
+	equal(t, "first linkType", fees[0].LinkType, "dofollow")
+	equal(t, "first feeWhenSellerWritesPost", fees[0].FeeWhenSellerWritesPost.Get().Amount, int32(5400))
+	equal(t, "first feeWhenSellerWritesPost amountDecimal", fees[0].FeeWhenSellerWritesPost.Get().GetAmountDecimal(), "54.00")
+	equal(t, "first feeWhenSellerDoesNotWritePost", fees[0].FeeWhenSellerDoesNotWritePost.Get() == nil, true)
+	equal(t, "second linkType", fees[1].LinkType, "nofollow")
+	equal(t, "second feeWhenSellerWritesPost", fees[1].FeeWhenSellerWritesPost.Get().Amount, int32(4200))
+	equal(t, "second feeWhenSellerWritesPost amountDecimal", fees[1].FeeWhenSellerWritesPost.Get().GetAmountDecimal(), "42.00")
+	equal(t, "second feeWhenSellerDoesNotWritePost", fees[1].FeeWhenSellerDoesNotWritePost.Get() == nil, true)
 }
 
 func TestAnOrderEventParsesWithFieldsThisClientDoesNotKnow(t *testing.T) {

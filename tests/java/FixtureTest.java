@@ -20,6 +20,7 @@ import com.growwer.api.model.OrderEventData;
 import com.growwer.api.model.PostOrderBriefing;
 import com.growwer.api.model.SellerFeesOrNull;
 import com.growwer.api.model.SellerMedia;
+import com.growwer.api.model.SellerMediaCompetitiveFeesByLinkTypeInner;
 import com.growwer.api.model.SellerMediaPostOfferPricingOptionsInner;
 import com.growwer.api.model.UpdateSellerMediaRequest;
 import com.growwer.api.model.UpdateSellerMediaRequestPostOffer;
@@ -248,12 +249,14 @@ public class FixtureTest {
         SellerMedia media = new SellerMediasApi(answer(fixture("seller-media.json"))).getSellerMedia(MEDIA_ID);
 
         equal("competitiveFees", media.getCompetitiveFees(), null);
+        equal("competitiveFeesByLinkType", media.getCompetitiveFeesByLinkType(), null);
         equal("linkAdditionOffer", media.getLinkAdditionOffer(), null);
         SellerMediaPostOfferPricingOptionsInner option = media.getPostOffer().getPricingOptions().get(0);
         equal("feeWhenSellerWritesPost", option.getFeeWhenSellerWritesPost().getAmount(), 6000);
         equal("feeWhenSellerDoesNotWritePost", option.getFeeWhenSellerDoesNotWritePost(), null);
         equal("currentCost", option.getCurrentCost(), null);
         equal("extra cost", media.getPostOffer().getExtraServices().get(0).getCost().getAmount(), 1500);
+        equal("extra cost amountDecimal", media.getPostOffer().getExtraServices().get(0).getCost().getAmountDecimal(), "15.00");
     }
 
     void aSellerMediaReadsCompetitiveFeesWithOneSideNull() throws Exception {
@@ -266,6 +269,24 @@ public class FixtureTest {
         }
         equal("feeWhenSellerWritesPost", fees.getFeeWhenSellerWritesPost().getAmount(), 5400);
         equal("feeWhenSellerDoesNotWritePost", fees.getFeeWhenSellerDoesNotWritePost(), null);
+    }
+
+    void aSellerMediaReadsCompetitiveFeesByLinkTypePerLinkType() throws Exception {
+        SellerMedia media = new SellerMediasApi(answer(fixture("seller-media-competitive-fees.json")))
+            .getSellerMedia(MEDIA_ID);
+
+        List<SellerMediaCompetitiveFeesByLinkTypeInner> fees = media.getCompetitiveFeesByLinkType();
+        if (fees == null || fees.size() != 2) {
+            throw new AssertionError("competitiveFeesByLinkType: got " + fees + ", want 2 entries");
+        }
+        equal("first linkType", fees.get(0).getLinkType(), SellerMediaCompetitiveFeesByLinkTypeInner.LinkTypeEnum.DOFOLLOW);
+        equal("first feeWhenSellerWritesPost", fees.get(0).getFeeWhenSellerWritesPost().getAmount(), 5400);
+        equal("first feeWhenSellerWritesPost amountDecimal", fees.get(0).getFeeWhenSellerWritesPost().getAmountDecimal(), "54.00");
+        equal("first feeWhenSellerDoesNotWritePost", fees.get(0).getFeeWhenSellerDoesNotWritePost(), null);
+        equal("second linkType", fees.get(1).getLinkType(), SellerMediaCompetitiveFeesByLinkTypeInner.LinkTypeEnum.NOFOLLOW);
+        equal("second feeWhenSellerWritesPost", fees.get(1).getFeeWhenSellerWritesPost().getAmount(), 4200);
+        equal("second feeWhenSellerWritesPost amountDecimal", fees.get(1).getFeeWhenSellerWritesPost().getAmountDecimal(), "42.00");
+        equal("second feeWhenSellerDoesNotWritePost", fees.get(1).getFeeWhenSellerDoesNotWritePost(), null);
     }
 
     // A PATCH sends only what the caller set: an empty list for a property left alone would clear the
@@ -402,6 +423,7 @@ public class FixtureTest {
         cases.put("a catalogue media reads a null linkType beside present offers", test::aCatalogueMediaReadsANullLinkTypeBesidePresentOffers);
         cases.put("a seller media reads null competitiveFees", test::aSellerMediaReadsNullCompetitiveFees);
         cases.put("a seller media reads competitiveFees with one side null", test::aSellerMediaReadsCompetitiveFeesWithOneSideNull);
+        cases.put("a seller media reads competitiveFeesByLinkType per link type", test::aSellerMediaReadsCompetitiveFeesByLinkTypePerLinkType);
         cases.put("a partial seller media update sends only the properties set", test::aPartialSellerMediaUpdateSendsOnlyThePropertiesSet);
         cases.put("an order event parses with fields this client does not know", test::anOrderEventParsesWithFieldsThisClientDoesNotKnow);
         cases.put("a balance.low event parses with fields this client does not know", test::aBalanceLowEventParsesWithFieldsThisClientDoesNotKnow);

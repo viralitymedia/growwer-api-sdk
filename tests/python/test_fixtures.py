@@ -32,6 +32,7 @@ from growwer.models import (
     SellerFeesOrNull,
     SellerMedia,
     SellerMediaCompetitiveFeesByLinkTypeInner,
+    UpdateWebhookRequest,
     WebhookEvent,
     WebhookTestEventData,
     WebhookWithSecret,
@@ -221,7 +222,7 @@ class FixtureTest(unittest.TestCase):
 
     def test_seller_media_reads_competitive_fees_per_link_type(self):
         media = SellerMediasApi(
-            self.client(200, fixture("seller-media-competitive-fees.json"))
+            self.client(200, fixture("seller-media-competitive-fees-by-link-type.json"))
         ).get_seller_media(MEDIA_ID)
 
         fees = media.competitive_fees_by_link_type
@@ -231,9 +232,11 @@ class FixtureTest(unittest.TestCase):
         self.assertEqual(fees[0].fee_when_seller_writes_post.amount, 5400)
         self.assertEqual(fees[0].fee_when_seller_writes_post.amount_decimal, "54.00")
         self.assertIsNone(fees[0].fee_when_seller_does_not_write_post)
-        self.assertEqual(fees[1].fee_when_seller_writes_post.amount, 4200)
-        self.assertEqual(fees[1].fee_when_seller_writes_post.amount_decimal, "42.00")
-        self.assertIsNone(fees[1].fee_when_seller_does_not_write_post)
+        self.assertIsNone(fees[1].fee_when_seller_writes_post)
+        self.assertEqual(fees[1].fee_when_seller_does_not_write_post.amount, 3600)
+        self.assertEqual(fees[1].fee_when_seller_does_not_write_post.amount_decimal, "36.00")
+        self.assertEqual(media.competitive_fees.fee_when_seller_writes_post.amount, 5400)
+        self.assertEqual(media.competitive_fees.fee_when_seller_does_not_write_post.amount, 3600)
 
     def test_order_event_parses_with_fields_this_client_does_not_know(self):
         event = WebhookEvent.from_json(fixture("webhook-order-created.json"))
@@ -303,6 +306,25 @@ class FixtureTest(unittest.TestCase):
         self.assertTrue(webhook.enabled)
         self.assertIsNone(webhook.disabled_reason)
         self.assertIsNone(webhook.failing_since)
+
+    def test_update_webhook_leaves_out_the_amount_decimal_of_a_money_it_read(self):
+        read = WebhooksApi(self.client(200, fixture("webhook-with-secret.json"))).rotate_webhook_secret(
+            WEBHOOK_ID, "rotate-webhook-1"
+        )
+        threshold = read.low_balance_threshold
+        self.assertEqual(threshold.amount_decimal, "50.00")
+
+        WebhooksApi(self.client(200, fixture("webhook-with-secret.json"))).update_webhook(
+            WEBHOOK_ID, "update-webhook-1", UpdateWebhookRequest(low_balance_threshold=threshold)
+        )
+
+        method, url, headers = self.sent()
+        self.assertEqual(method, "PATCH")
+        self.assertEqual(url, f"https://tool.growwer.com/api/v1/webhooks/{WEBHOOK_ID}")
+        self.assertEqual(
+            json.loads(self.pool.bodies[0]),
+            {"lowBalanceThreshold": {"amount": 5000, "currency": "EUR"}},
+        )
 
     def test_error_envelope_is_readable_from_the_exception(self):
         api = CatalogueApi(

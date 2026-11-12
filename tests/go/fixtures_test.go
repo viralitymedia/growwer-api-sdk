@@ -284,7 +284,7 @@ func TestASellerMediaReadsCompetitiveFeesWithOneSideNull(t *testing.T) {
 }
 
 func TestASellerMediaReadsCompetitiveFeesByLinkTypePerLinkType(t *testing.T) {
-	client, _ := answer(200, fixture(t, "seller-media-competitive-fees.json"), nil)
+	client, _ := answer(200, fixture(t, "seller-media-competitive-fees-by-link-type.json"), nil)
 
 	media, _, err := client.SellerMediasAPI.GetSellerMedia(authorised(), mediaID).Execute()
 	check(t, err)
@@ -298,9 +298,42 @@ func TestASellerMediaReadsCompetitiveFeesByLinkTypePerLinkType(t *testing.T) {
 	equal(t, "first feeWhenSellerWritesPost amountDecimal", fees[0].FeeWhenSellerWritesPost.Get().GetAmountDecimal(), "54.00")
 	equal(t, "first feeWhenSellerDoesNotWritePost", fees[0].FeeWhenSellerDoesNotWritePost.Get() == nil, true)
 	equal(t, "second linkType", fees[1].LinkType, "nofollow")
-	equal(t, "second feeWhenSellerWritesPost", fees[1].FeeWhenSellerWritesPost.Get().Amount, int32(4200))
-	equal(t, "second feeWhenSellerWritesPost amountDecimal", fees[1].FeeWhenSellerWritesPost.Get().GetAmountDecimal(), "42.00")
-	equal(t, "second feeWhenSellerDoesNotWritePost", fees[1].FeeWhenSellerDoesNotWritePost.Get() == nil, true)
+	equal(t, "second feeWhenSellerWritesPost", fees[1].FeeWhenSellerWritesPost.Get() == nil, true)
+	if fees[1].FeeWhenSellerDoesNotWritePost.Get() == nil {
+		t.Fatal("second feeWhenSellerDoesNotWritePost: got null, want 3600")
+	}
+	equal(t, "second feeWhenSellerDoesNotWritePost", fees[1].FeeWhenSellerDoesNotWritePost.Get().Amount, int32(3600))
+	equal(t, "second feeWhenSellerDoesNotWritePost amountDecimal", fees[1].FeeWhenSellerDoesNotWritePost.Get().GetAmountDecimal(), "36.00")
+	competitive := media.CompetitiveFees.Get()
+	if competitive == nil {
+		t.Fatal("competitiveFees: got null, want fees")
+	}
+	equal(t, "competitiveFees feeWhenSellerWritesPost", competitive.FeeWhenSellerWritesPost.Get().Amount, int32(5400))
+	equal(t, "competitiveFees feeWhenSellerDoesNotWritePost", competitive.FeeWhenSellerDoesNotWritePost.Get().Amount, int32(3600))
+}
+
+// Pins the generated client's current behaviour, which the README documents: a SellerMedia read with
+// a null competitiveFeesByLinkType marshals without the key, and the same client then refuses that
+// JSON because the key is required. A failure here means the generator changed that behaviour, and
+// the README's Go note on competitiveFeesByLinkType needs revisiting.
+func TestPinnedAMarshalledSellerMediaWithANilCompetitiveFeesByLinkTypeIsRefusedWhenReadBack(t *testing.T) {
+	var media growwer.SellerMedia
+	check(t, json.Unmarshal(fixture(t, "seller-media.json"), &media))
+	equal(t, "competitiveFeesByLinkType", media.CompetitiveFeesByLinkType == nil, true)
+
+	marshalled, err := json.Marshal(media)
+	check(t, err)
+	var keys map[string]interface{}
+	check(t, json.Unmarshal(marshalled, &keys))
+	_, present := keys["competitiveFeesByLinkType"]
+	equal(t, "competitiveFeesByLinkType key present", present, false)
+
+	var readBack growwer.SellerMedia
+	err = json.Unmarshal(marshalled, &readBack)
+	if err == nil {
+		t.Fatal("unmarshalling the marshalled seller media succeeded, want the required-property error")
+	}
+	equal(t, "error", err.Error(), "no value given for required property competitiveFeesByLinkType")
 }
 
 func TestAnOrderEventParsesWithFieldsThisClientDoesNotKnow(t *testing.T) {
@@ -395,6 +428,42 @@ func TestCreateWebhookSendsTheBodyAndKeyAndReadsTheSecret(t *testing.T) {
 	equal(t, "enabled", webhook.Enabled, true)
 	equal(t, "disabledReason set", webhook.DisabledReason.Get() == nil, true)
 	equal(t, "failingSince set", webhook.FailingSince.Get() == nil, true)
+}
+
+func TestUpdateWebhookSendsTheAmountDecimalOfAMoneyItRead(t *testing.T) {
+	reader, _ := answer(200, fixture(t, "webhook-with-secret.json"), nil)
+	read, _, err := reader.WebhooksAPI.RotateWebhookSecret(authorised(), webhookID).
+		IdempotencyKey("rotate-webhook-1").
+		Execute()
+	check(t, err)
+	threshold := read.LowBalanceThreshold.Get()
+	if threshold == nil {
+		t.Fatal("lowBalanceThreshold = nil, want 5000")
+	}
+	equal(t, "read amountDecimal", threshold.GetAmountDecimal(), "50.00")
+
+	client, transport := answer(200, fixture(t, "webhook-with-secret.json"), nil)
+	body := growwer.NewUpdateWebhookRequest()
+	body.SetLowBalanceThreshold(*threshold)
+	_, _, err = client.WebhooksAPI.UpdateWebhook(authorised(), webhookID).
+		IdempotencyKey("update-webhook-1").
+		UpdateWebhookRequest(*body).
+		Execute()
+	check(t, err)
+
+	request := sent(t, transport)
+	equal(t, "method", request.Method, "PATCH")
+	equal(t, "url", request.URL.String(), "https://tool.growwer.com/api/v1/webhooks/"+webhookID)
+	if request.GetBody == nil {
+		t.Fatal("the request body cannot be read back")
+	}
+	sentReader, err := request.GetBody()
+	check(t, err)
+	var sentBody map[string]interface{}
+	check(t, json.NewDecoder(sentReader).Decode(&sentBody))
+	equal(t, "body", sentBody, map[string]interface{}{
+		"lowBalanceThreshold": map[string]interface{}{"amount": float64(5000), "currency": "EUR", "amountDecimal": "50.00"},
+	})
 }
 
 func TestTheErrorEnvelopeIsReadableFromTheError(t *testing.T) {

@@ -25,12 +25,6 @@
         "feeWhenSellerDoesNotWritePost": null,
         "linkType": "dofollow",
         "currentCost": null
-      },
-      {
-        "feeWhenSellerWritesPost": {"amount": 4500, "currency": "EUR", "amountDecimal": "45.00"},
-        "feeWhenSellerDoesNotWritePost": null,
-        "linkType": "nofollow",
-        "currentCost": null
       }
     ],
     "extraServices": []
@@ -44,11 +38,6 @@
     {
       "linkType": "dofollow",
       "feeWhenSellerWritesPost": {"amount": 5400, "currency": "EUR", "amountDecimal": "54.00"},
-      "feeWhenSellerDoesNotWritePost": null
-    },
-    {
-      "linkType": "nofollow",
-      "feeWhenSellerWritesPost": {"amount": 4200, "currency": "EUR", "amountDecimal": "42.00"},
       "feeWhenSellerDoesNotWritePost": null
     }
   ],

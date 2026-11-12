@@ -1,0 +1,56 @@
+{
+  "id": "c1d2e3f4-a5b6-4c7d-8e9f-a0b1c2d3e4f5",
+  "domain": "blog.example",
+  "url": "https://blog.example",
+  "state": "active",
+  "deactivationStrikes": 0,
+  "country": null,
+  "language": "es",
+  "typology": "blog",
+  "topics": [3, 17],
+  "bannedTopics": [],
+  "providerComments": null,
+  "publicationRate": null,
+  "averageDaysToPublication": null,
+  "numPublishedOrders": 12,
+  "onHoliday": false,
+  "flashOffer": null,
+  "postOffer": {
+    "maximumLinks": 2,
+    "advertisingLabellingPolicy": "never",
+    "promotedSocialNetworks": ["twitter"],
+    "pricingOptions": [
+      {
+        "feeWhenSellerWritesPost": {"amount": 6000, "currency": "EUR", "amountDecimal": "60.00"},
+        "feeWhenSellerDoesNotWritePost": null,
+        "linkType": "dofollow",
+        "currentCost": null
+      },
+      {
+        "feeWhenSellerWritesPost": {"amount": 4500, "currency": "EUR", "amountDecimal": "45.00"},
+        "feeWhenSellerDoesNotWritePost": {"amount": 4000, "currency": "EUR", "amountDecimal": "40.00"},
+        "linkType": "nofollow",
+        "currentCost": null
+      }
+    ],
+    "extraServices": []
+  },
+  "linkAdditionOffer": null,
+  "competitiveFees": {
+    "feeWhenSellerWritesPost": {"amount": 5400, "currency": "EUR", "amountDecimal": "54.00"},
+    "feeWhenSellerDoesNotWritePost": {"amount": 3600, "currency": "EUR", "amountDecimal": "36.00"}
+  },
+  "competitiveFeesByLinkType": [
+    {
+      "linkType": "dofollow",
+      "feeWhenSellerWritesPost": {"amount": 5400, "currency": "EUR", "amountDecimal": "54.00"},
+      "feeWhenSellerDoesNotWritePost": null
+    },
+    {
+      "linkType": "nofollow",
+      "feeWhenSellerWritesPost": null,
+      "feeWhenSellerDoesNotWritePost": {"amount": 3600, "currency": "EUR", "amountDecimal": "36.00"}
+    }
+  ],
+  "createdAt": "2025-01-10T12:00:00+00:00"
+}

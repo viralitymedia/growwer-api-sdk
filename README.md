@@ -176,6 +176,53 @@ var me = new AccountApi(config).GetMe();
 ```
 </details>
 
+## Changes in 2.2.0
+
+**Some code written for 2.1.0 breaks** even though this is a minor version: `SellerMedia` gains a
+required, nullable `competitiveFeesByLinkType`, and `applySellerMediaCompetitiveFees` no longer
+answers `409 no_competitive_fees`. No path or type moved.
+
+- **`applySellerMediaCompetitiveFees` answers 200 when there is nothing to lower.** It used to answer
+  `409 no_competitive_fees` when Growwer had no suggestion for the media; now it answers 200 with the
+  media unchanged, so code that handled that 409 never sees it, and a 200 no longer means a fee
+  changed. Read `competitiveFees` first, which is null when there is nothing to lower, or compare
+  the fees it answers with the ones you had. A 409 is now only an `Idempotency-Key` conflict. What
+  the call sets changed too: it lowers each link type's fees on its own and never raises one, so
+  after it a link type's fee can be below `competitiveFees`.
+- **Go:** `NewSellerMedia` gains `competitiveFeesByLinkType` between `competitiveFees` and
+  `createdAt`.
+- **C#:** the `SellerMedia` constructor gains `competitiveFeesByLinkType` before `createdAt`, so a
+  call that passes `createdAt` by position no longer compiles. It refuses a `null`
+  `competitiveFeesByLinkType` with an `ArgumentNullException`, though reading a response with a null
+  one works; to build one by hand, assign `CompetitiveFeesByLinkType = null` after constructing it.
+- **Mocks and recorded responses without `competitiveFeesByLinkType`:** a seller media JSON recorded
+  before 2.2.0 now fails to parse in Go, Java and C#. Python still reads one, as a null list, but
+  refuses a `SellerMedia` built by hand without it, and a TypeScript object-literal mock without it
+  no longer type-checks; TypeScript's `SellerMediaFromJSON` reads a missing one as null, and
+  `instanceOfSellerMedia` answers false for it. PHP and Ruby read and build one as before, and their
+  `valid()` (PHP), `valid?` and `list_invalid_properties` (Ruby) do not flag it, because the field
+  may be null.
+
+What changes:
+
+- **Competitive fees per link type.** `SellerMedia.competitiveFeesByLinkType` lists the fees
+  `applySellerMediaCompetitiveFees` would set, one `SellerMediaCompetitiveFeesByLinkTypeInner` per
+  link type it lowers, in the order dofollow, nofollow, citation: a `linkType`, and a
+  `feeWhenSellerWritesPost` and `feeWhenSellerDoesNotWritePost` that are null where it keeps your
+  fee. It is null exactly when `competitiveFees` is null, and `competitiveFees` is now the highest
+  of these per side.
+- **`amountDecimal` on Money.** Every Money the API answers, `Money` and `MoneyOrNull`, carries
+  `amountDecimal`, the same amount as an exact decimal string in major units: `12500` cents is
+  `"125.00"`. It is optional and read-only, so no response, mock or request built for 2.1.0 breaks.
+  A request may leave it out or send it back exactly as it was answered; any other value is refused
+  with `422 validation_failed`. Python, TypeScript and C# never send it, but Go, Java, PHP and Ruby
+  send the one a Money was read with, so do not change the `amount` of a Money read from a response
+  and send it: build a new Money from `amount` and `currency`. See [Money and dates](#money-and-dates).
+- Descriptions only: the catalogue's `403 catalogue_requires_recent_order` and the trial refusal of
+  `429 catalogue_daily_cap_reached` name their threshold in `details.minOrders` and
+  `details.windowDays`, and count an order only once it is delivered and approved (see
+  [The catalogue](#the-catalogue)); the API description documents `amountDecimal`.
+
 ## Changes in 2.1.0
 
 **Some code written for 2.0.0 breaks** even though this is a minor version: `getMe` now answers a
@@ -368,9 +415,9 @@ that id in `requestId`. Quote it when you report a problem and it identifies you
   "message": "The available balance of your wallet does not cover the price of this order. Nothing was charged. Add funds to your wallet and retry.",
   "requestId": "0b8f6c2e-4a1d-4f3b-9c7e-5d2a8e1f6b34",
   "details": {
-    "required": { "amount": 9000, "currency": "EUR" },
-    "available": { "amount": 2500, "currency": "EUR" },
-    "missing": { "amount": 6500, "currency": "EUR" }
+    "required": { "amount": 9000, "currency": "EUR", "amountDecimal": "90.00" },
+    "available": { "amount": 2500, "currency": "EUR", "amountDecimal": "25.00" },
+    "missing": { "amount": 6500, "currency": "EUR", "amountDecimal": "65.00" }
   }
 }
 ```
@@ -904,17 +951,27 @@ subscriptions get the events of its test orders and test wallet.
 ### Money and dates
 
 Money is an object of integer **cents** and a currency code — `{"amount": 9000, "currency": "EUR"}`
-is 90.00 EUR — never a float. Dates and date-times are ISO-8601. A date-time sent in a query string
-carries its offset, and its `+` must be sent as `%2B`.
+is 90.00 EUR — never a float. Every Money the API answers also carries `amountDecimal`, the same
+amount as an exact decimal string in major units: `"90.00"`.
+
+A Money you send may leave `amountDecimal` out or carry it exactly as it was answered; any other
+value is refused with `422 validation_failed`. The Python, TypeScript and C# clients never send it.
+The Go, Java, PHP and Ruby clients send the one a Money was read with, so a Money read from a
+response can be sent back as it is, but changing its `amount` and sending it is refused: build a
+new Money from `amount` and `currency` instead.
+
+Dates and date-times are ISO-8601. A date-time sent in a query string carries its offset, and its
+`+` must be sent as `%2B`.
 
 ### The catalogue
 
 The catalogue operations (searching a project's medias, flash offers, media details) show each
 account a limited number of distinct medias per UTC day; medias seen again the same day are free.
-Accounts with recent completed orders, as buyer or as seller, get the full daily cap of **5,000**.
-Other accounts get a trial quota of **100** distinct medias per UTC day instead of a refusal, and
-it rises to the full cap after a completed order. A media you have ordered is always readable with
-`GET /medias/{id}` and counts against neither.
+Accounts with enough recent orders delivered and approved, as buyer or as seller, get the full
+daily cap of **5,000**. Other accounts get a trial quota of **100** distinct medias per UTC day
+instead of a refusal, and it rises to the full cap once they have those orders. An order counts
+only once it is delivered and approved, so one placed today usually does not lift today's quota. A
+media you have ordered is always readable with `GET /medias/{id}` and counts against neither.
 
 `GET /me` reports where you stand:
 
@@ -927,9 +984,11 @@ it rises to the full cap after a completed order. A media you have ordered is al
 A response that would go beyond the cap answers `429 catalogue_daily_cap_reached`:
 `details.remaining` says how many new medias still fit today, `details.limit` is the daily cap that
 applied and `details.tier` is `full` or `trial`; `Retry-After` is the time to the next UTC midnight,
-and medias already seen today stay readable. `403 catalogue_requires_recent_order` is left only for
-when the trial quota is turned off (`catalogue.dailyCap` is 0) and the account has no recent
-completed order.
+and medias already seen today stay readable. A trial refusal's message names the threshold of
+orders, which `details.minOrders` (how many orders) and `details.windowDays` (within how many days)
+repeat. `403 catalogue_requires_recent_order` is left only for when the trial quota is turned off
+(`catalogue.dailyCap` is 0) and the account has too few recent orders delivered and approved; it
+names the same threshold in its message, `details.minOrders` and `details.windowDays`.
 
 The managed service requests are capped per UTC day too, at 5 of each kind:
 `429 managed_service_request_limit_reached`, with `Retry-After` the time to the next UTC midnight.

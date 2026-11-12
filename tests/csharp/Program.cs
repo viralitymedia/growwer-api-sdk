@@ -223,6 +223,66 @@ internal static class Program
         Equal("threshold currency", (string)sentThreshold["currency"], "EUR");
     }
 
+    // enabled is optional and not nullable: an update that leaves it out keeps the subscription's
+    // state, so a C# bool the caller never set must not go out as false, which disables it.
+    private static void UpdateWebhookWithoutEnabledLeavesItOut()
+    {
+        new WebhooksApi(Answer(Fixture("webhook-with-secret.json")), Key())
+            .UpdateWebhook(WebhookId, "update-webhook-1", new UpdateWebhookRequest(url: "https://hooks.shop.example/v2"));
+
+        Equal("method", SentRequest().Method, HttpMethod.Patch);
+        JObject body = SentBody();
+        Keys("request keys", body, "url");
+        Equal("body url", (string)body["url"], "https://hooks.shop.example/v2");
+    }
+
+    private static void UpdateWebhookSendsEnabledSetToFalse()
+    {
+        var requests = new List<(string How, UpdateWebhookRequest Request)>
+        {
+            ("constructor", new UpdateWebhookRequest(enabled: false)),
+            ("property", new UpdateWebhookRequest { Enabled = false }),
+        };
+        foreach (var (how, request) in requests)
+        {
+            new WebhooksApi(Answer(Fixture("webhook-with-secret.json")), Key())
+                .UpdateWebhook(WebhookId, "update-webhook-1", request);
+
+            JObject body = SentBody();
+            Keys(how + " request keys", body, "enabled");
+            Equal(how + " enabled type", body["enabled"].Type, JTokenType.Boolean);
+            Equal(how + " enabled", (bool)body["enabled"], false);
+        }
+    }
+
+    private static void AnOrderEstimateLeavesOutADraftReviewableItNeverSet()
+    {
+        byte[] estimate = System.Text.Encoding.UTF8.GetBytes(
+            "{\"price\":{\"amount\":1800,\"currency\":\"EUR\"},\"availableBalance\":{\"amount\":50000,\"currency\":\"EUR\"},"
+            + "\"missing\":{\"amount\":0,\"currency\":\"EUR\"},\"sufficientBalance\":true}");
+        var briefing = new OrderEstimateRequestBriefing(new LinkAdditionOrderBriefingRequest(
+            linkingFrom: "https://blog.example/post",
+            link: new OrderLinkRequest(targetUrl: "https://shop.example", anchor: "trail shoes", type: OrderLinkRequest.TypeEnum.Dofollow)));
+        var requests = new List<(OrderEstimateRequest Request, string[] Keys)>
+        {
+            (new OrderEstimateRequest(type: OrderEstimateRequest.TypeEnum.LinkAddition, projectId: ProjectId, mediaId: MediaId, briefing: briefing),
+                new[] { "type", "projectId", "mediaId", "briefing" }),
+            (new OrderEstimateRequest(type: OrderEstimateRequest.TypeEnum.LinkAddition, projectId: ProjectId, mediaId: MediaId, briefing: briefing, draftReviewable: false),
+                new[] { "type", "projectId", "mediaId", "briefing", "draftReviewable" }),
+        };
+        foreach (var (request, keys) in requests)
+        {
+            new BuyerOrdersApi(Answer(estimate), Key()).EstimateOrder(request);
+
+            JObject body = SentBody();
+            Keys("request keys", body, keys);
+            if (body["draftReviewable"] != null)
+            {
+                Equal("draftReviewable", (bool)body["draftReviewable"], false);
+            }
+        }
+    }
+
     private static void TheBaseUrlIsOverridable()
     {
         Configuration configuration = Key();
@@ -504,6 +564,9 @@ internal static class Program
             ("a webhook.test event parses with fields this client does not know", AWebhookTestEventParsesWithFieldsThisClientDoesNotKnow),
             ("createWebhook sends the body and key and reads the secret", CreateWebhookSendsTheBodyAndKeyAndReadsTheSecret),
             ("updateWebhook leaves out the amountDecimal of a Money it read", UpdateWebhookLeavesOutTheAmountDecimalOfAMoneyItRead),
+            ("updateWebhook without enabled leaves it out", UpdateWebhookWithoutEnabledLeavesItOut),
+            ("updateWebhook sends enabled set to false", UpdateWebhookSendsEnabledSetToFalse),
+            ("an order estimate leaves out a draftReviewable it never set", AnOrderEstimateLeavesOutADraftReviewableItNeverSet),
         };
         int failed = 0;
         foreach (var (name, run) in cases)

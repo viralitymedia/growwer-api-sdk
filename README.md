@@ -198,7 +198,10 @@ answers `409 no_competitive_fees`. No path or type moved.
   call that passes `createdAt` by position no longer compiles. Any call that does not pass a
   non-null `competitiveFeesByLinkType`, named arguments included, compiles and throws an
   `ArgumentNullException`, though reading a response with a null one works; to build one with a null
-  list by hand, pass a list, then set `CompetitiveFeesByLinkType = null`.
+  list by hand, pass a list, then set `CompetitiveFeesByLinkType = null`. The `enabled` parameter of
+  the `UpdateWebhookRequest` constructor and the `draftReviewable` one of the `OrderEstimateRequest`
+  and `OrderCreateRequest` constructors become `bool?` (the properties stay `bool`): code that passes
+  a `bool` compiles as before, but code built against 2.1.0 must be recompiled.
 - **Mocks and recorded responses without `competitiveFeesByLinkType`:** a seller media JSON recorded
   before 2.2.0 now fails to parse in Go, Java and C#. Python still reads one, as `None`, but
   refuses a `SellerMedia` built by hand without it, and a TypeScript object-literal mock without it
@@ -226,11 +229,12 @@ What changes:
   `UpdateWebhookRequest` that never set `Enabled` sent `"enabled": false`, so changing only the URL,
   the events, the threshold or the description stopped the subscription's events. It now leaves
   `enabled` out, and the subscription keeps its state; `Enabled = false` or `true`, set through the
-  property or passed to the constructor, is still sent. `OrderEstimateRequest` and
+  property or passed to the constructor, is still sent. A subscription an update from a 2.1.0 C#
+  client disabled stays disabled after upgrading: read `Enabled` with `GetWebhook` or `ListWebhooks`
+  and send `Enabled = true` through `UpdateWebhook` to enable it again. `OrderEstimateRequest` and
   `OrderCreateRequest` leave an unset `DraftReviewable` out the same way, which the API reads as
-  false, as before. The properties stay `bool`, but the constructor parameters `enabled` and
-  `draftReviewable` become `bool?`: code that passes a `bool` compiles as before, and code built
-  against 2.1.0 must be recompiled.
+  false, as before. The constructor parameters `enabled` and `draftReviewable` become `bool?`; see
+  the C# break above.
 - Descriptions only: the catalogue's `403 catalogue_requires_recent_order` and the trial refusal of
   `429 catalogue_daily_cap_reached` name their threshold in `details.minOrders` and
   `details.windowDays`, and count an order only once it is delivered and approved (see

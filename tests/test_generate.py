@@ -755,8 +755,8 @@ class RubyOneOfUnknownKeysTest(unittest.TestCase):
 
 
 class CSharpOptionalNullablesTest(unittest.TestCase):
-    """scripts/csharp-optional-nullables.py makes the C# client leave an optional, nullable request
-    property out of the body until it is set, instead of sending it as null."""
+    """scripts/csharp-optional-nullables.py makes the C# client leave an optional, nullable or boolean
+    request property out of the body until it is set, instead of sending it as null or false."""
 
     @staticmethod
     def model(name, members):
@@ -929,6 +929,202 @@ class CSharpOptionalNullablesTest(unittest.TestCase):
             self.assertNotIn(f"ShouldSerialize{prop}", patched["UpdateProjectRequest"])
         self.assertEqual(models["Report"], patched["Report"])
 
+    WEBHOOK_BODY = {
+        "type": "object",
+        "required": ["active"],
+        "properties": {
+            "url": {"type": "string"},
+            "active": {"type": "boolean"},
+            "paused": {"type": "boolean", "nullable": True},
+            "enabled": {"type": "boolean"},
+        },
+    }
+    WEBHOOK_MEMBERS = [
+        ("url", "string", False),
+        ("active", "bool", True),
+        ("paused", "bool?", True),
+        ("enabled", "bool", True),
+    ]
+
+    def test_an_optional_boolean_is_sent_only_once_set_and_its_constructor_takes_a_null(self):
+        original = self.model("UpdateProjectRequest", self.WEBHOOK_MEMBERS)
+        result, models = self.run_script(self.contract(self.WEBHOOK_BODY), {"UpdateProjectRequest": original})
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        expected = (
+            original.replace("bool enabled = default", "bool? enabled = default")
+            .replace(
+                "            this.Enabled = enabled;\n",
+                "            // a null \"enabled\" leaves Enabled unset, so it is not sent\n"
+                "            if (enabled != null)\n"
+                "            {\n"
+                "                this.Enabled = enabled.Value;\n"
+                "            }\n",
+            )
+            .replace(
+                "        public bool Enabled { get; set; }\n",
+                "        public bool Enabled\n"
+                "        {\n"
+                "            get { return _Enabled; }\n"
+                "            set\n"
+                "            {\n"
+                "                _Enabled = value;\n"
+                "                _flagEnabled = true;\n"
+                "            }\n"
+                "        }\n"
+                "        private bool _Enabled;\n"
+                "        private bool _flagEnabled;\n"
+                "\n"
+                "        /// <summary>\n"
+                "        /// Returns true once Enabled has been set, so that a property left unset is left out of\n"
+                "        /// the request rather than sent as false, which the API reads as a value.\n"
+                "        /// </summary>\n"
+                "        /// <returns>true once Enabled has been set (boolean)</returns>\n"
+                "        public bool ShouldSerializeEnabled()\n"
+                "        {\n"
+                "            return _flagEnabled;\n"
+                "        }\n",
+            )
+        )
+        # The nullable boolean takes the nullable shape, its parameter already a bool?.
+        expected = expected.replace(
+            "            this.Paused = paused;\n",
+            "            // a null \"paused\" leaves Paused unset, so it is not sent\n"
+            "            this._Paused = paused;\n"
+            "            if (this.Paused != null)\n"
+            "            {\n"
+            "                this._flagPaused = true;\n"
+            "            }\n",
+        ).replace(
+            "        public bool? Paused { get; set; }\n",
+            "        public bool? Paused\n"
+            "        {\n"
+            "            get { return _Paused; }\n"
+            "            set\n"
+            "            {\n"
+            "                _Paused = value;\n"
+            "                _flagPaused = true;\n"
+            "            }\n"
+            "        }\n"
+            "        private bool? _Paused;\n"
+            "        private bool _flagPaused;\n"
+            "\n"
+            "        /// <summary>\n"
+            "        /// Returns true once Paused has been set, so that a property left unset is left out of\n"
+            "        /// the request rather than sent as null, which the API reads as a value.\n"
+            "        /// </summary>\n"
+            "        /// <returns>true once Paused has been set (boolean)</returns>\n"
+            "        public bool ShouldSerializePaused()\n"
+            "        {\n"
+            "            return _flagPaused;\n"
+            "        }\n",
+        )
+        self.assertNotEqual(original, expected)
+        # The required boolean is left as the generator wrote it.
+        self.assertIn("        public bool Active { get; set; }\n", expected)
+        self.assertIn("bool active = default", expected)
+        self.assertEqual(expected, models["UpdateProjectRequest"])
+        self.assertIn("optional nullables: UpdateProjectRequest.Paused", result.stdout)
+        self.assertIn("optional booleans: UpdateProjectRequest.Enabled", result.stdout)
+
+    def test_an_optional_boolean_a_component_inherits_through_all_of_is_patched_in_the_child(self):
+        schemas = {
+            "Estimate": {"type": "object", "required": ["kind"], "properties": {"kind": {"type": "string"}, "reviewable": {"type": "boolean"}}},
+            "Create": {"allOf": [{"$ref": "#/components/schemas/Estimate"}, {"required": ["price"], "properties": {"price": {"type": "integer"}}}]},
+        }
+        contract = self.contract({"$ref": "#/components/schemas/Create"}, schemas)
+        create = self.model("Create", [("kind", "string", True), ("reviewable", "bool", True), ("price", "int", False)])
+        estimate = self.model("Estimate", [("kind", "string", True), ("reviewable", "bool", True)])
+        result, models = self.run_script(contract, {"Create": create, "Estimate": estimate})
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        for name in ("Create", "Estimate"):
+            with self.subTest(model=name):
+                self.assertIn("bool? reviewable = default", models[name])
+                self.assertIn("public bool ShouldSerializeReviewable()", models[name])
+        self.assertIn("optional booleans: Create.Reviewable, Estimate.Reviewable", result.stdout)
+
+    def test_an_optional_boolean_in_another_shape_fails_the_run_and_is_not_written(self):
+        regular = self.model("UpdateProjectRequest", self.WEBHOOK_MEMBERS)
+        cases = {
+            "declared nullable": (
+                regular.replace("public bool Enabled { get; set; }", "public bool? Enabled { get; set; }"),
+                "the optional boolean Enabled is declared bool?, not bool",
+            ),
+            "no bool constructor parameter": (
+                regular.replace("bool enabled = default", "bool? enabled = default"),
+                "expected one constructor parameter bool enabled, found 0",
+            ),
+            "a default(bool) constructor parameter": (
+                regular.replace("bool enabled = default", "bool enabled = default(bool)"),
+                "expected one constructor parameter bool enabled, found 0",
+            ),
+            "no constructor assignment": (
+                regular.replace("            this.Enabled = enabled;\n", ""),
+                "expected one constructor assignment to Enabled, found 0",
+            ),
+            "no property to patch": (
+                regular.replace("public bool Enabled { get; set; }", "public bool Enabled { get; init; }"),
+                "no optional, boolean property declaration for enabled",
+            ),
+        }
+        for case, (text, message) in cases.items():
+            with self.subTest(case=case):
+                result, models = self.run_script(self.contract(self.WEBHOOK_BODY), {"UpdateProjectRequest": text})
+                self.assertNotEqual(0, result.returncode)
+                self.assertIn(message, result.stderr)
+                self.assertEqual(text, models["UpdateProjectRequest"])
+
+    def test_a_second_run_over_its_own_boolean_output_changes_nothing(self):
+        models = {"UpdateProjectRequest": self.model("UpdateProjectRequest", self.WEBHOOK_MEMBERS)}
+        once_result, once = self.run_script(self.contract(self.WEBHOOK_BODY), models)
+        twice_result, twice = self.run_script(self.contract(self.WEBHOOK_BODY), models, runs=2)
+        self.assertEqual(0, once_result.returncode, once_result.stderr)
+        self.assertEqual(0, twice_result.returncode, twice_result.stderr)
+        self.assertEqual(once, twice)
+        self.assertIn("optional booleans: already patched", twice_result.stdout)
+
+    def test_a_generator_that_leaves_out_an_unset_bool_fails_the_run_since_false_could_never_be_sent(self):
+        body = {"type": "object", "properties": {"enabled": {"type": "boolean"}}}
+        models = {"UpdateProjectRequest": self.model("UpdateProjectRequest", [("enabled", "bool", False)])}
+        result, patched = self.run_script(self.contract(body), models)
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn(
+            "UpdateProjectRequest.cs: the optional boolean enabled has EmitDefaultValue = false on a bool: "
+            "false can never be sent",
+            result.stderr,
+        )
+        self.assertEqual(models, patched)
+
+    def test_a_generator_that_already_leaves_an_unset_nullable_bool_out_fails_the_run(self):
+        body = {"type": "object", "properties": {"enabled": {"type": "boolean"}}}
+        models = {"UpdateProjectRequest": self.model("UpdateProjectRequest", [("enabled", "bool?", False)])}
+        result, patched = self.run_script(self.contract(body), models)
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("remove scripts/csharp-optional-nullables.py and its call in generate.sh", result.stderr)
+        self.assertEqual(models, patched)
+
+    def test_a_generator_that_leaves_out_one_kind_alone_fails_the_run_naming_its_branch(self):
+        body = {
+            "type": "object",
+            "properties": {"country": {"type": "string", "nullable": True}, "enabled": {"type": "boolean"}},
+        }
+        cases = {
+            "boolean": [("country", "string", True), ("enabled", "bool?", False)],
+            "nullable": [("country", "string", False), ("enabled", "bool", True)],
+        }
+        for kind, members in cases.items():
+            with self.subTest(kind=kind):
+                models = {"UpdateProjectRequest": self.model("UpdateProjectRequest", members)}
+                result, patched = self.run_script(self.contract(body), models)
+                self.assertNotEqual(0, result.returncode)
+                self.assertIn(
+                    f"no optional, {kind} C# request property is left to patch: remove the {kind} branch "
+                    "of scripts/csharp-optional-nullables.py",
+                    result.stderr,
+                )
+                self.assertNotIn("and its call in generate.sh", result.stderr)
+                # The other kind is patchable, but a run that fails writes no model.
+                self.assertEqual(models, patched)
+
     def test_a_body_sent_as_form_fields_is_left_alone(self):
         models = {"UpdateProjectRequest": self.model("UpdateProjectRequest", self.PROJECT_MEMBERS)}
         result, patched = self.run_script(self.contract(self.PROJECT_BODY, media_type="multipart/form-data"), models)
@@ -1008,8 +1204,13 @@ class CSharpOptionalNullablesTest(unittest.TestCase):
             ("UpdateProjectRequest", "Country"),
             ("UpdateSellerMediaRequest", "LinkAdditionOffer"),
             ("CreateSellerMediaRequest", "LinkAdditionOffer"),
+            ("UpdateWebhookRequest", "Enabled"),
+            ("OrderEstimateRequest", "DraftReviewable"),
+            ("OrderCreateRequest", "DraftReviewable"),
         ):
             self.assertIn(f"public bool ShouldSerialize{prop}()", models[name], name)
+        self.assertIn("optional booleans: already patched", result.stdout)
+        self.assertIn("bool? enabled = default", models["UpdateWebhookRequest"])
 
 
 class PythonDependencyFloorsTest(unittest.TestCase):

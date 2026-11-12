@@ -222,6 +222,15 @@ What changes:
   with `422 validation_failed`. Python, TypeScript and C# never send it, but Go, Java, PHP and Ruby
   send the one a Money was read with, so do not change the `amount` of a Money read from a response
   and send it: build a new Money from `amount` and `currency`. See [Money and dates](#money-and-dates).
+- **C#: an `updateWebhook` without `Enabled` no longer disables the subscription.** An
+  `UpdateWebhookRequest` that never set `Enabled` sent `"enabled": false`, so changing only the URL,
+  the events, the threshold or the description stopped the subscription's events. It now leaves
+  `enabled` out, and the subscription keeps its state; `Enabled = false` or `true`, set through the
+  property or passed to the constructor, is still sent. `OrderEstimateRequest` and
+  `OrderCreateRequest` leave an unset `DraftReviewable` out the same way, which the API reads as
+  false, as before. The properties stay `bool`, but the constructor parameters `enabled` and
+  `draftReviewable` become `bool?`: code that passes a `bool` compiles as before, and code built
+  against 2.1.0 must be recompiled.
 - Descriptions only: the catalogue's `403 catalogue_requires_recent_order` and the trial refusal of
   `429 catalogue_daily_cap_reached` name their threshold in `details.minOrders` and
   `details.windowDays`, and count an order only once it is delivered and approved (see
@@ -1078,10 +1087,12 @@ would be discarded on the next run:
   would fail deserialisation. The `?` is added by
   [`scripts/csharp-nullable-enums.py`](scripts/csharp-nullable-enums.py).
 - **C#**'s model template also writes an optional, nullable property whenever it is null, so
-  every request would send each one left unset as `null`, which the API reads as a value. Each
-  optional, nullable property of a request body, read from the contract, gets a flag that its
-  setter raises and a `ShouldSerialize` method that Newtonsoft.Json consults; a constructor
-  argument raises the flag only when it is not null. This is done by
+  every request would send each one left unset as `null`, which the API reads as a value, and an
+  optional boolean likewise, nullable or not, so a `bool` left unset would be sent as `false`. Each
+  optional property of a request body that is nullable or a boolean, read from the contract, gets a
+  flag that its setter raises and a `ShouldSerialize` method that Newtonsoft.Json consults; a
+  constructor argument raises the flag only when it is not null, and the constructor parameter of
+  a non-nullable boolean is a `bool?` so that it can be left out. This is done by
   [`scripts/csharp-optional-nullables.py`](scripts/csharp-optional-nullables.py). The generator's
   `conditionalSerialization` option would do the same, but it never marks a required constructor
   argument as set, so it would drop every required property.

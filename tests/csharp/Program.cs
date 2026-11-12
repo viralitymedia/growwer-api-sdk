@@ -283,6 +283,35 @@ internal static class Program
         }
     }
 
+    private static void AnOrderCreateLeavesOutADraftReviewableItNeverSet()
+    {
+        var briefing = new OrderEstimateRequestBriefing(new LinkAdditionOrderBriefingRequest(
+            linkingFrom: "https://blog.example/post",
+            link: new OrderLinkRequest(targetUrl: "https://shop.example", anchor: "trail shoes", type: OrderLinkRequest.TypeEnum.Dofollow)));
+        var price = new Money(amount: 1800, currency: "EUR");
+        var requests = new List<(string How, OrderCreateRequest Request, string[] Keys)>
+        {
+            ("unset", new OrderCreateRequest(type: OrderCreateRequest.TypeEnum.LinkAddition, projectId: ProjectId, mediaId: MediaId, briefing: briefing, expectedPrice: price),
+                new[] { "type", "projectId", "mediaId", "briefing", "expectedPrice" }),
+            ("constructor", new OrderCreateRequest(type: OrderCreateRequest.TypeEnum.LinkAddition, projectId: ProjectId, mediaId: MediaId, briefing: briefing, expectedPrice: price, draftReviewable: false),
+                new[] { "type", "projectId", "mediaId", "briefing", "expectedPrice", "draftReviewable" }),
+            ("property", new OrderCreateRequest(type: OrderCreateRequest.TypeEnum.LinkAddition, projectId: ProjectId, mediaId: MediaId, briefing: briefing, expectedPrice: price) { DraftReviewable = false },
+                new[] { "type", "projectId", "mediaId", "briefing", "expectedPrice", "draftReviewable" }),
+        };
+        foreach (var (how, request, keys) in requests)
+        {
+            new BuyerOrdersApi(Answer(Fixture("order-with-unknown-field.json")), Key()).CreateOrder("create-order-1", request);
+
+            JObject body = SentBody();
+            Keys(how + " request keys", body, keys);
+            if (body["draftReviewable"] != null)
+            {
+                Equal(how + " draftReviewable type", body["draftReviewable"].Type, JTokenType.Boolean);
+                Equal(how + " draftReviewable", (bool)body["draftReviewable"], false);
+            }
+        }
+    }
+
     private static void TheBaseUrlIsOverridable()
     {
         Configuration configuration = Key();
@@ -567,6 +596,7 @@ internal static class Program
             ("updateWebhook without enabled leaves it out", UpdateWebhookWithoutEnabledLeavesItOut),
             ("updateWebhook sends enabled set to false", UpdateWebhookSendsEnabledSetToFalse),
             ("an order estimate leaves out a draftReviewable it never set", AnOrderEstimateLeavesOutADraftReviewableItNeverSet),
+            ("an order create leaves out a draftReviewable it never set", AnOrderCreateLeavesOutADraftReviewableItNeverSet),
         };
         int failed = 0;
         foreach (var (name, run) in cases)

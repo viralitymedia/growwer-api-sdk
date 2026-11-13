@@ -615,6 +615,7 @@ type ApiListFlashOffersRequest struct {
 	minLinkAdditionPrice *int32
 	maxLinkAdditionPrice *int32
 	linkAdditionLinkType *string
+	bestPrice *bool
 	recommended *bool
 	favourite *bool
 	requested *bool
@@ -780,6 +781,12 @@ func (r ApiListFlashOffersRequest) MaxLinkAdditionPrice(maxLinkAdditionPrice int
 // A comma-separated list of link types the link addition offer gives: &#x60;dofollow&#x60;, &#x60;nofollow&#x60;, &#x60;citation&#x60;.
 func (r ApiListFlashOffersRequest) LinkAdditionLinkType(linkAdditionLinkType string) ApiListFlashOffersRequest {
 	r.linkAdditionLinkType = &linkAdditionLinkType
+	return r
+}
+
+// Medias with a best-price badge (&#x60;bestPrice&#x60; not null), of either claim. Only &#x60;true&#x60; applies it; omit it otherwise.
+func (r ApiListFlashOffersRequest) BestPrice(bestPrice bool) ApiListFlashOffersRequest {
+	r.bestPrice = &bestPrice
 	return r
 }
 
@@ -961,6 +968,9 @@ func (a *CatalogueAPIService) ListFlashOffersExecute(r ApiListFlashOffersRequest
 	}
 	if r.linkAdditionLinkType != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "linkAdditionLinkType", r.linkAdditionLinkType, "form", "")
+	}
+	if r.bestPrice != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "bestPrice", r.bestPrice, "form", "")
 	}
 	if r.recommended != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "recommended", r.recommended, "form", "")
@@ -1386,6 +1396,7 @@ type ApiSearchProjectMediasRequest struct {
 	minLinkAdditionPrice *int32
 	maxLinkAdditionPrice *int32
 	linkAdditionLinkType *string
+	bestPrice *bool
 	recommended *bool
 	favourite *bool
 	requested *bool
@@ -1552,6 +1563,12 @@ func (r ApiSearchProjectMediasRequest) MaxLinkAdditionPrice(maxLinkAdditionPrice
 // A comma-separated list of link types the link addition offer gives: &#x60;dofollow&#x60;, &#x60;nofollow&#x60;, &#x60;citation&#x60;.
 func (r ApiSearchProjectMediasRequest) LinkAdditionLinkType(linkAdditionLinkType string) ApiSearchProjectMediasRequest {
 	r.linkAdditionLinkType = &linkAdditionLinkType
+	return r
+}
+
+// Medias with a best-price badge (&#x60;bestPrice&#x60; not null), of either claim. Only &#x60;true&#x60; applies it; omit it otherwise.
+func (r ApiSearchProjectMediasRequest) BestPrice(bestPrice bool) ApiSearchProjectMediasRequest {
+	r.bestPrice = &bestPrice
 	return r
 }
 
@@ -1741,6 +1758,9 @@ func (a *CatalogueAPIService) SearchProjectMediasExecute(r ApiSearchProjectMedia
 	}
 	if r.linkAdditionLinkType != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "linkAdditionLinkType", r.linkAdditionLinkType, "form", "")
+	}
+	if r.bestPrice != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "bestPrice", r.bestPrice, "form", "")
 	}
 	if r.recommended != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "recommended", r.recommended, "form", "")

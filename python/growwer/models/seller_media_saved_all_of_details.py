@@ -30,7 +30,7 @@ class SellerMediaSavedAllOfDetails(BaseModel):
     SellerMediaSavedAllOfDetails
     """ # noqa: E501
     competitive_fees: SellerMediaSavedAllOfDetailsCompetitiveFees = Field(alias="competitiveFees")
-    competitors: List[StrictStr] = Field(json_schema_extra={"examples": [["Prensarank"]]})
+    competitors: List[StrictStr] = Field(json_schema_extra={"examples": [["Prensalink"]]})
     __properties: ClassVar[List[str]] = ["competitiveFees", "competitors"]
 
     model_config = ConfigDict(

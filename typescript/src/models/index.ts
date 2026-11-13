@@ -5,6 +5,7 @@ export * from './Balance';
 export * from './BalanceLowEventData';
 export * from './BalanceLowEventDataWallet';
 export * from './CatalogueMedia';
+export * from './CatalogueMediaBestPrice';
 export * from './CatalogueMediaFlashOffer';
 export * from './CatalogueMediaMetrics';
 export * from './CatalogueOffer';

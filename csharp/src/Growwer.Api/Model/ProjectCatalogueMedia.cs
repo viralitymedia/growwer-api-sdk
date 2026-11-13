@@ -82,10 +82,11 @@ namespace Growwer.Api.Model
         /// <param name="averageDaysToPublication">The average days from order to publication, or null without published orders. (required).</param>
         /// <param name="onHoliday">Whether the media is on holiday and will take longer to publish. (required).</param>
         /// <param name="flashOffer">flashOffer (required).</param>
+        /// <param name="bestPrice">bestPrice (required).</param>
         /// <param name="postOffer">postOffer (required).</param>
         /// <param name="linkAdditionOffer">Adding a link to an existing article, or null when the media does not offer it. (required).</param>
         /// <param name="project">project (required).</param>
-        public ProjectCatalogueMedia(Guid id = default, string domain = default, TypeEnum type = default, string language = default, string country = default, List<int> topics = default, CatalogueMediaMetrics metrics = default, bool positiveTrafficTrend = default, bool bestSeller = default, int? publicationRate = default, int? averageDaysToPublication = default, bool onHoliday = default, CatalogueMediaFlashOffer flashOffer = default, CataloguePostOffer postOffer = default, CatalogueOfferOrNull linkAdditionOffer = default, ProjectCatalogueMediaAllOfProject project = default)
+        public ProjectCatalogueMedia(Guid id = default, string domain = default, TypeEnum type = default, string language = default, string country = default, List<int> topics = default, CatalogueMediaMetrics metrics = default, bool positiveTrafficTrend = default, bool bestSeller = default, int? publicationRate = default, int? averageDaysToPublication = default, bool onHoliday = default, CatalogueMediaFlashOffer flashOffer = default, CatalogueMediaBestPrice bestPrice = default, CataloguePostOffer postOffer = default, CatalogueOfferOrNull linkAdditionOffer = default, ProjectCatalogueMediaAllOfProject project = default)
         {
             this.Id = id;
             // to ensure "domain" is required (not null)
@@ -140,6 +141,12 @@ namespace Growwer.Api.Model
                 throw new ArgumentNullException("flashOffer is a required property for ProjectCatalogueMedia and cannot be null");
             }
             this.FlashOffer = flashOffer;
+            // to ensure "bestPrice" is required (not null)
+            if (bestPrice == null)
+            {
+                throw new ArgumentNullException("bestPrice is a required property for ProjectCatalogueMedia and cannot be null");
+            }
+            this.BestPrice = bestPrice;
             // to ensure "postOffer" is required (not null)
             if (postOffer == null)
             {
@@ -243,6 +250,12 @@ namespace Growwer.Api.Model
         public CatalogueMediaFlashOffer FlashOffer { get; set; }
 
         /// <summary>
+        /// Gets or Sets BestPrice
+        /// </summary>
+        [DataMember(Name = "bestPrice", IsRequired = true, EmitDefaultValue = true)]
+        public CatalogueMediaBestPrice BestPrice { get; set; }
+
+        /// <summary>
         /// Gets or Sets PostOffer
         /// </summary>
         [DataMember(Name = "postOffer", IsRequired = true, EmitDefaultValue = true)]
@@ -288,6 +301,7 @@ namespace Growwer.Api.Model
             sb.Append("  AverageDaysToPublication: ").Append(AverageDaysToPublication).Append("\n");
             sb.Append("  OnHoliday: ").Append(OnHoliday).Append("\n");
             sb.Append("  FlashOffer: ").Append(FlashOffer).Append("\n");
+            sb.Append("  BestPrice: ").Append(BestPrice).Append("\n");
             sb.Append("  PostOffer: ").Append(PostOffer).Append("\n");
             sb.Append("  LinkAdditionOffer: ").Append(LinkAdditionOffer).Append("\n");
             sb.Append("  Project: ").Append(Project).Append("\n");

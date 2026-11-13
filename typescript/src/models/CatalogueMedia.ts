@@ -13,6 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
+import type { CatalogueMediaBestPrice } from './CatalogueMediaBestPrice';
+import {
+    CatalogueMediaBestPriceFromJSON,
+    CatalogueMediaBestPriceFromJSONTyped,
+    CatalogueMediaBestPriceToJSON,
+    CatalogueMediaBestPriceToJSONTyped,
+} from './CatalogueMediaBestPrice';
 import type { CatalogueMediaFlashOffer } from './CatalogueMediaFlashOffer';
 import {
     CatalogueMediaFlashOfferFromJSON,
@@ -128,6 +135,12 @@ export interface CatalogueMedia {
     flashOffer: CatalogueMediaFlashOffer | null;
     /**
      * 
+     * @type {CatalogueMediaBestPrice}
+     * @memberof CatalogueMedia
+     */
+    bestPrice: CatalogueMediaBestPrice | null;
+    /**
+     * 
      * @type {CataloguePostOffer}
      * @memberof CatalogueMedia
      */
@@ -168,6 +181,7 @@ export function instanceOfCatalogueMedia(value: object): value is CatalogueMedia
     if (!('averageDaysToPublication' in value) || value['averageDaysToPublication'] === undefined) return false;
     if (!('onHoliday' in value) || value['onHoliday'] === undefined) return false;
     if (!('flashOffer' in value) || value['flashOffer'] === undefined) return false;
+    if (!('bestPrice' in value) || value['bestPrice'] === undefined) return false;
     if (!('postOffer' in value) || value['postOffer'] === undefined) return false;
     if (!('linkAdditionOffer' in value) || value['linkAdditionOffer'] === undefined) return false;
     return true;
@@ -196,6 +210,7 @@ export function CatalogueMediaFromJSONTyped(json: any, ignoreDiscriminator: bool
         'averageDaysToPublication': json['averageDaysToPublication'],
         'onHoliday': json['onHoliday'],
         'flashOffer': CatalogueMediaFlashOfferFromJSON(json['flashOffer']),
+        'bestPrice': CatalogueMediaBestPriceFromJSON(json['bestPrice']),
         'postOffer': CataloguePostOfferFromJSON(json['postOffer']),
         'linkAdditionOffer': CatalogueOfferOrNullFromJSON(json['linkAdditionOffer']),
     };
@@ -225,6 +240,7 @@ export function CatalogueMediaToJSONTyped(value?: CatalogueMedia | null, ignoreD
         'averageDaysToPublication': value['averageDaysToPublication'],
         'onHoliday': value['onHoliday'],
         'flashOffer': CatalogueMediaFlashOfferToJSON(value['flashOffer']),
+        'bestPrice': CatalogueMediaBestPriceToJSON(value['bestPrice']),
         'postOffer': CataloguePostOfferToJSON(value['postOffer']),
         'linkAdditionOffer': CatalogueOfferOrNullToJSON(value['linkAdditionOffer']),
     };

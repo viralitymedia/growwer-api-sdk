@@ -271,6 +271,7 @@ module Growwer
     # @option opts [Integer] :min_link_addition_price Minimum link addition price, in cents.
     # @option opts [Integer] :max_link_addition_price Maximum link addition price, in cents.
     # @option opts [String] :link_addition_link_type A comma-separated list of link types the link addition offer gives: &#x60;dofollow&#x60;, &#x60;nofollow&#x60;, &#x60;citation&#x60;.
+    # @option opts [Boolean] :best_price Medias with a best-price badge (&#x60;bestPrice&#x60; not null), of either claim. Only &#x60;true&#x60; applies it; omit it otherwise.
     # @option opts [Boolean] :recommended &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others.
     # @option opts [Boolean] :favourite &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out.
     # @option opts [Boolean] :requested &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out.
@@ -316,6 +317,7 @@ module Growwer
     # @option opts [Integer] :min_link_addition_price Minimum link addition price, in cents.
     # @option opts [Integer] :max_link_addition_price Maximum link addition price, in cents.
     # @option opts [String] :link_addition_link_type A comma-separated list of link types the link addition offer gives: &#x60;dofollow&#x60;, &#x60;nofollow&#x60;, &#x60;citation&#x60;.
+    # @option opts [Boolean] :best_price Medias with a best-price badge (&#x60;bestPrice&#x60; not null), of either claim. Only &#x60;true&#x60; applies it; omit it otherwise.
     # @option opts [Boolean] :recommended &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others.
     # @option opts [Boolean] :favourite &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out.
     # @option opts [Boolean] :requested &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out.
@@ -390,6 +392,7 @@ module Growwer
       query_params[:'minLinkAdditionPrice'] = opts[:'min_link_addition_price'] if !opts[:'min_link_addition_price'].nil?
       query_params[:'maxLinkAdditionPrice'] = opts[:'max_link_addition_price'] if !opts[:'max_link_addition_price'].nil?
       query_params[:'linkAdditionLinkType'] = opts[:'link_addition_link_type'] if !opts[:'link_addition_link_type'].nil?
+      query_params[:'bestPrice'] = opts[:'best_price'] if !opts[:'best_price'].nil?
       query_params[:'recommended'] = opts[:'recommended'] if !opts[:'recommended'].nil?
       query_params[:'favourite'] = opts[:'favourite'] if !opts[:'favourite'].nil?
       query_params[:'requested'] = opts[:'requested'] if !opts[:'requested'].nil?
@@ -550,6 +553,7 @@ module Growwer
     # @option opts [Integer] :min_link_addition_price Minimum link addition price, in cents.
     # @option opts [Integer] :max_link_addition_price Maximum link addition price, in cents.
     # @option opts [String] :link_addition_link_type A comma-separated list of link types the link addition offer gives: &#x60;dofollow&#x60;, &#x60;nofollow&#x60;, &#x60;citation&#x60;.
+    # @option opts [Boolean] :best_price Medias with a best-price badge (&#x60;bestPrice&#x60; not null), of either claim. Only &#x60;true&#x60; applies it; omit it otherwise.
     # @option opts [Boolean] :recommended &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others.
     # @option opts [Boolean] :favourite &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out.
     # @option opts [Boolean] :requested &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out.
@@ -597,6 +601,7 @@ module Growwer
     # @option opts [Integer] :min_link_addition_price Minimum link addition price, in cents.
     # @option opts [Integer] :max_link_addition_price Maximum link addition price, in cents.
     # @option opts [String] :link_addition_link_type A comma-separated list of link types the link addition offer gives: &#x60;dofollow&#x60;, &#x60;nofollow&#x60;, &#x60;citation&#x60;.
+    # @option opts [Boolean] :best_price Medias with a best-price badge (&#x60;bestPrice&#x60; not null), of either claim. Only &#x60;true&#x60; applies it; omit it otherwise.
     # @option opts [Boolean] :recommended &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others.
     # @option opts [Boolean] :favourite &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out.
     # @option opts [Boolean] :requested &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out.
@@ -672,6 +677,7 @@ module Growwer
       query_params[:'minLinkAdditionPrice'] = opts[:'min_link_addition_price'] if !opts[:'min_link_addition_price'].nil?
       query_params[:'maxLinkAdditionPrice'] = opts[:'max_link_addition_price'] if !opts[:'max_link_addition_price'].nil?
       query_params[:'linkAdditionLinkType'] = opts[:'link_addition_link_type'] if !opts[:'link_addition_link_type'].nil?
+      query_params[:'bestPrice'] = opts[:'best_price'] if !opts[:'best_price'].nil?
       query_params[:'recommended'] = opts[:'recommended'] if !opts[:'recommended'].nil?
       query_params[:'favourite'] = opts[:'favourite'] if !opts[:'favourite'].nil?
       query_params[:'requested'] = opts[:'requested'] if !opts[:'requested'].nil?

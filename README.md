@@ -16,7 +16,7 @@ contract, one generator run, one version: a change to the API reaches all seven 
 | Python 3.10+ | `growwer` | [![PyPI](https://img.shields.io/pypi/v/growwer?label=pypi&color=informational)](https://pypi.org/project/growwer/) | [`python/`](python/) |
 | TypeScript (Node 22+, browsers) | `@growwer/api` | [![npm](https://img.shields.io/npm/v/%40growwer%2Fapi?label=npm&color=informational)](https://www.npmjs.com/package/@growwer/api) | [`typescript/`](typescript/) |
 | PHP 8.1+ | `growwer/growwer-api-sdk` | [![Packagist](https://img.shields.io/packagist/v/growwer/growwer-api-sdk?label=packagist&color=informational)](https://packagist.org/packages/growwer/growwer-api-sdk) | [`php/`](php/) |
-| Go 1.23+ | `github.com/viralitymedia/growwer-api-sdk/go/v3` | [![Go module](https://img.shields.io/github/v/tag/viralitymedia/growwer-api-sdk?filter=go%2F*&label=go&color=informational)](https://pkg.go.dev/github.com/viralitymedia/growwer-api-sdk/go/v2) | [`go/`](go/) |
+| Go 1.23+ | `github.com/viralitymedia/growwer-api-sdk/go/v3` | [![Go module](https://img.shields.io/github/v/tag/viralitymedia/growwer-api-sdk?filter=go%2F*&label=go&color=informational)](https://pkg.go.dev/github.com/viralitymedia/growwer-api-sdk/go/v3) | [`go/`](go/) |
 | Java 11+ | `com.growwer:growwer-api` | [![Maven Central](https://img.shields.io/maven-central/v/com.growwer/growwer-api?label=maven%20central&color=informational)](https://central.sonatype.com/artifact/com.growwer/growwer-api) | [`java/`](java/) |
 | .NET 8 | `Growwer.Api` | [![NuGet](https://img.shields.io/nuget/v/Growwer.Api?label=nuget&color=informational)](https://www.nuget.org/packages/Growwer.Api/) | [`csharp/`](csharp/) |
 | Ruby 3.0+ | `growwer` | [![RubyGems](https://img.shields.io/gem/v/growwer?label=gem&color=informational)](https://rubygems.org/gems/growwer) | [`ruby/`](ruby/) |
@@ -179,29 +179,71 @@ var me = new AccountApi(config).GetMe();
 ## Changes in 3.0.0
 
 **Code that names the result type of `updateSellerMedia` or `applySellerMediaCompetitiveFees` breaks
-in Go, Java and C#**, and the Go module moves to `/v3`. A seller always saves their fees now, a
-raise above the competitors included, and the two writes answer a new `SellerMediaSaved`: a
-`SellerMedia` plus `warnings`. It is a separate class in every language, not a subclass of
-`SellerMedia`, so an assignment to a variable or field typed `SellerMedia` no longer compiles where
-the language checks types. `getSellerMedia` and `createSellerMedia` still answer `SellerMedia`.
+in Go, Java and C#, every Java call of `listFlashOffers` or `searchProjectMedias` breaks**, and the
+Go module moves to `/v3`. A seller always saves their fees now, a raise above the competitors
+included, and the two writes answer a new `SellerMediaSaved`: a `SellerMedia` plus `warnings`. It is
+a separate class in every language, not a subclass of `SellerMedia`, so an assignment to a variable
+or field typed `SellerMedia` no longer compiles where the language checks types. `getSellerMedia`
+and `createSellerMedia` still answer `SellerMedia`.
+
+The catalogue media also gains a required, nullable `bestPrice`, and `listFlashOffers` and
+`searchProjectMedias` a `bestPrice` filter. The filter is a new method parameter after
+`linkAdditionLinkType`, before `recommended`. Java takes every parameter by position, so each call
+of the two stops compiling. In C#, PHP and Python a call that passes `recommended` or any later
+filter by position now passes it to the wrong parameter, and sends it under the wrong name
+(`recommended` becomes `bestPrice`, `favourite` becomes `recommended`, and so on). In C# and Python
+that happens silently whenever the types still fit; where they do not, C# stops compiling and
+Python raises a pydantic `ValidationError`. PHP's parameters are untyped, so there the shift is
+always silent. Name the arguments, or add the new one in its place. Go, TypeScript and Ruby take
+the filters by name and are unaffected.
 
 - **Go:** the module moves to `github.com/viralitymedia/growwer-api-sdk/go/v3`, because Go requires
   the major in the path. Update every import and run
   `go get github.com/viralitymedia/growwer-api-sdk/go/v3@v3.0.0`; the old path stays at 2.2.0.
   `Execute()` of both calls returns `*SellerMediaSaved`, so `var media *growwer.SellerMedia` fed
-  from them stops compiling.
+  from them stops compiling. `NewCatalogueMedia` and `NewProjectCatalogueMedia` gain `bestPrice`
+  between `flashOffer` and `postOffer`; a nil `BestPrice` is marshalled as `null` and reads back.
+- **Java:** `listFlashOffers` and `searchProjectMedias` (and their `WithHttpInfo`, `Async` and `Call`
+  forms) take a `Boolean bestPrice` after `linkAdditionLinkType`, so every existing call of them stops
+  compiling; pass `null` there to leave the filter out.
 - **Java and C#:** `updateSellerMedia` and `applySellerMediaCompetitiveFees` (and their
   `WithHttpInfo`, async and `ApiResponse` forms) return `SellerMediaSaved`. A `SellerMedia` variable,
   field, return type or `ApiResponse<SellerMedia>` fed from them stops compiling; change the type or
   use `var`.
+- **C#:** `ListFlashOffers` and `SearchProjectMedias` (and their `WithHttpInfo` and async forms) take
+  `bool? bestPrice` after `linkAdditionLinkType`: see the positional calls above. A class that
+  implements `ICatalogueApiSync`, `ICatalogueApiAsync` or `ICatalogueApi`, or `ISellerMediasApiSync`,
+  `ISellerMediasApiAsync` or `ISellerMediasApi`, no longer compiles, and neither does a Moq `Setup`
+  on `ListFlashOffers` or `SearchProjectMedias` (or their other forms), which lists every argument
+  and now lacks `bestPrice`, or one on `UpdateSellerMedia` or `ApplySellerMediaCompetitiveFees` that
+  `Returns` a `SellerMedia`. The `CatalogueMedia` and `ProjectCatalogueMedia` constructors gain
+  `bestPrice` before `postOffer`, so a call that passes `postOffer` or `linkAdditionOffer` by
+  position no longer compiles, and any call that does not pass a non-null `bestPrice`, named
+  arguments included, compiles and throws an `ArgumentNullException`, though reading a response with
+  a null one works; to build one with no badge by hand, pass a `CatalogueMediaBestPrice`, then set
+  `BestPrice = null`.
 - **TypeScript:** `SellerMediaSaved` carries every `SellerMedia` field plus `warnings`, so a value of
   it is still assignable to `SellerMedia` and the code compiles. `SellerMediaFromJSON` and
-  `instanceOfSellerMedia` do not apply to it: use `SellerMediaSavedFromJSON`.
+  `instanceOfSellerMedia` do not apply to it: use `SellerMediaSavedFromJSON`. `CatalogueMedia` and
+  `ProjectCatalogueMedia` require `bestPrice` (`CatalogueMediaBestPrice | null`), so an
+  object-literal mock without it no longer type-checks.
 - **PHP, Python and Ruby:** nothing fails to compile or load, and every field is read as before.
   `instanceof SellerMedia` (PHP), `isinstance(x, SellerMedia)` (Python) and `is_a?(Growwer::SellerMedia)`
   (Ruby) are now false for these two answers, and a PHP function declared to return `SellerMedia`
   throws a `TypeError` when it returns one. Python's annotation is `SellerMediaSaved`, which a type
-  checker flags where the result is declared `SellerMedia`.
+  checker flags where the result is declared `SellerMedia`. In PHP and Python, `listFlashOffers` /
+  `list_flash_offers` and `searchProjectMedias` / `search_project_medias` (and their other forms)
+  take the `bestPrice` filter by position too: see the positional calls above. Python refuses a
+  `CatalogueMedia` or `ProjectCatalogueMedia` built by hand without `best_price` (pass `None` for no
+  badge). PHP builds one, but its `valid()` and `listInvalidProperties()` flag one whose data lacks
+  a `best_price` key (pass `'best_price' => null` for no badge). Ruby builds one as before.
+- **PHP:** the boolean filters of `listFlashOffers` and `searchProjectMedias` (`bestPrice`,
+  `recommended`, `favourite` and the rest) go out as `true` and `false`. They went out as `1` and
+  `0`, which the API refuses with a 400, so every boolean filter sent from PHP failed.
+  `Configuration::getDefaultConfiguration()->setBooleanFormatForQueryString()` still overrides it
+  (`Configuration::BOOLEAN_FORMAT_INT` brings back `1` and `0`). It has to be the default
+  configuration: the serializer reads only that one, so the same call on a configuration passed to
+  an API class changes nothing.
 
 What changes:
 
@@ -210,16 +252,42 @@ What changes:
   media above the marketplaces that list the same domain cheaper and some fee would list it under
   them, the 200 carries a warning.
 - **`warnings`.** Always present, an empty list when there is nothing to know. Each entry is a
-  `SellerMediaSavedAllOfWarnings` with `code` (today only `saved_above_competitors`), a `message`,
-  and `details`: `competitiveFees` (`feeWhenSellerWritesPost` and `feeWhenSellerDoesNotWritePost`,
-  null when no fee of that side would list it under the marketplaces or the media does not offer
-  it) and `competitors`, the names of those marketplaces, never their prices. A client should
-  tolerate a new `code`.
-- **Recorded responses without `warnings`.** `warnings` is required in the contract, so a seller media
-  save recorded before 3.0.0 and fed to a mock fails to parse in C# (`Required property 'warnings'
-  not found`), and the Go and Java models mark it required too. Add `"warnings": []` to the mock.
-- Three more models come with it, one per nested object (`SellerMediaSavedAllOfDetails` and
-  `SellerMediaSavedAllOfDetailsCompetitiveFees` besides the warning).
+  `SellerMediaSavedAllOfWarnings` with `code`, a `message`, and `details`: `competitiveFees`
+  (`feeWhenSellerWritesPost` and `feeWhenSellerDoesNotWritePost`, null when no fee of that side would
+  list it under the marketplaces or the media does not offer it) and `competitors`, the names of
+  those marketplaces, never their prices. `code` is one of two values:
+  - `saved_above_competitors`: the fees were saved, but the media still lists above the marketplaces
+    that list the same domain cheaper, and some fee would list it under them.
+  - `saved_not_recommended`: the same, for a save that raised a fee or added a side or a link type.
+    The media is not recommended in buyers' projects while it lists above those marketplaces, and
+    stays in the catalogue.
+
+  Code that switches over `code` exhaustively needs a case for each (`SAVED_NOT_RECOMMENDED` in
+  Java, `SavedNotRecommended` in C#), and a client should tolerate a new `code`; see
+  [Forward compatibility](#forward-compatibility) for the clients that refuse an enum value they
+  were not generated with.
+- **The best-price badge.** Every catalogue media (`getCatalogueMedia`, and the items of
+  `listFlashOffers` and `searchProjectMedias`) carries `bestPrice`: null when the catalogue shows no
+  badge, or a `CatalogueMediaBestPrice` with `badge`, `platformCount` (how many platforms the claim
+  was checked against, at least 1) and `checkedOn` (the day of that check, a date). `badge` is
+  `cheaper` when the price is at least 1 EUR below the cheapest listing of the media found on the
+  other platforms checked in the last 7 days, and `only_here` when none of the platforms checked
+  lists it. It names neither the platforms nor any price.
+- **The `bestPrice` filter.** `listFlashOffers` and `searchProjectMedias` take `bestPrice`: `true`
+  answers only the medias with a badge, of either kind. Only `true` applies it; leave it unset
+  otherwise.
+- **Recorded responses without `warnings` or `bestPrice`.** Both are required in the contract. A
+  seller media save recorded before 3.0.0, without `warnings`, and fed to a mock fails to parse in
+  every client but PHP: Go, Java and C# refuse it (C#: `Required property 'warnings' not found`),
+  Python raises a pydantic `ValidationError`, Ruby an `ArgumentError` (`warnings cannot be nil`) and
+  TypeScript a `TypeError`. PHP reads it, with `getWarnings()` null. A catalogue media without
+  `bestPrice` fails to parse in Go, Java and C#. Add `"warnings": []` or `"bestPrice": null` to the
+  mock. Python, Ruby and PHP read a catalogue media without `bestPrice` as no badge, and PHP's
+  `valid()` and `listInvalidProperties()` do not flag it, because the field may be null;
+  TypeScript's `CatalogueMediaFromJSON` reads it as `undefined`, and `instanceOfCatalogueMedia`
+  answers false for it.
+- Four more models come with it, one per nested object (`SellerMediaSavedAllOfDetails` and
+  `SellerMediaSavedAllOfDetailsCompetitiveFees` besides the warning, and `CatalogueMediaBestPrice`).
 
 ## Changes in 2.2.0
 
@@ -1145,6 +1213,11 @@ would be discarded on the next run:
   [`scripts/csharp-optional-nullables.py`](scripts/csharp-optional-nullables.py). The generator's
   `conditionalSerialization` option would do the same, but it never marks a required constructor
   argument as set, so it would drop every required property.
+- **PHP**'s configuration template starts the boolean query format at `BOOLEAN_FORMAT_INT`, so a
+  boolean filter would go out as `1` or `0`, which the API refuses with a 400: it accepts only
+  `true` and `false`. The generator has no option for it, so
+  [`scripts/php-boolean-query-format.py`](scripts/php-boolean-query-format.py) starts it at
+  `BOOLEAN_FORMAT_STRING`.
 - **Inline class names.** The generator gives identical inline schemas one class, named after the
   first operation that uses it, so an operation added before one that already had the shape would
   rename its class and break every client that names it. `inlineSchemaNameMappings` in

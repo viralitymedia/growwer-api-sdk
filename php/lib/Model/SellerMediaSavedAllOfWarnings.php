@@ -242,6 +242,7 @@ class SellerMediaSavedAllOfWarnings implements ModelInterface, ArrayAccess, \Jso
     }
 
     public const CODE_SAVED_ABOVE_COMPETITORS = 'saved_above_competitors';
+    public const CODE_SAVED_NOT_RECOMMENDED = 'saved_not_recommended';
 
     /**
      * Gets allowable values of the enum
@@ -252,6 +253,7 @@ class SellerMediaSavedAllOfWarnings implements ModelInterface, ArrayAccess, \Jso
     {
         return [
             self::CODE_SAVED_ABOVE_COMPETITORS,
+            self::CODE_SAVED_NOT_RECOMMENDED,
         ];
     }
 

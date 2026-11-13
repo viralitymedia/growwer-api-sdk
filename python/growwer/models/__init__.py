@@ -19,6 +19,7 @@ from growwer.models.balance import Balance
 from growwer.models.balance_low_event_data import BalanceLowEventData
 from growwer.models.balance_low_event_data_wallet import BalanceLowEventDataWallet
 from growwer.models.catalogue_media import CatalogueMedia
+from growwer.models.catalogue_media_best_price import CatalogueMediaBestPrice
 from growwer.models.catalogue_media_flash_offer import CatalogueMediaFlashOffer
 from growwer.models.catalogue_media_metrics import CatalogueMediaMetrics
 from growwer.models.catalogue_offer import CatalogueOffer

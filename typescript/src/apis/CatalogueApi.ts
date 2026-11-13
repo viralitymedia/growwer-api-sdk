@@ -77,6 +77,7 @@ export interface ListFlashOffersRequest {
     minLinkAdditionPrice?: number;
     maxLinkAdditionPrice?: number;
     linkAdditionLinkType?: string;
+    bestPrice?: boolean;
     recommended?: boolean;
     favourite?: boolean;
     requested?: boolean;
@@ -123,6 +124,7 @@ export interface SearchProjectMediasRequest {
     minLinkAdditionPrice?: number;
     maxLinkAdditionPrice?: number;
     linkAdditionLinkType?: string;
+    bestPrice?: boolean;
     recommended?: boolean;
     favourite?: boolean;
     requested?: boolean;
@@ -263,6 +265,7 @@ export interface CatalogueApiInterface {
      * @param {number} [minLinkAdditionPrice] Minimum link addition price, in cents.
      * @param {number} [maxLinkAdditionPrice] Maximum link addition price, in cents.
      * @param {string} [linkAdditionLinkType] A comma-separated list of link types the link addition offer gives: &#x60;dofollow&#x60;, &#x60;nofollow&#x60;, &#x60;citation&#x60;.
+     * @param {boolean} [bestPrice] Medias with a best-price badge (&#x60;bestPrice&#x60; not null), of either claim. Only &#x60;true&#x60; applies it; omit it otherwise.
      * @param {boolean} [recommended] &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others.
      * @param {boolean} [favourite] &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out.
      * @param {boolean} [requested] &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out.
@@ -307,6 +310,7 @@ export interface CatalogueApiInterface {
      * @param {number} [minLinkAdditionPrice] Minimum link addition price, in cents.
      * @param {number} [maxLinkAdditionPrice] Maximum link addition price, in cents.
      * @param {string} [linkAdditionLinkType] A comma-separated list of link types the link addition offer gives: &#x60;dofollow&#x60;, &#x60;nofollow&#x60;, &#x60;citation&#x60;.
+     * @param {boolean} [bestPrice] Medias with a best-price badge (&#x60;bestPrice&#x60; not null), of either claim. Only &#x60;true&#x60; applies it; omit it otherwise.
      * @param {boolean} [recommended] &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others.
      * @param {boolean} [favourite] &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out.
      * @param {boolean} [requested] &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out.
@@ -386,6 +390,7 @@ export interface CatalogueApiInterface {
      * @param {number} [minLinkAdditionPrice] Minimum link addition price, in cents.
      * @param {number} [maxLinkAdditionPrice] Maximum link addition price, in cents.
      * @param {string} [linkAdditionLinkType] A comma-separated list of link types the link addition offer gives: &#x60;dofollow&#x60;, &#x60;nofollow&#x60;, &#x60;citation&#x60;.
+     * @param {boolean} [bestPrice] Medias with a best-price badge (&#x60;bestPrice&#x60; not null), of either claim. Only &#x60;true&#x60; applies it; omit it otherwise.
      * @param {boolean} [recommended] &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others.
      * @param {boolean} [favourite] &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out.
      * @param {boolean} [requested] &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out.
@@ -432,6 +437,7 @@ export interface CatalogueApiInterface {
      * @param {number} [minLinkAdditionPrice] Minimum link addition price, in cents.
      * @param {number} [maxLinkAdditionPrice] Maximum link addition price, in cents.
      * @param {string} [linkAdditionLinkType] A comma-separated list of link types the link addition offer gives: &#x60;dofollow&#x60;, &#x60;nofollow&#x60;, &#x60;citation&#x60;.
+     * @param {boolean} [bestPrice] Medias with a best-price badge (&#x60;bestPrice&#x60; not null), of either claim. Only &#x60;true&#x60; applies it; omit it otherwise.
      * @param {boolean} [recommended] &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others.
      * @param {boolean} [favourite] &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out.
      * @param {boolean} [requested] &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out.
@@ -836,6 +842,10 @@ export class CatalogueApi extends runtime.BaseAPI implements CatalogueApiInterfa
             queryParameters['linkAdditionLinkType'] = requestParameters['linkAdditionLinkType'];
         }
 
+        if (requestParameters['bestPrice'] != null) {
+            queryParameters['bestPrice'] = requestParameters['bestPrice'];
+        }
+
         if (requestParameters['recommended'] != null) {
             queryParameters['recommended'] = requestParameters['recommended'];
         }
@@ -1108,6 +1118,10 @@ export class CatalogueApi extends runtime.BaseAPI implements CatalogueApiInterfa
 
         if (requestParameters['linkAdditionLinkType'] != null) {
             queryParameters['linkAdditionLinkType'] = requestParameters['linkAdditionLinkType'];
+        }
+
+        if (requestParameters['bestPrice'] != null) {
+            queryParameters['bestPrice'] = requestParameters['bestPrice'];
         }
 
         if (requestParameters['recommended'] != null) {

@@ -14,7 +14,7 @@ require 'growwer'
 
 instance = Growwer::SellerMediaSavedAllOfDetails.new(
   competitive_fees: null,
-  competitors: [&quot;Prensarank&quot;]
+  competitors: [&quot;Prensalink&quot;]
 )
 ```
 

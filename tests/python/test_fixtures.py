@@ -8,6 +8,7 @@ import datetime
 import json
 import pathlib
 import unittest
+import urllib.parse
 import uuid
 
 import urllib3
@@ -18,6 +19,7 @@ from growwer.exceptions import ApiException
 from growwer.models import (
     BalanceLowEventData,
     CatalogueMedia,
+    CatalogueMediaBestPrice,
     CatalogueOfferOrNull,
     CreateWebhookRequest,
     Error,
@@ -29,9 +31,12 @@ from growwer.models import (
     OrderEventData,
     PostOrderBriefing,
     MoneyOrNull,
+    ProjectCatalogueMedia,
     SellerFeesOrNull,
     SellerMedia,
     SellerMediaCompetitiveFeesByLinkTypeInner,
+    SellerMediaSaved,
+    UpdateSellerMediaRequest,
     UpdateWebhookRequest,
     WebhookEvent,
     WebhookTestEventData,
@@ -42,6 +47,7 @@ FIXTURES = pathlib.Path(__file__).resolve().parent.parent / "fixtures"
 MEDIA_ID = uuid.UUID("c1d2e3f4-a5b6-4c7d-8e9f-a0b1c2d3e4f5")
 ORDER_ID = uuid.UUID("0b9c6a4e-6f1d-4c39-9a51-2f5d7c1e8a01")
 WEBHOOK_ID = uuid.UUID("9d4c3f5b-6e7a-4b82-9d2e-3f4a5b6c7d8e")
+PROJECT_ID = uuid.UUID("5e0c2b7a-3d4f-4a1b-9c8d-7e6f5a4b3c2d")
 
 
 def fixture(name):
@@ -169,6 +175,7 @@ class FixtureTest(unittest.TestCase):
         media = CatalogueApi(self.client(200, fixture("catalogue-media.json"))).get_catalogue_media(MEDIA_ID)
 
         self.assertIsInstance(media, CatalogueMedia)
+        self.assertIsNone(media.best_price)
         self.assertIsNone(media.link_addition_offer)
         self.assertIsNone(media.flash_offer)
         self.assertIsNone(media.country)
@@ -196,6 +203,44 @@ class FixtureTest(unittest.TestCase):
         self.assertIsNone(offer.link_type)
         self.assertEqual(offer.price.amount, 6000)
         self.assertIsNone(offer.previous_price)
+
+    def test_catalogue_media_reads_its_best_price_badge(self):
+        media = CatalogueApi(
+            self.client(200, fixture("catalogue-media-null-link-type.json"))
+        ).get_catalogue_media(MEDIA_ID)
+
+        best_price = media.best_price
+        self.assertIsInstance(best_price, CatalogueMediaBestPrice)
+        self.assertEqual(best_price.badge, "cheaper")
+        self.assertEqual(best_price.platform_count, 3)
+        self.assertEqual(best_price.checked_on, datetime.date(2026, 11, 12))
+
+    def test_search_project_medias_sends_the_best_price_filter_and_reads_an_only_here_badge(self):
+        page = CatalogueApi(
+            self.client(200, fixture("project-medias-page.json"))
+        ).search_project_medias(PROJECT_ID, best_price=True)
+
+        _, url, _ = self.sent()
+        parsed = urllib.parse.urlsplit(url)
+        self.assertEqual(parsed.path, f"/api/v1/projects/{PROJECT_ID}/medias")
+        self.assertIn("bestPrice=true", parsed.query.split("&"))
+        media = page.items[0]
+        self.assertIsInstance(media, ProjectCatalogueMedia)
+        self.assertIsInstance(media.best_price, CatalogueMediaBestPrice)
+        self.assertEqual(media.best_price.badge, "only_here")
+        self.assertEqual(media.best_price.platform_count, 2)
+        self.assertEqual(media.best_price.checked_on, datetime.date(2026, 11, 11))
+
+    def test_search_project_medias_reads_a_project_media_without_a_badge(self):
+        page = CatalogueApi(
+            self.client(200, fixture("project-medias-page-no-badge.json"))
+        ).search_project_medias(PROJECT_ID)
+
+        _, url, _ = self.sent()
+        self.assertNotIn("bestPrice", urllib.parse.urlsplit(url).query)
+        self.assertIsInstance(page.items[0], ProjectCatalogueMedia)
+        self.assertIsNone(page.items[0].best_price)
+        self.assertEqual(page.items[0].domain, "blog.example")
 
     def test_seller_media_reads_null_competitive_fees(self):
         media = SellerMediasApi(self.client(200, fixture("seller-media.json"))).get_seller_media(MEDIA_ID)
@@ -237,6 +282,20 @@ class FixtureTest(unittest.TestCase):
         self.assertEqual(fees[1].fee_when_seller_does_not_write_post.amount_decimal, "36.00")
         self.assertEqual(media.competitive_fees.fee_when_seller_writes_post.amount, 5400)
         self.assertEqual(media.competitive_fees.fee_when_seller_does_not_write_post.amount, 3600)
+
+    def test_update_seller_media_reads_a_saved_not_recommended_warning(self):
+        saved = SellerMediasApi(
+            self.client(200, fixture("seller-media-saved-not-recommended.json"))
+        ).update_seller_media(MEDIA_ID, "key-1", UpdateSellerMediaRequest())
+
+        self.assertIsInstance(saved, SellerMediaSaved)
+        self.assertEqual(len(saved.warnings), 1)
+        warning = saved.warnings[0]
+        self.assertEqual(warning.code, "saved_not_recommended")
+        self.assertEqual(warning.details.competitive_fees.fee_when_seller_writes_post.amount, 5400)
+        self.assertIsNone(warning.details.competitive_fees.fee_when_seller_does_not_write_post)
+        self.assertEqual(warning.details.competitors, ["Prensalink"])
+        self.assertEqual(saved.domain, "blog.example")
 
     def test_order_event_parses_with_fields_this_client_does_not_know(self):
         event = WebhookEvent.from_json(fixture("webhook-order-created.json"))

@@ -101,6 +101,7 @@ public class JSON {
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.BalanceLowEventData.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.BalanceLowEventDataWallet.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.CatalogueMedia.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.CatalogueMediaBestPrice.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.CatalogueMediaFlashOffer.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.CatalogueMediaMetrics.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.CatalogueOffer.CustomTypeAdapterFactory());

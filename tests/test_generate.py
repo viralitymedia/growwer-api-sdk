@@ -20,6 +20,7 @@ POST_PROCESSING_SCRIPTS = (
     "java-pom-publish.py",
     "license.py",
     "package-metadata.py",
+    "php-boolean-query-format.py",
     "php-root-manifest.py",
     "ruby-oneof-unknown-keys.py",
 )
@@ -636,6 +637,57 @@ class GoOneOfUnreachableTest(unittest.TestCase):
         for path in (ROOT / "go").glob("model_*.go"):
             text = path.read_text(encoding="utf-8")
             self.assertLessEqual(text.count("data failed to match schemas in oneOf("), 2, path.name)
+
+
+class PhpBooleanQueryFormatTest(unittest.TestCase):
+    """scripts/php-boolean-query-format.py starts the PHP configuration at `true`/`false` for boolean
+    query parameters, which the API accepts, instead of the `1`/`0` it refuses."""
+
+    INT = "    protected $booleanFormatForQueryString = self::BOOLEAN_FORMAT_INT;\n"
+    STRING = "    protected $booleanFormatForQueryString = self::BOOLEAN_FORMAT_STRING;\n"
+    CONFIGURATION = (
+        "class Configuration\n{{\n"
+        "    public const BOOLEAN_FORMAT_INT = 'int';\n"
+        "    public const BOOLEAN_FORMAT_STRING = 'string';\n"
+        "{default}"
+        "    public function setBooleanFormatForQueryString(string $booleanFormat)\n"
+        "    {{\n        $this->booleanFormatForQueryString = $booleanFormat;\n    }}\n}}\n"
+    )
+
+    def run_script(self, configuration):
+        with tempfile.TemporaryDirectory(prefix="growwer-php-boolean-test-") as directory:
+            root = Path(directory)
+            (root / "scripts").mkdir()
+            shutil.copyfile(
+                ROOT / "scripts/php-boolean-query-format.py", root / "scripts/php-boolean-query-format.py"
+            )
+            folder = root / "php" / "lib"
+            folder.mkdir(parents=True)
+            (folder / "Configuration.php").write_text(configuration)
+            result = subprocess.run(
+                [sys.executable, "scripts/php-boolean-query-format.py"],
+                cwd=root,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            return result, (folder / "Configuration.php").read_text()
+
+    def test_the_default_moves_to_string_and_nothing_else_changes(self):
+        result, configuration = self.run_script(self.CONFIGURATION.format(default=self.INT))
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        self.assertEqual(self.CONFIGURATION.format(default=self.STRING), configuration)
+
+    def test_a_generator_that_no_longer_defaults_to_int_fails_the_run(self):
+        result, configuration = self.run_script(self.CONFIGURATION.format(default=self.STRING))
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("remove or update scripts/php-boolean-query-format.py", result.stderr)
+        self.assertEqual(self.CONFIGURATION.format(default=self.STRING), configuration)
+
+    def test_the_committed_php_client_defaults_to_string(self):
+        configuration = (ROOT / "php/lib/Configuration.php").read_text(encoding="utf-8")
+        self.assertEqual(1, configuration.count(self.STRING))
+        self.assertNotIn(self.INT, configuration)
 
 
 class RubyOneOfUnknownKeysTest(unittest.TestCase):

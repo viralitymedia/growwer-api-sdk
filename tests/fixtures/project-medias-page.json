@@ -23,6 +23,11 @@
       "averageDaysToPublication": null,
       "onHoliday": false,
       "flashOffer": null,
+      "bestPrice": {
+        "badge": "only_here",
+        "platformCount": 2,
+        "checkedOn": "2026-11-11"
+      },
       "postOffer": {
         "price": {
           "amount": 9000,

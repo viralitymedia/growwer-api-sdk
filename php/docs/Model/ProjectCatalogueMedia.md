@@ -17,6 +17,7 @@ Name | Type | Description | Notes
 **average_days_to_publication** | **int** | The average days from order to publication, or null without published orders. |
 **on_holiday** | **bool** | Whether the media is on holiday and will take longer to publish. |
 **flash_offer** | [**\Growwer\Api\Model\CatalogueMediaFlashOffer**](CatalogueMediaFlashOffer.md) |  |
+**best_price** | [**\Growwer\Api\Model\CatalogueMediaBestPrice**](CatalogueMediaBestPrice.md) |  |
 **post_offer** | [**\Growwer\Api\Model\CataloguePostOffer**](CataloguePostOffer.md) |  |
 **link_addition_offer** | [**\Growwer\Api\Model\CatalogueOfferOrNull**](CatalogueOfferOrNull.md) | Adding a link to an existing article, or null when the media does not offer it. |
 **project** | [**\Growwer\Api\Model\ProjectCatalogueMediaAllOfProject**](ProjectCatalogueMediaAllOfProject.md) |  |

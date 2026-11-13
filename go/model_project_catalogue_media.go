@@ -40,6 +40,7 @@ type ProjectCatalogueMedia struct {
 	// Whether the media is on holiday and will take longer to publish.
 	OnHoliday bool `json:"onHoliday"`
 	FlashOffer NullableCatalogueMediaFlashOffer `json:"flashOffer"`
+	BestPrice NullableCatalogueMediaBestPrice `json:"bestPrice"`
 	PostOffer CataloguePostOffer `json:"postOffer"`
 	// Adding a link to an existing article, or null when the media does not offer it.
 	LinkAdditionOffer NullableCatalogueOfferOrNull `json:"linkAdditionOffer"`
@@ -53,7 +54,7 @@ type _ProjectCatalogueMedia ProjectCatalogueMedia
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewProjectCatalogueMedia(id string, domain string, type_ string, language string, country NullableString, topics []int32, metrics CatalogueMediaMetrics, positiveTrafficTrend bool, bestSeller bool, publicationRate NullableInt32, averageDaysToPublication NullableInt32, onHoliday bool, flashOffer NullableCatalogueMediaFlashOffer, postOffer CataloguePostOffer, linkAdditionOffer NullableCatalogueOfferOrNull, project ProjectCatalogueMediaAllOfProject) *ProjectCatalogueMedia {
+func NewProjectCatalogueMedia(id string, domain string, type_ string, language string, country NullableString, topics []int32, metrics CatalogueMediaMetrics, positiveTrafficTrend bool, bestSeller bool, publicationRate NullableInt32, averageDaysToPublication NullableInt32, onHoliday bool, flashOffer NullableCatalogueMediaFlashOffer, bestPrice NullableCatalogueMediaBestPrice, postOffer CataloguePostOffer, linkAdditionOffer NullableCatalogueOfferOrNull, project ProjectCatalogueMediaAllOfProject) *ProjectCatalogueMedia {
 	this := ProjectCatalogueMedia{}
 	this.Id = id
 	this.Domain = domain
@@ -68,6 +69,7 @@ func NewProjectCatalogueMedia(id string, domain string, type_ string, language s
 	this.AverageDaysToPublication = averageDaysToPublication
 	this.OnHoliday = onHoliday
 	this.FlashOffer = flashOffer
+	this.BestPrice = bestPrice
 	this.PostOffer = postOffer
 	this.LinkAdditionOffer = linkAdditionOffer
 	this.Project = project
@@ -402,6 +404,32 @@ func (o *ProjectCatalogueMedia) SetFlashOffer(v CatalogueMediaFlashOffer) {
 	o.FlashOffer.Set(&v)
 }
 
+// GetBestPrice returns the BestPrice field value
+// If the value is explicit nil, the zero value for CatalogueMediaBestPrice will be returned
+func (o *ProjectCatalogueMedia) GetBestPrice() CatalogueMediaBestPrice {
+	if o == nil || o.BestPrice.Get() == nil {
+		var ret CatalogueMediaBestPrice
+		return ret
+	}
+
+	return *o.BestPrice.Get()
+}
+
+// GetBestPriceOk returns a tuple with the BestPrice field value
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *ProjectCatalogueMedia) GetBestPriceOk() (*CatalogueMediaBestPrice, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.BestPrice.Get(), o.BestPrice.IsSet()
+}
+
+// SetBestPrice sets field value
+func (o *ProjectCatalogueMedia) SetBestPrice(v CatalogueMediaBestPrice) {
+	o.BestPrice.Set(&v)
+}
+
 // GetPostOffer returns the PostOffer field value
 func (o *ProjectCatalogueMedia) GetPostOffer() CataloguePostOffer {
 	if o == nil {
@@ -499,6 +527,7 @@ func (o ProjectCatalogueMedia) ToMap() (map[string]interface{}, error) {
 	toSerialize["averageDaysToPublication"] = o.AverageDaysToPublication.Get()
 	toSerialize["onHoliday"] = o.OnHoliday
 	toSerialize["flashOffer"] = o.FlashOffer.Get()
+	toSerialize["bestPrice"] = o.BestPrice.Get()
 	toSerialize["postOffer"] = o.PostOffer
 	toSerialize["linkAdditionOffer"] = o.LinkAdditionOffer.Get()
 	toSerialize["project"] = o.Project
@@ -528,6 +557,7 @@ func (o *ProjectCatalogueMedia) UnmarshalJSON(data []byte) (err error) {
 		"averageDaysToPublication",
 		"onHoliday",
 		"flashOffer",
+		"bestPrice",
 		"postOffer",
 		"linkAdditionOffer",
 		"project",
@@ -573,6 +603,7 @@ func (o *ProjectCatalogueMedia) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "averageDaysToPublication")
 		delete(additionalProperties, "onHoliday")
 		delete(additionalProperties, "flashOffer")
+		delete(additionalProperties, "bestPrice")
 		delete(additionalProperties, "postOffer")
 		delete(additionalProperties, "linkAdditionOffer")
 		delete(additionalProperties, "project")

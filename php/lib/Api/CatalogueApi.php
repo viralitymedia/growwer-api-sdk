@@ -1184,6 +1184,7 @@ class CatalogueApi
      * @param  int|null $min_link_addition_price Minimum link addition price, in cents. (optional)
      * @param  int|null $max_link_addition_price Maximum link addition price, in cents. (optional)
      * @param  string|null $link_addition_link_type A comma-separated list of link types the link addition offer gives: &#x60;dofollow&#x60;, &#x60;nofollow&#x60;, &#x60;citation&#x60;. (optional)
+     * @param  bool|null $best_price Medias with a best-price badge (&#x60;bestPrice&#x60; not null), of either claim. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)
      * @param  bool|null $recommended &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. (optional)
      * @param  bool|null $favourite &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $requested &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. (optional)
@@ -1200,9 +1201,9 @@ class CatalogueApi
      * @throws \InvalidArgumentException
      * @return \Growwer\Api\Model\ListFlashOffers200Response|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error
      */
-    public function listFlashOffers($project_id, $source = null, $sort = null, $domain = null, $website_type = null, $language = null, $country = null, $topics = null, $not_banned_topics = null, $min_traffic = null, $max_traffic = null, $traffic_trend_upward = null, $min_domain_rating = null, $max_domain_rating = null, $min_linked_to_referring_ratio = null, $max_linked_to_referring_ratio = null, $min_post_price = null, $max_post_price = null, $post_link_type = null, $promoted_social_network = null, $without_advertising_label = null, $homepage_listing = null, $has_link_addition = null, $min_link_addition_price = null, $max_link_addition_price = null, $link_addition_link_type = null, $recommended = null, $favourite = null, $requested = null, $bought = null, $discarded = null, $new = null, $ranks_goal_keyword = null, $ranks_ai_keyword = null, $limit = 20, $offset = 0, string $contentType = self::contentTypes['listFlashOffers'][0])
+    public function listFlashOffers($project_id, $source = null, $sort = null, $domain = null, $website_type = null, $language = null, $country = null, $topics = null, $not_banned_topics = null, $min_traffic = null, $max_traffic = null, $traffic_trend_upward = null, $min_domain_rating = null, $max_domain_rating = null, $min_linked_to_referring_ratio = null, $max_linked_to_referring_ratio = null, $min_post_price = null, $max_post_price = null, $post_link_type = null, $promoted_social_network = null, $without_advertising_label = null, $homepage_listing = null, $has_link_addition = null, $min_link_addition_price = null, $max_link_addition_price = null, $link_addition_link_type = null, $best_price = null, $recommended = null, $favourite = null, $requested = null, $bought = null, $discarded = null, $new = null, $ranks_goal_keyword = null, $ranks_ai_keyword = null, $limit = 20, $offset = 0, string $contentType = self::contentTypes['listFlashOffers'][0])
     {
-        list($response) = $this->listFlashOffersWithHttpInfo($project_id, $source, $sort, $domain, $website_type, $language, $country, $topics, $not_banned_topics, $min_traffic, $max_traffic, $traffic_trend_upward, $min_domain_rating, $max_domain_rating, $min_linked_to_referring_ratio, $max_linked_to_referring_ratio, $min_post_price, $max_post_price, $post_link_type, $promoted_social_network, $without_advertising_label, $homepage_listing, $has_link_addition, $min_link_addition_price, $max_link_addition_price, $link_addition_link_type, $recommended, $favourite, $requested, $bought, $discarded, $new, $ranks_goal_keyword, $ranks_ai_keyword, $limit, $offset, $contentType);
+        list($response) = $this->listFlashOffersWithHttpInfo($project_id, $source, $sort, $domain, $website_type, $language, $country, $topics, $not_banned_topics, $min_traffic, $max_traffic, $traffic_trend_upward, $min_domain_rating, $max_domain_rating, $min_linked_to_referring_ratio, $max_linked_to_referring_ratio, $min_post_price, $max_post_price, $post_link_type, $promoted_social_network, $without_advertising_label, $homepage_listing, $has_link_addition, $min_link_addition_price, $max_link_addition_price, $link_addition_link_type, $best_price, $recommended, $favourite, $requested, $bought, $discarded, $new, $ranks_goal_keyword, $ranks_ai_keyword, $limit, $offset, $contentType);
         return $response;
     }
 
@@ -1237,6 +1238,7 @@ class CatalogueApi
      * @param  int|null $min_link_addition_price Minimum link addition price, in cents. (optional)
      * @param  int|null $max_link_addition_price Maximum link addition price, in cents. (optional)
      * @param  string|null $link_addition_link_type A comma-separated list of link types the link addition offer gives: &#x60;dofollow&#x60;, &#x60;nofollow&#x60;, &#x60;citation&#x60;. (optional)
+     * @param  bool|null $best_price Medias with a best-price badge (&#x60;bestPrice&#x60; not null), of either claim. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)
      * @param  bool|null $recommended &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. (optional)
      * @param  bool|null $favourite &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $requested &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. (optional)
@@ -1253,9 +1255,9 @@ class CatalogueApi
      * @throws \InvalidArgumentException
      * @return array of \Growwer\Api\Model\ListFlashOffers200Response|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
-    public function listFlashOffersWithHttpInfo($project_id, $source = null, $sort = null, $domain = null, $website_type = null, $language = null, $country = null, $topics = null, $not_banned_topics = null, $min_traffic = null, $max_traffic = null, $traffic_trend_upward = null, $min_domain_rating = null, $max_domain_rating = null, $min_linked_to_referring_ratio = null, $max_linked_to_referring_ratio = null, $min_post_price = null, $max_post_price = null, $post_link_type = null, $promoted_social_network = null, $without_advertising_label = null, $homepage_listing = null, $has_link_addition = null, $min_link_addition_price = null, $max_link_addition_price = null, $link_addition_link_type = null, $recommended = null, $favourite = null, $requested = null, $bought = null, $discarded = null, $new = null, $ranks_goal_keyword = null, $ranks_ai_keyword = null, $limit = 20, $offset = 0, string $contentType = self::contentTypes['listFlashOffers'][0])
+    public function listFlashOffersWithHttpInfo($project_id, $source = null, $sort = null, $domain = null, $website_type = null, $language = null, $country = null, $topics = null, $not_banned_topics = null, $min_traffic = null, $max_traffic = null, $traffic_trend_upward = null, $min_domain_rating = null, $max_domain_rating = null, $min_linked_to_referring_ratio = null, $max_linked_to_referring_ratio = null, $min_post_price = null, $max_post_price = null, $post_link_type = null, $promoted_social_network = null, $without_advertising_label = null, $homepage_listing = null, $has_link_addition = null, $min_link_addition_price = null, $max_link_addition_price = null, $link_addition_link_type = null, $best_price = null, $recommended = null, $favourite = null, $requested = null, $bought = null, $discarded = null, $new = null, $ranks_goal_keyword = null, $ranks_ai_keyword = null, $limit = 20, $offset = 0, string $contentType = self::contentTypes['listFlashOffers'][0])
     {
-        $request = $this->listFlashOffersRequest($project_id, $source, $sort, $domain, $website_type, $language, $country, $topics, $not_banned_topics, $min_traffic, $max_traffic, $traffic_trend_upward, $min_domain_rating, $max_domain_rating, $min_linked_to_referring_ratio, $max_linked_to_referring_ratio, $min_post_price, $max_post_price, $post_link_type, $promoted_social_network, $without_advertising_label, $homepage_listing, $has_link_addition, $min_link_addition_price, $max_link_addition_price, $link_addition_link_type, $recommended, $favourite, $requested, $bought, $discarded, $new, $ranks_goal_keyword, $ranks_ai_keyword, $limit, $offset, $contentType);
+        $request = $this->listFlashOffersRequest($project_id, $source, $sort, $domain, $website_type, $language, $country, $topics, $not_banned_topics, $min_traffic, $max_traffic, $traffic_trend_upward, $min_domain_rating, $max_domain_rating, $min_linked_to_referring_ratio, $max_linked_to_referring_ratio, $min_post_price, $max_post_price, $post_link_type, $promoted_social_network, $without_advertising_label, $homepage_listing, $has_link_addition, $min_link_addition_price, $max_link_addition_price, $link_addition_link_type, $best_price, $recommended, $favourite, $requested, $bought, $discarded, $new, $ranks_goal_keyword, $ranks_ai_keyword, $limit, $offset, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1455,6 +1457,7 @@ class CatalogueApi
      * @param  int|null $min_link_addition_price Minimum link addition price, in cents. (optional)
      * @param  int|null $max_link_addition_price Maximum link addition price, in cents. (optional)
      * @param  string|null $link_addition_link_type A comma-separated list of link types the link addition offer gives: &#x60;dofollow&#x60;, &#x60;nofollow&#x60;, &#x60;citation&#x60;. (optional)
+     * @param  bool|null $best_price Medias with a best-price badge (&#x60;bestPrice&#x60; not null), of either claim. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)
      * @param  bool|null $recommended &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. (optional)
      * @param  bool|null $favourite &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $requested &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. (optional)
@@ -1470,9 +1473,9 @@ class CatalogueApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function listFlashOffersAsync($project_id, $source = null, $sort = null, $domain = null, $website_type = null, $language = null, $country = null, $topics = null, $not_banned_topics = null, $min_traffic = null, $max_traffic = null, $traffic_trend_upward = null, $min_domain_rating = null, $max_domain_rating = null, $min_linked_to_referring_ratio = null, $max_linked_to_referring_ratio = null, $min_post_price = null, $max_post_price = null, $post_link_type = null, $promoted_social_network = null, $without_advertising_label = null, $homepage_listing = null, $has_link_addition = null, $min_link_addition_price = null, $max_link_addition_price = null, $link_addition_link_type = null, $recommended = null, $favourite = null, $requested = null, $bought = null, $discarded = null, $new = null, $ranks_goal_keyword = null, $ranks_ai_keyword = null, $limit = 20, $offset = 0, string $contentType = self::contentTypes['listFlashOffers'][0])
+    public function listFlashOffersAsync($project_id, $source = null, $sort = null, $domain = null, $website_type = null, $language = null, $country = null, $topics = null, $not_banned_topics = null, $min_traffic = null, $max_traffic = null, $traffic_trend_upward = null, $min_domain_rating = null, $max_domain_rating = null, $min_linked_to_referring_ratio = null, $max_linked_to_referring_ratio = null, $min_post_price = null, $max_post_price = null, $post_link_type = null, $promoted_social_network = null, $without_advertising_label = null, $homepage_listing = null, $has_link_addition = null, $min_link_addition_price = null, $max_link_addition_price = null, $link_addition_link_type = null, $best_price = null, $recommended = null, $favourite = null, $requested = null, $bought = null, $discarded = null, $new = null, $ranks_goal_keyword = null, $ranks_ai_keyword = null, $limit = 20, $offset = 0, string $contentType = self::contentTypes['listFlashOffers'][0])
     {
-        return $this->listFlashOffersAsyncWithHttpInfo($project_id, $source, $sort, $domain, $website_type, $language, $country, $topics, $not_banned_topics, $min_traffic, $max_traffic, $traffic_trend_upward, $min_domain_rating, $max_domain_rating, $min_linked_to_referring_ratio, $max_linked_to_referring_ratio, $min_post_price, $max_post_price, $post_link_type, $promoted_social_network, $without_advertising_label, $homepage_listing, $has_link_addition, $min_link_addition_price, $max_link_addition_price, $link_addition_link_type, $recommended, $favourite, $requested, $bought, $discarded, $new, $ranks_goal_keyword, $ranks_ai_keyword, $limit, $offset, $contentType)
+        return $this->listFlashOffersAsyncWithHttpInfo($project_id, $source, $sort, $domain, $website_type, $language, $country, $topics, $not_banned_topics, $min_traffic, $max_traffic, $traffic_trend_upward, $min_domain_rating, $max_domain_rating, $min_linked_to_referring_ratio, $max_linked_to_referring_ratio, $min_post_price, $max_post_price, $post_link_type, $promoted_social_network, $without_advertising_label, $homepage_listing, $has_link_addition, $min_link_addition_price, $max_link_addition_price, $link_addition_link_type, $best_price, $recommended, $favourite, $requested, $bought, $discarded, $new, $ranks_goal_keyword, $ranks_ai_keyword, $limit, $offset, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1511,6 +1514,7 @@ class CatalogueApi
      * @param  int|null $min_link_addition_price Minimum link addition price, in cents. (optional)
      * @param  int|null $max_link_addition_price Maximum link addition price, in cents. (optional)
      * @param  string|null $link_addition_link_type A comma-separated list of link types the link addition offer gives: &#x60;dofollow&#x60;, &#x60;nofollow&#x60;, &#x60;citation&#x60;. (optional)
+     * @param  bool|null $best_price Medias with a best-price badge (&#x60;bestPrice&#x60; not null), of either claim. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)
      * @param  bool|null $recommended &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. (optional)
      * @param  bool|null $favourite &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $requested &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. (optional)
@@ -1526,10 +1530,10 @@ class CatalogueApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function listFlashOffersAsyncWithHttpInfo($project_id, $source = null, $sort = null, $domain = null, $website_type = null, $language = null, $country = null, $topics = null, $not_banned_topics = null, $min_traffic = null, $max_traffic = null, $traffic_trend_upward = null, $min_domain_rating = null, $max_domain_rating = null, $min_linked_to_referring_ratio = null, $max_linked_to_referring_ratio = null, $min_post_price = null, $max_post_price = null, $post_link_type = null, $promoted_social_network = null, $without_advertising_label = null, $homepage_listing = null, $has_link_addition = null, $min_link_addition_price = null, $max_link_addition_price = null, $link_addition_link_type = null, $recommended = null, $favourite = null, $requested = null, $bought = null, $discarded = null, $new = null, $ranks_goal_keyword = null, $ranks_ai_keyword = null, $limit = 20, $offset = 0, string $contentType = self::contentTypes['listFlashOffers'][0])
+    public function listFlashOffersAsyncWithHttpInfo($project_id, $source = null, $sort = null, $domain = null, $website_type = null, $language = null, $country = null, $topics = null, $not_banned_topics = null, $min_traffic = null, $max_traffic = null, $traffic_trend_upward = null, $min_domain_rating = null, $max_domain_rating = null, $min_linked_to_referring_ratio = null, $max_linked_to_referring_ratio = null, $min_post_price = null, $max_post_price = null, $post_link_type = null, $promoted_social_network = null, $without_advertising_label = null, $homepage_listing = null, $has_link_addition = null, $min_link_addition_price = null, $max_link_addition_price = null, $link_addition_link_type = null, $best_price = null, $recommended = null, $favourite = null, $requested = null, $bought = null, $discarded = null, $new = null, $ranks_goal_keyword = null, $ranks_ai_keyword = null, $limit = 20, $offset = 0, string $contentType = self::contentTypes['listFlashOffers'][0])
     {
         $returnType = '\Growwer\Api\Model\ListFlashOffers200Response';
-        $request = $this->listFlashOffersRequest($project_id, $source, $sort, $domain, $website_type, $language, $country, $topics, $not_banned_topics, $min_traffic, $max_traffic, $traffic_trend_upward, $min_domain_rating, $max_domain_rating, $min_linked_to_referring_ratio, $max_linked_to_referring_ratio, $min_post_price, $max_post_price, $post_link_type, $promoted_social_network, $without_advertising_label, $homepage_listing, $has_link_addition, $min_link_addition_price, $max_link_addition_price, $link_addition_link_type, $recommended, $favourite, $requested, $bought, $discarded, $new, $ranks_goal_keyword, $ranks_ai_keyword, $limit, $offset, $contentType);
+        $request = $this->listFlashOffersRequest($project_id, $source, $sort, $domain, $website_type, $language, $country, $topics, $not_banned_topics, $min_traffic, $max_traffic, $traffic_trend_upward, $min_domain_rating, $max_domain_rating, $min_linked_to_referring_ratio, $max_linked_to_referring_ratio, $min_post_price, $max_post_price, $post_link_type, $promoted_social_network, $without_advertising_label, $homepage_listing, $has_link_addition, $min_link_addition_price, $max_link_addition_price, $link_addition_link_type, $best_price, $recommended, $favourite, $requested, $bought, $discarded, $new, $ranks_goal_keyword, $ranks_ai_keyword, $limit, $offset, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1596,6 +1600,7 @@ class CatalogueApi
      * @param  int|null $min_link_addition_price Minimum link addition price, in cents. (optional)
      * @param  int|null $max_link_addition_price Maximum link addition price, in cents. (optional)
      * @param  string|null $link_addition_link_type A comma-separated list of link types the link addition offer gives: &#x60;dofollow&#x60;, &#x60;nofollow&#x60;, &#x60;citation&#x60;. (optional)
+     * @param  bool|null $best_price Medias with a best-price badge (&#x60;bestPrice&#x60; not null), of either claim. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)
      * @param  bool|null $recommended &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. (optional)
      * @param  bool|null $favourite &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $requested &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. (optional)
@@ -1611,7 +1616,7 @@ class CatalogueApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function listFlashOffersRequest($project_id, $source = null, $sort = null, $domain = null, $website_type = null, $language = null, $country = null, $topics = null, $not_banned_topics = null, $min_traffic = null, $max_traffic = null, $traffic_trend_upward = null, $min_domain_rating = null, $max_domain_rating = null, $min_linked_to_referring_ratio = null, $max_linked_to_referring_ratio = null, $min_post_price = null, $max_post_price = null, $post_link_type = null, $promoted_social_network = null, $without_advertising_label = null, $homepage_listing = null, $has_link_addition = null, $min_link_addition_price = null, $max_link_addition_price = null, $link_addition_link_type = null, $recommended = null, $favourite = null, $requested = null, $bought = null, $discarded = null, $new = null, $ranks_goal_keyword = null, $ranks_ai_keyword = null, $limit = 20, $offset = 0, string $contentType = self::contentTypes['listFlashOffers'][0])
+    public function listFlashOffersRequest($project_id, $source = null, $sort = null, $domain = null, $website_type = null, $language = null, $country = null, $topics = null, $not_banned_topics = null, $min_traffic = null, $max_traffic = null, $traffic_trend_upward = null, $min_domain_rating = null, $max_domain_rating = null, $min_linked_to_referring_ratio = null, $max_linked_to_referring_ratio = null, $min_post_price = null, $max_post_price = null, $post_link_type = null, $promoted_social_network = null, $without_advertising_label = null, $homepage_listing = null, $has_link_addition = null, $min_link_addition_price = null, $max_link_addition_price = null, $link_addition_link_type = null, $best_price = null, $recommended = null, $favourite = null, $requested = null, $bought = null, $discarded = null, $new = null, $ranks_goal_keyword = null, $ranks_ai_keyword = null, $limit = 20, $offset = 0, string $contentType = self::contentTypes['listFlashOffers'][0])
     {
 
         // verify the required parameter 'project_id' is set
@@ -1620,6 +1625,7 @@ class CatalogueApi
                 'Missing the required parameter $project_id when calling listFlashOffers'
             );
         }
+
 
 
 
@@ -1906,6 +1912,15 @@ class CatalogueApi
             $link_addition_link_type,
             'linkAdditionLinkType', // param base name
             'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $best_price,
+            'bestPrice', // param base name
+            'boolean', // openApiType
             'form', // style
             true, // explode
             false // required
@@ -2529,6 +2544,7 @@ class CatalogueApi
      * @param  int|null $min_link_addition_price Minimum link addition price, in cents. (optional)
      * @param  int|null $max_link_addition_price Maximum link addition price, in cents. (optional)
      * @param  string|null $link_addition_link_type A comma-separated list of link types the link addition offer gives: &#x60;dofollow&#x60;, &#x60;nofollow&#x60;, &#x60;citation&#x60;. (optional)
+     * @param  bool|null $best_price Medias with a best-price badge (&#x60;bestPrice&#x60; not null), of either claim. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)
      * @param  bool|null $recommended &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. (optional)
      * @param  bool|null $favourite &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $requested &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. (optional)
@@ -2546,9 +2562,9 @@ class CatalogueApi
      * @throws \InvalidArgumentException
      * @return \Growwer\Api\Model\ListFlashOffers200Response|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error
      */
-    public function searchProjectMedias($id, $source = null, $sort = null, $saved_filter_id = null, $domain = null, $website_type = null, $language = null, $country = null, $topics = null, $not_banned_topics = null, $min_traffic = null, $max_traffic = null, $traffic_trend_upward = null, $min_domain_rating = null, $max_domain_rating = null, $min_linked_to_referring_ratio = null, $max_linked_to_referring_ratio = null, $min_post_price = null, $max_post_price = null, $post_link_type = null, $promoted_social_network = null, $without_advertising_label = null, $homepage_listing = null, $has_link_addition = null, $min_link_addition_price = null, $max_link_addition_price = null, $link_addition_link_type = null, $recommended = null, $favourite = null, $requested = null, $flash_offer = null, $bought = null, $discarded = null, $new = null, $ranks_goal_keyword = null, $ranks_ai_keyword = null, $limit = 20, $offset = 0, string $contentType = self::contentTypes['searchProjectMedias'][0])
+    public function searchProjectMedias($id, $source = null, $sort = null, $saved_filter_id = null, $domain = null, $website_type = null, $language = null, $country = null, $topics = null, $not_banned_topics = null, $min_traffic = null, $max_traffic = null, $traffic_trend_upward = null, $min_domain_rating = null, $max_domain_rating = null, $min_linked_to_referring_ratio = null, $max_linked_to_referring_ratio = null, $min_post_price = null, $max_post_price = null, $post_link_type = null, $promoted_social_network = null, $without_advertising_label = null, $homepage_listing = null, $has_link_addition = null, $min_link_addition_price = null, $max_link_addition_price = null, $link_addition_link_type = null, $best_price = null, $recommended = null, $favourite = null, $requested = null, $flash_offer = null, $bought = null, $discarded = null, $new = null, $ranks_goal_keyword = null, $ranks_ai_keyword = null, $limit = 20, $offset = 0, string $contentType = self::contentTypes['searchProjectMedias'][0])
     {
-        list($response) = $this->searchProjectMediasWithHttpInfo($id, $source, $sort, $saved_filter_id, $domain, $website_type, $language, $country, $topics, $not_banned_topics, $min_traffic, $max_traffic, $traffic_trend_upward, $min_domain_rating, $max_domain_rating, $min_linked_to_referring_ratio, $max_linked_to_referring_ratio, $min_post_price, $max_post_price, $post_link_type, $promoted_social_network, $without_advertising_label, $homepage_listing, $has_link_addition, $min_link_addition_price, $max_link_addition_price, $link_addition_link_type, $recommended, $favourite, $requested, $flash_offer, $bought, $discarded, $new, $ranks_goal_keyword, $ranks_ai_keyword, $limit, $offset, $contentType);
+        list($response) = $this->searchProjectMediasWithHttpInfo($id, $source, $sort, $saved_filter_id, $domain, $website_type, $language, $country, $topics, $not_banned_topics, $min_traffic, $max_traffic, $traffic_trend_upward, $min_domain_rating, $max_domain_rating, $min_linked_to_referring_ratio, $max_linked_to_referring_ratio, $min_post_price, $max_post_price, $post_link_type, $promoted_social_network, $without_advertising_label, $homepage_listing, $has_link_addition, $min_link_addition_price, $max_link_addition_price, $link_addition_link_type, $best_price, $recommended, $favourite, $requested, $flash_offer, $bought, $discarded, $new, $ranks_goal_keyword, $ranks_ai_keyword, $limit, $offset, $contentType);
         return $response;
     }
 
@@ -2584,6 +2600,7 @@ class CatalogueApi
      * @param  int|null $min_link_addition_price Minimum link addition price, in cents. (optional)
      * @param  int|null $max_link_addition_price Maximum link addition price, in cents. (optional)
      * @param  string|null $link_addition_link_type A comma-separated list of link types the link addition offer gives: &#x60;dofollow&#x60;, &#x60;nofollow&#x60;, &#x60;citation&#x60;. (optional)
+     * @param  bool|null $best_price Medias with a best-price badge (&#x60;bestPrice&#x60; not null), of either claim. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)
      * @param  bool|null $recommended &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. (optional)
      * @param  bool|null $favourite &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $requested &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. (optional)
@@ -2601,9 +2618,9 @@ class CatalogueApi
      * @throws \InvalidArgumentException
      * @return array of \Growwer\Api\Model\ListFlashOffers200Response|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
-    public function searchProjectMediasWithHttpInfo($id, $source = null, $sort = null, $saved_filter_id = null, $domain = null, $website_type = null, $language = null, $country = null, $topics = null, $not_banned_topics = null, $min_traffic = null, $max_traffic = null, $traffic_trend_upward = null, $min_domain_rating = null, $max_domain_rating = null, $min_linked_to_referring_ratio = null, $max_linked_to_referring_ratio = null, $min_post_price = null, $max_post_price = null, $post_link_type = null, $promoted_social_network = null, $without_advertising_label = null, $homepage_listing = null, $has_link_addition = null, $min_link_addition_price = null, $max_link_addition_price = null, $link_addition_link_type = null, $recommended = null, $favourite = null, $requested = null, $flash_offer = null, $bought = null, $discarded = null, $new = null, $ranks_goal_keyword = null, $ranks_ai_keyword = null, $limit = 20, $offset = 0, string $contentType = self::contentTypes['searchProjectMedias'][0])
+    public function searchProjectMediasWithHttpInfo($id, $source = null, $sort = null, $saved_filter_id = null, $domain = null, $website_type = null, $language = null, $country = null, $topics = null, $not_banned_topics = null, $min_traffic = null, $max_traffic = null, $traffic_trend_upward = null, $min_domain_rating = null, $max_domain_rating = null, $min_linked_to_referring_ratio = null, $max_linked_to_referring_ratio = null, $min_post_price = null, $max_post_price = null, $post_link_type = null, $promoted_social_network = null, $without_advertising_label = null, $homepage_listing = null, $has_link_addition = null, $min_link_addition_price = null, $max_link_addition_price = null, $link_addition_link_type = null, $best_price = null, $recommended = null, $favourite = null, $requested = null, $flash_offer = null, $bought = null, $discarded = null, $new = null, $ranks_goal_keyword = null, $ranks_ai_keyword = null, $limit = 20, $offset = 0, string $contentType = self::contentTypes['searchProjectMedias'][0])
     {
-        $request = $this->searchProjectMediasRequest($id, $source, $sort, $saved_filter_id, $domain, $website_type, $language, $country, $topics, $not_banned_topics, $min_traffic, $max_traffic, $traffic_trend_upward, $min_domain_rating, $max_domain_rating, $min_linked_to_referring_ratio, $max_linked_to_referring_ratio, $min_post_price, $max_post_price, $post_link_type, $promoted_social_network, $without_advertising_label, $homepage_listing, $has_link_addition, $min_link_addition_price, $max_link_addition_price, $link_addition_link_type, $recommended, $favourite, $requested, $flash_offer, $bought, $discarded, $new, $ranks_goal_keyword, $ranks_ai_keyword, $limit, $offset, $contentType);
+        $request = $this->searchProjectMediasRequest($id, $source, $sort, $saved_filter_id, $domain, $website_type, $language, $country, $topics, $not_banned_topics, $min_traffic, $max_traffic, $traffic_trend_upward, $min_domain_rating, $max_domain_rating, $min_linked_to_referring_ratio, $max_linked_to_referring_ratio, $min_post_price, $max_post_price, $post_link_type, $promoted_social_network, $without_advertising_label, $homepage_listing, $has_link_addition, $min_link_addition_price, $max_link_addition_price, $link_addition_link_type, $best_price, $recommended, $favourite, $requested, $flash_offer, $bought, $discarded, $new, $ranks_goal_keyword, $ranks_ai_keyword, $limit, $offset, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -2804,6 +2821,7 @@ class CatalogueApi
      * @param  int|null $min_link_addition_price Minimum link addition price, in cents. (optional)
      * @param  int|null $max_link_addition_price Maximum link addition price, in cents. (optional)
      * @param  string|null $link_addition_link_type A comma-separated list of link types the link addition offer gives: &#x60;dofollow&#x60;, &#x60;nofollow&#x60;, &#x60;citation&#x60;. (optional)
+     * @param  bool|null $best_price Medias with a best-price badge (&#x60;bestPrice&#x60; not null), of either claim. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)
      * @param  bool|null $recommended &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. (optional)
      * @param  bool|null $favourite &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $requested &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. (optional)
@@ -2820,9 +2838,9 @@ class CatalogueApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function searchProjectMediasAsync($id, $source = null, $sort = null, $saved_filter_id = null, $domain = null, $website_type = null, $language = null, $country = null, $topics = null, $not_banned_topics = null, $min_traffic = null, $max_traffic = null, $traffic_trend_upward = null, $min_domain_rating = null, $max_domain_rating = null, $min_linked_to_referring_ratio = null, $max_linked_to_referring_ratio = null, $min_post_price = null, $max_post_price = null, $post_link_type = null, $promoted_social_network = null, $without_advertising_label = null, $homepage_listing = null, $has_link_addition = null, $min_link_addition_price = null, $max_link_addition_price = null, $link_addition_link_type = null, $recommended = null, $favourite = null, $requested = null, $flash_offer = null, $bought = null, $discarded = null, $new = null, $ranks_goal_keyword = null, $ranks_ai_keyword = null, $limit = 20, $offset = 0, string $contentType = self::contentTypes['searchProjectMedias'][0])
+    public function searchProjectMediasAsync($id, $source = null, $sort = null, $saved_filter_id = null, $domain = null, $website_type = null, $language = null, $country = null, $topics = null, $not_banned_topics = null, $min_traffic = null, $max_traffic = null, $traffic_trend_upward = null, $min_domain_rating = null, $max_domain_rating = null, $min_linked_to_referring_ratio = null, $max_linked_to_referring_ratio = null, $min_post_price = null, $max_post_price = null, $post_link_type = null, $promoted_social_network = null, $without_advertising_label = null, $homepage_listing = null, $has_link_addition = null, $min_link_addition_price = null, $max_link_addition_price = null, $link_addition_link_type = null, $best_price = null, $recommended = null, $favourite = null, $requested = null, $flash_offer = null, $bought = null, $discarded = null, $new = null, $ranks_goal_keyword = null, $ranks_ai_keyword = null, $limit = 20, $offset = 0, string $contentType = self::contentTypes['searchProjectMedias'][0])
     {
-        return $this->searchProjectMediasAsyncWithHttpInfo($id, $source, $sort, $saved_filter_id, $domain, $website_type, $language, $country, $topics, $not_banned_topics, $min_traffic, $max_traffic, $traffic_trend_upward, $min_domain_rating, $max_domain_rating, $min_linked_to_referring_ratio, $max_linked_to_referring_ratio, $min_post_price, $max_post_price, $post_link_type, $promoted_social_network, $without_advertising_label, $homepage_listing, $has_link_addition, $min_link_addition_price, $max_link_addition_price, $link_addition_link_type, $recommended, $favourite, $requested, $flash_offer, $bought, $discarded, $new, $ranks_goal_keyword, $ranks_ai_keyword, $limit, $offset, $contentType)
+        return $this->searchProjectMediasAsyncWithHttpInfo($id, $source, $sort, $saved_filter_id, $domain, $website_type, $language, $country, $topics, $not_banned_topics, $min_traffic, $max_traffic, $traffic_trend_upward, $min_domain_rating, $max_domain_rating, $min_linked_to_referring_ratio, $max_linked_to_referring_ratio, $min_post_price, $max_post_price, $post_link_type, $promoted_social_network, $without_advertising_label, $homepage_listing, $has_link_addition, $min_link_addition_price, $max_link_addition_price, $link_addition_link_type, $best_price, $recommended, $favourite, $requested, $flash_offer, $bought, $discarded, $new, $ranks_goal_keyword, $ranks_ai_keyword, $limit, $offset, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -2862,6 +2880,7 @@ class CatalogueApi
      * @param  int|null $min_link_addition_price Minimum link addition price, in cents. (optional)
      * @param  int|null $max_link_addition_price Maximum link addition price, in cents. (optional)
      * @param  string|null $link_addition_link_type A comma-separated list of link types the link addition offer gives: &#x60;dofollow&#x60;, &#x60;nofollow&#x60;, &#x60;citation&#x60;. (optional)
+     * @param  bool|null $best_price Medias with a best-price badge (&#x60;bestPrice&#x60; not null), of either claim. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)
      * @param  bool|null $recommended &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. (optional)
      * @param  bool|null $favourite &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $requested &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. (optional)
@@ -2878,10 +2897,10 @@ class CatalogueApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function searchProjectMediasAsyncWithHttpInfo($id, $source = null, $sort = null, $saved_filter_id = null, $domain = null, $website_type = null, $language = null, $country = null, $topics = null, $not_banned_topics = null, $min_traffic = null, $max_traffic = null, $traffic_trend_upward = null, $min_domain_rating = null, $max_domain_rating = null, $min_linked_to_referring_ratio = null, $max_linked_to_referring_ratio = null, $min_post_price = null, $max_post_price = null, $post_link_type = null, $promoted_social_network = null, $without_advertising_label = null, $homepage_listing = null, $has_link_addition = null, $min_link_addition_price = null, $max_link_addition_price = null, $link_addition_link_type = null, $recommended = null, $favourite = null, $requested = null, $flash_offer = null, $bought = null, $discarded = null, $new = null, $ranks_goal_keyword = null, $ranks_ai_keyword = null, $limit = 20, $offset = 0, string $contentType = self::contentTypes['searchProjectMedias'][0])
+    public function searchProjectMediasAsyncWithHttpInfo($id, $source = null, $sort = null, $saved_filter_id = null, $domain = null, $website_type = null, $language = null, $country = null, $topics = null, $not_banned_topics = null, $min_traffic = null, $max_traffic = null, $traffic_trend_upward = null, $min_domain_rating = null, $max_domain_rating = null, $min_linked_to_referring_ratio = null, $max_linked_to_referring_ratio = null, $min_post_price = null, $max_post_price = null, $post_link_type = null, $promoted_social_network = null, $without_advertising_label = null, $homepage_listing = null, $has_link_addition = null, $min_link_addition_price = null, $max_link_addition_price = null, $link_addition_link_type = null, $best_price = null, $recommended = null, $favourite = null, $requested = null, $flash_offer = null, $bought = null, $discarded = null, $new = null, $ranks_goal_keyword = null, $ranks_ai_keyword = null, $limit = 20, $offset = 0, string $contentType = self::contentTypes['searchProjectMedias'][0])
     {
         $returnType = '\Growwer\Api\Model\ListFlashOffers200Response';
-        $request = $this->searchProjectMediasRequest($id, $source, $sort, $saved_filter_id, $domain, $website_type, $language, $country, $topics, $not_banned_topics, $min_traffic, $max_traffic, $traffic_trend_upward, $min_domain_rating, $max_domain_rating, $min_linked_to_referring_ratio, $max_linked_to_referring_ratio, $min_post_price, $max_post_price, $post_link_type, $promoted_social_network, $without_advertising_label, $homepage_listing, $has_link_addition, $min_link_addition_price, $max_link_addition_price, $link_addition_link_type, $recommended, $favourite, $requested, $flash_offer, $bought, $discarded, $new, $ranks_goal_keyword, $ranks_ai_keyword, $limit, $offset, $contentType);
+        $request = $this->searchProjectMediasRequest($id, $source, $sort, $saved_filter_id, $domain, $website_type, $language, $country, $topics, $not_banned_topics, $min_traffic, $max_traffic, $traffic_trend_upward, $min_domain_rating, $max_domain_rating, $min_linked_to_referring_ratio, $max_linked_to_referring_ratio, $min_post_price, $max_post_price, $post_link_type, $promoted_social_network, $without_advertising_label, $homepage_listing, $has_link_addition, $min_link_addition_price, $max_link_addition_price, $link_addition_link_type, $best_price, $recommended, $favourite, $requested, $flash_offer, $bought, $discarded, $new, $ranks_goal_keyword, $ranks_ai_keyword, $limit, $offset, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -2949,6 +2968,7 @@ class CatalogueApi
      * @param  int|null $min_link_addition_price Minimum link addition price, in cents. (optional)
      * @param  int|null $max_link_addition_price Maximum link addition price, in cents. (optional)
      * @param  string|null $link_addition_link_type A comma-separated list of link types the link addition offer gives: &#x60;dofollow&#x60;, &#x60;nofollow&#x60;, &#x60;citation&#x60;. (optional)
+     * @param  bool|null $best_price Medias with a best-price badge (&#x60;bestPrice&#x60; not null), of either claim. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)
      * @param  bool|null $recommended &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. (optional)
      * @param  bool|null $favourite &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $requested &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. (optional)
@@ -2965,7 +2985,7 @@ class CatalogueApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function searchProjectMediasRequest($id, $source = null, $sort = null, $saved_filter_id = null, $domain = null, $website_type = null, $language = null, $country = null, $topics = null, $not_banned_topics = null, $min_traffic = null, $max_traffic = null, $traffic_trend_upward = null, $min_domain_rating = null, $max_domain_rating = null, $min_linked_to_referring_ratio = null, $max_linked_to_referring_ratio = null, $min_post_price = null, $max_post_price = null, $post_link_type = null, $promoted_social_network = null, $without_advertising_label = null, $homepage_listing = null, $has_link_addition = null, $min_link_addition_price = null, $max_link_addition_price = null, $link_addition_link_type = null, $recommended = null, $favourite = null, $requested = null, $flash_offer = null, $bought = null, $discarded = null, $new = null, $ranks_goal_keyword = null, $ranks_ai_keyword = null, $limit = 20, $offset = 0, string $contentType = self::contentTypes['searchProjectMedias'][0])
+    public function searchProjectMediasRequest($id, $source = null, $sort = null, $saved_filter_id = null, $domain = null, $website_type = null, $language = null, $country = null, $topics = null, $not_banned_topics = null, $min_traffic = null, $max_traffic = null, $traffic_trend_upward = null, $min_domain_rating = null, $max_domain_rating = null, $min_linked_to_referring_ratio = null, $max_linked_to_referring_ratio = null, $min_post_price = null, $max_post_price = null, $post_link_type = null, $promoted_social_network = null, $without_advertising_label = null, $homepage_listing = null, $has_link_addition = null, $min_link_addition_price = null, $max_link_addition_price = null, $link_addition_link_type = null, $best_price = null, $recommended = null, $favourite = null, $requested = null, $flash_offer = null, $bought = null, $discarded = null, $new = null, $ranks_goal_keyword = null, $ranks_ai_keyword = null, $limit = 20, $offset = 0, string $contentType = self::contentTypes['searchProjectMedias'][0])
     {
 
         // verify the required parameter 'id' is set
@@ -2974,6 +2994,7 @@ class CatalogueApi
                 'Missing the required parameter $id when calling searchProjectMedias'
             );
         }
+
 
 
 
@@ -3262,6 +3283,15 @@ class CatalogueApi
             $link_addition_link_type,
             'linkAdditionLinkType', // param base name
             'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $best_price,
+            'bestPrice', // param base name
+            'boolean', // openApiType
             'form', // style
             true, // explode
             false // required

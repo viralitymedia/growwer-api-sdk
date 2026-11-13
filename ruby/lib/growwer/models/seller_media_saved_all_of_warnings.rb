@@ -137,7 +137,7 @@ module Growwer
     def valid?
       warn '[DEPRECATED] the `valid?` method is obsolete'
       return false if @code.nil?
-      code_validator = EnumAttributeValidator.new('String', ["saved_above_competitors"])
+      code_validator = EnumAttributeValidator.new('String', ["saved_above_competitors", "saved_not_recommended"])
       return false unless code_validator.valid?(@code)
       return false if @message.nil?
       return false if @details.nil?
@@ -147,7 +147,7 @@ module Growwer
     # Custom attribute writer method checking allowed values (enum).
     # @param [Object] code Object to be assigned
     def code=(code)
-      validator = EnumAttributeValidator.new('String', ["saved_above_competitors"])
+      validator = EnumAttributeValidator.new('String', ["saved_above_competitors", "saved_not_recommended"])
       unless validator.valid?(code)
         fail ArgumentError, "invalid value for \"code\", must be one of #{validator.allowable_values}."
       end

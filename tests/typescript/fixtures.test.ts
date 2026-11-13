@@ -8,6 +8,7 @@ import {
   AccountApi,
   BuyerOrdersApi,
   CatalogueApi,
+  CatalogueMediaBestPriceBadgeEnum,
   Configuration,
   ModelErrorFromJSON,
   ResponseError,
@@ -17,6 +18,7 @@ import {
 } from '../../typescript/dist';
 import type {
   BalanceLowEventData,
+  CatalogueMediaBestPrice,
   LinkAdditionOrderBriefing,
   OrderEventData,
   PostOrderBriefing,
@@ -36,6 +38,7 @@ const path = require('node:path');
 const FIXTURES = path.join(__dirname, '..', 'fixtures');
 const MEDIA_ID = 'c1d2e3f4-a5b6-4c7d-8e9f-a0b1c2d3e4f5';
 const ORDER_ID = '0b9c6a4e-6f1d-4c39-9a51-2f5d7c1e8a01';
+const PROJECT_ID = '5e0c2b7a-3d4f-4a1b-9c8d-7e6f5a4b3c2d';
 const WEBHOOK_ID = '9d4c3f5b-6e7a-4b82-9d2e-3f4a5b6c7d8e';
 const POST_BRIEFING_FIELDS = ['additionalInfo', 'extraServices', 'hasProposedDraft', 'language', 'links', 'title'];
 
@@ -187,6 +190,7 @@ const tests: Array<[string, () => Promise<void>]> = [
     const media = await new CatalogueApi(answer(sent, 200, fixture('catalogue-media.json')))
       .getCatalogueMedia({ id: MEDIA_ID });
 
+    assert.equal(media.bestPrice, null);
     assert.equal(media.linkAdditionOffer, null);
     assert.equal(media.flashOffer, null);
     assert.equal(media.country, null);
@@ -214,6 +218,40 @@ const tests: Array<[string, () => Promise<void>]> = [
     assert.equal(offer!.linkType, null);
     assert.equal(offer!.price.amount, 6000);
     assert.equal(offer!.previousPrice, null);
+  }],
+
+  ['a catalogue media reads its best-price badge', async () => {
+    const sent: Sent[] = [];
+    const media = await new CatalogueApi(answer(sent, 200, fixture('catalogue-media-null-link-type.json')))
+      .getCatalogueMedia({ id: MEDIA_ID });
+
+    const bestPrice: CatalogueMediaBestPrice | null = media.bestPrice;
+    assert.notEqual(bestPrice, null);
+    assert.equal(bestPrice!.badge, CatalogueMediaBestPriceBadgeEnum.Cheaper);
+    assert.equal(bestPrice!.platformCount, 3);
+    assert.equal(bestPrice!.checkedOn.toISOString().slice(0, 10), '2026-11-12');
+  }],
+
+  ['searchProjectMedias sends the bestPrice filter and reads an only_here badge', async () => {
+    const sent: Sent[] = [];
+    const page = await new CatalogueApi(answer(sent, 200, fixture('project-medias-page.json')))
+      .searchProjectMedias({ id: PROJECT_ID, bestPrice: true });
+
+    const url = new URL(sent[0].url);
+    assert.equal(url.pathname, `/api/v1/projects/${PROJECT_ID}/medias`);
+    assert.equal(url.searchParams.get('bestPrice'), 'true');
+    assert.equal(page.items[0].bestPrice?.badge, CatalogueMediaBestPriceBadgeEnum.OnlyHere);
+    assert.equal(page.items[0].bestPrice?.platformCount, 2);
+  }],
+
+  ['a project media without a badge reads a null bestPrice', async () => {
+    const sent: Sent[] = [];
+    const page = await new CatalogueApi(answer(sent, 200, fixture('project-medias-page-no-badge.json')))
+      .searchProjectMedias({ id: PROJECT_ID });
+
+    assert.equal(new URL(sent[0].url).searchParams.has('bestPrice'), false);
+    assert.equal(page.items[0].bestPrice, null);
+    assert.equal(page.items[0].domain, 'blog.example');
   }],
 
   ['a seller media reads null competitiveFees', async () => {

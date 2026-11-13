@@ -73,7 +73,7 @@ namespace Growwer.Api.Model
         /// Gets or Sets Competitors
         /// </summary>
         /*
-        <example>[&quot;Prensarank&quot;]</example>
+        <example>[&quot;Prensalink&quot;]</example>
         */
         [DataMember(Name = "competitors", IsRequired = true, EmitDefaultValue = true)]
         public List<string> Competitors { get; set; }

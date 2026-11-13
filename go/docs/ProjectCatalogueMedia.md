@@ -17,6 +17,7 @@ Name | Type | Description | Notes
 **AverageDaysToPublication** | **NullableInt32** | The average days from order to publication, or null without published orders. | 
 **OnHoliday** | **bool** | Whether the media is on holiday and will take longer to publish. | 
 **FlashOffer** | [**NullableCatalogueMediaFlashOffer**](CatalogueMediaFlashOffer.md) |  | 
+**BestPrice** | [**NullableCatalogueMediaBestPrice**](CatalogueMediaBestPrice.md) |  | 
 **PostOffer** | [**CataloguePostOffer**](CataloguePostOffer.md) |  | 
 **LinkAdditionOffer** | [**NullableCatalogueOfferOrNull**](CatalogueOfferOrNull.md) | Adding a link to an existing article, or null when the media does not offer it. | 
 **Project** | [**ProjectCatalogueMediaAllOfProject**](ProjectCatalogueMediaAllOfProject.md) |  | 
@@ -25,7 +26,7 @@ Name | Type | Description | Notes
 
 ### NewProjectCatalogueMedia
 
-`func NewProjectCatalogueMedia(id string, domain string, type_ string, language string, country NullableString, topics []int32, metrics CatalogueMediaMetrics, positiveTrafficTrend bool, bestSeller bool, publicationRate NullableInt32, averageDaysToPublication NullableInt32, onHoliday bool, flashOffer NullableCatalogueMediaFlashOffer, postOffer CataloguePostOffer, linkAdditionOffer NullableCatalogueOfferOrNull, project ProjectCatalogueMediaAllOfProject, ) *ProjectCatalogueMedia`
+`func NewProjectCatalogueMedia(id string, domain string, type_ string, language string, country NullableString, topics []int32, metrics CatalogueMediaMetrics, positiveTrafficTrend bool, bestSeller bool, publicationRate NullableInt32, averageDaysToPublication NullableInt32, onHoliday bool, flashOffer NullableCatalogueMediaFlashOffer, bestPrice NullableCatalogueMediaBestPrice, postOffer CataloguePostOffer, linkAdditionOffer NullableCatalogueOfferOrNull, project ProjectCatalogueMediaAllOfProject, ) *ProjectCatalogueMedia`
 
 NewProjectCatalogueMedia instantiates a new ProjectCatalogueMedia object
 This constructor will assign default values to properties that have it defined,
@@ -340,6 +341,36 @@ SetFlashOffer sets FlashOffer field to given value.
 `func (o *ProjectCatalogueMedia) UnsetFlashOffer()`
 
 UnsetFlashOffer ensures that no value is present for FlashOffer, not even an explicit nil
+### GetBestPrice
+
+`func (o *ProjectCatalogueMedia) GetBestPrice() CatalogueMediaBestPrice`
+
+GetBestPrice returns the BestPrice field if non-nil, zero value otherwise.
+
+### GetBestPriceOk
+
+`func (o *ProjectCatalogueMedia) GetBestPriceOk() (*CatalogueMediaBestPrice, bool)`
+
+GetBestPriceOk returns a tuple with the BestPrice field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetBestPrice
+
+`func (o *ProjectCatalogueMedia) SetBestPrice(v CatalogueMediaBestPrice)`
+
+SetBestPrice sets BestPrice field to given value.
+
+
+### SetBestPriceNil
+
+`func (o *ProjectCatalogueMedia) SetBestPriceNil(b bool)`
+
+ SetBestPriceNil sets the value for BestPrice to be an explicit nil
+
+### UnsetBestPrice
+`func (o *ProjectCatalogueMedia) UnsetBestPrice()`
+
+UnsetBestPrice ensures that no value is present for BestPrice, not even an explicit nil
 ### GetPostOffer
 
 `func (o *ProjectCatalogueMedia) GetPostOffer() CataloguePostOffer`

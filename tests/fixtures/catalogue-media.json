@@ -18,6 +18,7 @@
   "averageDaysToPublication": null,
   "onHoliday": false,
   "flashOffer": null,
+  "bestPrice": null,
   "postOffer": {
     "price": {"amount": 9000, "currency": "EUR", "amountDecimal": "90.00"},
     "linkType": "dofollow",

@@ -47,6 +47,8 @@ module Growwer
 
     attr_accessor :flash_offer
 
+    attr_accessor :best_price
+
     attr_accessor :post_offer
 
     # Adding a link to an existing article, or null when the media does not offer it.
@@ -90,6 +92,7 @@ module Growwer
         :'average_days_to_publication' => :'averageDaysToPublication',
         :'on_holiday' => :'onHoliday',
         :'flash_offer' => :'flashOffer',
+        :'best_price' => :'bestPrice',
         :'post_offer' => :'postOffer',
         :'link_addition_offer' => :'linkAdditionOffer'
       }
@@ -121,6 +124,7 @@ module Growwer
         :'average_days_to_publication' => :'Integer',
         :'on_holiday' => :'Boolean',
         :'flash_offer' => :'CatalogueMediaFlashOffer',
+        :'best_price' => :'CatalogueMediaBestPrice',
         :'post_offer' => :'CataloguePostOffer',
         :'link_addition_offer' => :'CatalogueOfferOrNull'
       }
@@ -133,6 +137,7 @@ module Growwer
         :'publication_rate',
         :'average_days_to_publication',
         :'flash_offer',
+        :'best_price',
         :'link_addition_offer'
       ])
     end
@@ -231,6 +236,12 @@ module Growwer
         self.flash_offer = attributes[:'flash_offer']
       else
         self.flash_offer = nil
+      end
+
+      if attributes.key?(:'best_price')
+        self.best_price = attributes[:'best_price']
+      else
+        self.best_price = nil
       end
 
       if attributes.key?(:'post_offer')
@@ -431,6 +442,7 @@ module Growwer
           average_days_to_publication == o.average_days_to_publication &&
           on_holiday == o.on_holiday &&
           flash_offer == o.flash_offer &&
+          best_price == o.best_price &&
           post_offer == o.post_offer &&
           link_addition_offer == o.link_addition_offer
     end
@@ -444,7 +456,7 @@ module Growwer
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, domain, type, language, country, topics, metrics, positive_traffic_trend, best_seller, publication_rate, average_days_to_publication, on_holiday, flash_offer, post_offer, link_addition_offer].hash
+      [id, domain, type, language, country, topics, metrics, positive_traffic_trend, best_seller, publication_rate, average_days_to_publication, on_holiday, flash_offer, best_price, post_offer, link_addition_offer].hash
     end
 
     # Builds the object from hash

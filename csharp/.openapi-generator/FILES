@@ -11,6 +11,7 @@ docs/BuyerOrdersApi.md
 docs/BuyerWalletApi.md
 docs/CatalogueApi.md
 docs/CatalogueMedia.md
+docs/CatalogueMediaBestPrice.md
 docs/CatalogueMediaFlashOffer.md
 docs/CatalogueMediaMetrics.md
 docs/CatalogueOffer.md
@@ -194,6 +195,7 @@ src/Growwer.Api/Model/Balance.cs
 src/Growwer.Api/Model/BalanceLowEventData.cs
 src/Growwer.Api/Model/BalanceLowEventDataWallet.cs
 src/Growwer.Api/Model/CatalogueMedia.cs
+src/Growwer.Api/Model/CatalogueMediaBestPrice.cs
 src/Growwer.Api/Model/CatalogueMediaFlashOffer.cs
 src/Growwer.Api/Model/CatalogueMediaMetrics.cs
 src/Growwer.Api/Model/CatalogueOffer.cs

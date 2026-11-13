@@ -17,6 +17,7 @@ Name | Type | Description | Notes
 **AverageDaysToPublication** | **int?** | The average days from order to publication, or null without published orders. | 
 **OnHoliday** | **bool** | Whether the media is on holiday and will take longer to publish. | 
 **FlashOffer** | [**CatalogueMediaFlashOffer**](CatalogueMediaFlashOffer.md) |  | 
+**BestPrice** | [**CatalogueMediaBestPrice**](CatalogueMediaBestPrice.md) |  | 
 **PostOffer** | [**CataloguePostOffer**](CataloguePostOffer.md) |  | 
 **LinkAdditionOffer** | [**CatalogueOfferOrNull**](CatalogueOfferOrNull.md) | Adding a link to an existing article, or null when the media does not offer it. | 
 

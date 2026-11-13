@@ -13,6 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
+import type { CatalogueMediaBestPrice } from './CatalogueMediaBestPrice';
+import {
+    CatalogueMediaBestPriceFromJSON,
+    CatalogueMediaBestPriceFromJSONTyped,
+    CatalogueMediaBestPriceToJSON,
+    CatalogueMediaBestPriceToJSONTyped,
+} from './CatalogueMediaBestPrice';
 import type { CatalogueMediaFlashOffer } from './CatalogueMediaFlashOffer';
 import {
     CatalogueMediaFlashOfferFromJSON,
@@ -135,6 +142,12 @@ export interface ProjectCatalogueMedia {
     flashOffer: CatalogueMediaFlashOffer | null;
     /**
      * 
+     * @type {CatalogueMediaBestPrice}
+     * @memberof ProjectCatalogueMedia
+     */
+    bestPrice: CatalogueMediaBestPrice | null;
+    /**
+     * 
      * @type {CataloguePostOffer}
      * @memberof ProjectCatalogueMedia
      */
@@ -181,6 +194,7 @@ export function instanceOfProjectCatalogueMedia(value: object): value is Project
     if (!('averageDaysToPublication' in value) || value['averageDaysToPublication'] === undefined) return false;
     if (!('onHoliday' in value) || value['onHoliday'] === undefined) return false;
     if (!('flashOffer' in value) || value['flashOffer'] === undefined) return false;
+    if (!('bestPrice' in value) || value['bestPrice'] === undefined) return false;
     if (!('postOffer' in value) || value['postOffer'] === undefined) return false;
     if (!('linkAdditionOffer' in value) || value['linkAdditionOffer'] === undefined) return false;
     if (!('project' in value) || value['project'] === undefined) return false;
@@ -210,6 +224,7 @@ export function ProjectCatalogueMediaFromJSONTyped(json: any, ignoreDiscriminato
         'averageDaysToPublication': json['averageDaysToPublication'],
         'onHoliday': json['onHoliday'],
         'flashOffer': CatalogueMediaFlashOfferFromJSON(json['flashOffer']),
+        'bestPrice': CatalogueMediaBestPriceFromJSON(json['bestPrice']),
         'postOffer': CataloguePostOfferFromJSON(json['postOffer']),
         'linkAdditionOffer': CatalogueOfferOrNullFromJSON(json['linkAdditionOffer']),
         'project': ProjectCatalogueMediaAllOfProjectFromJSON(json['project']),
@@ -240,6 +255,7 @@ export function ProjectCatalogueMediaToJSONTyped(value?: ProjectCatalogueMedia |
         'averageDaysToPublication': value['averageDaysToPublication'],
         'onHoliday': value['onHoliday'],
         'flashOffer': CatalogueMediaFlashOfferToJSON(value['flashOffer']),
+        'bestPrice': CatalogueMediaBestPriceToJSON(value['bestPrice']),
         'postOffer': CataloguePostOfferToJSON(value['postOffer']),
         'linkAdditionOffer': CatalogueOfferOrNullToJSON(value['linkAdditionOffer']),
         'project': ProjectCatalogueMediaAllOfProjectToJSON(value['project']),

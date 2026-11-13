@@ -14,6 +14,7 @@ docs/BuyerOrdersApi.md
 docs/BuyerWalletApi.md
 docs/CatalogueApi.md
 docs/CatalogueMedia.md
+docs/CatalogueMediaBestPrice.md
 docs/CatalogueMediaFlashOffer.md
 docs/CatalogueMediaMetrics.md
 docs/CatalogueOffer.md
@@ -203,6 +204,7 @@ src/main/java/com/growwer/api/model/Balance.java
 src/main/java/com/growwer/api/model/BalanceLowEventData.java
 src/main/java/com/growwer/api/model/BalanceLowEventDataWallet.java
 src/main/java/com/growwer/api/model/CatalogueMedia.java
+src/main/java/com/growwer/api/model/CatalogueMediaBestPrice.java
 src/main/java/com/growwer/api/model/CatalogueMediaFlashOffer.java
 src/main/java/com/growwer/api/model/CatalogueMediaMetrics.java
 src/main/java/com/growwer/api/model/CatalogueOffer.java

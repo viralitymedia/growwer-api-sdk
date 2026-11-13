@@ -71,6 +71,7 @@ class ProjectCatalogueMedia implements ModelInterface, ArrayAccess, \JsonSeriali
         'average_days_to_publication' => 'int',
         'on_holiday' => 'bool',
         'flash_offer' => '\Growwer\Api\Model\CatalogueMediaFlashOffer',
+        'best_price' => '\Growwer\Api\Model\CatalogueMediaBestPrice',
         'post_offer' => '\Growwer\Api\Model\CataloguePostOffer',
         'link_addition_offer' => '\Growwer\Api\Model\CatalogueOfferOrNull',
         'project' => '\Growwer\Api\Model\ProjectCatalogueMediaAllOfProject'
@@ -97,6 +98,7 @@ class ProjectCatalogueMedia implements ModelInterface, ArrayAccess, \JsonSeriali
         'average_days_to_publication' => null,
         'on_holiday' => null,
         'flash_offer' => null,
+        'best_price' => null,
         'post_offer' => null,
         'link_addition_offer' => null,
         'project' => null
@@ -121,6 +123,7 @@ class ProjectCatalogueMedia implements ModelInterface, ArrayAccess, \JsonSeriali
         'average_days_to_publication' => true,
         'on_holiday' => false,
         'flash_offer' => true,
+        'best_price' => true,
         'post_offer' => false,
         'link_addition_offer' => true,
         'project' => false
@@ -225,6 +228,7 @@ class ProjectCatalogueMedia implements ModelInterface, ArrayAccess, \JsonSeriali
         'average_days_to_publication' => 'averageDaysToPublication',
         'on_holiday' => 'onHoliday',
         'flash_offer' => 'flashOffer',
+        'best_price' => 'bestPrice',
         'post_offer' => 'postOffer',
         'link_addition_offer' => 'linkAdditionOffer',
         'project' => 'project'
@@ -249,6 +253,7 @@ class ProjectCatalogueMedia implements ModelInterface, ArrayAccess, \JsonSeriali
         'average_days_to_publication' => 'setAverageDaysToPublication',
         'on_holiday' => 'setOnHoliday',
         'flash_offer' => 'setFlashOffer',
+        'best_price' => 'setBestPrice',
         'post_offer' => 'setPostOffer',
         'link_addition_offer' => 'setLinkAdditionOffer',
         'project' => 'setProject'
@@ -273,6 +278,7 @@ class ProjectCatalogueMedia implements ModelInterface, ArrayAccess, \JsonSeriali
         'average_days_to_publication' => 'getAverageDaysToPublication',
         'on_holiday' => 'getOnHoliday',
         'flash_offer' => 'getFlashOffer',
+        'best_price' => 'getBestPrice',
         'post_offer' => 'getPostOffer',
         'link_addition_offer' => 'getLinkAdditionOffer',
         'project' => 'getProject'
@@ -363,6 +369,7 @@ class ProjectCatalogueMedia implements ModelInterface, ArrayAccess, \JsonSeriali
         $this->setIfExists('average_days_to_publication', $data ?? [], null);
         $this->setIfExists('on_holiday', $data ?? [], null);
         $this->setIfExists('flash_offer', $data ?? [], null);
+        $this->setIfExists('best_price', $data ?? [], null);
         $this->setIfExists('post_offer', $data ?? [], null);
         $this->setIfExists('link_addition_offer', $data ?? [], null);
         $this->setIfExists('project', $data ?? [], null);
@@ -442,6 +449,9 @@ class ProjectCatalogueMedia implements ModelInterface, ArrayAccess, \JsonSeriali
         }
         if ($this->container['flash_offer'] === null && !$this->isNullableSetToNull('flash_offer')) {
             $invalidProperties[] = "'flash_offer' is required";
+        }
+        if ($this->container['best_price'] === null && !$this->isNullableSetToNull('best_price')) {
+            $invalidProperties[] = "'best_price' is required";
         }
         if ($this->container['post_offer'] === null) {
             $invalidProperties[] = "'post_offer' can't be null";
@@ -852,6 +862,40 @@ class ProjectCatalogueMedia implements ModelInterface, ArrayAccess, \JsonSeriali
             }
         }
         $this->container['flash_offer'] = $flash_offer;
+
+        return $this;
+    }
+
+    /**
+     * Gets best_price
+     *
+     * @return \Growwer\Api\Model\CatalogueMediaBestPrice|null
+     */
+    public function getBestPrice()
+    {
+        return $this->container['best_price'];
+    }
+
+    /**
+     * Sets best_price
+     *
+     * @param \Growwer\Api\Model\CatalogueMediaBestPrice|null $best_price best_price
+     *
+     * @return self
+     */
+    public function setBestPrice($best_price)
+    {
+        if (is_null($best_price)) {
+            array_push($this->openAPINullablesSetToNull, 'best_price');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('best_price', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['best_price'] = $best_price;
 
         return $this;
     }

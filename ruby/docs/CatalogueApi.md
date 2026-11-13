@@ -274,6 +274,7 @@ opts = {
   min_link_addition_price: 56, # Integer | Minimum link addition price, in cents.
   max_link_addition_price: 56, # Integer | Maximum link addition price, in cents.
   link_addition_link_type: 'link_addition_link_type_example', # String | A comma-separated list of link types the link addition offer gives: `dofollow`, `nofollow`, `citation`.
+  best_price: true, # Boolean | Medias with a best-price badge (`bestPrice` not null), of either claim. Only `true` applies it; omit it otherwise.
   recommended: true, # Boolean | `true`: only the medias Growwer recommends for the project; `false`: only the others.
   favourite: true, # Boolean | `true`: only your favourites for the project; `false`: leave them out.
   requested: true, # Boolean | `true`: only the medias you requested for the project; `false`: leave them out.
@@ -343,6 +344,7 @@ end
 | **min_link_addition_price** | **Integer** | Minimum link addition price, in cents. | [optional] |
 | **max_link_addition_price** | **Integer** | Maximum link addition price, in cents. | [optional] |
 | **link_addition_link_type** | **String** | A comma-separated list of link types the link addition offer gives: &#x60;dofollow&#x60;, &#x60;nofollow&#x60;, &#x60;citation&#x60;. | [optional] |
+| **best_price** | **Boolean** | Medias with a best-price badge (&#x60;bestPrice&#x60; not null), of either claim. Only &#x60;true&#x60; applies it; omit it otherwise. | [optional] |
 | **recommended** | **Boolean** | &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. | [optional] |
 | **favourite** | **Boolean** | &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. | [optional] |
 | **requested** | **Boolean** | &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. | [optional] |
@@ -489,6 +491,7 @@ opts = {
   min_link_addition_price: 56, # Integer | Minimum link addition price, in cents.
   max_link_addition_price: 56, # Integer | Maximum link addition price, in cents.
   link_addition_link_type: 'link_addition_link_type_example', # String | A comma-separated list of link types the link addition offer gives: `dofollow`, `nofollow`, `citation`.
+  best_price: true, # Boolean | Medias with a best-price badge (`bestPrice` not null), of either claim. Only `true` applies it; omit it otherwise.
   recommended: true, # Boolean | `true`: only the medias Growwer recommends for the project; `false`: only the others.
   favourite: true, # Boolean | `true`: only your favourites for the project; `false`: leave them out.
   requested: true, # Boolean | `true`: only the medias you requested for the project; `false`: leave them out.
@@ -560,6 +563,7 @@ end
 | **min_link_addition_price** | **Integer** | Minimum link addition price, in cents. | [optional] |
 | **max_link_addition_price** | **Integer** | Maximum link addition price, in cents. | [optional] |
 | **link_addition_link_type** | **String** | A comma-separated list of link types the link addition offer gives: &#x60;dofollow&#x60;, &#x60;nofollow&#x60;, &#x60;citation&#x60;. | [optional] |
+| **best_price** | **Boolean** | Medias with a best-price badge (&#x60;bestPrice&#x60; not null), of either claim. Only &#x60;true&#x60; applies it; omit it otherwise. | [optional] |
 | **recommended** | **Boolean** | &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. | [optional] |
 | **favourite** | **Boolean** | &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. | [optional] |
 | **requested** | **Boolean** | &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. | [optional] |

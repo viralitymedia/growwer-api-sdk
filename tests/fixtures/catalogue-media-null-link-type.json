@@ -18,6 +18,7 @@
   "averageDaysToPublication": 4,
   "onHoliday": false,
   "flashOffer": null,
+  "bestPrice": {"badge": "cheaper", "platformCount": 3, "checkedOn": "2026-11-12"},
   "postOffer": {
     "price": {"amount": 18000, "currency": "EUR", "amountDecimal": "180.00"},
     "linkType": null,

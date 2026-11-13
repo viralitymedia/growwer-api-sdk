@@ -22,6 +22,7 @@ docs/Model/Balance.md
 docs/Model/BalanceLowEventData.md
 docs/Model/BalanceLowEventDataWallet.md
 docs/Model/CatalogueMedia.md
+docs/Model/CatalogueMediaBestPrice.md
 docs/Model/CatalogueMediaFlashOffer.md
 docs/Model/CatalogueMediaMetrics.md
 docs/Model/CatalogueOffer.md
@@ -179,6 +180,7 @@ lib/Model/Balance.php
 lib/Model/BalanceLowEventData.php
 lib/Model/BalanceLowEventDataWallet.php
 lib/Model/CatalogueMedia.php
+lib/Model/CatalogueMediaBestPrice.php
 lib/Model/CatalogueMediaFlashOffer.php
 lib/Model/CatalogueMediaMetrics.php
 lib/Model/CatalogueOffer.php

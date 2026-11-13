@@ -376,6 +376,10 @@ for name in sorted(listed(previous_list) - listed(current_list)):
     # separately are two manifests that disagree.
     python3 scripts/php-root-manifest.py
     echo "    root composer.json <- php/composer.json"
+
+    # The Configuration template starts the boolean query format at integers, so a boolean filter
+    # went out as `1` or `0`, which the API refuses. It starts at `true`/`false` here after every run.
+    python3 scripts/php-boolean-query-format.py
   fi
 
   if [[ "${target}" == "java" ]]; then

@@ -331,7 +331,7 @@ catch (ApiException e)
 
 <a id="listflashoffers"></a>
 # **ListFlashOffers**
-> ListFlashOffers200Response ListFlashOffers (Guid projectId, string? source = null, string? sort = null, string? domain = null, string? websiteType = null, string? language = null, string? country = null, string? topics = null, bool? notBannedTopics = null, int? minTraffic = null, int? maxTraffic = null, bool? trafficTrendUpward = null, int? minDomainRating = null, int? maxDomainRating = null, decimal? minLinkedToReferringRatio = null, decimal? maxLinkedToReferringRatio = null, int? minPostPrice = null, int? maxPostPrice = null, string? postLinkType = null, string? promotedSocialNetwork = null, bool? withoutAdvertisingLabel = null, bool? homepageListing = null, bool? hasLinkAddition = null, int? minLinkAdditionPrice = null, int? maxLinkAdditionPrice = null, string? linkAdditionLinkType = null, bool? recommended = null, bool? favourite = null, bool? requested = null, bool? bought = null, bool? discarded = null, bool? varNew = null, string? ranksGoalKeyword = null, string? ranksAiKeyword = null, int? limit = null, int? offset = null)
+> ListFlashOffers200Response ListFlashOffers (Guid projectId, string? source = null, string? sort = null, string? domain = null, string? websiteType = null, string? language = null, string? country = null, string? topics = null, bool? notBannedTopics = null, int? minTraffic = null, int? maxTraffic = null, bool? trafficTrendUpward = null, int? minDomainRating = null, int? maxDomainRating = null, decimal? minLinkedToReferringRatio = null, decimal? maxLinkedToReferringRatio = null, int? minPostPrice = null, int? maxPostPrice = null, string? postLinkType = null, string? promotedSocialNetwork = null, bool? withoutAdvertisingLabel = null, bool? homepageListing = null, bool? hasLinkAddition = null, int? minLinkAdditionPrice = null, int? maxLinkAdditionPrice = null, string? linkAdditionLinkType = null, bool? bestPrice = null, bool? recommended = null, bool? favourite = null, bool? requested = null, bool? bought = null, bool? discarded = null, bool? varNew = null, string? ranksGoalKeyword = null, string? ranksAiKeyword = null, int? limit = null, int? offset = null)
 
 List flash offers
 
@@ -387,6 +387,7 @@ namespace Example
             var minLinkAdditionPrice = 56;  // int? | Minimum link addition price, in cents. (optional) 
             var maxLinkAdditionPrice = 56;  // int? | Maximum link addition price, in cents. (optional) 
             var linkAdditionLinkType = "linkAdditionLinkType_example";  // string? | A comma-separated list of link types the link addition offer gives: `dofollow`, `nofollow`, `citation`. (optional) 
+            var bestPrice = true;  // bool? | Medias with a best-price badge (`bestPrice` not null), of either claim. Only `true` applies it; omit it otherwise. (optional) 
             var recommended = true;  // bool? | `true`: only the medias Growwer recommends for the project; `false`: only the others. (optional) 
             var favourite = true;  // bool? | `true`: only your favourites for the project; `false`: leave them out. (optional) 
             var requested = true;  // bool? | `true`: only the medias you requested for the project; `false`: leave them out. (optional) 
@@ -401,7 +402,7 @@ namespace Example
             try
             {
                 // List flash offers
-                ListFlashOffers200Response result = apiInstance.ListFlashOffers(projectId, source, sort, domain, websiteType, language, country, topics, notBannedTopics, minTraffic, maxTraffic, trafficTrendUpward, minDomainRating, maxDomainRating, minLinkedToReferringRatio, maxLinkedToReferringRatio, minPostPrice, maxPostPrice, postLinkType, promotedSocialNetwork, withoutAdvertisingLabel, homepageListing, hasLinkAddition, minLinkAdditionPrice, maxLinkAdditionPrice, linkAdditionLinkType, recommended, favourite, requested, bought, discarded, varNew, ranksGoalKeyword, ranksAiKeyword, limit, offset);
+                ListFlashOffers200Response result = apiInstance.ListFlashOffers(projectId, source, sort, domain, websiteType, language, country, topics, notBannedTopics, minTraffic, maxTraffic, trafficTrendUpward, minDomainRating, maxDomainRating, minLinkedToReferringRatio, maxLinkedToReferringRatio, minPostPrice, maxPostPrice, postLinkType, promotedSocialNetwork, withoutAdvertisingLabel, homepageListing, hasLinkAddition, minLinkAdditionPrice, maxLinkAdditionPrice, linkAdditionLinkType, bestPrice, recommended, favourite, requested, bought, discarded, varNew, ranksGoalKeyword, ranksAiKeyword, limit, offset);
                 Debug.WriteLine(result);
             }
             catch (ApiException  e)
@@ -422,7 +423,7 @@ This returns an ApiResponse object which contains the response data, status code
 try
 {
     // List flash offers
-    ApiResponse<ListFlashOffers200Response> response = apiInstance.ListFlashOffersWithHttpInfo(projectId, source, sort, domain, websiteType, language, country, topics, notBannedTopics, minTraffic, maxTraffic, trafficTrendUpward, minDomainRating, maxDomainRating, minLinkedToReferringRatio, maxLinkedToReferringRatio, minPostPrice, maxPostPrice, postLinkType, promotedSocialNetwork, withoutAdvertisingLabel, homepageListing, hasLinkAddition, minLinkAdditionPrice, maxLinkAdditionPrice, linkAdditionLinkType, recommended, favourite, requested, bought, discarded, varNew, ranksGoalKeyword, ranksAiKeyword, limit, offset);
+    ApiResponse<ListFlashOffers200Response> response = apiInstance.ListFlashOffersWithHttpInfo(projectId, source, sort, domain, websiteType, language, country, topics, notBannedTopics, minTraffic, maxTraffic, trafficTrendUpward, minDomainRating, maxDomainRating, minLinkedToReferringRatio, maxLinkedToReferringRatio, minPostPrice, maxPostPrice, postLinkType, promotedSocialNetwork, withoutAdvertisingLabel, homepageListing, hasLinkAddition, minLinkAdditionPrice, maxLinkAdditionPrice, linkAdditionLinkType, bestPrice, recommended, favourite, requested, bought, discarded, varNew, ranksGoalKeyword, ranksAiKeyword, limit, offset);
     Debug.Write("Status Code: " + response.StatusCode);
     Debug.Write("Response Headers: " + response.Headers);
     Debug.Write("Response Body: " + response.Data);
@@ -465,6 +466,7 @@ catch (ApiException e)
 | **minLinkAdditionPrice** | **int?** | Minimum link addition price, in cents. | [optional]  |
 | **maxLinkAdditionPrice** | **int?** | Maximum link addition price, in cents. | [optional]  |
 | **linkAdditionLinkType** | **string?** | A comma-separated list of link types the link addition offer gives: &#x60;dofollow&#x60;, &#x60;nofollow&#x60;, &#x60;citation&#x60;. | [optional]  |
+| **bestPrice** | **bool?** | Medias with a best-price badge (&#x60;bestPrice&#x60; not null), of either claim. Only &#x60;true&#x60; applies it; omit it otherwise. | [optional]  |
 | **recommended** | **bool?** | &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. | [optional]  |
 | **favourite** | **bool?** | &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. | [optional]  |
 | **requested** | **bool?** | &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. | [optional]  |
@@ -617,7 +619,7 @@ catch (ApiException e)
 
 <a id="searchprojectmedias"></a>
 # **SearchProjectMedias**
-> ListFlashOffers200Response SearchProjectMedias (Guid id, string? source = null, string? sort = null, Guid? savedFilterId = null, string? domain = null, string? websiteType = null, string? language = null, string? country = null, string? topics = null, bool? notBannedTopics = null, int? minTraffic = null, int? maxTraffic = null, bool? trafficTrendUpward = null, int? minDomainRating = null, int? maxDomainRating = null, decimal? minLinkedToReferringRatio = null, decimal? maxLinkedToReferringRatio = null, int? minPostPrice = null, int? maxPostPrice = null, string? postLinkType = null, string? promotedSocialNetwork = null, bool? withoutAdvertisingLabel = null, bool? homepageListing = null, bool? hasLinkAddition = null, int? minLinkAdditionPrice = null, int? maxLinkAdditionPrice = null, string? linkAdditionLinkType = null, bool? recommended = null, bool? favourite = null, bool? requested = null, bool? flashOffer = null, bool? bought = null, bool? discarded = null, bool? varNew = null, string? ranksGoalKeyword = null, string? ranksAiKeyword = null, int? limit = null, int? offset = null)
+> ListFlashOffers200Response SearchProjectMedias (Guid id, string? source = null, string? sort = null, Guid? savedFilterId = null, string? domain = null, string? websiteType = null, string? language = null, string? country = null, string? topics = null, bool? notBannedTopics = null, int? minTraffic = null, int? maxTraffic = null, bool? trafficTrendUpward = null, int? minDomainRating = null, int? maxDomainRating = null, decimal? minLinkedToReferringRatio = null, decimal? maxLinkedToReferringRatio = null, int? minPostPrice = null, int? maxPostPrice = null, string? postLinkType = null, string? promotedSocialNetwork = null, bool? withoutAdvertisingLabel = null, bool? homepageListing = null, bool? hasLinkAddition = null, int? minLinkAdditionPrice = null, int? maxLinkAdditionPrice = null, string? linkAdditionLinkType = null, bool? bestPrice = null, bool? recommended = null, bool? favourite = null, bool? requested = null, bool? flashOffer = null, bool? bought = null, bool? discarded = null, bool? varNew = null, string? ranksGoalKeyword = null, string? ranksAiKeyword = null, int? limit = null, int? offset = null)
 
 Search the catalogue for a project
 
@@ -674,6 +676,7 @@ namespace Example
             var minLinkAdditionPrice = 56;  // int? | Minimum link addition price, in cents. (optional) 
             var maxLinkAdditionPrice = 56;  // int? | Maximum link addition price, in cents. (optional) 
             var linkAdditionLinkType = "linkAdditionLinkType_example";  // string? | A comma-separated list of link types the link addition offer gives: `dofollow`, `nofollow`, `citation`. (optional) 
+            var bestPrice = true;  // bool? | Medias with a best-price badge (`bestPrice` not null), of either claim. Only `true` applies it; omit it otherwise. (optional) 
             var recommended = true;  // bool? | `true`: only the medias Growwer recommends for the project; `false`: only the others. (optional) 
             var favourite = true;  // bool? | `true`: only your favourites for the project; `false`: leave them out. (optional) 
             var requested = true;  // bool? | `true`: only the medias you requested for the project; `false`: leave them out. (optional) 
@@ -689,7 +692,7 @@ namespace Example
             try
             {
                 // Search the catalogue for a project
-                ListFlashOffers200Response result = apiInstance.SearchProjectMedias(id, source, sort, savedFilterId, domain, websiteType, language, country, topics, notBannedTopics, minTraffic, maxTraffic, trafficTrendUpward, minDomainRating, maxDomainRating, minLinkedToReferringRatio, maxLinkedToReferringRatio, minPostPrice, maxPostPrice, postLinkType, promotedSocialNetwork, withoutAdvertisingLabel, homepageListing, hasLinkAddition, minLinkAdditionPrice, maxLinkAdditionPrice, linkAdditionLinkType, recommended, favourite, requested, flashOffer, bought, discarded, varNew, ranksGoalKeyword, ranksAiKeyword, limit, offset);
+                ListFlashOffers200Response result = apiInstance.SearchProjectMedias(id, source, sort, savedFilterId, domain, websiteType, language, country, topics, notBannedTopics, minTraffic, maxTraffic, trafficTrendUpward, minDomainRating, maxDomainRating, minLinkedToReferringRatio, maxLinkedToReferringRatio, minPostPrice, maxPostPrice, postLinkType, promotedSocialNetwork, withoutAdvertisingLabel, homepageListing, hasLinkAddition, minLinkAdditionPrice, maxLinkAdditionPrice, linkAdditionLinkType, bestPrice, recommended, favourite, requested, flashOffer, bought, discarded, varNew, ranksGoalKeyword, ranksAiKeyword, limit, offset);
                 Debug.WriteLine(result);
             }
             catch (ApiException  e)
@@ -710,7 +713,7 @@ This returns an ApiResponse object which contains the response data, status code
 try
 {
     // Search the catalogue for a project
-    ApiResponse<ListFlashOffers200Response> response = apiInstance.SearchProjectMediasWithHttpInfo(id, source, sort, savedFilterId, domain, websiteType, language, country, topics, notBannedTopics, minTraffic, maxTraffic, trafficTrendUpward, minDomainRating, maxDomainRating, minLinkedToReferringRatio, maxLinkedToReferringRatio, minPostPrice, maxPostPrice, postLinkType, promotedSocialNetwork, withoutAdvertisingLabel, homepageListing, hasLinkAddition, minLinkAdditionPrice, maxLinkAdditionPrice, linkAdditionLinkType, recommended, favourite, requested, flashOffer, bought, discarded, varNew, ranksGoalKeyword, ranksAiKeyword, limit, offset);
+    ApiResponse<ListFlashOffers200Response> response = apiInstance.SearchProjectMediasWithHttpInfo(id, source, sort, savedFilterId, domain, websiteType, language, country, topics, notBannedTopics, minTraffic, maxTraffic, trafficTrendUpward, minDomainRating, maxDomainRating, minLinkedToReferringRatio, maxLinkedToReferringRatio, minPostPrice, maxPostPrice, postLinkType, promotedSocialNetwork, withoutAdvertisingLabel, homepageListing, hasLinkAddition, minLinkAdditionPrice, maxLinkAdditionPrice, linkAdditionLinkType, bestPrice, recommended, favourite, requested, flashOffer, bought, discarded, varNew, ranksGoalKeyword, ranksAiKeyword, limit, offset);
     Debug.Write("Status Code: " + response.StatusCode);
     Debug.Write("Response Headers: " + response.Headers);
     Debug.Write("Response Body: " + response.Data);
@@ -754,6 +757,7 @@ catch (ApiException e)
 | **minLinkAdditionPrice** | **int?** | Minimum link addition price, in cents. | [optional]  |
 | **maxLinkAdditionPrice** | **int?** | Maximum link addition price, in cents. | [optional]  |
 | **linkAdditionLinkType** | **string?** | A comma-separated list of link types the link addition offer gives: &#x60;dofollow&#x60;, &#x60;nofollow&#x60;, &#x60;citation&#x60;. | [optional]  |
+| **bestPrice** | **bool?** | Medias with a best-price badge (&#x60;bestPrice&#x60; not null), of either claim. Only &#x60;true&#x60; applies it; omit it otherwise. | [optional]  |
 | **recommended** | **bool?** | &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. | [optional]  |
 | **favourite** | **bool?** | &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. | [optional]  |
 | **requested** | **bool?** | &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. | [optional]  |

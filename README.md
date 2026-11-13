@@ -237,6 +237,13 @@ the filters by name and are unaffected.
   `CatalogueMedia` or `ProjectCatalogueMedia` built by hand without `best_price` (pass `None` for no
   badge). PHP builds one, but its `valid()` and `listInvalidProperties()` flag one whose data lacks
   a `best_price` key (pass `'best_price' => null` for no badge). Ruby builds one as before.
+- **PHP:** the boolean filters of `listFlashOffers` and `searchProjectMedias` (`bestPrice`,
+  `recommended`, `favourite` and the rest) go out as `true` and `false`. They went out as `1` and
+  `0`, which the API refuses with a 400, so every boolean filter sent from PHP failed.
+  `Configuration::getDefaultConfiguration()->setBooleanFormatForQueryString()` still overrides it
+  (`Configuration::BOOLEAN_FORMAT_INT` brings back `1` and `0`). It has to be the default
+  configuration: the serializer reads only that one, so the same call on a configuration passed to
+  an API class changes nothing.
 
 What changes:
 
@@ -1206,6 +1213,11 @@ would be discarded on the next run:
   [`scripts/csharp-optional-nullables.py`](scripts/csharp-optional-nullables.py). The generator's
   `conditionalSerialization` option would do the same, but it never marks a required constructor
   argument as set, so it would drop every required property.
+- **PHP**'s configuration template starts the boolean query format at `BOOLEAN_FORMAT_INT`, so a
+  boolean filter would go out as `1` or `0`, which the API refuses with a 400: it accepts only
+  `true` and `false`. The generator has no option for it, so
+  [`scripts/php-boolean-query-format.py`](scripts/php-boolean-query-format.py) starts it at
+  `BOOLEAN_FORMAT_STRING`.
 - **Inline class names.** The generator gives identical inline schemas one class, named after the
   first operation that uses it, so an operation added before one that already had the shape would
   rename its class and break every client that names it. `inlineSchemaNameMappings` in

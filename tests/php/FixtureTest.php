@@ -245,9 +245,10 @@ final class FixtureTest extends TestCase
     public function testAProjectMediaReadsAnOnlyHereBadge(): void
     {
         $page = (new CatalogueApi(...$this->answer(200, self::fixture('project-medias-page.json'))))
-            ->searchProjectMedias(self::PROJECT_ID);
+            ->searchProjectMedias(self::PROJECT_ID, best_price: true);
 
         self::assertSame('/api/v1/projects/' . self::PROJECT_ID . '/medias', $this->sent()->getUri()->getPath());
+        self::assertContains('bestPrice=true', explode('&', $this->sent()->getUri()->getQuery()));
         $media = $page->getItems()[0];
         self::assertInstanceOf(ProjectCatalogueMedia::class, $media);
         self::assertSame([], $media->listInvalidProperties());
@@ -256,6 +257,35 @@ final class FixtureTest extends TestCase
         self::assertSame(CatalogueMediaBestPrice::BADGE_ONLY_HERE, $bestPrice->getBadge());
         self::assertSame(2, $bestPrice->getPlatformCount());
         self::assertSame('2026-11-11', $bestPrice->getCheckedOn()->format('Y-m-d'));
+    }
+
+    public function testListFlashOffersSendsBooleanFiltersAsTrueAndFalse(): void
+    {
+        $page = (new CatalogueApi(...$this->answer(200, self::fixture('project-medias-page.json'))))
+            ->listFlashOffers(self::PROJECT_ID, best_price: true, favourite: false);
+
+        self::assertSame('/api/v1/flash-offers', $this->sent()->getUri()->getPath());
+        $query = explode('&', $this->sent()->getUri()->getQuery());
+        self::assertContains('bestPrice=true', $query);
+        self::assertContains('favourite=false', $query);
+        self::assertCount(1, $page->getItems());
+    }
+
+    public function testTheDefaultConfigurationStillSendsBooleanFiltersAsIntegersWhenAskedTo(): void
+    {
+        $default = Configuration::getDefaultConfiguration();
+        $previous = $default->getBooleanFormatForQueryString();
+        $default->setBooleanFormatForQueryString(Configuration::BOOLEAN_FORMAT_INT);
+        try {
+            (new CatalogueApi(...$this->answer(200, self::fixture('project-medias-page.json'))))
+                ->listFlashOffers(self::PROJECT_ID, best_price: true, favourite: false);
+        } finally {
+            $default->setBooleanFormatForQueryString($previous);
+        }
+
+        $query = explode('&', $this->sent()->getUri()->getQuery());
+        self::assertContains('bestPrice=1', $query);
+        self::assertContains('favourite=0', $query);
     }
 
     public function testAProjectMediaWithoutABadgeReadsANullBestPrice(): void

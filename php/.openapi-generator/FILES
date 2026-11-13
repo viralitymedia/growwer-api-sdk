@@ -118,6 +118,10 @@ docs/Model/SellerMediaLinkAdditionOffer.md
 docs/Model/SellerMediaLinkAdditionOfferPricingOptionsInner.md
 docs/Model/SellerMediaPostOffer.md
 docs/Model/SellerMediaPostOfferPricingOptionsInner.md
+docs/Model/SellerMediaSaved.md
+docs/Model/SellerMediaSavedAllOfDetails.md
+docs/Model/SellerMediaSavedAllOfDetailsCompetitiveFees.md
+docs/Model/SellerMediaSavedAllOfWarnings.md
 docs/Model/SellerOrder.md
 docs/Model/SellerOrderBriefing.md
 docs/Model/SellerOrderChannel.md
@@ -272,6 +276,10 @@ lib/Model/SellerMediaLinkAdditionOffer.php
 lib/Model/SellerMediaLinkAdditionOfferPricingOptionsInner.php
 lib/Model/SellerMediaPostOffer.php
 lib/Model/SellerMediaPostOfferPricingOptionsInner.php
+lib/Model/SellerMediaSaved.php
+lib/Model/SellerMediaSavedAllOfDetails.php
+lib/Model/SellerMediaSavedAllOfDetailsCompetitiveFees.php
+lib/Model/SellerMediaSavedAllOfWarnings.php
 lib/Model/SellerOrder.php
 lib/Model/SellerOrderBriefing.php
 lib/Model/SellerOrderChannel.php

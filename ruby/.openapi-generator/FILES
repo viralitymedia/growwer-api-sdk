@@ -116,6 +116,10 @@ docs/SellerMediaLinkAdditionOffer.md
 docs/SellerMediaLinkAdditionOfferPricingOptionsInner.md
 docs/SellerMediaPostOffer.md
 docs/SellerMediaPostOfferPricingOptionsInner.md
+docs/SellerMediaSaved.md
+docs/SellerMediaSavedAllOfDetails.md
+docs/SellerMediaSavedAllOfDetailsCompetitiveFees.md
+docs/SellerMediaSavedAllOfWarnings.md
 docs/SellerMediasApi.md
 docs/SellerOrder.md
 docs/SellerOrderBriefing.md
@@ -276,6 +280,10 @@ lib/growwer/models/seller_media_link_addition_offer.rb
 lib/growwer/models/seller_media_link_addition_offer_pricing_options_inner.rb
 lib/growwer/models/seller_media_post_offer.rb
 lib/growwer/models/seller_media_post_offer_pricing_options_inner.rb
+lib/growwer/models/seller_media_saved.rb
+lib/growwer/models/seller_media_saved_all_of_details.rb
+lib/growwer/models/seller_media_saved_all_of_details_competitive_fees.rb
+lib/growwer/models/seller_media_saved_all_of_warnings.rb
 lib/growwer/models/seller_order.rb
 lib/growwer/models/seller_order_briefing.rb
 lib/growwer/models/seller_order_channel.rb

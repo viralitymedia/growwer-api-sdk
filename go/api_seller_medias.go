@@ -37,7 +37,7 @@ func (r ApiApplySellerMediaCompetitiveFeesRequest) IdempotencyKey(idempotencyKey
 	return r
 }
 
-func (r ApiApplySellerMediaCompetitiveFeesRequest) Execute() (*SellerMedia, *http.Response, error) {
+func (r ApiApplySellerMediaCompetitiveFeesRequest) Execute() (*SellerMediaSaved, *http.Response, error) {
 	return r.ApiService.ApplySellerMediaCompetitiveFeesExecute(r)
 }
 
@@ -48,7 +48,7 @@ Lowers your post fees for the media to the competitive fees Growwer suggests, pe
 
 When there is no suggestion (Growwer sets the media's prices, it is not listed on a marketplace Growwer compares with, it already lists below its price there, or no fee would bring it below), or your fees already are at or below the suggested ones, nothing changes and the answer is 200 with the media as it is.
 
-The fees set are your base fees: a running flash offer keeps discounting them. As with a fee edit, a change of the price may cancel the managed-service proposals accepted for the media whose price it changes. Send no body, or an empty object.
+The fees set are your base fees: a running flash offer keeps discounting them. As with a fee edit, a change of the price may cancel the managed-service proposals accepted for the media whose price it changes. When the fees set still list the media above the marketplaces that list the same domain cheaper, they are saved, and `warnings` holds a `saved_above_competitors` warning with the competitive fee of each side and the names of those marketplaces. Send no body, or an empty object.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param id
@@ -63,13 +63,13 @@ func (a *SellerMediasAPIService) ApplySellerMediaCompetitiveFees(ctx context.Con
 }
 
 // Execute executes the request
-//  @return SellerMedia
-func (a *SellerMediasAPIService) ApplySellerMediaCompetitiveFeesExecute(r ApiApplySellerMediaCompetitiveFeesRequest) (*SellerMedia, *http.Response, error) {
+//  @return SellerMediaSaved
+func (a *SellerMediasAPIService) ApplySellerMediaCompetitiveFeesExecute(r ApiApplySellerMediaCompetitiveFeesRequest) (*SellerMediaSaved, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *SellerMedia
+		localVarReturnValue  *SellerMediaSaved
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SellerMediasAPIService.ApplySellerMediaCompetitiveFees")
@@ -1049,7 +1049,7 @@ func (r ApiUpdateSellerMediaRequest) UpdateSellerMediaRequest(updateSellerMediaR
 	return r
 }
 
-func (r ApiUpdateSellerMediaRequest) Execute() (*SellerMedia, *http.Response, error) {
+func (r ApiUpdateSellerMediaRequest) Execute() (*SellerMediaSaved, *http.Response, error) {
 	return r.ApiService.UpdateSellerMediaExecute(r)
 }
 
@@ -1066,7 +1066,7 @@ Sets the fees, extra services, typology and post offer characteristics of one of
 
 The fees are your base fees, the ones GET /seller/medias/{id} returns: while a flash offer runs, its discount keeps applying on top of them, and `currentCost` shows the result. `currentCost` may be sent back as read and is ignored. Country, language, topics and comments are not edited here.
 
-As on the page, a change of the post offer's price may cancel the managed-service proposals accepted for the media whose price it changes, and raising the price above the best competitor's tells Growwer's support team. A restricted seller account may edit its offer.
+As on the page, a change of the post offer's price may cancel the managed-service proposals accepted for the media whose price it changes. Your fees are always saved, a raise included. When they list the media above the marketplaces that list the same domain cheaper and some fee would list it under them, the 200 carries a `saved_above_competitors` warning in `warnings`, with the competitive fee of each side and the names of those marketplaces. A restricted seller account may edit its offer.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param id
@@ -1081,13 +1081,13 @@ func (a *SellerMediasAPIService) UpdateSellerMedia(ctx context.Context, id strin
 }
 
 // Execute executes the request
-//  @return SellerMedia
-func (a *SellerMediasAPIService) UpdateSellerMediaExecute(r ApiUpdateSellerMediaRequest) (*SellerMedia, *http.Response, error) {
+//  @return SellerMediaSaved
+func (a *SellerMediasAPIService) UpdateSellerMediaExecute(r ApiUpdateSellerMediaRequest) (*SellerMediaSaved, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPatch
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *SellerMedia
+		localVarReturnValue  *SellerMediaSaved
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SellerMediasAPIService.UpdateSellerMedia")

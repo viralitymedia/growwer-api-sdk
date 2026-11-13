@@ -15,7 +15,7 @@
 """  # noqa: E501
 
 
-__version__ = "2.2.0"
+__version__ = "3.0.0"
 
 # Define package exports
 __all__ = [
@@ -143,6 +143,10 @@ __all__ = [
     "SellerMediaLinkAdditionOfferPricingOptionsInner",
     "SellerMediaPostOffer",
     "SellerMediaPostOfferPricingOptionsInner",
+    "SellerMediaSaved",
+    "SellerMediaSavedAllOfDetails",
+    "SellerMediaSavedAllOfDetailsCompetitiveFees",
+    "SellerMediaSavedAllOfWarnings",
     "SellerOrder",
     "SellerOrderBriefing",
     "SellerOrderChannel",
@@ -307,6 +311,10 @@ from growwer.models.seller_media_link_addition_offer import SellerMediaLinkAddit
 from growwer.models.seller_media_link_addition_offer_pricing_options_inner import SellerMediaLinkAdditionOfferPricingOptionsInner as SellerMediaLinkAdditionOfferPricingOptionsInner
 from growwer.models.seller_media_post_offer import SellerMediaPostOffer as SellerMediaPostOffer
 from growwer.models.seller_media_post_offer_pricing_options_inner import SellerMediaPostOfferPricingOptionsInner as SellerMediaPostOfferPricingOptionsInner
+from growwer.models.seller_media_saved import SellerMediaSaved as SellerMediaSaved
+from growwer.models.seller_media_saved_all_of_details import SellerMediaSavedAllOfDetails as SellerMediaSavedAllOfDetails
+from growwer.models.seller_media_saved_all_of_details_competitive_fees import SellerMediaSavedAllOfDetailsCompetitiveFees as SellerMediaSavedAllOfDetailsCompetitiveFees
+from growwer.models.seller_media_saved_all_of_warnings import SellerMediaSavedAllOfWarnings as SellerMediaSavedAllOfWarnings
 from growwer.models.seller_order import SellerOrder as SellerOrder
 from growwer.models.seller_order_briefing import SellerOrderBriefing as SellerOrderBriefing
 from growwer.models.seller_order_channel import SellerOrderChannel as SellerOrderChannel

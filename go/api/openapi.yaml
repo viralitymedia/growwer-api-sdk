@@ -6118,7 +6118,7 @@ paths:
 
         When there is no suggestion (Growwer sets the media's prices, it is not listed on a marketplace Growwer compares with, it already lists below its price there, or no fee would bring it below), or your fees already are at or below the suggested ones, nothing changes and the answer is 200 with the media as it is.
 
-        The fees set are your base fees: a running flash offer keeps discounting them. As with a fee edit, a change of the price may cancel the managed-service proposals accepted for the media whose price it changes. Send no body, or an empty object.
+        The fees set are your base fees: a running flash offer keeps discounting them. As with a fee edit, a change of the price may cancel the managed-service proposals accepted for the media whose price it changes. When the fees set still list the media above the marketplaces that list the same domain cheaper, they are saved, and `warnings` holds a `saved_above_competitors` warning with the competitive fee of each side and the names of those marketplaces. Send no body, or an empty object.
       operationId: applySellerMediaCompetitiveFees
       parameters:
       - explode: false
@@ -6145,9 +6145,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SellerMedia"
+                $ref: "#/components/schemas/SellerMediaSaved"
           description: "The media, with its fees above the suggested ones lowered\
-            \ to them, or unchanged when there were none to lower."
+            \ to them, or unchanged and without a warning when there were none to\
+            \ lower; `warnings` holds one `saved_above_competitors` when the fees\
+            \ set still list it above the marketplaces that list the same domain cheaper."
         "400":
           content:
             application/json:
@@ -6824,7 +6826,7 @@ paths:
 
         The fees are your base fees, the ones GET /seller/medias/{id} returns: while a flash offer runs, its discount keeps applying on top of them, and `currentCost` shows the result. `currentCost` may be sent back as read and is ignored. Country, language, topics and comments are not edited here.
 
-        As on the page, a change of the post offer's price may cancel the managed-service proposals accepted for the media whose price it changes, and raising the price above the best competitor's tells Growwer's support team. A restricted seller account may edit its offer.
+        As on the page, a change of the post offer's price may cancel the managed-service proposals accepted for the media whose price it changes. Your fees are always saved, a raise included. When they list the media above the marketplaces that list the same domain cheaper and some fee would list it under them, the 200 carries a `saved_above_competitors` warning in `warnings`, with the competitive fee of each side and the names of those marketplaces. A restricted seller account may edit its offer.
       operationId: updateSellerMedia
       parameters:
       - explode: false
@@ -6886,8 +6888,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SellerMedia"
-          description: "The media, with the changes saved."
+                $ref: "#/components/schemas/SellerMediaSaved"
+          description: "The media, with the changes saved, and `warnings`: one `saved_above_competitors`\
+            \ when it still lists above the marketplaces that list the same domain\
+            \ cheaper and some fee would list it under them, none otherwise."
         "400":
           content:
             application/json:
@@ -11705,6 +11709,10 @@ components:
       - websiteType
       type: object
     MoneyOrNull:
+      example:
+        amount: 12500
+        currency: EUR
+        amountDecimal: "125.00"
       nullable: true
       properties:
         amount:
@@ -12218,6 +12226,121 @@ components:
       - topics
       - typology
       - url
+      type: object
+    SellerMediaSaved:
+      allOf:
+      - $ref: "#/components/schemas/SellerMedia"
+      - properties:
+          warnings:
+            description: "What the save left to know, empty when nothing. `saved_above_competitors`:\
+              \ the fees were saved, but the media still lists above the marketplaces\
+              \ that list the same domain cheaper, and some fee would list it under\
+              \ them. `details.competitiveFees` holds the highest fee of each side\
+              \ that lists it under them (`feeWhenSellerWritesPost`, `feeWhenSellerDoesNotWritePost`,\
+              \ null when none does or the media does not offer that side) and `details.competitors`\
+              \ the names of those marketplaces, never their prices."
+            items:
+              $ref: "#/components/schemas/SellerMediaSaved_allOf_warnings"
+            type: array
+        required:
+        - warnings
+        type: object
+      description: "A media you sell on as a write answers it (PATCH /seller/medias/{id}\
+        \ and POST /seller/medias/{id}/apply-competitive-fees), with the warnings\
+        \ about the save. GET and the list answer SellerMedia, without them."
+      example:
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        domain: example.com
+        url: url
+        typology: blog
+        state: analyzing
+        deactivationStrikes: 0
+        country: country
+        language: language
+        topics:
+        - 6
+        - 6
+        bannedTopics:
+        - 1
+        - 1
+        providerComments: providerComments
+        publicationRate: 5
+        averageDaysToPublication: 5
+        numPublishedOrders: 2
+        onHoliday: true
+        flashOffer:
+          discountPercent: 7
+          endsAt: 2000-01-23T04:56:07.000+00:00
+        postOffer:
+          pricingOptions:
+          - feeWhenSellerWritesPost: ""
+            feeWhenSellerDoesNotWritePost: ""
+            linkType: dofollow
+            currentCost: ""
+          - feeWhenSellerWritesPost: ""
+            feeWhenSellerDoesNotWritePost: ""
+            linkType: dofollow
+            currentCost: ""
+          maximumLinks: 9
+          advertisingLabellingPolicy: always
+          promotedSocialNetworks:
+          - twitter
+          - twitter
+          extraServices:
+          - name: list_on_homepage
+            cost: ""
+          - name: list_on_homepage
+            cost: ""
+        linkAdditionOffer:
+          pricingOptions:
+          - linkType: dofollow
+            fee: ""
+            currentCost: ""
+          - linkType: dofollow
+            fee: ""
+            currentCost: ""
+        competitiveFees: ""
+        competitiveFeesByLinkType:
+        - linkType: dofollow
+          feeWhenSellerWritesPost: ""
+          feeWhenSellerDoesNotWritePost: ""
+        - linkType: dofollow
+          feeWhenSellerWritesPost: ""
+          feeWhenSellerDoesNotWritePost: ""
+        createdAt: 2000-01-23T04:56:07.000+00:00
+        warnings:
+        - code: saved_above_competitors
+          message: Saved. The media still lists above the marketplaces that list the
+            same domain cheaper. Setting the fees at most at the competitive fees
+            in details lists it under them.
+          details:
+            competitiveFees:
+              feeWhenSellerWritesPost:
+                amount: 12500
+                currency: EUR
+                amountDecimal: "125.00"
+              feeWhenSellerDoesNotWritePost:
+                amount: 12500
+                currency: EUR
+                amountDecimal: "125.00"
+            competitors:
+            - Prensarank
+        - code: saved_above_competitors
+          message: Saved. The media still lists above the marketplaces that list the
+            same domain cheaper. Setting the fees at most at the competitive fees
+            in details lists it under them.
+          details:
+            competitiveFees:
+              feeWhenSellerWritesPost:
+                amount: 12500
+                currency: EUR
+                amountDecimal: "125.00"
+              feeWhenSellerDoesNotWritePost:
+                amount: 12500
+                currency: EUR
+                amountDecimal: "125.00"
+            competitors:
+            - Prensarank
       type: object
     SavedFilter:
       example:
@@ -15001,7 +15124,7 @@ components:
             feeWhenSellerWritesPost: ""
             feeWhenSellerDoesNotWritePost: ""
           createdAt: 2000-01-23T04:56:07.000+00:00
-        total: 0
+        total: 7
       properties:
         items:
           items:
@@ -16014,6 +16137,86 @@ components:
       - feeWhenSellerDoesNotWritePost
       - feeWhenSellerWritesPost
       - linkType
+      type: object
+    SellerMediaSaved_allOf_details_competitiveFees:
+      example:
+        feeWhenSellerWritesPost:
+          amount: 12500
+          currency: EUR
+          amountDecimal: "125.00"
+        feeWhenSellerDoesNotWritePost:
+          amount: 12500
+          currency: EUR
+          amountDecimal: "125.00"
+      properties:
+        feeWhenSellerWritesPost:
+          $ref: "#/components/schemas/MoneyOrNull"
+        feeWhenSellerDoesNotWritePost:
+          $ref: "#/components/schemas/MoneyOrNull"
+      required:
+      - feeWhenSellerDoesNotWritePost
+      - feeWhenSellerWritesPost
+      type: object
+    SellerMediaSaved_allOf_details:
+      example:
+        competitiveFees:
+          feeWhenSellerWritesPost:
+            amount: 12500
+            currency: EUR
+            amountDecimal: "125.00"
+          feeWhenSellerDoesNotWritePost:
+            amount: 12500
+            currency: EUR
+            amountDecimal: "125.00"
+        competitors:
+        - Prensarank
+      properties:
+        competitiveFees:
+          $ref: "#/components/schemas/SellerMediaSaved_allOf_details_competitiveFees"
+        competitors:
+          example:
+          - Prensarank
+          items:
+            type: string
+          type: array
+      required:
+      - competitiveFees
+      - competitors
+      type: object
+    SellerMediaSaved_allOf_warnings:
+      example:
+        code: saved_above_competitors
+        message: Saved. The media still lists above the marketplaces that list the
+          same domain cheaper. Setting the fees at most at the competitive fees in
+          details lists it under them.
+        details:
+          competitiveFees:
+            feeWhenSellerWritesPost:
+              amount: 12500
+              currency: EUR
+              amountDecimal: "125.00"
+            feeWhenSellerDoesNotWritePost:
+              amount: 12500
+              currency: EUR
+              amountDecimal: "125.00"
+          competitors:
+          - Prensarank
+      properties:
+        code:
+          enum:
+          - saved_above_competitors
+          type: string
+        message:
+          example: Saved. The media still lists above the marketplaces that list the
+            same domain cheaper. Setting the fees at most at the competitive fees
+            in details lists it under them.
+          type: string
+        details:
+          $ref: "#/components/schemas/SellerMediaSaved_allOf_details"
+      required:
+      - code
+      - details
+      - message
       type: object
     SavedFilter_notifications:
       example:

@@ -15,7 +15,7 @@ Method | HTTP request | Description
 
 ## ApplySellerMediaCompetitiveFees
 
-> SellerMedia ApplySellerMediaCompetitiveFees(ctx, id).IdempotencyKey(idempotencyKey).Execute()
+> SellerMediaSaved ApplySellerMediaCompetitiveFees(ctx, id).IdempotencyKey(idempotencyKey).Execute()
 
 Lower your fees to the competitive fees Growwer suggests
 
@@ -30,7 +30,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/viralitymedia/growwer-api-sdk/go/v2"
+	openapiclient "github.com/viralitymedia/growwer-api-sdk/go/v3"
 )
 
 func main() {
@@ -44,7 +44,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error when calling `SellerMediasAPI.ApplySellerMediaCompetitiveFees``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `ApplySellerMediaCompetitiveFees`: SellerMedia
+	// response from `ApplySellerMediaCompetitiveFees`: SellerMediaSaved
 	fmt.Fprintf(os.Stdout, "Response from `SellerMediasAPI.ApplySellerMediaCompetitiveFees`: %v\n", resp)
 }
 ```
@@ -69,7 +69,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**SellerMedia**](SellerMedia.md)
+[**SellerMediaSaved**](SellerMediaSaved.md)
 
 ### Authorization
 
@@ -102,7 +102,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/viralitymedia/growwer-api-sdk/go/v2"
+	openapiclient "github.com/viralitymedia/growwer-api-sdk/go/v3"
 )
 
 func main() {
@@ -170,7 +170,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/viralitymedia/growwer-api-sdk/go/v2"
+	openapiclient "github.com/viralitymedia/growwer-api-sdk/go/v3"
 )
 
 func main() {
@@ -240,7 +240,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/viralitymedia/growwer-api-sdk/go/v2"
+	openapiclient "github.com/viralitymedia/growwer-api-sdk/go/v3"
 )
 
 func main() {
@@ -310,7 +310,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/viralitymedia/growwer-api-sdk/go/v2"
+	openapiclient "github.com/viralitymedia/growwer-api-sdk/go/v3"
 )
 
 func main() {
@@ -367,7 +367,7 @@ Name | Type | Description  | Notes
 
 ## UpdateSellerMedia
 
-> SellerMedia UpdateSellerMedia(ctx, id).IdempotencyKey(idempotencyKey).UpdateSellerMediaRequest(updateSellerMediaRequest).Execute()
+> SellerMediaSaved UpdateSellerMedia(ctx, id).IdempotencyKey(idempotencyKey).UpdateSellerMediaRequest(updateSellerMediaRequest).Execute()
 
 Edit the offer of a media you sell on
 
@@ -382,7 +382,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/viralitymedia/growwer-api-sdk/go/v2"
+	openapiclient "github.com/viralitymedia/growwer-api-sdk/go/v3"
 )
 
 func main() {
@@ -397,7 +397,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error when calling `SellerMediasAPI.UpdateSellerMedia``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `UpdateSellerMedia`: SellerMedia
+	// response from `UpdateSellerMedia`: SellerMediaSaved
 	fmt.Fprintf(os.Stdout, "Response from `SellerMediasAPI.UpdateSellerMedia`: %v\n", resp)
 }
 ```
@@ -423,7 +423,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**SellerMedia**](SellerMedia.md)
+[**SellerMediaSaved**](SellerMediaSaved.md)
 
 ### Authorization
 

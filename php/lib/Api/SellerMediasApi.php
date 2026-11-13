@@ -152,7 +152,7 @@ class SellerMediasApi
      *
      * @throws \Growwer\Api\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return \Growwer\Api\Model\SellerMedia|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error
+     * @return \Growwer\Api\Model\SellerMediaSaved|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error
      */
     public function applySellerMediaCompetitiveFees($id, $idempotency_key, string $contentType = self::contentTypes['applySellerMediaCompetitiveFees'][0])
     {
@@ -171,7 +171,7 @@ class SellerMediasApi
      *
      * @throws \Growwer\Api\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return array of \Growwer\Api\Model\SellerMedia|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Growwer\Api\Model\SellerMediaSaved|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function applySellerMediaCompetitiveFeesWithHttpInfo($id, $idempotency_key, string $contentType = self::contentTypes['applySellerMediaCompetitiveFees'][0])
     {
@@ -203,7 +203,7 @@ class SellerMediasApi
             switch($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Growwer\Api\Model\SellerMedia',
+                        '\Growwer\Api\Model\SellerMediaSaved',
                         $request,
                         $response,
                     );
@@ -279,7 +279,7 @@ class SellerMediasApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Growwer\Api\Model\SellerMedia',
+                '\Growwer\Api\Model\SellerMediaSaved',
                 $request,
                 $response,
             );
@@ -288,7 +288,7 @@ class SellerMediasApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Growwer\Api\Model\SellerMedia',
+                        '\Growwer\Api\Model\SellerMediaSaved',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -408,7 +408,7 @@ class SellerMediasApi
      */
     public function applySellerMediaCompetitiveFeesAsyncWithHttpInfo($id, $idempotency_key, string $contentType = self::contentTypes['applySellerMediaCompetitiveFees'][0])
     {
-        $returnType = '\Growwer\Api\Model\SellerMedia';
+        $returnType = '\Growwer\Api\Model\SellerMediaSaved';
         $request = $this->applySellerMediaCompetitiveFeesRequest($id, $idempotency_key, $contentType);
 
         return $this->client
@@ -2010,7 +2010,7 @@ class SellerMediasApi
      *
      * @throws \Growwer\Api\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return \Growwer\Api\Model\SellerMedia|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error
+     * @return \Growwer\Api\Model\SellerMediaSaved|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error
      */
     public function updateSellerMedia($id, $idempotency_key, $update_seller_media_request, string $contentType = self::contentTypes['updateSellerMedia'][0])
     {
@@ -2030,7 +2030,7 @@ class SellerMediasApi
      *
      * @throws \Growwer\Api\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return array of \Growwer\Api\Model\SellerMedia|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Growwer\Api\Model\SellerMediaSaved|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error|\Growwer\Api\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function updateSellerMediaWithHttpInfo($id, $idempotency_key, $update_seller_media_request, string $contentType = self::contentTypes['updateSellerMedia'][0])
     {
@@ -2062,7 +2062,7 @@ class SellerMediasApi
             switch($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Growwer\Api\Model\SellerMedia',
+                        '\Growwer\Api\Model\SellerMediaSaved',
                         $request,
                         $response,
                     );
@@ -2138,7 +2138,7 @@ class SellerMediasApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Growwer\Api\Model\SellerMedia',
+                '\Growwer\Api\Model\SellerMediaSaved',
                 $request,
                 $response,
             );
@@ -2147,7 +2147,7 @@ class SellerMediasApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Growwer\Api\Model\SellerMedia',
+                        '\Growwer\Api\Model\SellerMediaSaved',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -2269,7 +2269,7 @@ class SellerMediasApi
      */
     public function updateSellerMediaAsyncWithHttpInfo($id, $idempotency_key, $update_seller_media_request, string $contentType = self::contentTypes['updateSellerMedia'][0])
     {
-        $returnType = '\Growwer\Api\Model\SellerMedia';
+        $returnType = '\Growwer\Api\Model\SellerMediaSaved';
         $request = $this->updateSellerMediaRequest($id, $idempotency_key, $update_seller_media_request, $contentType);
 
         return $this->client

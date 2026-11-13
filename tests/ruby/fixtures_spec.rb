@@ -11,6 +11,7 @@ FIXTURES = File.expand_path('../fixtures', __dir__)
 MEDIA_ID = 'c1d2e3f4-a5b6-4c7d-8e9f-a0b1c2d3e4f5'
 ORDER_ID = '0b9c6a4e-6f1d-4c39-9a51-2f5d7c1e8a01'
 WEBHOOK_ID = '9d4c3f5b-6e7a-4b82-9d2e-3f4a5b6c7d8e'
+PROJECT_ID = '5e0c2b7a-3d4f-4a1b-9c8d-7e6f5a4b3c2d'
 
 # Answers every request with one canned response and records it. Faraday's own test adapter is not
 # used because it ignores `on_data`, through which the client reads a download; a streamed response
@@ -194,6 +195,31 @@ RSpec.describe 'Growwer fixtures' do
     expect(best_price.checked_on).to eq(Date.new(2026, 11, 12))
   end
 
+  it 'sends the bestPrice filter of searchProjectMedias and reads an only_here badge' do
+    page = Growwer::CatalogueApi.new(answer(200, fixture('project-medias-page.json')))
+                                .search_project_medias(PROJECT_ID, best_price: true)
+
+    expect(sent.url.path).to eq("/api/v1/projects/#{PROJECT_ID}/medias")
+    expect(sent.url.query.split('&')).to include('bestPrice=true')
+    media = page.items[0]
+    expect(media).to be_a(Growwer::ProjectCatalogueMedia)
+    expect(media.best_price).to be_a(Growwer::CatalogueMediaBestPrice)
+    expect(media.best_price.badge).to eq('only_here')
+    expect(media.best_price.platform_count).to eq(2)
+    expect(media.best_price.checked_on).to eq(Date.new(2026, 11, 11))
+  end
+
+  it 'reads a project media without a badge as a nil bestPrice' do
+    page = Growwer::CatalogueApi.new(answer(200, fixture('project-medias-page-no-badge.json')))
+                                .search_project_medias(PROJECT_ID)
+
+    expect(sent.url.query.to_s).not_to include('bestPrice')
+    media = page.items[0]
+    expect(media).to be_a(Growwer::ProjectCatalogueMedia)
+    expect(media.best_price).to be_nil
+    expect(media.domain).to eq('blog.example')
+  end
+
   it 'reads a seller media with null competitiveFees' do
     media = Growwer::SellerMediasApi.new(answer(200, fixture('seller-media.json'))).get_seller_media(MEDIA_ID)
 
@@ -234,6 +260,21 @@ RSpec.describe 'Growwer fixtures' do
     expect(fees[1].fee_when_seller_does_not_write_post.amount_decimal).to eq('36.00')
     expect(media.competitive_fees.fee_when_seller_writes_post.amount).to eq(5400)
     expect(media.competitive_fees.fee_when_seller_does_not_write_post.amount).to eq(3600)
+  end
+
+  it 'reads a saved_not_recommended warning from a seller media save' do
+    saved = Growwer::SellerMediasApi.new(answer(200, fixture('seller-media-saved-not-recommended.json')))
+                                    .update_seller_media(MEDIA_ID, 'key-1', Growwer::UpdateSellerMediaRequest.new)
+
+    expect(saved).to be_a(Growwer::SellerMediaSaved)
+    expect(saved.warnings.size).to eq(1)
+    warning = saved.warnings[0]
+    expect(warning).to be_a(Growwer::SellerMediaSavedAllOfWarnings)
+    expect(warning.code).to eq('saved_not_recommended')
+    expect(warning.details.competitive_fees.fee_when_seller_writes_post.amount).to eq(5400)
+    expect(warning.details.competitive_fees.fee_when_seller_does_not_write_post).to be_nil
+    expect(warning.details.competitors).to eq(['Prensalink'])
+    expect(saved.domain).to eq('blog.example')
   end
 
   it 'makes the error envelope readable from the ApiError' do

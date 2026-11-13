@@ -21,9 +21,13 @@ use Growwer\Api\Model\ListOrders200Response;
 use Growwer\Api\Model\Money;
 use Growwer\Api\Model\MoneyOrNull;
 use Growwer\Api\Model\Order;
+use Growwer\Api\Model\ProjectCatalogueMedia;
 use Growwer\Api\Model\SellerFeesOrNull;
 use Growwer\Api\Model\SellerMedia;
 use Growwer\Api\Model\SellerMediaCompetitiveFeesByLinkTypeInner;
+use Growwer\Api\Model\SellerMediaSaved;
+use Growwer\Api\Model\SellerMediaSavedAllOfWarnings;
+use Growwer\Api\Model\UpdateSellerMediaRequest;
 use Growwer\Api\Model\UpdateWebhookRequest;
 use Growwer\Api\Model\WebhookEvent;
 use Growwer\Api\Model\WebhookEventData;
@@ -49,6 +53,7 @@ final class FixtureTest extends TestCase
     private const MEDIA_ID = 'c1d2e3f4-a5b6-4c7d-8e9f-a0b1c2d3e4f5';
     private const ORDER_ID = '0b9c6a4e-6f1d-4c39-9a51-2f5d7c1e8a01';
     private const WEBHOOK_ID = '9d4c3f5b-6e7a-4b82-9d2e-3f4a5b6c7d8e';
+    private const PROJECT_ID = '5e0c2b7a-3d4f-4a1b-9c8d-7e6f5a4b3c2d';
 
     /** @var list<array{request: RequestInterface}> */
     private array $history = [];
@@ -237,6 +242,34 @@ final class FixtureTest extends TestCase
         self::assertSame('2026-11-12', $bestPrice->getCheckedOn()->format('Y-m-d'));
     }
 
+    public function testAProjectMediaReadsAnOnlyHereBadge(): void
+    {
+        $page = (new CatalogueApi(...$this->answer(200, self::fixture('project-medias-page.json'))))
+            ->searchProjectMedias(self::PROJECT_ID);
+
+        self::assertSame('/api/v1/projects/' . self::PROJECT_ID . '/medias', $this->sent()->getUri()->getPath());
+        $media = $page->getItems()[0];
+        self::assertInstanceOf(ProjectCatalogueMedia::class, $media);
+        self::assertSame([], $media->listInvalidProperties());
+        $bestPrice = $media->getBestPrice();
+        self::assertInstanceOf(CatalogueMediaBestPrice::class, $bestPrice);
+        self::assertSame(CatalogueMediaBestPrice::BADGE_ONLY_HERE, $bestPrice->getBadge());
+        self::assertSame(2, $bestPrice->getPlatformCount());
+        self::assertSame('2026-11-11', $bestPrice->getCheckedOn()->format('Y-m-d'));
+    }
+
+    public function testAProjectMediaWithoutABadgeReadsANullBestPrice(): void
+    {
+        $page = (new CatalogueApi(...$this->answer(200, self::fixture('project-medias-page-no-badge.json'))))
+            ->searchProjectMedias(self::PROJECT_ID);
+
+        $media = $page->getItems()[0];
+        self::assertInstanceOf(ProjectCatalogueMedia::class, $media);
+        self::assertNull($media->getBestPrice());
+        self::assertSame([], $media->listInvalidProperties());
+        self::assertSame('blog.example', $media->getDomain());
+    }
+
     public function testASellerMediaReadsNullCompetitiveFees(): void
     {
         $media = (new SellerMediasApi(...$this->answer(200, self::fixture('seller-media.json'))))
@@ -287,6 +320,24 @@ final class FixtureTest extends TestCase
         self::assertSame('36.00', $fees[1]->getFeeWhenSellerDoesNotWritePost()->getAmountDecimal());
         self::assertSame(5400, $media->getCompetitiveFees()->getFeeWhenSellerWritesPost()->getAmount());
         self::assertSame(3600, $media->getCompetitiveFees()->getFeeWhenSellerDoesNotWritePost()->getAmount());
+    }
+
+    public function testASellerMediaSaveReadsASavedNotRecommendedWarning(): void
+    {
+        $saved = (new SellerMediasApi(...$this->answer(200, self::fixture('seller-media-saved-not-recommended.json'))))
+            ->updateSellerMedia(self::MEDIA_ID, 'key-1', new UpdateSellerMediaRequest());
+
+        self::assertInstanceOf(SellerMediaSaved::class, $saved);
+        self::assertSame([], $saved->listInvalidProperties());
+        $warnings = $saved->getWarnings();
+        self::assertCount(1, $warnings);
+        self::assertInstanceOf(SellerMediaSavedAllOfWarnings::class, $warnings[0]);
+        self::assertSame(SellerMediaSavedAllOfWarnings::CODE_SAVED_NOT_RECOMMENDED, $warnings[0]->getCode());
+        $fees = $warnings[0]->getDetails()->getCompetitiveFees();
+        self::assertSame(5400, $fees->getFeeWhenSellerWritesPost()->getAmount());
+        self::assertNull($fees->getFeeWhenSellerDoesNotWritePost());
+        self::assertSame(['Prensalink'], $warnings[0]->getDetails()->getCompetitors());
+        self::assertSame('blog.example', $saved->getDomain());
     }
 
     public function testAnOrderEventParsesWithFieldsThisClientDoesNotKnow(): void

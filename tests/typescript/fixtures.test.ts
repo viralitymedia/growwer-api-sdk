@@ -244,6 +244,16 @@ const tests: Array<[string, () => Promise<void>]> = [
     assert.equal(page.items[0].bestPrice?.platformCount, 2);
   }],
 
+  ['a project media without a badge reads a null bestPrice', async () => {
+    const sent: Sent[] = [];
+    const page = await new CatalogueApi(answer(sent, 200, fixture('project-medias-page-no-badge.json')))
+      .searchProjectMedias({ id: PROJECT_ID });
+
+    assert.equal(new URL(sent[0].url).searchParams.has('bestPrice'), false);
+    assert.equal(page.items[0].bestPrice, null);
+    assert.equal(page.items[0].domain, 'blog.example');
+  }],
+
   ['a seller media reads null competitiveFees', async () => {
     const sent: Sent[] = [];
     const media = await new SellerMediasApi(answer(sent, 200, fixture('seller-media.json')))

@@ -197,6 +197,10 @@ public class JSON {
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.SellerMediaLinkAdditionOfferPricingOptionsInner.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.SellerMediaPostOffer.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.SellerMediaPostOfferPricingOptionsInner.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.SellerMediaSaved.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.SellerMediaSavedAllOfDetails.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.SellerMediaSavedAllOfDetailsCompetitiveFees.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.SellerMediaSavedAllOfWarnings.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.SellerOrder.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.SellerOrderBriefing.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.growwer.api.model.SellerOrderChannel.CustomTypeAdapterFactory());

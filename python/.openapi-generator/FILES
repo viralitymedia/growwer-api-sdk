@@ -113,6 +113,10 @@ docs/SellerMediaLinkAdditionOffer.md
 docs/SellerMediaLinkAdditionOfferPricingOptionsInner.md
 docs/SellerMediaPostOffer.md
 docs/SellerMediaPostOfferPricingOptionsInner.md
+docs/SellerMediaSaved.md
+docs/SellerMediaSavedAllOfDetails.md
+docs/SellerMediaSavedAllOfDetailsCompetitiveFees.md
+docs/SellerMediaSavedAllOfWarnings.md
 docs/SellerMediasApi.md
 docs/SellerOrder.md
 docs/SellerOrderBriefing.md
@@ -274,6 +278,10 @@ growwer/models/seller_media_link_addition_offer.py
 growwer/models/seller_media_link_addition_offer_pricing_options_inner.py
 growwer/models/seller_media_post_offer.py
 growwer/models/seller_media_post_offer_pricing_options_inner.py
+growwer/models/seller_media_saved.py
+growwer/models/seller_media_saved_all_of_details.py
+growwer/models/seller_media_saved_all_of_details_competitive_fees.py
+growwer/models/seller_media_saved_all_of_warnings.py
 growwer/models/seller_order.py
 growwer/models/seller_order_briefing.py
 growwer/models/seller_order_channel.py

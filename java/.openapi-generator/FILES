@@ -115,6 +115,10 @@ docs/SellerMediaLinkAdditionOffer.md
 docs/SellerMediaLinkAdditionOfferPricingOptionsInner.md
 docs/SellerMediaPostOffer.md
 docs/SellerMediaPostOfferPricingOptionsInner.md
+docs/SellerMediaSaved.md
+docs/SellerMediaSavedAllOfDetails.md
+docs/SellerMediaSavedAllOfDetailsCompetitiveFees.md
+docs/SellerMediaSavedAllOfWarnings.md
 docs/SellerMediasApi.md
 docs/SellerOrder.md
 docs/SellerOrderBriefing.md
@@ -295,6 +299,10 @@ src/main/java/com/growwer/api/model/SellerMediaLinkAdditionOffer.java
 src/main/java/com/growwer/api/model/SellerMediaLinkAdditionOfferPricingOptionsInner.java
 src/main/java/com/growwer/api/model/SellerMediaPostOffer.java
 src/main/java/com/growwer/api/model/SellerMediaPostOfferPricingOptionsInner.java
+src/main/java/com/growwer/api/model/SellerMediaSaved.java
+src/main/java/com/growwer/api/model/SellerMediaSavedAllOfDetails.java
+src/main/java/com/growwer/api/model/SellerMediaSavedAllOfDetailsCompetitiveFees.java
+src/main/java/com/growwer/api/model/SellerMediaSavedAllOfWarnings.java
 src/main/java/com/growwer/api/model/SellerOrder.java
 src/main/java/com/growwer/api/model/SellerOrderBriefing.java
 src/main/java/com/growwer/api/model/SellerOrderChannel.java

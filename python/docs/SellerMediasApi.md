@@ -13,7 +13,7 @@ Method | HTTP request | Description
 
 
 # **apply_seller_media_competitive_fees**
-> SellerMedia apply_seller_media_competitive_fees(id, idempotency_key)
+> SellerMediaSaved apply_seller_media_competitive_fees(id, idempotency_key)
 
 Lower your fees to the competitive fees Growwer suggests
 
@@ -21,7 +21,7 @@ Lowers your post fees for the media to the competitive fees Growwer suggests, pe
 
 When there is no suggestion (Growwer sets the media's prices, it is not listed on a marketplace Growwer compares with, it already lists below its price there, or no fee would bring it below), or your fees already are at or below the suggested ones, nothing changes and the answer is 200 with the media as it is.
 
-The fees set are your base fees: a running flash offer keeps discounting them. As with a fee edit, a change of the price may cancel the managed-service proposals accepted for the media whose price it changes. Send no body, or an empty object.
+The fees set are your base fees: a running flash offer keeps discounting them. As with a fee edit, a change of the price may cancel the managed-service proposals accepted for the media whose price it changes. When the fees set still list the media above the marketplaces that list the same domain cheaper, they are saved, and `warnings` holds a `saved_above_competitors` warning with the competitive fee of each side and the names of those marketplaces. Send no body, or an empty object.
 
 ### Example
 
@@ -29,7 +29,7 @@ The fees set are your base fees: a running flash offer keeps discounting them. A
 
 ```python
 import growwer
-from growwer.models.seller_media import SellerMedia
+from growwer.models.seller_media_saved import SellerMediaSaved
 from growwer.rest import ApiException
 from pprint import pprint
 
@@ -77,7 +77,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**SellerMedia**](SellerMedia.md)
+[**SellerMediaSaved**](SellerMediaSaved.md)
 
 ### Authorization
 
@@ -92,7 +92,7 @@ Name | Type | Description  | Notes
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | The media, with its fees above the suggested ones lowered to them, or unchanged when there were none to lower. |  -  |
+**200** | The media, with its fees above the suggested ones lowered to them, or unchanged and without a warning when there were none to lower; &#x60;warnings&#x60; holds one &#x60;saved_above_competitors&#x60; when the fees set still list it above the marketplaces that list the same domain cheaper. |  -  |
 **400** | The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). |  -  |
 **401** | The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). |  -  |
 **403** | The key is read-only (code &#x60;insufficient_capability&#x60;). |  -  |
@@ -473,7 +473,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **update_seller_media**
-> SellerMedia update_seller_media(id, idempotency_key, update_seller_media_request)
+> SellerMediaSaved update_seller_media(id, idempotency_key, update_seller_media_request)
 
 Edit the offer of a media you sell on
 
@@ -487,7 +487,7 @@ Sets the fees, extra services, typology and post offer characteristics of one of
 
 The fees are your base fees, the ones GET /seller/medias/{id} returns: while a flash offer runs, its discount keeps applying on top of them, and `currentCost` shows the result. `currentCost` may be sent back as read and is ignored. Country, language, topics and comments are not edited here.
 
-As on the page, a change of the post offer's price may cancel the managed-service proposals accepted for the media whose price it changes, and raising the price above the best competitor's tells Growwer's support team. A restricted seller account may edit its offer.
+As on the page, a change of the post offer's price may cancel the managed-service proposals accepted for the media whose price it changes. Your fees are always saved, a raise included. When they list the media above the marketplaces that list the same domain cheaper and some fee would list it under them, the 200 carries a `saved_above_competitors` warning in `warnings`, with the competitive fee of each side and the names of those marketplaces. A restricted seller account may edit its offer.
 
 ### Example
 
@@ -495,7 +495,7 @@ As on the page, a change of the post offer's price may cancel the managed-servic
 
 ```python
 import growwer
-from growwer.models.seller_media import SellerMedia
+from growwer.models.seller_media_saved import SellerMediaSaved
 from growwer.models.update_seller_media_request import UpdateSellerMediaRequest
 from growwer.rest import ApiException
 from pprint import pprint
@@ -546,7 +546,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**SellerMedia**](SellerMedia.md)
+[**SellerMediaSaved**](SellerMediaSaved.md)
 
 ### Authorization
 
@@ -561,7 +561,7 @@ Name | Type | Description  | Notes
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | The media, with the changes saved. |  -  |
+**200** | The media, with the changes saved, and &#x60;warnings&#x60;: one &#x60;saved_above_competitors&#x60; when it still lists above the marketplaces that list the same domain cheaper and some fee would list it under them, none otherwise. |  -  |
 **400** | The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). |  -  |
 **401** | The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). |  -  |
 **403** | The key is read-only (code &#x60;insufficient_capability&#x60;). |  -  |

@@ -21,6 +21,8 @@ import com.growwer.api.model.PostOrderBriefing;
 import com.growwer.api.model.SellerFeesOrNull;
 import com.growwer.api.model.SellerMedia;
 import com.growwer.api.model.SellerMediaCompetitiveFeesByLinkTypeInner;
+import com.growwer.api.model.SellerMediaSaved;
+import com.growwer.api.model.SellerMediaSavedAllOfWarnings;
 import com.growwer.api.model.SellerMediaPostOfferPricingOptionsInner;
 import com.growwer.api.model.UpdateSellerMediaRequest;
 import com.growwer.api.model.UpdateSellerMediaRequestPostOffer;
@@ -272,6 +274,20 @@ public class FixtureTest {
         equal("feeWhenSellerDoesNotWritePost", fees.getFeeWhenSellerDoesNotWritePost(), null);
     }
 
+    void aSellerMediaSaveReadsItsWarnings() throws Exception {
+        SellerMediaSaved saved = new SellerMediasApi(answer(fixture("seller-media-saved.json")))
+            .updateSellerMedia(MEDIA_ID, "key-1", new UpdateSellerMediaRequest());
+
+        if (saved.getWarnings() == null || saved.getWarnings().size() != 1) {
+            throw new AssertionError("warnings: got " + saved.getWarnings() + ", want 1 entry");
+        }
+        SellerMediaSavedAllOfWarnings warning = saved.getWarnings().get(0);
+        equal("warning code", warning.getCode(), SellerMediaSavedAllOfWarnings.CodeEnum.SAVED_ABOVE_COMPETITORS);
+        equal("feeWhenSellerWritesPost", warning.getDetails().getCompetitiveFees().getFeeWhenSellerWritesPost().getAmount(), 5400);
+        equal("feeWhenSellerDoesNotWritePost", warning.getDetails().getCompetitiveFees().getFeeWhenSellerDoesNotWritePost(), null);
+        equal("competitors", warning.getDetails().getCompetitors(), List.of("Prensarank"));
+    }
+
     void aSellerMediaReadsCompetitiveFeesByLinkTypePerLinkType() throws Exception {
         SellerMedia media = new SellerMediasApi(answer(fixture("seller-media-competitive-fees-by-link-type.json")))
             .getSellerMedia(MEDIA_ID);
@@ -299,7 +315,7 @@ public class FixtureTest {
             .addPricingOptionsItem(new UpdateSellerMediaRequestPostOfferPricingOptionsInner()
                 .linkType(UpdateSellerMediaRequestPostOfferPricingOptionsInner.LinkTypeEnum.DOFOLLOW)
                 .feeWhenSellerWritesPost(new MoneyOrNull().amount(6000).currency("EUR"))));
-        new SellerMediasApi(answer(fixture("seller-media.json"))).updateSellerMedia(MEDIA_ID, "key-1", update);
+        new SellerMediasApi(answer(fixture("seller-media-saved.json"))).updateSellerMedia(MEDIA_ID, "key-1", update);
 
         equal("method", sent().method(), "PATCH");
         JsonObject body = sentBody();
@@ -441,6 +457,7 @@ public class FixtureTest {
         cases.put("a catalogue media reads a null linkType beside present offers", test::aCatalogueMediaReadsANullLinkTypeBesidePresentOffers);
         cases.put("a seller media reads null competitiveFees", test::aSellerMediaReadsNullCompetitiveFees);
         cases.put("a seller media reads competitiveFees with one side null", test::aSellerMediaReadsCompetitiveFeesWithOneSideNull);
+        cases.put("a seller media save reads its warnings", test::aSellerMediaSaveReadsItsWarnings);
         cases.put("a seller media reads competitiveFeesByLinkType per link type", test::aSellerMediaReadsCompetitiveFeesByLinkTypePerLinkType);
         cases.put("a partial seller media update sends only the properties set", test::aPartialSellerMediaUpdateSendsOnlyThePropertiesSet);
         cases.put("an order event parses with fields this client does not know", test::anOrderEventParsesWithFieldsThisClientDoesNotKnow);

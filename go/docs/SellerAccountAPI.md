@@ -25,7 +25,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/viralitymedia/growwer-api-sdk/go/v2"
+	openapiclient "github.com/viralitymedia/growwer-api-sdk/go/v3"
 )
 
 func main() {

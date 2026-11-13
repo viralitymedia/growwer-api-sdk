@@ -128,6 +128,10 @@ docs/SellerMediaLinkAdditionOffer.md
 docs/SellerMediaLinkAdditionOfferPricingOptionsInner.md
 docs/SellerMediaPostOffer.md
 docs/SellerMediaPostOfferPricingOptionsInner.md
+docs/SellerMediaSaved.md
+docs/SellerMediaSavedAllOfDetails.md
+docs/SellerMediaSavedAllOfDetailsCompetitiveFees.md
+docs/SellerMediaSavedAllOfWarnings.md
 docs/SellerMediasAPI.md
 docs/SellerOrder.md
 docs/SellerOrderBriefing.md
@@ -270,6 +274,10 @@ model_seller_media_link_addition_offer.go
 model_seller_media_link_addition_offer_pricing_options_inner.go
 model_seller_media_post_offer.go
 model_seller_media_post_offer_pricing_options_inner.go
+model_seller_media_saved.go
+model_seller_media_saved_all_of_details.go
+model_seller_media_saved_all_of_details_competitive_fees.go
+model_seller_media_saved_all_of_warnings.go
 model_seller_order.go
 model_seller_order_briefing.go
 model_seller_order_channel.go

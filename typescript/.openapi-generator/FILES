@@ -111,6 +111,10 @@ docs/SellerMediaLinkAdditionOffer.md
 docs/SellerMediaLinkAdditionOfferPricingOptionsInner.md
 docs/SellerMediaPostOffer.md
 docs/SellerMediaPostOfferPricingOptionsInner.md
+docs/SellerMediaSaved.md
+docs/SellerMediaSavedAllOfDetails.md
+docs/SellerMediaSavedAllOfDetailsCompetitiveFees.md
+docs/SellerMediaSavedAllOfWarnings.md
 docs/SellerMediasApi.md
 docs/SellerOrder.md
 docs/SellerOrderBriefing.md
@@ -267,6 +271,10 @@ src/models/SellerMediaLinkAdditionOffer.ts
 src/models/SellerMediaLinkAdditionOfferPricingOptionsInner.ts
 src/models/SellerMediaPostOffer.ts
 src/models/SellerMediaPostOfferPricingOptionsInner.ts
+src/models/SellerMediaSaved.ts
+src/models/SellerMediaSavedAllOfDetails.ts
+src/models/SellerMediaSavedAllOfDetailsCompetitiveFees.ts
+src/models/SellerMediaSavedAllOfWarnings.ts
 src/models/SellerOrder.ts
 src/models/SellerOrderBriefing.ts
 src/models/SellerOrderChannel.ts

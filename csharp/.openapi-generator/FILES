@@ -112,6 +112,10 @@ docs/SellerMediaLinkAdditionOffer.md
 docs/SellerMediaLinkAdditionOfferPricingOptionsInner.md
 docs/SellerMediaPostOffer.md
 docs/SellerMediaPostOfferPricingOptionsInner.md
+docs/SellerMediaSaved.md
+docs/SellerMediaSavedAllOfDetails.md
+docs/SellerMediaSavedAllOfDetailsCompetitiveFees.md
+docs/SellerMediaSavedAllOfWarnings.md
 docs/SellerMediasApi.md
 docs/SellerOrder.md
 docs/SellerOrderBriefing.md
@@ -286,6 +290,10 @@ src/Growwer.Api/Model/SellerMediaLinkAdditionOffer.cs
 src/Growwer.Api/Model/SellerMediaLinkAdditionOfferPricingOptionsInner.cs
 src/Growwer.Api/Model/SellerMediaPostOffer.cs
 src/Growwer.Api/Model/SellerMediaPostOfferPricingOptionsInner.cs
+src/Growwer.Api/Model/SellerMediaSaved.cs
+src/Growwer.Api/Model/SellerMediaSavedAllOfDetails.cs
+src/Growwer.Api/Model/SellerMediaSavedAllOfDetailsCompetitiveFees.cs
+src/Growwer.Api/Model/SellerMediaSavedAllOfWarnings.cs
 src/Growwer.Api/Model/SellerOrder.cs
 src/Growwer.Api/Model/SellerOrderBriefing.cs
 src/Growwer.Api/Model/SellerOrderChannel.cs

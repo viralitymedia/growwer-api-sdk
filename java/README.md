@@ -91,7 +91,7 @@ Add this dependency to your project's POM:
 <dependency>
   <groupId>com.growwer</groupId>
   <artifactId>growwer-api</artifactId>
-  <version>2.2.0</version>
+  <version>3.0.0</version>
   <scope>compile</scope>
 </dependency>
 ```
@@ -107,7 +107,7 @@ Add this dependency to your project's build file:
   }
 
   dependencies {
-     implementation "com.growwer:growwer-api:2.2.0"
+     implementation "com.growwer:growwer-api:3.0.0"
   }
 ```
 
@@ -121,7 +121,7 @@ mvn clean package
 
 Then manually install the following JARs:
 
-* `target/growwer-api-2.2.0.jar`
+* `target/growwer-api-3.0.0.jar`
 * `target/lib/*.jar`
 
 ## Getting Started
@@ -354,6 +354,10 @@ Class | Method | HTTP request | Description
  - [SellerMediaLinkAdditionOfferPricingOptionsInner](docs/SellerMediaLinkAdditionOfferPricingOptionsInner.md)
  - [SellerMediaPostOffer](docs/SellerMediaPostOffer.md)
  - [SellerMediaPostOfferPricingOptionsInner](docs/SellerMediaPostOfferPricingOptionsInner.md)
+ - [SellerMediaSaved](docs/SellerMediaSaved.md)
+ - [SellerMediaSavedAllOfDetails](docs/SellerMediaSavedAllOfDetails.md)
+ - [SellerMediaSavedAllOfDetailsCompetitiveFees](docs/SellerMediaSavedAllOfDetailsCompetitiveFees.md)
+ - [SellerMediaSavedAllOfWarnings](docs/SellerMediaSavedAllOfWarnings.md)
  - [SellerOrder](docs/SellerOrder.md)
  - [SellerOrderBriefing](docs/SellerOrderBriefing.md)
  - [SellerOrderChannel](docs/SellerOrderChannel.md)

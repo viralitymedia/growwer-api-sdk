@@ -449,6 +449,23 @@ internal static class Program
         Equal("feeWhenSellerDoesNotWritePost", fees.FeeWhenSellerDoesNotWritePost, null);
     }
 
+    private static void ASellerMediaSaveReadsItsWarnings()
+    {
+        SellerMediaSaved saved = new SellerMediasApi(Answer(Fixture("seller-media-saved.json")), Key())
+            .UpdateSellerMedia(MediaId, "key-1", new UpdateSellerMediaRequest());
+
+        if (saved.Warnings == null || saved.Warnings.Count != 1)
+        {
+            throw new Exception($"warnings: got {saved.Warnings?.Count.ToString() ?? "null"} entries, want 1");
+        }
+        SellerMediaSavedAllOfWarnings warning = saved.Warnings[0];
+        Equal("warning code", warning.Code, SellerMediaSavedAllOfWarnings.CodeEnum.SavedAboveCompetitors);
+        Equal("feeWhenSellerWritesPost", warning.Details.CompetitiveFees.FeeWhenSellerWritesPost.Amount, 5400);
+        Equal("feeWhenSellerDoesNotWritePost", warning.Details.CompetitiveFees.FeeWhenSellerDoesNotWritePost, null);
+        Equal("competitors", string.Join(",", warning.Details.Competitors), "Prensarank");
+        Equal("domain", saved.Domain, "blog.example");
+    }
+
     private static void ASellerMediaReadsCompetitiveFeesByLinkTypePerLinkType()
     {
         SellerMedia media = new SellerMediasApi(Answer(Fixture("seller-media-competitive-fees-by-link-type.json")), Key())
@@ -547,7 +564,7 @@ internal static class Program
             feeWhenSellerWritesPost: new MoneyOrNull(6000, "EUR"));
         var update = new UpdateSellerMediaRequest(postOffer: new UpdateSellerMediaRequestPostOffer(
             pricingOptions: new List<UpdateSellerMediaRequestPostOfferPricingOptionsInner> { option }));
-        new SellerMediasApi(Answer(Fixture("seller-media.json")), Key()).UpdateSellerMedia(MediaId, "key-1", update);
+        new SellerMediasApi(Answer(Fixture("seller-media-saved.json")), Key()).UpdateSellerMedia(MediaId, "key-1", update);
 
         Equal("method", SentRequest().Method, HttpMethod.Patch);
         JObject body = SentBody();
@@ -558,7 +575,7 @@ internal static class Program
 
     private static void ASellerMediaUpdateSendsALinkAdditionOfferSetToNull()
     {
-        new SellerMediasApi(Answer(Fixture("seller-media.json")), Key())
+        new SellerMediasApi(Answer(Fixture("seller-media-saved.json")), Key())
             .UpdateSellerMedia(MediaId, "key-1", new UpdateSellerMediaRequest { LinkAdditionOffer = null });
 
         JObject body = SentBody();
@@ -584,6 +601,7 @@ internal static class Program
             ("a seller media reads competitiveFeesByLinkType per link type", ASellerMediaReadsCompetitiveFeesByLinkTypePerLinkType),
             ("a project update with only a name leaves the country out", AProjectUpdateWithOnlyANameLeavesTheCountryOut),
             ("a project update sends a country set to null", AProjectUpdateSendsACountrySetToNull),
+            ("a seller media save reads its warnings", ASellerMediaSaveReadsItsWarnings),
             ("a seller media update without a linkAdditionOffer leaves it out", ASellerMediaUpdateWithoutALinkAdditionOfferLeavesItOut),
             ("a seller media update sends a linkAdditionOffer set to null", ASellerMediaUpdateSendsALinkAdditionOfferSetToNull),
             ("the error envelope is readable from the ApiException", TheErrorEnvelopeIsReadableFromTheException),

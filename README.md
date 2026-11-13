@@ -16,7 +16,7 @@ contract, one generator run, one version: a change to the API reaches all seven 
 | Python 3.10+ | `growwer` | [![PyPI](https://img.shields.io/pypi/v/growwer?label=pypi&color=informational)](https://pypi.org/project/growwer/) | [`python/`](python/) |
 | TypeScript (Node 22+, browsers) | `@growwer/api` | [![npm](https://img.shields.io/npm/v/%40growwer%2Fapi?label=npm&color=informational)](https://www.npmjs.com/package/@growwer/api) | [`typescript/`](typescript/) |
 | PHP 8.1+ | `growwer/growwer-api-sdk` | [![Packagist](https://img.shields.io/packagist/v/growwer/growwer-api-sdk?label=packagist&color=informational)](https://packagist.org/packages/growwer/growwer-api-sdk) | [`php/`](php/) |
-| Go 1.23+ | `github.com/viralitymedia/growwer-api-sdk/go/v2` | [![Go module](https://img.shields.io/github/v/tag/viralitymedia/growwer-api-sdk?filter=go%2F*&label=go&color=informational)](https://pkg.go.dev/github.com/viralitymedia/growwer-api-sdk/go/v2) | [`go/`](go/) |
+| Go 1.23+ | `github.com/viralitymedia/growwer-api-sdk/go/v3` | [![Go module](https://img.shields.io/github/v/tag/viralitymedia/growwer-api-sdk?filter=go%2F*&label=go&color=informational)](https://pkg.go.dev/github.com/viralitymedia/growwer-api-sdk/go/v2) | [`go/`](go/) |
 | Java 11+ | `com.growwer:growwer-api` | [![Maven Central](https://img.shields.io/maven-central/v/com.growwer/growwer-api?label=maven%20central&color=informational)](https://central.sonatype.com/artifact/com.growwer/growwer-api) | [`java/`](java/) |
 | .NET 8 | `Growwer.Api` | [![NuGet](https://img.shields.io/nuget/v/Growwer.Api?label=nuget&color=informational)](https://www.nuget.org/packages/Growwer.Api/) | [`csharp/`](csharp/) |
 | Ruby 3.0+ | `growwer` | [![RubyGems](https://img.shields.io/gem/v/growwer?label=gem&color=informational)](https://rubygems.org/gems/growwer) | [`ruby/`](ruby/) |
@@ -101,7 +101,7 @@ import (
 	"context"
 	"os"
 
-	growwer "github.com/viralitymedia/growwer-api-sdk/go/v2"
+	growwer "github.com/viralitymedia/growwer-api-sdk/go/v3"
 )
 
 config := growwer.NewConfiguration()
@@ -175,6 +175,51 @@ var config = new Configuration
 var me = new AccountApi(config).GetMe();
 ```
 </details>
+
+## Changes in 3.0.0
+
+**Code that names the result type of `updateSellerMedia` or `applySellerMediaCompetitiveFees` breaks
+in Go, Java and C#**, and the Go module moves to `/v3`. A seller always saves their fees now, a
+raise above the competitors included, and the two writes answer a new `SellerMediaSaved`: a
+`SellerMedia` plus `warnings`. It is a separate class in every language, not a subclass of
+`SellerMedia`, so an assignment to a variable or field typed `SellerMedia` no longer compiles where
+the language checks types. `getSellerMedia` and `createSellerMedia` still answer `SellerMedia`.
+
+- **Go:** the module moves to `github.com/viralitymedia/growwer-api-sdk/go/v3`, because Go requires
+  the major in the path. Update every import and run
+  `go get github.com/viralitymedia/growwer-api-sdk/go/v3@v3.0.0`; the old path stays at 2.2.0.
+  `Execute()` of both calls returns `*SellerMediaSaved`, so `var media *growwer.SellerMedia` fed
+  from them stops compiling.
+- **Java and C#:** `updateSellerMedia` and `applySellerMediaCompetitiveFees` (and their
+  `WithHttpInfo`, async and `ApiResponse` forms) return `SellerMediaSaved`. A `SellerMedia` variable,
+  field, return type or `ApiResponse<SellerMedia>` fed from them stops compiling; change the type or
+  use `var`.
+- **TypeScript:** `SellerMediaSaved` carries every `SellerMedia` field plus `warnings`, so a value of
+  it is still assignable to `SellerMedia` and the code compiles. `SellerMediaFromJSON` and
+  `instanceOfSellerMedia` do not apply to it: use `SellerMediaSavedFromJSON`.
+- **PHP, Python and Ruby:** nothing fails to compile or load, and every field is read as before.
+  `instanceof SellerMedia` (PHP), `isinstance(x, SellerMedia)` (Python) and `is_a?(Growwer::SellerMedia)`
+  (Ruby) are now false for these two answers, and a PHP function declared to return `SellerMedia`
+  throws a `TypeError` when it returns one. Python's annotation is `SellerMediaSaved`, which a type
+  checker flags where the result is declared `SellerMedia`.
+
+What changes:
+
+- **Fees are always saved, a raise included.** The contract no longer says that raising the price
+  above the best competitor's tells Growwer's support team. When the saved fees list the
+  media above the marketplaces that list the same domain cheaper and some fee would list it under
+  them, the 200 carries a warning.
+- **`warnings`.** Always present, an empty list when there is nothing to know. Each entry is a
+  `SellerMediaSavedAllOfWarnings` with `code` (today only `saved_above_competitors`), a `message`,
+  and `details`: `competitiveFees` (`feeWhenSellerWritesPost` and `feeWhenSellerDoesNotWritePost`,
+  null when no fee of that side would list it under the marketplaces or the media does not offer
+  it) and `competitors`, the names of those marketplaces, never their prices. A client should
+  tolerate a new `code`.
+- **Recorded responses without `warnings`.** `warnings` is required in the contract, so a seller media
+  save recorded before 3.0.0 and fed to a mock fails to parse in C# (`Required property 'warnings'
+  not found`), and the Go and Java models mark it required too. Add `"warnings": []` to the mock.
+- Three more models come with it, one per nested object (`SellerMediaSavedAllOfDetails` and
+  `SellerMediaSavedAllOfDetailsCompetitiveFees` besides the warning).
 
 ## Changes in 2.2.0
 
@@ -789,7 +834,7 @@ import (
 	"net/http"
 
 	standardwebhooks "github.com/standard-webhooks/standard-webhooks/libraries/go"
-	growwer "github.com/viralitymedia/growwer-api-sdk/go/v2"
+	growwer "github.com/viralitymedia/growwer-api-sdk/go/v3"
 )
 
 verifier, err := standardwebhooks.NewWebhook(secret)
@@ -1080,8 +1125,8 @@ These corrections are applied by the generator script rather than by hand, becau
 would be discarded on the next run:
 
 - **Go** has no package registry, so the import path is the repository URL plus the directory, and
-  from 2.0.0 on the `/v2` Go requires of a second major. The generator derives the module path from
-  the Go package name, and `go` is a keyword, so it cannot produce `.../growwer-api-sdk/go/v2`
+  from 2.0.0 on the major suffix Go requires of a second major (`/v3` since
+  3.0.0). The generator derives the module path from the Go package name, and `go` is a keyword, so it cannot produce `.../growwer-api-sdk/go/v3`
   on its own.
 - **Go**'s oneOf template writes its no-match branch twice in a row, and `go vet` rejects the second
   copy as unreachable code. The copy is dropped by

@@ -13,11 +13,11 @@ All URIs are relative to *https://tool.growwer.com*
 
 <a id="applysellermediacompetitivefees"></a>
 # **ApplySellerMediaCompetitiveFees**
-> SellerMedia ApplySellerMediaCompetitiveFees (Guid id, string idempotencyKey)
+> SellerMediaSaved ApplySellerMediaCompetitiveFees (Guid id, string idempotencyKey)
 
 Lower your fees to the competitive fees Growwer suggests
 
-Lowers your post fees for the media to the competitive fees Growwer suggests, per link type. On each side, a fee above the highest whole-euro fee that lists the media at least 1 EUR below its cheapest price on the marketplaces Growwer compares with is lowered to that fee, and a link type that then still does not list the media at least 1 EUR below that price has one of its fees lowered by 1 EUR, which does. GET /seller/medias/{id} shows, per side, the highest fee this sets on that side as `competitiveFees`, and the fees it sets on each link type it lowers as `competitiveFeesByLinkType`. Only fees above their suggestion change: a fee is never raised, a cheaper link type keeps its fee, no link type gains a side it did not offer, and a side without a suggestion keeps your fee.  When there is no suggestion (Growwer sets the media's prices, it is not listed on a marketplace Growwer compares with, it already lists below its price there, or no fee would bring it below), or your fees already are at or below the suggested ones, nothing changes and the answer is 200 with the media as it is.  The fees set are your base fees: a running flash offer keeps discounting them. As with a fee edit, a change of the price may cancel the managed-service proposals accepted for the media whose price it changes. Send no body, or an empty object.
+Lowers your post fees for the media to the competitive fees Growwer suggests, per link type. On each side, a fee above the highest whole-euro fee that lists the media at least 1 EUR below its cheapest price on the marketplaces Growwer compares with is lowered to that fee, and a link type that then still does not list the media at least 1 EUR below that price has one of its fees lowered by 1 EUR, which does. GET /seller/medias/{id} shows, per side, the highest fee this sets on that side as `competitiveFees`, and the fees it sets on each link type it lowers as `competitiveFeesByLinkType`. Only fees above their suggestion change: a fee is never raised, a cheaper link type keeps its fee, no link type gains a side it did not offer, and a side without a suggestion keeps your fee.  When there is no suggestion (Growwer sets the media's prices, it is not listed on a marketplace Growwer compares with, it already lists below its price there, or no fee would bring it below), or your fees already are at or below the suggested ones, nothing changes and the answer is 200 with the media as it is.  The fees set are your base fees: a running flash offer keeps discounting them. As with a fee edit, a change of the price may cancel the managed-service proposals accepted for the media whose price it changes. When the fees set still list the media above the marketplaces that list the same domain cheaper, they are saved, and `warnings` holds a `saved_above_competitors` warning with the competitive fee of each side and the names of those marketplaces. Send no body, or an empty object.
 
 ### Example
 ```csharp
@@ -49,7 +49,7 @@ namespace Example
             try
             {
                 // Lower your fees to the competitive fees Growwer suggests
-                SellerMedia result = apiInstance.ApplySellerMediaCompetitiveFees(id, idempotencyKey);
+                SellerMediaSaved result = apiInstance.ApplySellerMediaCompetitiveFees(id, idempotencyKey);
                 Debug.WriteLine(result);
             }
             catch (ApiException  e)
@@ -70,7 +70,7 @@ This returns an ApiResponse object which contains the response data, status code
 try
 {
     // Lower your fees to the competitive fees Growwer suggests
-    ApiResponse<SellerMedia> response = apiInstance.ApplySellerMediaCompetitiveFeesWithHttpInfo(id, idempotencyKey);
+    ApiResponse<SellerMediaSaved> response = apiInstance.ApplySellerMediaCompetitiveFeesWithHttpInfo(id, idempotencyKey);
     Debug.Write("Status Code: " + response.StatusCode);
     Debug.Write("Response Headers: " + response.Headers);
     Debug.Write("Response Body: " + response.Data);
@@ -92,7 +92,7 @@ catch (ApiException e)
 
 ### Return type
 
-[**SellerMedia**](SellerMedia.md)
+[**SellerMediaSaved**](SellerMediaSaved.md)
 
 ### Authorization
 
@@ -107,7 +107,7 @@ catch (ApiException e)
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **200** | The media, with its fees above the suggested ones lowered to them, or unchanged when there were none to lower. |  -  |
+| **200** | The media, with its fees above the suggested ones lowered to them, or unchanged and without a warning when there were none to lower; &#x60;warnings&#x60; holds one &#x60;saved_above_competitors&#x60; when the fees set still list it above the marketplaces that list the same domain cheaper. |  -  |
 | **400** | The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). |  -  |
 | **401** | The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). |  -  |
 | **403** | The key is read-only (code &#x60;insufficient_capability&#x60;). |  -  |
@@ -546,11 +546,11 @@ catch (ApiException e)
 
 <a id="updatesellermedia"></a>
 # **UpdateSellerMedia**
-> SellerMedia UpdateSellerMedia (Guid id, string idempotencyKey, UpdateSellerMediaRequest updateSellerMediaRequest)
+> SellerMediaSaved UpdateSellerMedia (Guid id, string idempotencyKey, UpdateSellerMediaRequest updateSellerMediaRequest)
 
 Edit the offer of a media you sell on
 
-Sets the fees, extra services, typology and post offer characteristics of one of your medias, as the media edit page saves them. Send only the fields you change: a field you send replaces that field wholly, a field you leave out stays as it is, inside `postOffer` too (sending only `postOffer.maximumLinks` keeps your fees).  - `typology` is `blog` or `press`. - `postOffer.pricingOptions` lists every link type you offer for sponsored posts, at least one. A link type you leave out is no longer offered. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR. - `postOffer.maximumLinks` is how many links a sponsored post may hold, 1 to 4; `postOffer.advertisingLabellingPolicy` whether posts are labelled as advertising (`always` or `never`); `postOffer.promotedSocialNetworks` the full list of social networks posts are promoted on, each once (an empty list for none). - `linkAdditionOffer.pricingOptions` lists the link types you offer for adding a link to an existing article; `null` or an empty list stops offering link additions. - `extraServices` is the full list of extra services you offer; an empty list removes them all. It is sent at the top level, although GET /seller/medias/{id} reads it inside `postOffer`.  The fees are your base fees, the ones GET /seller/medias/{id} returns: while a flash offer runs, its discount keeps applying on top of them, and `currentCost` shows the result. `currentCost` may be sent back as read and is ignored. Country, language, topics and comments are not edited here.  As on the page, a change of the post offer's price may cancel the managed-service proposals accepted for the media whose price it changes, and raising the price above the best competitor's tells Growwer's support team. A restricted seller account may edit its offer.
+Sets the fees, extra services, typology and post offer characteristics of one of your medias, as the media edit page saves them. Send only the fields you change: a field you send replaces that field wholly, a field you leave out stays as it is, inside `postOffer` too (sending only `postOffer.maximumLinks` keeps your fees).  - `typology` is `blog` or `press`. - `postOffer.pricingOptions` lists every link type you offer for sponsored posts, at least one. A link type you leave out is no longer offered. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR. - `postOffer.maximumLinks` is how many links a sponsored post may hold, 1 to 4; `postOffer.advertisingLabellingPolicy` whether posts are labelled as advertising (`always` or `never`); `postOffer.promotedSocialNetworks` the full list of social networks posts are promoted on, each once (an empty list for none). - `linkAdditionOffer.pricingOptions` lists the link types you offer for adding a link to an existing article; `null` or an empty list stops offering link additions. - `extraServices` is the full list of extra services you offer; an empty list removes them all. It is sent at the top level, although GET /seller/medias/{id} reads it inside `postOffer`.  The fees are your base fees, the ones GET /seller/medias/{id} returns: while a flash offer runs, its discount keeps applying on top of them, and `currentCost` shows the result. `currentCost` may be sent back as read and is ignored. Country, language, topics and comments are not edited here.  As on the page, a change of the post offer's price may cancel the managed-service proposals accepted for the media whose price it changes. Your fees are always saved, a raise included. When they list the media above the marketplaces that list the same domain cheaper and some fee would list it under them, the 200 carries a `saved_above_competitors` warning in `warnings`, with the competitive fee of each side and the names of those marketplaces. A restricted seller account may edit its offer.
 
 ### Example
 ```csharp
@@ -583,7 +583,7 @@ namespace Example
             try
             {
                 // Edit the offer of a media you sell on
-                SellerMedia result = apiInstance.UpdateSellerMedia(id, idempotencyKey, updateSellerMediaRequest);
+                SellerMediaSaved result = apiInstance.UpdateSellerMedia(id, idempotencyKey, updateSellerMediaRequest);
                 Debug.WriteLine(result);
             }
             catch (ApiException  e)
@@ -604,7 +604,7 @@ This returns an ApiResponse object which contains the response data, status code
 try
 {
     // Edit the offer of a media you sell on
-    ApiResponse<SellerMedia> response = apiInstance.UpdateSellerMediaWithHttpInfo(id, idempotencyKey, updateSellerMediaRequest);
+    ApiResponse<SellerMediaSaved> response = apiInstance.UpdateSellerMediaWithHttpInfo(id, idempotencyKey, updateSellerMediaRequest);
     Debug.Write("Status Code: " + response.StatusCode);
     Debug.Write("Response Headers: " + response.Headers);
     Debug.Write("Response Body: " + response.Data);
@@ -627,7 +627,7 @@ catch (ApiException e)
 
 ### Return type
 
-[**SellerMedia**](SellerMedia.md)
+[**SellerMediaSaved**](SellerMediaSaved.md)
 
 ### Authorization
 
@@ -642,7 +642,7 @@ catch (ApiException e)
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **200** | The media, with the changes saved. |  -  |
+| **200** | The media, with the changes saved, and &#x60;warnings&#x60;: one &#x60;saved_above_competitors&#x60; when it still lists above the marketplaces that list the same domain cheaper and some fee would list it under them, none otherwise. |  -  |
 | **400** | The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). |  -  |
 | **401** | The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). |  -  |
 | **403** | The key is read-only (code &#x60;insufficient_capability&#x60;). |  -  |

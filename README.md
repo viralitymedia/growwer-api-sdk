@@ -190,10 +190,12 @@ The catalogue media also gains a required, nullable `bestPrice`, and `listFlashO
 `searchProjectMedias` a `bestPrice` filter. The filter is a new method parameter after
 `linkAdditionLinkType`, before `recommended`. Java takes every parameter by position, so each call
 of the two stops compiling. In C#, PHP and Python a call that passes `recommended` or any later
-filter by position now passes it to the wrong parameter, and sends it under the wrong name whenever
-the types still fit (`recommended` becomes `bestPrice`, `favourite` becomes `recommended`, and so
-on); name the arguments, or add the new one in its place. Go, TypeScript and Ruby take the filters
-by name and are unaffected.
+filter by position now passes it to the wrong parameter, and sends it under the wrong name
+(`recommended` becomes `bestPrice`, `favourite` becomes `recommended`, and so on). In C# and Python
+that happens silently whenever the types still fit; where they do not, C# stops compiling and
+Python raises a pydantic `ValidationError`. PHP's parameters are untyped, so there the shift is
+always silent. Name the arguments, or add the new one in its place. Go, TypeScript and Ruby take
+the filters by name and are unaffected.
 
 - **Go:** the module moves to `github.com/viralitymedia/growwer-api-sdk/go/v3`, because Go requires
   the major in the path. Update every import and run
@@ -209,12 +211,17 @@ by name and are unaffected.
   field, return type or `ApiResponse<SellerMedia>` fed from them stops compiling; change the type or
   use `var`.
 - **C#:** `ListFlashOffers` and `SearchProjectMedias` (and their `WithHttpInfo` and async forms) take
-  `bool? bestPrice` after `linkAdditionLinkType`: see the positional calls above. The `CatalogueMedia`
-  and `ProjectCatalogueMedia` constructors gain `bestPrice` before `postOffer`, so a call that passes
-  `postOffer` or `linkAdditionOffer` by position no longer compiles, and any call that does not pass a
-  non-null `bestPrice`, named arguments included, compiles and throws an `ArgumentNullException`,
-  though reading a response with a null one works; to build one with no badge by hand, pass a
-  `CatalogueMediaBestPrice`, then set `BestPrice = null`.
+  `bool? bestPrice` after `linkAdditionLinkType`: see the positional calls above. A class that
+  implements `ICatalogueApiSync`, `ICatalogueApiAsync` or `ICatalogueApi`, or `ISellerMediasApiSync`,
+  `ISellerMediasApiAsync` or `ISellerMediasApi`, no longer compiles, and neither does a Moq `Setup`
+  on `ListFlashOffers` or `SearchProjectMedias` (or their other forms), which lists every argument
+  and now lacks `bestPrice`, or one on `UpdateSellerMedia` or `ApplySellerMediaCompetitiveFees` that
+  `Returns` a `SellerMedia`. The `CatalogueMedia` and `ProjectCatalogueMedia` constructors gain
+  `bestPrice` before `postOffer`, so a call that passes `postOffer` or `linkAdditionOffer` by
+  position no longer compiles, and any call that does not pass a non-null `bestPrice`, named
+  arguments included, compiles and throws an `ArgumentNullException`, though reading a response with
+  a null one works; to build one with no badge by hand, pass a `CatalogueMediaBestPrice`, then set
+  `BestPrice = null`.
 - **TypeScript:** `SellerMediaSaved` carries every `SellerMedia` field plus `warnings`, so a value of
   it is still assignable to `SellerMedia` and the code compiles. `SellerMediaFromJSON` and
   `instanceOfSellerMedia` do not apply to it: use `SellerMediaSavedFromJSON`. `CatalogueMedia` and
@@ -228,7 +235,8 @@ by name and are unaffected.
   `list_flash_offers` and `searchProjectMedias` / `search_project_medias` (and their other forms)
   take the `bestPrice` filter by position too: see the positional calls above. Python refuses a
   `CatalogueMedia` or `ProjectCatalogueMedia` built by hand without `best_price` (pass `None` for no
-  badge); PHP and Ruby build one as before.
+  badge). PHP builds one, but its `valid()` and `listInvalidProperties()` flag one whose data lacks
+  a `best_price` key (pass `'best_price' => null` for no badge). Ruby builds one as before.
 
 What changes:
 
@@ -261,13 +269,16 @@ What changes:
 - **The `bestPrice` filter.** `listFlashOffers` and `searchProjectMedias` take `bestPrice`: `true`
   answers only the medias with a badge, of either kind. Only `true` applies it; leave it unset
   otherwise.
-- **Recorded responses without `warnings` or `bestPrice`.** Both are required in the contract, so a
-  seller media save or a catalogue media recorded before 3.0.0 and fed to a mock fails to parse in Go,
-  Java and C# (C#: `Required property 'warnings' not found`). Add `"warnings": []` or
-  `"bestPrice": null` to the mock. Python, Ruby and PHP read a catalogue media without `bestPrice`, as
-  no badge, though PHP's `valid()` and `listInvalidProperties()` then flag it; TypeScript's
-  `CatalogueMediaFromJSON` reads it as `undefined`, and `instanceOfCatalogueMedia` answers false for
-  it.
+- **Recorded responses without `warnings` or `bestPrice`.** Both are required in the contract. A
+  seller media save recorded before 3.0.0, without `warnings`, and fed to a mock fails to parse in
+  every client but PHP: Go, Java and C# refuse it (C#: `Required property 'warnings' not found`),
+  Python raises a pydantic `ValidationError`, Ruby an `ArgumentError` (`warnings cannot be nil`) and
+  TypeScript a `TypeError`. PHP reads it, with `getWarnings()` null. A catalogue media without
+  `bestPrice` fails to parse in Go, Java and C#. Add `"warnings": []` or `"bestPrice": null` to the
+  mock. Python, Ruby and PHP read a catalogue media without `bestPrice` as no badge, and PHP's
+  `valid()` and `listInvalidProperties()` do not flag it, because the field may be null;
+  TypeScript's `CatalogueMediaFromJSON` reads it as `undefined`, and `instanceOfCatalogueMedia`
+  answers false for it.
 - Four more models come with it, one per nested object (`SellerMediaSavedAllOfDetails` and
   `SellerMediaSavedAllOfDetailsCompetitiveFees` besides the warning, and `CatalogueMediaBestPrice`).
 

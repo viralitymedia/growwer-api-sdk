@@ -17,6 +17,7 @@ import com.growwer.api.ApiException;
 import com.growwer.api.model.Error;
 import com.growwer.api.model.ListSellerMedias200Response;
 import com.growwer.api.model.SellerMedia;
+import com.growwer.api.model.SellerMediaSaved;
 import java.util.UUID;
 import com.growwer.api.model.UpdateSellerMediaRequest;
 import org.junit.jupiter.api.Disabled;
@@ -46,7 +47,7 @@ public class SellerMediasApiTest {
     public void applySellerMediaCompetitiveFeesTest() throws ApiException {
         UUID id = null;
         String idempotencyKey = null;
-        SellerMedia response = api.applySellerMediaCompetitiveFees(id, idempotencyKey);
+        SellerMediaSaved response = api.applySellerMediaCompetitiveFees(id, idempotencyKey);
         // TODO: test validations
     }
 
@@ -93,7 +94,7 @@ public class SellerMediasApiTest {
         UUID id = null;
         String idempotencyKey = null;
         UpdateSellerMediaRequest updateSellerMediaRequest = null;
-        SellerMedia response = api.updateSellerMedia(id, idempotencyKey, updateSellerMediaRequest);
+        SellerMediaSaved response = api.updateSellerMedia(id, idempotencyKey, updateSellerMediaRequest);
         // TODO: test validations
     }
 

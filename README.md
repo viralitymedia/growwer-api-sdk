@@ -215,6 +215,9 @@ What changes:
   null when no fee of that side would list it under the marketplaces or the media does not offer
   it) and `competitors`, the names of those marketplaces, never their prices. A client should
   tolerate a new `code`.
+- **Recorded responses without `warnings`.** `warnings` is required in the contract, so a seller media
+  save recorded before 3.0.0 and fed to a mock fails to parse in C# (`Required property 'warnings'
+  not found`), and the Go and Java models mark it required too. Add `"warnings": []` to the mock.
 - Three more models come with it, one per nested object (`SellerMediaSavedAllOfDetails` and
   `SellerMediaSavedAllOfDetailsCompetitiveFees` besides the warning).
 

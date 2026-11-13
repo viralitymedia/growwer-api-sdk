@@ -487,7 +487,7 @@ Sets the fees, extra services, typology and post offer characteristics of one of
 
 The fees are your base fees, the ones GET /seller/medias/{id} returns: while a flash offer runs, its discount keeps applying on top of them, and `currentCost` shows the result. `currentCost` may be sent back as read and is ignored. Country, language, topics and comments are not edited here.
 
-As on the page, a change of the post offer's price may cancel the managed-service proposals accepted for the media whose price it changes. Your fees are always saved, a raise included. When they list the media above the marketplaces that list the same domain cheaper and some fee would list it under them, the 200 carries a `saved_above_competitors` warning in `warnings`, with the competitive fee of each side and the names of those marketplaces. A restricted seller account may edit its offer.
+As on the page, a change of the post offer's price may cancel the managed-service proposals accepted for the media whose price it changes. Your fees are always saved, a raise included. When they list the media above the marketplaces that list the same domain cheaper and some fee would list it under them, the 200 carries a `saved_above_competitors` warning in `warnings`, with the competitive fee of each side and the names of those marketplaces. When such a save raises a fee, or adds a side or a link type, the warning is `saved_not_recommended` instead, with the same details: the media is not recommended in buyers' projects while it lists above them, and stays in the catalogue. A restricted seller account may edit its offer.
 
 ### Example
 
@@ -561,7 +561,7 @@ Name | Type | Description  | Notes
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | The media, with the changes saved, and &#x60;warnings&#x60;: one &#x60;saved_above_competitors&#x60; when it still lists above the marketplaces that list the same domain cheaper and some fee would list it under them, none otherwise. |  -  |
+**200** | The media, with the changes saved, and &#x60;warnings&#x60;: one &#x60;saved_above_competitors&#x60; when it still lists above the marketplaces that list the same domain cheaper and some fee would list it under them, &#x60;saved_not_recommended&#x60; instead when the save raised a fee or added a side or a link type, none otherwise. |  -  |
 **400** | The write has no &#x60;Idempotency-Key&#x60; header (code &#x60;idempotency_key_required&#x60;), the header is not 1 to 255 printable ASCII characters without spaces (code &#x60;invalid_idempotency_key&#x60;), or the body is not a JSON object (code &#x60;invalid_json&#x60;). |  -  |
 **401** | The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). |  -  |
 **403** | The key is read-only (code &#x60;insufficient_capability&#x60;). |  -  |

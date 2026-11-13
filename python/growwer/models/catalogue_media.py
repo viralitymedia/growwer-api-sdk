@@ -21,6 +21,7 @@ import json
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
 from uuid import UUID
+from growwer.models.catalogue_media_best_price import CatalogueMediaBestPrice
 from growwer.models.catalogue_media_flash_offer import CatalogueMediaFlashOffer
 from growwer.models.catalogue_media_metrics import CatalogueMediaMetrics
 from growwer.models.catalogue_offer_or_null import CatalogueOfferOrNull
@@ -46,9 +47,10 @@ class CatalogueMedia(BaseModel):
     average_days_to_publication: Optional[StrictInt] = Field(description="The average days from order to publication, or null without published orders.", alias="averageDaysToPublication")
     on_holiday: StrictBool = Field(description="Whether the media is on holiday and will take longer to publish.", alias="onHoliday")
     flash_offer: Optional[CatalogueMediaFlashOffer] = Field(alias="flashOffer")
+    best_price: Optional[CatalogueMediaBestPrice] = Field(alias="bestPrice")
     post_offer: CataloguePostOffer = Field(alias="postOffer")
     link_addition_offer: Optional[CatalogueOfferOrNull] = Field(description="Adding a link to an existing article, or null when the media does not offer it.", alias="linkAdditionOffer")
-    __properties: ClassVar[List[str]] = ["id", "domain", "type", "language", "country", "topics", "metrics", "positiveTrafficTrend", "bestSeller", "publicationRate", "averageDaysToPublication", "onHoliday", "flashOffer", "postOffer", "linkAdditionOffer"]
+    __properties: ClassVar[List[str]] = ["id", "domain", "type", "language", "country", "topics", "metrics", "positiveTrafficTrend", "bestSeller", "publicationRate", "averageDaysToPublication", "onHoliday", "flashOffer", "bestPrice", "postOffer", "linkAdditionOffer"]
 
     @field_validator('type')
     def type_validate_enum(cls, value):
@@ -102,6 +104,9 @@ class CatalogueMedia(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of flash_offer
         if self.flash_offer:
             _dict['flashOffer'] = self.flash_offer.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of best_price
+        if self.best_price:
+            _dict['bestPrice'] = self.best_price.to_dict()
         # override the default output from pydantic by calling `to_dict()` of post_offer
         if self.post_offer:
             _dict['postOffer'] = self.post_offer.to_dict()
@@ -127,6 +132,11 @@ class CatalogueMedia(BaseModel):
         # and model_fields_set contains the field
         if self.flash_offer is None and "flash_offer" in self.model_fields_set:
             _dict['flashOffer'] = None
+
+        # set to None if best_price (nullable) is None
+        # and model_fields_set contains the field
+        if self.best_price is None and "best_price" in self.model_fields_set:
+            _dict['bestPrice'] = None
 
         # set to None if link_addition_offer (nullable) is None
         # and model_fields_set contains the field
@@ -158,6 +168,7 @@ class CatalogueMedia(BaseModel):
             "averageDaysToPublication": obj.get("averageDaysToPublication"),
             "onHoliday": obj.get("onHoliday"),
             "flashOffer": CatalogueMediaFlashOffer.from_dict(obj["flashOffer"]) if obj.get("flashOffer") is not None else None,
+            "bestPrice": CatalogueMediaBestPrice.from_dict(obj["bestPrice"]) if obj.get("bestPrice") is not None else None,
             "postOffer": CataloguePostOffer.from_dict(obj["postOffer"]) if obj.get("postOffer") is not None else None,
             "linkAdditionOffer": CatalogueOfferOrNull.from_dict(obj["linkAdditionOffer"]) if obj.get("linkAdditionOffer") is not None else None
         })

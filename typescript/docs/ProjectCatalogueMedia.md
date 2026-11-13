@@ -19,6 +19,7 @@ Name | Type
 `averageDaysToPublication` | number
 `onHoliday` | boolean
 `flashOffer` | [CatalogueMediaFlashOffer](CatalogueMediaFlashOffer.md)
+`bestPrice` | [CatalogueMediaBestPrice](CatalogueMediaBestPrice.md)
 `postOffer` | [CataloguePostOffer](CataloguePostOffer.md)
 `linkAdditionOffer` | [CatalogueOfferOrNull](CatalogueOfferOrNull.md)
 `project` | [ProjectCatalogueMediaAllOfProject](ProjectCatalogueMediaAllOfProject.md)
@@ -43,6 +44,7 @@ const example = {
   "averageDaysToPublication": null,
   "onHoliday": null,
   "flashOffer": null,
+  "bestPrice": null,
   "postOffer": null,
   "linkAdditionOffer": null,
   "project": null,

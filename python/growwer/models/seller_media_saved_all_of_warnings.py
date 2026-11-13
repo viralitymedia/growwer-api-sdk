@@ -37,8 +37,8 @@ class SellerMediaSavedAllOfWarnings(BaseModel):
     @field_validator('code')
     def code_validate_enum(cls, value):
         """Validates the enum"""
-        if value not in set(['saved_above_competitors']):
-            raise ValueError("must be one of enum values ('saved_above_competitors')")
+        if value not in set(['saved_above_competitors', 'saved_not_recommended']):
+            raise ValueError("must be one of enum values ('saved_above_competitors', 'saved_not_recommended')")
         return value
 
     model_config = ConfigDict(

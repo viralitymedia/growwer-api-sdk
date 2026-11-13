@@ -17,7 +17,7 @@ import type { SellerMediaSavedAllOfDetails } from '@growwer/api'
 // TODO: Update the object below with actual values
 const example = {
   "competitiveFees": null,
-  "competitors": ["Prensarank"],
+  "competitors": ["Prensalink"],
 } satisfies SellerMediaSavedAllOfDetails
 
 console.log(example)

@@ -18,6 +18,7 @@ from growwer.exceptions import ApiException
 from growwer.models import (
     BalanceLowEventData,
     CatalogueMedia,
+    CatalogueMediaBestPrice,
     CatalogueOfferOrNull,
     CreateWebhookRequest,
     Error,
@@ -169,6 +170,7 @@ class FixtureTest(unittest.TestCase):
         media = CatalogueApi(self.client(200, fixture("catalogue-media.json"))).get_catalogue_media(MEDIA_ID)
 
         self.assertIsInstance(media, CatalogueMedia)
+        self.assertIsNone(media.best_price)
         self.assertIsNone(media.link_addition_offer)
         self.assertIsNone(media.flash_offer)
         self.assertIsNone(media.country)
@@ -196,6 +198,17 @@ class FixtureTest(unittest.TestCase):
         self.assertIsNone(offer.link_type)
         self.assertEqual(offer.price.amount, 6000)
         self.assertIsNone(offer.previous_price)
+
+    def test_catalogue_media_reads_its_best_price_badge(self):
+        media = CatalogueApi(
+            self.client(200, fixture("catalogue-media-null-link-type.json"))
+        ).get_catalogue_media(MEDIA_ID)
+
+        best_price = media.best_price
+        self.assertIsInstance(best_price, CatalogueMediaBestPrice)
+        self.assertEqual(best_price.badge, "cheaper")
+        self.assertEqual(best_price.platform_count, 3)
+        self.assertEqual(best_price.checked_on, datetime.date(2026, 11, 12))
 
     def test_seller_media_reads_null_competitive_fees(self):
         media = SellerMediasApi(self.client(200, fixture("seller-media.json"))).get_seller_media(MEDIA_ID)

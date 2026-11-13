@@ -17,6 +17,7 @@ Name | Type | Description | Notes
 **AverageDaysToPublication** | **NullableInt32** | The average days from order to publication, or null without published orders. | 
 **OnHoliday** | **bool** | Whether the media is on holiday and will take longer to publish. | 
 **FlashOffer** | [**NullableCatalogueMediaFlashOffer**](CatalogueMediaFlashOffer.md) |  | 
+**BestPrice** | [**NullableCatalogueMediaBestPrice**](CatalogueMediaBestPrice.md) |  | 
 **PostOffer** | [**CataloguePostOffer**](CataloguePostOffer.md) |  | 
 **LinkAdditionOffer** | [**NullableCatalogueOfferOrNull**](CatalogueOfferOrNull.md) | Adding a link to an existing article, or null when the media does not offer it. | 
 
@@ -24,7 +25,7 @@ Name | Type | Description | Notes
 
 ### NewCatalogueMedia
 
-`func NewCatalogueMedia(id string, domain string, type_ string, language string, country NullableString, topics []int32, metrics CatalogueMediaMetrics, positiveTrafficTrend bool, bestSeller bool, publicationRate NullableInt32, averageDaysToPublication NullableInt32, onHoliday bool, flashOffer NullableCatalogueMediaFlashOffer, postOffer CataloguePostOffer, linkAdditionOffer NullableCatalogueOfferOrNull, ) *CatalogueMedia`
+`func NewCatalogueMedia(id string, domain string, type_ string, language string, country NullableString, topics []int32, metrics CatalogueMediaMetrics, positiveTrafficTrend bool, bestSeller bool, publicationRate NullableInt32, averageDaysToPublication NullableInt32, onHoliday bool, flashOffer NullableCatalogueMediaFlashOffer, bestPrice NullableCatalogueMediaBestPrice, postOffer CataloguePostOffer, linkAdditionOffer NullableCatalogueOfferOrNull, ) *CatalogueMedia`
 
 NewCatalogueMedia instantiates a new CatalogueMedia object
 This constructor will assign default values to properties that have it defined,
@@ -339,6 +340,36 @@ SetFlashOffer sets FlashOffer field to given value.
 `func (o *CatalogueMedia) UnsetFlashOffer()`
 
 UnsetFlashOffer ensures that no value is present for FlashOffer, not even an explicit nil
+### GetBestPrice
+
+`func (o *CatalogueMedia) GetBestPrice() CatalogueMediaBestPrice`
+
+GetBestPrice returns the BestPrice field if non-nil, zero value otherwise.
+
+### GetBestPriceOk
+
+`func (o *CatalogueMedia) GetBestPriceOk() (*CatalogueMediaBestPrice, bool)`
+
+GetBestPriceOk returns a tuple with the BestPrice field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetBestPrice
+
+`func (o *CatalogueMedia) SetBestPrice(v CatalogueMediaBestPrice)`
+
+SetBestPrice sets BestPrice field to given value.
+
+
+### SetBestPriceNil
+
+`func (o *CatalogueMedia) SetBestPriceNil(b bool)`
+
+ SetBestPriceNil sets the value for BestPrice to be an explicit nil
+
+### UnsetBestPrice
+`func (o *CatalogueMedia) UnsetBestPrice()`
+
+UnsetBestPrice ensures that no value is present for BestPrice, not even an explicit nil
 ### GetPostOffer
 
 `func (o *CatalogueMedia) GetPostOffer() CataloguePostOffer`

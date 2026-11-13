@@ -999,6 +999,9 @@
             "$ref": "#/components/parameters/CatalogueLinkAdditionLinkType"
           },
           {
+            "$ref": "#/components/parameters/CatalogueBestPrice"
+          },
+          {
             "$ref": "#/components/parameters/CatalogueRecommended"
           },
           {
@@ -1298,6 +1301,9 @@
           },
           {
             "$ref": "#/components/parameters/CatalogueLinkAdditionLinkType"
+          },
+          {
+            "$ref": "#/components/parameters/CatalogueBestPrice"
           },
           {
             "$ref": "#/components/parameters/CatalogueRecommended"
@@ -4345,7 +4351,7 @@
           "Seller medias"
         ],
         "summary": "Edit the offer of a media you sell on",
-        "description": "Sets the fees, extra services, typology and post offer characteristics of one of your medias, as the media edit page saves them. Send only the fields you change: a field you send replaces that field wholly, a field you leave out stays as it is, inside `postOffer` too (sending only `postOffer.maximumLinks` keeps your fees).\n\n- `typology` is `blog` or `press`.\n- `postOffer.pricingOptions` lists every link type you offer for sponsored posts, at least one. A link type you leave out is no longer offered. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR.\n- `postOffer.maximumLinks` is how many links a sponsored post may hold, 1 to 4; `postOffer.advertisingLabellingPolicy` whether posts are labelled as advertising (`always` or `never`); `postOffer.promotedSocialNetworks` the full list of social networks posts are promoted on, each once (an empty list for none).\n- `linkAdditionOffer.pricingOptions` lists the link types you offer for adding a link to an existing article; `null` or an empty list stops offering link additions.\n- `extraServices` is the full list of extra services you offer; an empty list removes them all. It is sent at the top level, although GET /seller/medias/{id} reads it inside `postOffer`.\n\nThe fees are your base fees, the ones GET /seller/medias/{id} returns: while a flash offer runs, its discount keeps applying on top of them, and `currentCost` shows the result. `currentCost` may be sent back as read and is ignored. Country, language, topics and comments are not edited here.\n\nAs on the page, a change of the post offer's price may cancel the managed-service proposals accepted for the media whose price it changes. Your fees are always saved, a raise included. When they list the media above the marketplaces that list the same domain cheaper and some fee would list it under them, the 200 carries a `saved_above_competitors` warning in `warnings`, with the competitive fee of each side and the names of those marketplaces. A restricted seller account may edit its offer.",
+        "description": "Sets the fees, extra services, typology and post offer characteristics of one of your medias, as the media edit page saves them. Send only the fields you change: a field you send replaces that field wholly, a field you leave out stays as it is, inside `postOffer` too (sending only `postOffer.maximumLinks` keeps your fees).\n\n- `typology` is `blog` or `press`.\n- `postOffer.pricingOptions` lists every link type you offer for sponsored posts, at least one. A link type you leave out is no longer offered. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR.\n- `postOffer.maximumLinks` is how many links a sponsored post may hold, 1 to 4; `postOffer.advertisingLabellingPolicy` whether posts are labelled as advertising (`always` or `never`); `postOffer.promotedSocialNetworks` the full list of social networks posts are promoted on, each once (an empty list for none).\n- `linkAdditionOffer.pricingOptions` lists the link types you offer for adding a link to an existing article; `null` or an empty list stops offering link additions.\n- `extraServices` is the full list of extra services you offer; an empty list removes them all. It is sent at the top level, although GET /seller/medias/{id} reads it inside `postOffer`.\n\nThe fees are your base fees, the ones GET /seller/medias/{id} returns: while a flash offer runs, its discount keeps applying on top of them, and `currentCost` shows the result. `currentCost` may be sent back as read and is ignored. Country, language, topics and comments are not edited here.\n\nAs on the page, a change of the post offer's price may cancel the managed-service proposals accepted for the media whose price it changes. Your fees are always saved, a raise included. When they list the media above the marketplaces that list the same domain cheaper and some fee would list it under them, the 200 carries a `saved_above_competitors` warning in `warnings`, with the competitive fee of each side and the names of those marketplaces. When such a save raises a fee, or adds a side or a link type, the warning is `saved_not_recommended` instead, with the same details: the media is not recommended in buyers' projects while it lists above them, and stays in the catalogue. A restricted seller account may edit its offer.",
         "operationId": "updateSellerMedia",
         "parameters": [
           {
@@ -4562,7 +4568,7 @@
         },
         "responses": {
           "200": {
-            "description": "The media, with the changes saved, and `warnings`: one `saved_above_competitors` when it still lists above the marketplaces that list the same domain cheaper and some fee would list it under them, none otherwise.",
+            "description": "The media, with the changes saved, and `warnings`: one `saved_above_competitors` when it still lists above the marketplaces that list the same domain cheaper and some fee would list it under them, `saved_not_recommended` instead when the save raised a fee or added a side or a link type, none otherwise.",
             "content": {
               "application/json": {
                 "schema": {
@@ -7444,6 +7450,7 @@
           "averageDaysToPublication",
           "onHoliday",
           "flashOffer",
+          "bestPrice",
           "postOffer",
           "linkAdditionOffer"
         ],
@@ -7546,6 +7553,35 @@
               "endsAt": {
                 "type": "string",
                 "format": "date-time"
+              }
+            },
+            "type": "object",
+            "nullable": true
+          },
+          "bestPrice": {
+            "description": "The best-price badge the catalogue shows, or null for none: cheaper means the price is at least 1 EUR below the cheapest listing of the media found on the other platforms checked in the last 7 days; only_here means none of the platforms checked lists it. It names neither the platforms nor any price.",
+            "required": [
+              "badge",
+              "platformCount",
+              "checkedOn"
+            ],
+            "properties": {
+              "badge": {
+                "type": "string",
+                "enum": [
+                  "cheaper",
+                  "only_here"
+                ]
+              },
+              "platformCount": {
+                "description": "How many platforms the claim was checked against.",
+                "type": "integer",
+                "minimum": 1
+              },
+              "checkedOn": {
+                "description": "The day of that check.",
+                "type": "string",
+                "format": "date"
               }
             },
             "type": "object",
@@ -8031,7 +8067,7 @@
             ],
             "properties": {
               "warnings": {
-                "description": "What the save left to know, empty when nothing. `saved_above_competitors`: the fees were saved, but the media still lists above the marketplaces that list the same domain cheaper, and some fee would list it under them. `details.competitiveFees` holds the highest fee of each side that lists it under them (`feeWhenSellerWritesPost`, `feeWhenSellerDoesNotWritePost`, null when none does or the media does not offer that side) and `details.competitors` the names of those marketplaces, never their prices.",
+                "description": "What the save left to know, empty when nothing. `saved_above_competitors`: the fees were saved, but the media still lists above the marketplaces that list the same domain cheaper, and some fee would list it under them. `saved_not_recommended`: the same, for a save that raised a fee or added a side or link type: the media is not recommended in buyers' projects while it lists above them, and stays in the catalogue. `details.competitiveFees` holds the highest fee of each side that lists it under them (`feeWhenSellerWritesPost`, `feeWhenSellerDoesNotWritePost`, null when none does or the media does not offer that side) and `details.competitors` the names of those marketplaces, never their prices.",
                 "type": "array",
                 "items": {
                   "required": [
@@ -8043,7 +8079,8 @@
                     "code": {
                       "type": "string",
                       "enum": [
-                        "saved_above_competitors"
+                        "saved_above_competitors",
+                        "saved_not_recommended"
                       ]
                     },
                     "message": {
@@ -8077,7 +8114,7 @@
                             "type": "string"
                           },
                           "example": [
-                            "Prensarank"
+                            "Prensalink"
                           ]
                         }
                       },
@@ -10529,6 +10566,15 @@
         "required": false,
         "schema": {
           "type": "string"
+        }
+      },
+      "CatalogueBestPrice": {
+        "name": "bestPrice",
+        "in": "query",
+        "description": "Medias with a best-price badge (`bestPrice` not null), of either claim. Only `true` applies it; omit it otherwise.",
+        "required": false,
+        "schema": {
+          "type": "boolean"
         }
       },
       "CatalogueRecommended": {

@@ -19,6 +19,7 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import com.growwer.api.model.CatalogueMediaBestPrice;
 import com.growwer.api.model.CatalogueMediaFlashOffer;
 import com.growwer.api.model.CatalogueMediaMetrics;
 import com.growwer.api.model.CatalogueOfferOrNull;
@@ -173,6 +174,11 @@ public class CatalogueMedia {
   @SerializedName(SERIALIZED_NAME_FLASH_OFFER)
   @javax.annotation.Nullable
   private CatalogueMediaFlashOffer flashOffer;
+
+  public static final String SERIALIZED_NAME_BEST_PRICE = "bestPrice";
+  @SerializedName(SERIALIZED_NAME_BEST_PRICE)
+  @javax.annotation.Nullable
+  private CatalogueMediaBestPrice bestPrice;
 
   public static final String SERIALIZED_NAME_POST_OFFER = "postOffer";
   @SerializedName(SERIALIZED_NAME_POST_OFFER)
@@ -442,6 +448,25 @@ public class CatalogueMedia {
   }
 
 
+  public CatalogueMedia bestPrice(@javax.annotation.Nullable CatalogueMediaBestPrice bestPrice) {
+    this.bestPrice = bestPrice;
+    return this;
+  }
+
+  /**
+   * Get bestPrice
+   * @return bestPrice
+   */
+  @javax.annotation.Nullable
+  public CatalogueMediaBestPrice getBestPrice() {
+    return bestPrice;
+  }
+
+  public void setBestPrice(@javax.annotation.Nullable CatalogueMediaBestPrice bestPrice) {
+    this.bestPrice = bestPrice;
+  }
+
+
   public CatalogueMedia postOffer(@javax.annotation.Nonnull CataloguePostOffer postOffer) {
     this.postOffer = postOffer;
     return this;
@@ -547,6 +572,7 @@ public class CatalogueMedia {
         Objects.equals(this.averageDaysToPublication, catalogueMedia.averageDaysToPublication) &&
         Objects.equals(this.onHoliday, catalogueMedia.onHoliday) &&
         Objects.equals(this.flashOffer, catalogueMedia.flashOffer) &&
+        Objects.equals(this.bestPrice, catalogueMedia.bestPrice) &&
         Objects.equals(this.postOffer, catalogueMedia.postOffer) &&
         Objects.equals(this.linkAdditionOffer, catalogueMedia.linkAdditionOffer)&&
         Objects.equals(this.additionalProperties, catalogueMedia.additionalProperties);
@@ -554,7 +580,7 @@ public class CatalogueMedia {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, domain, type, language, country, topics, metrics, positiveTrafficTrend, bestSeller, publicationRate, averageDaysToPublication, onHoliday, flashOffer, postOffer, linkAdditionOffer, additionalProperties);
+    return Objects.hash(id, domain, type, language, country, topics, metrics, positiveTrafficTrend, bestSeller, publicationRate, averageDaysToPublication, onHoliday, flashOffer, bestPrice, postOffer, linkAdditionOffer, additionalProperties);
   }
 
   @Override
@@ -574,6 +600,7 @@ public class CatalogueMedia {
     sb.append("    averageDaysToPublication: ").append(toIndentedString(averageDaysToPublication)).append("\n");
     sb.append("    onHoliday: ").append(toIndentedString(onHoliday)).append("\n");
     sb.append("    flashOffer: ").append(toIndentedString(flashOffer)).append("\n");
+    sb.append("    bestPrice: ").append(toIndentedString(bestPrice)).append("\n");
     sb.append("    postOffer: ").append(toIndentedString(postOffer)).append("\n");
     sb.append("    linkAdditionOffer: ").append(toIndentedString(linkAdditionOffer)).append("\n");
     sb.append("    additionalProperties: ").append(toIndentedString(additionalProperties)).append("\n");
@@ -595,10 +622,10 @@ public class CatalogueMedia {
 
   static {
     // a set of all properties/fields (JSON key names)
-    openapiFields = new HashSet<String>(Arrays.asList("id", "domain", "type", "language", "country", "topics", "metrics", "positiveTrafficTrend", "bestSeller", "publicationRate", "averageDaysToPublication", "onHoliday", "flashOffer", "postOffer", "linkAdditionOffer"));
+    openapiFields = new HashSet<String>(Arrays.asList("id", "domain", "type", "language", "country", "topics", "metrics", "positiveTrafficTrend", "bestSeller", "publicationRate", "averageDaysToPublication", "onHoliday", "flashOffer", "bestPrice", "postOffer", "linkAdditionOffer"));
 
     // a set of required properties/fields (JSON key names)
-    openapiRequiredFields = new HashSet<String>(Arrays.asList("id", "domain", "type", "language", "country", "topics", "metrics", "positiveTrafficTrend", "bestSeller", "publicationRate", "averageDaysToPublication", "onHoliday", "flashOffer", "postOffer", "linkAdditionOffer"));
+    openapiRequiredFields = new HashSet<String>(Arrays.asList("id", "domain", "type", "language", "country", "topics", "metrics", "positiveTrafficTrend", "bestSeller", "publicationRate", "averageDaysToPublication", "onHoliday", "flashOffer", "bestPrice", "postOffer", "linkAdditionOffer"));
   }
 
   /**
@@ -649,6 +676,10 @@ public class CatalogueMedia {
       if (jsonObj.get("flashOffer") != null && !jsonObj.get("flashOffer").isJsonNull()) {
       // validate the required field `flashOffer`
       CatalogueMediaFlashOffer.validateJsonElement(jsonObj.get("flashOffer"));
+      }
+      if (jsonObj.get("bestPrice") != null && !jsonObj.get("bestPrice").isJsonNull()) {
+      // validate the required field `bestPrice`
+      CatalogueMediaBestPrice.validateJsonElement(jsonObj.get("bestPrice"));
       }
       // validate the required field `postOffer`
       CataloguePostOffer.validateJsonElement(jsonObj.get("postOffer"));

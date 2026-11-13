@@ -245,7 +245,7 @@ public class Example {
 
 <a id="listFlashOffers"></a>
 # **listFlashOffers**
-> ListFlashOffers200Response listFlashOffers(projectId, source, sort, domain, websiteType, language, country, topics, notBannedTopics, minTraffic, maxTraffic, trafficTrendUpward, minDomainRating, maxDomainRating, minLinkedToReferringRatio, maxLinkedToReferringRatio, minPostPrice, maxPostPrice, postLinkType, promotedSocialNetwork, withoutAdvertisingLabel, homepageListing, hasLinkAddition, minLinkAdditionPrice, maxLinkAdditionPrice, linkAdditionLinkType, recommended, favourite, requested, bought, discarded, _new, ranksGoalKeyword, ranksAiKeyword, limit, offset)
+> ListFlashOffers200Response listFlashOffers(projectId, source, sort, domain, websiteType, language, country, topics, notBannedTopics, minTraffic, maxTraffic, trafficTrendUpward, minDomainRating, maxDomainRating, minLinkedToReferringRatio, maxLinkedToReferringRatio, minPostPrice, maxPostPrice, postLinkType, promotedSocialNetwork, withoutAdvertisingLabel, homepageListing, hasLinkAddition, minLinkAdditionPrice, maxLinkAdditionPrice, linkAdditionLinkType, bestPrice, recommended, favourite, requested, bought, discarded, _new, ranksGoalKeyword, ranksAiKeyword, limit, offset)
 
 List flash offers
 
@@ -297,6 +297,7 @@ public class Example {
     Integer minLinkAdditionPrice = 56; // Integer | Minimum link addition price, in cents.
     Integer maxLinkAdditionPrice = 56; // Integer | Maximum link addition price, in cents.
     String linkAdditionLinkType = "linkAdditionLinkType_example"; // String | A comma-separated list of link types the link addition offer gives: `dofollow`, `nofollow`, `citation`.
+    Boolean bestPrice = true; // Boolean | Medias with a best-price badge (`bestPrice` not null), of either claim. Only `true` applies it; omit it otherwise.
     Boolean recommended = true; // Boolean | `true`: only the medias Growwer recommends for the project; `false`: only the others.
     Boolean favourite = true; // Boolean | `true`: only your favourites for the project; `false`: leave them out.
     Boolean requested = true; // Boolean | `true`: only the medias you requested for the project; `false`: leave them out.
@@ -308,7 +309,7 @@ public class Example {
     Integer limit = 20; // Integer | Medias per page, 1 to 100.
     Integer offset = 0; // Integer | Medias to skip, at most 99900.
     try {
-      ListFlashOffers200Response result = apiInstance.listFlashOffers(projectId, source, sort, domain, websiteType, language, country, topics, notBannedTopics, minTraffic, maxTraffic, trafficTrendUpward, minDomainRating, maxDomainRating, minLinkedToReferringRatio, maxLinkedToReferringRatio, minPostPrice, maxPostPrice, postLinkType, promotedSocialNetwork, withoutAdvertisingLabel, homepageListing, hasLinkAddition, minLinkAdditionPrice, maxLinkAdditionPrice, linkAdditionLinkType, recommended, favourite, requested, bought, discarded, _new, ranksGoalKeyword, ranksAiKeyword, limit, offset);
+      ListFlashOffers200Response result = apiInstance.listFlashOffers(projectId, source, sort, domain, websiteType, language, country, topics, notBannedTopics, minTraffic, maxTraffic, trafficTrendUpward, minDomainRating, maxDomainRating, minLinkedToReferringRatio, maxLinkedToReferringRatio, minPostPrice, maxPostPrice, postLinkType, promotedSocialNetwork, withoutAdvertisingLabel, homepageListing, hasLinkAddition, minLinkAdditionPrice, maxLinkAdditionPrice, linkAdditionLinkType, bestPrice, recommended, favourite, requested, bought, discarded, _new, ranksGoalKeyword, ranksAiKeyword, limit, offset);
       System.out.println(result);
     } catch (ApiException e) {
       System.err.println("Exception when calling CatalogueApi#listFlashOffers");
@@ -351,6 +352,7 @@ public class Example {
 | **minLinkAdditionPrice** | **Integer**| Minimum link addition price, in cents. | [optional] |
 | **maxLinkAdditionPrice** | **Integer**| Maximum link addition price, in cents. | [optional] |
 | **linkAdditionLinkType** | **String**| A comma-separated list of link types the link addition offer gives: &#x60;dofollow&#x60;, &#x60;nofollow&#x60;, &#x60;citation&#x60;. | [optional] |
+| **bestPrice** | **Boolean**| Medias with a best-price badge (&#x60;bestPrice&#x60; not null), of either claim. Only &#x60;true&#x60; applies it; omit it otherwise. | [optional] |
 | **recommended** | **Boolean**| &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. | [optional] |
 | **favourite** | **Boolean**| &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. | [optional] |
 | **requested** | **Boolean**| &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. | [optional] |
@@ -469,7 +471,7 @@ public class Example {
 
 <a id="searchProjectMedias"></a>
 # **searchProjectMedias**
-> ListFlashOffers200Response searchProjectMedias(id, source, sort, savedFilterId, domain, websiteType, language, country, topics, notBannedTopics, minTraffic, maxTraffic, trafficTrendUpward, minDomainRating, maxDomainRating, minLinkedToReferringRatio, maxLinkedToReferringRatio, minPostPrice, maxPostPrice, postLinkType, promotedSocialNetwork, withoutAdvertisingLabel, homepageListing, hasLinkAddition, minLinkAdditionPrice, maxLinkAdditionPrice, linkAdditionLinkType, recommended, favourite, requested, flashOffer, bought, discarded, _new, ranksGoalKeyword, ranksAiKeyword, limit, offset)
+> ListFlashOffers200Response searchProjectMedias(id, source, sort, savedFilterId, domain, websiteType, language, country, topics, notBannedTopics, minTraffic, maxTraffic, trafficTrendUpward, minDomainRating, maxDomainRating, minLinkedToReferringRatio, maxLinkedToReferringRatio, minPostPrice, maxPostPrice, postLinkType, promotedSocialNetwork, withoutAdvertisingLabel, homepageListing, hasLinkAddition, minLinkAdditionPrice, maxLinkAdditionPrice, linkAdditionLinkType, bestPrice, recommended, favourite, requested, flashOffer, bought, discarded, _new, ranksGoalKeyword, ranksAiKeyword, limit, offset)
 
 Search the catalogue for a project
 
@@ -522,6 +524,7 @@ public class Example {
     Integer minLinkAdditionPrice = 56; // Integer | Minimum link addition price, in cents.
     Integer maxLinkAdditionPrice = 56; // Integer | Maximum link addition price, in cents.
     String linkAdditionLinkType = "linkAdditionLinkType_example"; // String | A comma-separated list of link types the link addition offer gives: `dofollow`, `nofollow`, `citation`.
+    Boolean bestPrice = true; // Boolean | Medias with a best-price badge (`bestPrice` not null), of either claim. Only `true` applies it; omit it otherwise.
     Boolean recommended = true; // Boolean | `true`: only the medias Growwer recommends for the project; `false`: only the others.
     Boolean favourite = true; // Boolean | `true`: only your favourites for the project; `false`: leave them out.
     Boolean requested = true; // Boolean | `true`: only the medias you requested for the project; `false`: leave them out.
@@ -534,7 +537,7 @@ public class Example {
     Integer limit = 20; // Integer | Medias per page, 1 to 100.
     Integer offset = 0; // Integer | Medias to skip, at most 99900.
     try {
-      ListFlashOffers200Response result = apiInstance.searchProjectMedias(id, source, sort, savedFilterId, domain, websiteType, language, country, topics, notBannedTopics, minTraffic, maxTraffic, trafficTrendUpward, minDomainRating, maxDomainRating, minLinkedToReferringRatio, maxLinkedToReferringRatio, minPostPrice, maxPostPrice, postLinkType, promotedSocialNetwork, withoutAdvertisingLabel, homepageListing, hasLinkAddition, minLinkAdditionPrice, maxLinkAdditionPrice, linkAdditionLinkType, recommended, favourite, requested, flashOffer, bought, discarded, _new, ranksGoalKeyword, ranksAiKeyword, limit, offset);
+      ListFlashOffers200Response result = apiInstance.searchProjectMedias(id, source, sort, savedFilterId, domain, websiteType, language, country, topics, notBannedTopics, minTraffic, maxTraffic, trafficTrendUpward, minDomainRating, maxDomainRating, minLinkedToReferringRatio, maxLinkedToReferringRatio, minPostPrice, maxPostPrice, postLinkType, promotedSocialNetwork, withoutAdvertisingLabel, homepageListing, hasLinkAddition, minLinkAdditionPrice, maxLinkAdditionPrice, linkAdditionLinkType, bestPrice, recommended, favourite, requested, flashOffer, bought, discarded, _new, ranksGoalKeyword, ranksAiKeyword, limit, offset);
       System.out.println(result);
     } catch (ApiException e) {
       System.err.println("Exception when calling CatalogueApi#searchProjectMedias");
@@ -578,6 +581,7 @@ public class Example {
 | **minLinkAdditionPrice** | **Integer**| Minimum link addition price, in cents. | [optional] |
 | **maxLinkAdditionPrice** | **Integer**| Maximum link addition price, in cents. | [optional] |
 | **linkAdditionLinkType** | **String**| A comma-separated list of link types the link addition offer gives: &#x60;dofollow&#x60;, &#x60;nofollow&#x60;, &#x60;citation&#x60;. | [optional] |
+| **bestPrice** | **Boolean**| Medias with a best-price badge (&#x60;bestPrice&#x60; not null), of either claim. Only &#x60;true&#x60; applies it; omit it otherwise. | [optional] |
 | **recommended** | **Boolean**| &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. | [optional] |
 | **favourite** | **Boolean**| &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. | [optional] |
 | **requested** | **Boolean**| &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. | [optional] |

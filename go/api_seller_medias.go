@@ -1066,7 +1066,7 @@ Sets the fees, extra services, typology and post offer characteristics of one of
 
 The fees are your base fees, the ones GET /seller/medias/{id} returns: while a flash offer runs, its discount keeps applying on top of them, and `currentCost` shows the result. `currentCost` may be sent back as read and is ignored. Country, language, topics and comments are not edited here.
 
-As on the page, a change of the post offer's price may cancel the managed-service proposals accepted for the media whose price it changes. Your fees are always saved, a raise included. When they list the media above the marketplaces that list the same domain cheaper and some fee would list it under them, the 200 carries a `saved_above_competitors` warning in `warnings`, with the competitive fee of each side and the names of those marketplaces. A restricted seller account may edit its offer.
+As on the page, a change of the post offer's price may cancel the managed-service proposals accepted for the media whose price it changes. Your fees are always saved, a raise included. When they list the media above the marketplaces that list the same domain cheaper and some fee would list it under them, the 200 carries a `saved_above_competitors` warning in `warnings`, with the competitive fee of each side and the names of those marketplaces. When such a save raises a fee, or adds a side or a link type, the warning is `saved_not_recommended` instead, with the same details: the media is not recommended in buyers' projects while it lists above them, and stays in the catalogue. A restricted seller account may edit its offer.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param id

@@ -264,7 +264,7 @@ example().catch(console.error);
 
 ## listFlashOffers
 
-> ListFlashOffers200Response listFlashOffers(projectId, source, sort, domain, websiteType, language, country, topics, notBannedTopics, minTraffic, maxTraffic, trafficTrendUpward, minDomainRating, maxDomainRating, minLinkedToReferringRatio, maxLinkedToReferringRatio, minPostPrice, maxPostPrice, postLinkType, promotedSocialNetwork, withoutAdvertisingLabel, homepageListing, hasLinkAddition, minLinkAdditionPrice, maxLinkAdditionPrice, linkAdditionLinkType, recommended, favourite, requested, bought, discarded, _new, ranksGoalKeyword, ranksAiKeyword, limit, offset)
+> ListFlashOffers200Response listFlashOffers(projectId, source, sort, domain, websiteType, language, country, topics, notBannedTopics, minTraffic, maxTraffic, trafficTrendUpward, minDomainRating, maxDomainRating, minLinkedToReferringRatio, maxLinkedToReferringRatio, minPostPrice, maxPostPrice, postLinkType, promotedSocialNetwork, withoutAdvertisingLabel, homepageListing, hasLinkAddition, minLinkAdditionPrice, maxLinkAdditionPrice, linkAdditionLinkType, bestPrice, recommended, favourite, requested, bought, discarded, _new, ranksGoalKeyword, ranksAiKeyword, limit, offset)
 
 List flash offers
 
@@ -340,6 +340,8 @@ async function example() {
     maxLinkAdditionPrice: 56,
     // string | A comma-separated list of link types the link addition offer gives: `dofollow`, `nofollow`, `citation`. (optional)
     linkAdditionLinkType: linkAdditionLinkType_example,
+    // boolean | Medias with a best-price badge (`bestPrice` not null), of either claim. Only `true` applies it; omit it otherwise. (optional)
+    bestPrice: true,
     // boolean | `true`: only the medias Growwer recommends for the project; `false`: only the others. (optional)
     recommended: true,
     // boolean | `true`: only your favourites for the project; `false`: leave them out. (optional)
@@ -405,6 +407,7 @@ example().catch(console.error);
 | **minLinkAdditionPrice** | `number` | Minimum link addition price, in cents. | [Optional] [Defaults to `undefined`] |
 | **maxLinkAdditionPrice** | `number` | Maximum link addition price, in cents. | [Optional] [Defaults to `undefined`] |
 | **linkAdditionLinkType** | `string` | A comma-separated list of link types the link addition offer gives: &#x60;dofollow&#x60;, &#x60;nofollow&#x60;, &#x60;citation&#x60;. | [Optional] [Defaults to `undefined`] |
+| **bestPrice** | `boolean` | Medias with a best-price badge (&#x60;bestPrice&#x60; not null), of either claim. Only &#x60;true&#x60; applies it; omit it otherwise. | [Optional] [Defaults to `undefined`] |
 | **recommended** | `boolean` | &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. | [Optional] [Defaults to `undefined`] |
 | **favourite** | `boolean` | &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. | [Optional] [Defaults to `undefined`] |
 | **requested** | `boolean` | &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. | [Optional] [Defaults to `undefined`] |
@@ -533,7 +536,7 @@ example().catch(console.error);
 
 ## searchProjectMedias
 
-> ListFlashOffers200Response searchProjectMedias(id, source, sort, savedFilterId, domain, websiteType, language, country, topics, notBannedTopics, minTraffic, maxTraffic, trafficTrendUpward, minDomainRating, maxDomainRating, minLinkedToReferringRatio, maxLinkedToReferringRatio, minPostPrice, maxPostPrice, postLinkType, promotedSocialNetwork, withoutAdvertisingLabel, homepageListing, hasLinkAddition, minLinkAdditionPrice, maxLinkAdditionPrice, linkAdditionLinkType, recommended, favourite, requested, flashOffer, bought, discarded, _new, ranksGoalKeyword, ranksAiKeyword, limit, offset)
+> ListFlashOffers200Response searchProjectMedias(id, source, sort, savedFilterId, domain, websiteType, language, country, topics, notBannedTopics, minTraffic, maxTraffic, trafficTrendUpward, minDomainRating, maxDomainRating, minLinkedToReferringRatio, maxLinkedToReferringRatio, minPostPrice, maxPostPrice, postLinkType, promotedSocialNetwork, withoutAdvertisingLabel, homepageListing, hasLinkAddition, minLinkAdditionPrice, maxLinkAdditionPrice, linkAdditionLinkType, bestPrice, recommended, favourite, requested, flashOffer, bought, discarded, _new, ranksGoalKeyword, ranksAiKeyword, limit, offset)
 
 Search the catalogue for a project
 
@@ -611,6 +614,8 @@ async function example() {
     maxLinkAdditionPrice: 56,
     // string | A comma-separated list of link types the link addition offer gives: `dofollow`, `nofollow`, `citation`. (optional)
     linkAdditionLinkType: linkAdditionLinkType_example,
+    // boolean | Medias with a best-price badge (`bestPrice` not null), of either claim. Only `true` applies it; omit it otherwise. (optional)
+    bestPrice: true,
     // boolean | `true`: only the medias Growwer recommends for the project; `false`: only the others. (optional)
     recommended: true,
     // boolean | `true`: only your favourites for the project; `false`: leave them out. (optional)
@@ -679,6 +684,7 @@ example().catch(console.error);
 | **minLinkAdditionPrice** | `number` | Minimum link addition price, in cents. | [Optional] [Defaults to `undefined`] |
 | **maxLinkAdditionPrice** | `number` | Maximum link addition price, in cents. | [Optional] [Defaults to `undefined`] |
 | **linkAdditionLinkType** | `string` | A comma-separated list of link types the link addition offer gives: &#x60;dofollow&#x60;, &#x60;nofollow&#x60;, &#x60;citation&#x60;. | [Optional] [Defaults to `undefined`] |
+| **bestPrice** | `boolean` | Medias with a best-price badge (&#x60;bestPrice&#x60; not null), of either claim. Only &#x60;true&#x60; applies it; omit it otherwise. | [Optional] [Defaults to `undefined`] |
 | **recommended** | `boolean` | &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. | [Optional] [Defaults to `undefined`] |
 | **favourite** | `boolean` | &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. | [Optional] [Defaults to `undefined`] |
 | **requested** | `boolean` | &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. | [Optional] [Defaults to `undefined`] |

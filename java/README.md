@@ -258,6 +258,7 @@ Class | Method | HTTP request | Description
  - [BalanceLowEventData](docs/BalanceLowEventData.md)
  - [BalanceLowEventDataWallet](docs/BalanceLowEventDataWallet.md)
  - [CatalogueMedia](docs/CatalogueMedia.md)
+ - [CatalogueMediaBestPrice](docs/CatalogueMediaBestPrice.md)
  - [CatalogueMediaFlashOffer](docs/CatalogueMediaFlashOffer.md)
  - [CatalogueMediaMetrics](docs/CatalogueMediaMetrics.md)
  - [CatalogueOffer](docs/CatalogueOffer.md)

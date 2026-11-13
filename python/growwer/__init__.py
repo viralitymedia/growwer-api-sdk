@@ -47,6 +47,7 @@ __all__ = [
     "BalanceLowEventData",
     "BalanceLowEventDataWallet",
     "CatalogueMedia",
+    "CatalogueMediaBestPrice",
     "CatalogueMediaFlashOffer",
     "CatalogueMediaMetrics",
     "CatalogueOffer",
@@ -215,6 +216,7 @@ from growwer.models.balance import Balance as Balance
 from growwer.models.balance_low_event_data import BalanceLowEventData as BalanceLowEventData
 from growwer.models.balance_low_event_data_wallet import BalanceLowEventDataWallet as BalanceLowEventDataWallet
 from growwer.models.catalogue_media import CatalogueMedia as CatalogueMedia
+from growwer.models.catalogue_media_best_price import CatalogueMediaBestPrice as CatalogueMediaBestPrice
 from growwer.models.catalogue_media_flash_offer import CatalogueMediaFlashOffer as CatalogueMediaFlashOffer
 from growwer.models.catalogue_media_metrics import CatalogueMediaMetrics as CatalogueMediaMetrics
 from growwer.models.catalogue_offer import CatalogueOffer as CatalogueOffer

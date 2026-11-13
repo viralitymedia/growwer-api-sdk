@@ -17,6 +17,7 @@
 | **average_days_to_publication** | **Integer** | The average days from order to publication, or null without published orders. |  |
 | **on_holiday** | **Boolean** | Whether the media is on holiday and will take longer to publish. |  |
 | **flash_offer** | [**CatalogueMediaFlashOffer**](CatalogueMediaFlashOffer.md) |  |  |
+| **best_price** | [**CatalogueMediaBestPrice**](CatalogueMediaBestPrice.md) |  |  |
 | **post_offer** | [**CataloguePostOffer**](CataloguePostOffer.md) |  |  |
 | **link_addition_offer** | [**CatalogueOfferOrNull**](CatalogueOfferOrNull.md) | Adding a link to an existing article, or null when the media does not offer it. |  |
 
@@ -39,6 +40,7 @@ instance = Growwer::CatalogueMedia.new(
   average_days_to_publication: null,
   on_holiday: null,
   flash_offer: null,
+  best_price: null,
   post_offer: null,
   link_addition_offer: null
 )

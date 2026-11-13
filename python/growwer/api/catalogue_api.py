@@ -981,6 +981,7 @@ class CatalogueApi:
         min_link_addition_price: Annotated[Optional[StrictInt], Field(description="Minimum link addition price, in cents.")] = None,
         max_link_addition_price: Annotated[Optional[StrictInt], Field(description="Maximum link addition price, in cents.")] = None,
         link_addition_link_type: Annotated[Optional[StrictStr], Field(description="A comma-separated list of link types the link addition offer gives: `dofollow`, `nofollow`, `citation`.")] = None,
+        best_price: Annotated[Optional[StrictBool], Field(description="Medias with a best-price badge (`bestPrice` not null), of either claim. Only `true` applies it; omit it otherwise.")] = None,
         recommended: Annotated[Optional[StrictBool], Field(description="`true`: only the medias Growwer recommends for the project; `false`: only the others.")] = None,
         favourite: Annotated[Optional[StrictBool], Field(description="`true`: only your favourites for the project; `false`: leave them out.")] = None,
         requested: Annotated[Optional[StrictBool], Field(description="`true`: only the medias you requested for the project; `false`: leave them out.")] = None,
@@ -1060,6 +1061,8 @@ class CatalogueApi:
         :type max_link_addition_price: int
         :param link_addition_link_type: A comma-separated list of link types the link addition offer gives: `dofollow`, `nofollow`, `citation`.
         :type link_addition_link_type: str
+        :param best_price: Medias with a best-price badge (`bestPrice` not null), of either claim. Only `true` applies it; omit it otherwise.
+        :type best_price: bool
         :param recommended: `true`: only the medias Growwer recommends for the project; `false`: only the others.
         :type recommended: bool
         :param favourite: `true`: only your favourites for the project; `false`: leave them out.
@@ -1129,6 +1132,7 @@ class CatalogueApi:
             min_link_addition_price=min_link_addition_price,
             max_link_addition_price=max_link_addition_price,
             link_addition_link_type=link_addition_link_type,
+            best_price=best_price,
             recommended=recommended,
             favourite=favourite,
             requested=requested,
@@ -1195,6 +1199,7 @@ class CatalogueApi:
         min_link_addition_price: Annotated[Optional[StrictInt], Field(description="Minimum link addition price, in cents.")] = None,
         max_link_addition_price: Annotated[Optional[StrictInt], Field(description="Maximum link addition price, in cents.")] = None,
         link_addition_link_type: Annotated[Optional[StrictStr], Field(description="A comma-separated list of link types the link addition offer gives: `dofollow`, `nofollow`, `citation`.")] = None,
+        best_price: Annotated[Optional[StrictBool], Field(description="Medias with a best-price badge (`bestPrice` not null), of either claim. Only `true` applies it; omit it otherwise.")] = None,
         recommended: Annotated[Optional[StrictBool], Field(description="`true`: only the medias Growwer recommends for the project; `false`: only the others.")] = None,
         favourite: Annotated[Optional[StrictBool], Field(description="`true`: only your favourites for the project; `false`: leave them out.")] = None,
         requested: Annotated[Optional[StrictBool], Field(description="`true`: only the medias you requested for the project; `false`: leave them out.")] = None,
@@ -1274,6 +1279,8 @@ class CatalogueApi:
         :type max_link_addition_price: int
         :param link_addition_link_type: A comma-separated list of link types the link addition offer gives: `dofollow`, `nofollow`, `citation`.
         :type link_addition_link_type: str
+        :param best_price: Medias with a best-price badge (`bestPrice` not null), of either claim. Only `true` applies it; omit it otherwise.
+        :type best_price: bool
         :param recommended: `true`: only the medias Growwer recommends for the project; `false`: only the others.
         :type recommended: bool
         :param favourite: `true`: only your favourites for the project; `false`: leave them out.
@@ -1343,6 +1350,7 @@ class CatalogueApi:
             min_link_addition_price=min_link_addition_price,
             max_link_addition_price=max_link_addition_price,
             link_addition_link_type=link_addition_link_type,
+            best_price=best_price,
             recommended=recommended,
             favourite=favourite,
             requested=requested,
@@ -1409,6 +1417,7 @@ class CatalogueApi:
         min_link_addition_price: Annotated[Optional[StrictInt], Field(description="Minimum link addition price, in cents.")] = None,
         max_link_addition_price: Annotated[Optional[StrictInt], Field(description="Maximum link addition price, in cents.")] = None,
         link_addition_link_type: Annotated[Optional[StrictStr], Field(description="A comma-separated list of link types the link addition offer gives: `dofollow`, `nofollow`, `citation`.")] = None,
+        best_price: Annotated[Optional[StrictBool], Field(description="Medias with a best-price badge (`bestPrice` not null), of either claim. Only `true` applies it; omit it otherwise.")] = None,
         recommended: Annotated[Optional[StrictBool], Field(description="`true`: only the medias Growwer recommends for the project; `false`: only the others.")] = None,
         favourite: Annotated[Optional[StrictBool], Field(description="`true`: only your favourites for the project; `false`: leave them out.")] = None,
         requested: Annotated[Optional[StrictBool], Field(description="`true`: only the medias you requested for the project; `false`: leave them out.")] = None,
@@ -1488,6 +1497,8 @@ class CatalogueApi:
         :type max_link_addition_price: int
         :param link_addition_link_type: A comma-separated list of link types the link addition offer gives: `dofollow`, `nofollow`, `citation`.
         :type link_addition_link_type: str
+        :param best_price: Medias with a best-price badge (`bestPrice` not null), of either claim. Only `true` applies it; omit it otherwise.
+        :type best_price: bool
         :param recommended: `true`: only the medias Growwer recommends for the project; `false`: only the others.
         :type recommended: bool
         :param favourite: `true`: only your favourites for the project; `false`: leave them out.
@@ -1557,6 +1568,7 @@ class CatalogueApi:
             min_link_addition_price=min_link_addition_price,
             max_link_addition_price=max_link_addition_price,
             link_addition_link_type=link_addition_link_type,
+            best_price=best_price,
             recommended=recommended,
             favourite=favourite,
             requested=requested,
@@ -1618,6 +1630,7 @@ class CatalogueApi:
         min_link_addition_price,
         max_link_addition_price,
         link_addition_link_type,
+        best_price,
         recommended,
         favourite,
         requested,
@@ -1753,6 +1766,10 @@ class CatalogueApi:
         if link_addition_link_type is not None:
             
             _query_params.append(('linkAdditionLinkType', link_addition_link_type))
+            
+        if best_price is not None:
+            
+            _query_params.append(('bestPrice', best_price))
             
         if recommended is not None:
             
@@ -2192,6 +2209,7 @@ class CatalogueApi:
         min_link_addition_price: Annotated[Optional[StrictInt], Field(description="Minimum link addition price, in cents.")] = None,
         max_link_addition_price: Annotated[Optional[StrictInt], Field(description="Maximum link addition price, in cents.")] = None,
         link_addition_link_type: Annotated[Optional[StrictStr], Field(description="A comma-separated list of link types the link addition offer gives: `dofollow`, `nofollow`, `citation`.")] = None,
+        best_price: Annotated[Optional[StrictBool], Field(description="Medias with a best-price badge (`bestPrice` not null), of either claim. Only `true` applies it; omit it otherwise.")] = None,
         recommended: Annotated[Optional[StrictBool], Field(description="`true`: only the medias Growwer recommends for the project; `false`: only the others.")] = None,
         favourite: Annotated[Optional[StrictBool], Field(description="`true`: only your favourites for the project; `false`: leave them out.")] = None,
         requested: Annotated[Optional[StrictBool], Field(description="`true`: only the medias you requested for the project; `false`: leave them out.")] = None,
@@ -2274,6 +2292,8 @@ class CatalogueApi:
         :type max_link_addition_price: int
         :param link_addition_link_type: A comma-separated list of link types the link addition offer gives: `dofollow`, `nofollow`, `citation`.
         :type link_addition_link_type: str
+        :param best_price: Medias with a best-price badge (`bestPrice` not null), of either claim. Only `true` applies it; omit it otherwise.
+        :type best_price: bool
         :param recommended: `true`: only the medias Growwer recommends for the project; `false`: only the others.
         :type recommended: bool
         :param favourite: `true`: only your favourites for the project; `false`: leave them out.
@@ -2346,6 +2366,7 @@ class CatalogueApi:
             min_link_addition_price=min_link_addition_price,
             max_link_addition_price=max_link_addition_price,
             link_addition_link_type=link_addition_link_type,
+            best_price=best_price,
             recommended=recommended,
             favourite=favourite,
             requested=requested,
@@ -2414,6 +2435,7 @@ class CatalogueApi:
         min_link_addition_price: Annotated[Optional[StrictInt], Field(description="Minimum link addition price, in cents.")] = None,
         max_link_addition_price: Annotated[Optional[StrictInt], Field(description="Maximum link addition price, in cents.")] = None,
         link_addition_link_type: Annotated[Optional[StrictStr], Field(description="A comma-separated list of link types the link addition offer gives: `dofollow`, `nofollow`, `citation`.")] = None,
+        best_price: Annotated[Optional[StrictBool], Field(description="Medias with a best-price badge (`bestPrice` not null), of either claim. Only `true` applies it; omit it otherwise.")] = None,
         recommended: Annotated[Optional[StrictBool], Field(description="`true`: only the medias Growwer recommends for the project; `false`: only the others.")] = None,
         favourite: Annotated[Optional[StrictBool], Field(description="`true`: only your favourites for the project; `false`: leave them out.")] = None,
         requested: Annotated[Optional[StrictBool], Field(description="`true`: only the medias you requested for the project; `false`: leave them out.")] = None,
@@ -2496,6 +2518,8 @@ class CatalogueApi:
         :type max_link_addition_price: int
         :param link_addition_link_type: A comma-separated list of link types the link addition offer gives: `dofollow`, `nofollow`, `citation`.
         :type link_addition_link_type: str
+        :param best_price: Medias with a best-price badge (`bestPrice` not null), of either claim. Only `true` applies it; omit it otherwise.
+        :type best_price: bool
         :param recommended: `true`: only the medias Growwer recommends for the project; `false`: only the others.
         :type recommended: bool
         :param favourite: `true`: only your favourites for the project; `false`: leave them out.
@@ -2568,6 +2592,7 @@ class CatalogueApi:
             min_link_addition_price=min_link_addition_price,
             max_link_addition_price=max_link_addition_price,
             link_addition_link_type=link_addition_link_type,
+            best_price=best_price,
             recommended=recommended,
             favourite=favourite,
             requested=requested,
@@ -2636,6 +2661,7 @@ class CatalogueApi:
         min_link_addition_price: Annotated[Optional[StrictInt], Field(description="Minimum link addition price, in cents.")] = None,
         max_link_addition_price: Annotated[Optional[StrictInt], Field(description="Maximum link addition price, in cents.")] = None,
         link_addition_link_type: Annotated[Optional[StrictStr], Field(description="A comma-separated list of link types the link addition offer gives: `dofollow`, `nofollow`, `citation`.")] = None,
+        best_price: Annotated[Optional[StrictBool], Field(description="Medias with a best-price badge (`bestPrice` not null), of either claim. Only `true` applies it; omit it otherwise.")] = None,
         recommended: Annotated[Optional[StrictBool], Field(description="`true`: only the medias Growwer recommends for the project; `false`: only the others.")] = None,
         favourite: Annotated[Optional[StrictBool], Field(description="`true`: only your favourites for the project; `false`: leave them out.")] = None,
         requested: Annotated[Optional[StrictBool], Field(description="`true`: only the medias you requested for the project; `false`: leave them out.")] = None,
@@ -2718,6 +2744,8 @@ class CatalogueApi:
         :type max_link_addition_price: int
         :param link_addition_link_type: A comma-separated list of link types the link addition offer gives: `dofollow`, `nofollow`, `citation`.
         :type link_addition_link_type: str
+        :param best_price: Medias with a best-price badge (`bestPrice` not null), of either claim. Only `true` applies it; omit it otherwise.
+        :type best_price: bool
         :param recommended: `true`: only the medias Growwer recommends for the project; `false`: only the others.
         :type recommended: bool
         :param favourite: `true`: only your favourites for the project; `false`: leave them out.
@@ -2790,6 +2818,7 @@ class CatalogueApi:
             min_link_addition_price=min_link_addition_price,
             max_link_addition_price=max_link_addition_price,
             link_addition_link_type=link_addition_link_type,
+            best_price=best_price,
             recommended=recommended,
             favourite=favourite,
             requested=requested,
@@ -2853,6 +2882,7 @@ class CatalogueApi:
         min_link_addition_price,
         max_link_addition_price,
         link_addition_link_type,
+        best_price,
         recommended,
         favourite,
         requested,
@@ -2991,6 +3021,10 @@ class CatalogueApi:
         if link_addition_link_type is not None:
             
             _query_params.append(('linkAdditionLinkType', link_addition_link_type))
+            
+        if best_price is not None:
+            
+            _query_params.append(('bestPrice', best_price))
             
         if recommended is not None:
             

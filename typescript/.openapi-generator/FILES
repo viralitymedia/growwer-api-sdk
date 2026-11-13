@@ -10,6 +10,7 @@ docs/BuyerOrdersApi.md
 docs/BuyerWalletApi.md
 docs/CatalogueApi.md
 docs/CatalogueMedia.md
+docs/CatalogueMediaBestPrice.md
 docs/CatalogueMediaFlashOffer.md
 docs/CatalogueMediaMetrics.md
 docs/CatalogueOffer.md
@@ -175,6 +176,7 @@ src/models/Balance.ts
 src/models/BalanceLowEventData.ts
 src/models/BalanceLowEventDataWallet.ts
 src/models/CatalogueMedia.ts
+src/models/CatalogueMediaBestPrice.ts
 src/models/CatalogueMediaFlashOffer.ts
 src/models/CatalogueMediaMetrics.ts
 src/models/CatalogueOffer.ts

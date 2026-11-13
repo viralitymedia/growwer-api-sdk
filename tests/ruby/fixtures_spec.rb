@@ -152,6 +152,7 @@ RSpec.describe 'Growwer fixtures' do
     media = Growwer::CatalogueApi.new(answer(200, fixture('catalogue-media.json'))).get_catalogue_media(MEDIA_ID)
 
     expect(media).to be_a(Growwer::CatalogueMedia)
+    expect(media.best_price).to be_nil
     expect(media.link_addition_offer).to be_nil
     expect(media.flash_offer).to be_nil
     expect(media.country).to be_nil
@@ -180,6 +181,17 @@ RSpec.describe 'Growwer fixtures' do
     expect(offer.link_type).to be_nil
     expect(offer.price.amount).to eq(6000)
     expect(offer.previous_price).to be_nil
+  end
+
+  it 'reads a catalogue media with its best-price badge' do
+    media = Growwer::CatalogueApi.new(answer(200, fixture('catalogue-media-null-link-type.json')))
+                                 .get_catalogue_media(MEDIA_ID)
+
+    best_price = media.best_price
+    expect(best_price).to be_a(Growwer::CatalogueMediaBestPrice)
+    expect(best_price.badge).to eq('cheaper')
+    expect(best_price.platform_count).to eq(3)
+    expect(best_price.checked_on).to eq(Date.new(2026, 11, 12))
   end
 
   it 'reads a seller media with null competitiveFees' do

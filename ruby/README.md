@@ -225,6 +225,7 @@ Class | Method | HTTP request | Description
  - [Growwer::BalanceLowEventData](docs/BalanceLowEventData.md)
  - [Growwer::BalanceLowEventDataWallet](docs/BalanceLowEventDataWallet.md)
  - [Growwer::CatalogueMedia](docs/CatalogueMedia.md)
+ - [Growwer::CatalogueMediaBestPrice](docs/CatalogueMediaBestPrice.md)
  - [Growwer::CatalogueMediaFlashOffer](docs/CatalogueMediaFlashOffer.md)
  - [Growwer::CatalogueMediaMetrics](docs/CatalogueMediaMetrics.md)
  - [Growwer::CatalogueOffer](docs/CatalogueOffer.md)

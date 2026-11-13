@@ -118,6 +118,7 @@ public class CatalogueApiTest {
         Integer minLinkAdditionPrice = null;
         Integer maxLinkAdditionPrice = null;
         String linkAdditionLinkType = null;
+        Boolean bestPrice = null;
         Boolean recommended = null;
         Boolean favourite = null;
         Boolean requested = null;
@@ -128,7 +129,7 @@ public class CatalogueApiTest {
         String ranksAiKeyword = null;
         Integer limit = null;
         Integer offset = null;
-        ListFlashOffers200Response response = api.listFlashOffers(projectId, source, sort, domain, websiteType, language, country, topics, notBannedTopics, minTraffic, maxTraffic, trafficTrendUpward, minDomainRating, maxDomainRating, minLinkedToReferringRatio, maxLinkedToReferringRatio, minPostPrice, maxPostPrice, postLinkType, promotedSocialNetwork, withoutAdvertisingLabel, homepageListing, hasLinkAddition, minLinkAdditionPrice, maxLinkAdditionPrice, linkAdditionLinkType, recommended, favourite, requested, bought, discarded, _new, ranksGoalKeyword, ranksAiKeyword, limit, offset);
+        ListFlashOffers200Response response = api.listFlashOffers(projectId, source, sort, domain, websiteType, language, country, topics, notBannedTopics, minTraffic, maxTraffic, trafficTrendUpward, minDomainRating, maxDomainRating, minLinkedToReferringRatio, maxLinkedToReferringRatio, minPostPrice, maxPostPrice, postLinkType, promotedSocialNetwork, withoutAdvertisingLabel, homepageListing, hasLinkAddition, minLinkAdditionPrice, maxLinkAdditionPrice, linkAdditionLinkType, bestPrice, recommended, favourite, requested, bought, discarded, _new, ranksGoalKeyword, ranksAiKeyword, limit, offset);
         // TODO: test validations
     }
 
@@ -184,6 +185,7 @@ public class CatalogueApiTest {
         Integer minLinkAdditionPrice = null;
         Integer maxLinkAdditionPrice = null;
         String linkAdditionLinkType = null;
+        Boolean bestPrice = null;
         Boolean recommended = null;
         Boolean favourite = null;
         Boolean requested = null;
@@ -195,7 +197,7 @@ public class CatalogueApiTest {
         String ranksAiKeyword = null;
         Integer limit = null;
         Integer offset = null;
-        ListFlashOffers200Response response = api.searchProjectMedias(id, source, sort, savedFilterId, domain, websiteType, language, country, topics, notBannedTopics, minTraffic, maxTraffic, trafficTrendUpward, minDomainRating, maxDomainRating, minLinkedToReferringRatio, maxLinkedToReferringRatio, minPostPrice, maxPostPrice, postLinkType, promotedSocialNetwork, withoutAdvertisingLabel, homepageListing, hasLinkAddition, minLinkAdditionPrice, maxLinkAdditionPrice, linkAdditionLinkType, recommended, favourite, requested, flashOffer, bought, discarded, _new, ranksGoalKeyword, ranksAiKeyword, limit, offset);
+        ListFlashOffers200Response response = api.searchProjectMedias(id, source, sort, savedFilterId, domain, websiteType, language, country, topics, notBannedTopics, minTraffic, maxTraffic, trafficTrendUpward, minDomainRating, maxDomainRating, minLinkedToReferringRatio, maxLinkedToReferringRatio, minPostPrice, maxPostPrice, postLinkType, promotedSocialNetwork, withoutAdvertisingLabel, homepageListing, hasLinkAddition, minLinkAdditionPrice, maxLinkAdditionPrice, linkAdditionLinkType, bestPrice, recommended, favourite, requested, flashOffer, bought, discarded, _new, ranksGoalKeyword, ranksAiKeyword, limit, offset);
         // TODO: test validations
     }
 

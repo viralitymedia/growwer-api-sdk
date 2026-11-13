@@ -218,6 +218,7 @@ func TestACatalogueMediaReadsANullPreviousPriceAndLinkAdditionOffer(t *testing.T
 	media, _, err := client.CatalogueAPI.GetCatalogueMedia(authorised(), mediaID).Execute()
 	check(t, err)
 
+	equal(t, "bestPrice", media.BestPrice.Get() == nil, true)
 	equal(t, "linkAdditionOffer", media.LinkAdditionOffer.Get() == nil, true)
 	equal(t, "flashOffer", media.FlashOffer.Get() == nil, true)
 	equal(t, "country", media.Country.Get() == nil, true)
@@ -250,6 +251,21 @@ func TestACatalogueMediaReadsANullLinkTypeBesidePresentOffers(t *testing.T) {
 	equal(t, "linkAdditionOffer linkType", offer.LinkType.Get() == nil, true)
 	equal(t, "linkAdditionOffer price", offer.Price.Amount, int32(6000))
 	equal(t, "linkAdditionOffer previousPrice", offer.PreviousPrice.Get() == nil, true)
+}
+
+func TestACatalogueMediaReadsItsBestPriceBadge(t *testing.T) {
+	client, _ := answer(200, fixture(t, "catalogue-media-null-link-type.json"), nil)
+
+	media, _, err := client.CatalogueAPI.GetCatalogueMedia(authorised(), mediaID).Execute()
+	check(t, err)
+
+	var bestPrice *growwer.CatalogueMediaBestPrice = media.BestPrice.Get()
+	if bestPrice == nil {
+		t.Fatal("bestPrice: got null, want a badge")
+	}
+	equal(t, "badge", bestPrice.Badge, "cheaper")
+	equal(t, "platformCount", bestPrice.PlatformCount, int32(3))
+	equal(t, "checkedOn", bestPrice.CheckedOn, "2026-11-12")
 }
 
 func TestASellerMediaReadsNullCompetitiveFees(t *testing.T) {

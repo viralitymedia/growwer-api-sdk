@@ -12,6 +12,7 @@ use Growwer\Api\Api\WebhooksApi;
 use Growwer\Api\ApiException;
 use Growwer\Api\Configuration;
 use Growwer\Api\Model\CatalogueMedia;
+use Growwer\Api\Model\CatalogueMediaBestPrice;
 use Growwer\Api\Model\CatalogueOfferOrNull;
 use Growwer\Api\Model\CreateWebhookRequest;
 use Growwer\Api\Model\Error;
@@ -189,6 +190,7 @@ final class FixtureTest extends TestCase
             ->getCatalogueMedia(self::MEDIA_ID);
 
         self::assertInstanceOf(CatalogueMedia::class, $media);
+        self::assertNull($media->getBestPrice());
         self::assertNull($media->getLinkAdditionOffer());
         self::assertNull($media->getFlashOffer());
         self::assertNull($media->getCountry());
@@ -220,6 +222,19 @@ final class FixtureTest extends TestCase
         self::assertSame([], $offer->listInvalidProperties());
         self::assertSame(6000, $offer->getPrice()->getAmount());
         self::assertNull($offer->getPreviousPrice());
+    }
+
+    public function testACatalogueMediaReadsItsBestPriceBadge(): void
+    {
+        $media = (new CatalogueApi(...$this->answer(200, self::fixture('catalogue-media-null-link-type.json'))))
+            ->getCatalogueMedia(self::MEDIA_ID);
+
+        $bestPrice = $media->getBestPrice();
+        self::assertInstanceOf(CatalogueMediaBestPrice::class, $bestPrice);
+        self::assertSame([], $bestPrice->listInvalidProperties());
+        self::assertSame(CatalogueMediaBestPrice::BADGE_CHEAPER, $bestPrice->getBadge());
+        self::assertSame(3, $bestPrice->getPlatformCount());
+        self::assertSame('2026-11-12', $bestPrice->getCheckedOn()->format('Y-m-d'));
     }
 
     public function testASellerMediaReadsNullCompetitiveFees(): void

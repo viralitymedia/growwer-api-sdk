@@ -205,7 +205,7 @@ try {
 ## `listFlashOffers()`
 
 ```php
-listFlashOffers($project_id, $source, $sort, $domain, $website_type, $language, $country, $topics, $not_banned_topics, $min_traffic, $max_traffic, $traffic_trend_upward, $min_domain_rating, $max_domain_rating, $min_linked_to_referring_ratio, $max_linked_to_referring_ratio, $min_post_price, $max_post_price, $post_link_type, $promoted_social_network, $without_advertising_label, $homepage_listing, $has_link_addition, $min_link_addition_price, $max_link_addition_price, $link_addition_link_type, $recommended, $favourite, $requested, $bought, $discarded, $new, $ranks_goal_keyword, $ranks_ai_keyword, $limit, $offset): \Growwer\Api\Model\ListFlashOffers200Response
+listFlashOffers($project_id, $source, $sort, $domain, $website_type, $language, $country, $topics, $not_banned_topics, $min_traffic, $max_traffic, $traffic_trend_upward, $min_domain_rating, $max_domain_rating, $min_linked_to_referring_ratio, $max_linked_to_referring_ratio, $min_post_price, $max_post_price, $post_link_type, $promoted_social_network, $without_advertising_label, $homepage_listing, $has_link_addition, $min_link_addition_price, $max_link_addition_price, $link_addition_link_type, $best_price, $recommended, $favourite, $requested, $bought, $discarded, $new, $ranks_goal_keyword, $ranks_ai_keyword, $limit, $offset): \Growwer\Api\Model\ListFlashOffers200Response
 ```
 
 List flash offers
@@ -255,6 +255,7 @@ $has_link_addition = True; // bool | Medias that offer adding a link to an exist
 $min_link_addition_price = 56; // int | Minimum link addition price, in cents.
 $max_link_addition_price = 56; // int | Maximum link addition price, in cents.
 $link_addition_link_type = 'link_addition_link_type_example'; // string | A comma-separated list of link types the link addition offer gives: `dofollow`, `nofollow`, `citation`.
+$best_price = True; // bool | Medias with a best-price badge (`bestPrice` not null), of either claim. Only `true` applies it; omit it otherwise.
 $recommended = True; // bool | `true`: only the medias Growwer recommends for the project; `false`: only the others.
 $favourite = True; // bool | `true`: only your favourites for the project; `false`: leave them out.
 $requested = True; // bool | `true`: only the medias you requested for the project; `false`: leave them out.
@@ -267,7 +268,7 @@ $limit = 20; // int | Medias per page, 1 to 100.
 $offset = 0; // int | Medias to skip, at most 99900.
 
 try {
-    $result = $apiInstance->listFlashOffers($project_id, $source, $sort, $domain, $website_type, $language, $country, $topics, $not_banned_topics, $min_traffic, $max_traffic, $traffic_trend_upward, $min_domain_rating, $max_domain_rating, $min_linked_to_referring_ratio, $max_linked_to_referring_ratio, $min_post_price, $max_post_price, $post_link_type, $promoted_social_network, $without_advertising_label, $homepage_listing, $has_link_addition, $min_link_addition_price, $max_link_addition_price, $link_addition_link_type, $recommended, $favourite, $requested, $bought, $discarded, $new, $ranks_goal_keyword, $ranks_ai_keyword, $limit, $offset);
+    $result = $apiInstance->listFlashOffers($project_id, $source, $sort, $domain, $website_type, $language, $country, $topics, $not_banned_topics, $min_traffic, $max_traffic, $traffic_trend_upward, $min_domain_rating, $max_domain_rating, $min_linked_to_referring_ratio, $max_linked_to_referring_ratio, $min_post_price, $max_post_price, $post_link_type, $promoted_social_network, $without_advertising_label, $homepage_listing, $has_link_addition, $min_link_addition_price, $max_link_addition_price, $link_addition_link_type, $best_price, $recommended, $favourite, $requested, $bought, $discarded, $new, $ranks_goal_keyword, $ranks_ai_keyword, $limit, $offset);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling CatalogueApi->listFlashOffers: ', $e->getMessage(), PHP_EOL;
@@ -304,6 +305,7 @@ try {
 | **min_link_addition_price** | **int**| Minimum link addition price, in cents. | [optional] |
 | **max_link_addition_price** | **int**| Maximum link addition price, in cents. | [optional] |
 | **link_addition_link_type** | **string**| A comma-separated list of link types the link addition offer gives: &#x60;dofollow&#x60;, &#x60;nofollow&#x60;, &#x60;citation&#x60;. | [optional] |
+| **best_price** | **bool**| Medias with a best-price badge (&#x60;bestPrice&#x60; not null), of either claim. Only &#x60;true&#x60; applies it; omit it otherwise. | [optional] |
 | **recommended** | **bool**| &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. | [optional] |
 | **favourite** | **bool**| &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. | [optional] |
 | **requested** | **bool**| &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. | [optional] |
@@ -399,7 +401,7 @@ try {
 ## `searchProjectMedias()`
 
 ```php
-searchProjectMedias($id, $source, $sort, $saved_filter_id, $domain, $website_type, $language, $country, $topics, $not_banned_topics, $min_traffic, $max_traffic, $traffic_trend_upward, $min_domain_rating, $max_domain_rating, $min_linked_to_referring_ratio, $max_linked_to_referring_ratio, $min_post_price, $max_post_price, $post_link_type, $promoted_social_network, $without_advertising_label, $homepage_listing, $has_link_addition, $min_link_addition_price, $max_link_addition_price, $link_addition_link_type, $recommended, $favourite, $requested, $flash_offer, $bought, $discarded, $new, $ranks_goal_keyword, $ranks_ai_keyword, $limit, $offset): \Growwer\Api\Model\ListFlashOffers200Response
+searchProjectMedias($id, $source, $sort, $saved_filter_id, $domain, $website_type, $language, $country, $topics, $not_banned_topics, $min_traffic, $max_traffic, $traffic_trend_upward, $min_domain_rating, $max_domain_rating, $min_linked_to_referring_ratio, $max_linked_to_referring_ratio, $min_post_price, $max_post_price, $post_link_type, $promoted_social_network, $without_advertising_label, $homepage_listing, $has_link_addition, $min_link_addition_price, $max_link_addition_price, $link_addition_link_type, $best_price, $recommended, $favourite, $requested, $flash_offer, $bought, $discarded, $new, $ranks_goal_keyword, $ranks_ai_keyword, $limit, $offset): \Growwer\Api\Model\ListFlashOffers200Response
 ```
 
 Search the catalogue for a project
@@ -450,6 +452,7 @@ $has_link_addition = True; // bool | Medias that offer adding a link to an exist
 $min_link_addition_price = 56; // int | Minimum link addition price, in cents.
 $max_link_addition_price = 56; // int | Maximum link addition price, in cents.
 $link_addition_link_type = 'link_addition_link_type_example'; // string | A comma-separated list of link types the link addition offer gives: `dofollow`, `nofollow`, `citation`.
+$best_price = True; // bool | Medias with a best-price badge (`bestPrice` not null), of either claim. Only `true` applies it; omit it otherwise.
 $recommended = True; // bool | `true`: only the medias Growwer recommends for the project; `false`: only the others.
 $favourite = True; // bool | `true`: only your favourites for the project; `false`: leave them out.
 $requested = True; // bool | `true`: only the medias you requested for the project; `false`: leave them out.
@@ -463,7 +466,7 @@ $limit = 20; // int | Medias per page, 1 to 100.
 $offset = 0; // int | Medias to skip, at most 99900.
 
 try {
-    $result = $apiInstance->searchProjectMedias($id, $source, $sort, $saved_filter_id, $domain, $website_type, $language, $country, $topics, $not_banned_topics, $min_traffic, $max_traffic, $traffic_trend_upward, $min_domain_rating, $max_domain_rating, $min_linked_to_referring_ratio, $max_linked_to_referring_ratio, $min_post_price, $max_post_price, $post_link_type, $promoted_social_network, $without_advertising_label, $homepage_listing, $has_link_addition, $min_link_addition_price, $max_link_addition_price, $link_addition_link_type, $recommended, $favourite, $requested, $flash_offer, $bought, $discarded, $new, $ranks_goal_keyword, $ranks_ai_keyword, $limit, $offset);
+    $result = $apiInstance->searchProjectMedias($id, $source, $sort, $saved_filter_id, $domain, $website_type, $language, $country, $topics, $not_banned_topics, $min_traffic, $max_traffic, $traffic_trend_upward, $min_domain_rating, $max_domain_rating, $min_linked_to_referring_ratio, $max_linked_to_referring_ratio, $min_post_price, $max_post_price, $post_link_type, $promoted_social_network, $without_advertising_label, $homepage_listing, $has_link_addition, $min_link_addition_price, $max_link_addition_price, $link_addition_link_type, $best_price, $recommended, $favourite, $requested, $flash_offer, $bought, $discarded, $new, $ranks_goal_keyword, $ranks_ai_keyword, $limit, $offset);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling CatalogueApi->searchProjectMedias: ', $e->getMessage(), PHP_EOL;
@@ -501,6 +504,7 @@ try {
 | **min_link_addition_price** | **int**| Minimum link addition price, in cents. | [optional] |
 | **max_link_addition_price** | **int**| Maximum link addition price, in cents. | [optional] |
 | **link_addition_link_type** | **string**| A comma-separated list of link types the link addition offer gives: &#x60;dofollow&#x60;, &#x60;nofollow&#x60;, &#x60;citation&#x60;. | [optional] |
+| **best_price** | **bool**| Medias with a best-price badge (&#x60;bestPrice&#x60; not null), of either claim. Only &#x60;true&#x60; applies it; omit it otherwise. | [optional] |
 | **recommended** | **bool**| &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. | [optional] |
 | **favourite** | **bool**| &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. | [optional] |
 | **requested** | **bool**| &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. | [optional] |

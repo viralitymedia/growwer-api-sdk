@@ -56,7 +56,9 @@ public class SellerMediaSavedAllOfWarnings {
    */
   @JsonAdapter(CodeEnum.Adapter.class)
   public enum CodeEnum {
-    SAVED_ABOVE_COMPETITORS("saved_above_competitors");
+    SAVED_ABOVE_COMPETITORS("saved_above_competitors"),
+    
+    SAVED_NOT_RECOMMENDED("saved_not_recommended");
 
     private String value;
 

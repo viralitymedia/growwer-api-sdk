@@ -12,6 +12,7 @@ docs/BuyerOrdersApi.md
 docs/BuyerWalletApi.md
 docs/CatalogueApi.md
 docs/CatalogueMedia.md
+docs/CatalogueMediaBestPrice.md
 docs/CatalogueMediaFlashOffer.md
 docs/CatalogueMediaMetrics.md
 docs/CatalogueOffer.md
@@ -182,6 +183,7 @@ growwer/models/balance.py
 growwer/models/balance_low_event_data.py
 growwer/models/balance_low_event_data_wallet.py
 growwer/models/catalogue_media.py
+growwer/models/catalogue_media_best_price.py
 growwer/models/catalogue_media_flash_offer.py
 growwer/models/catalogue_media_metrics.py
 growwer/models/catalogue_offer.py

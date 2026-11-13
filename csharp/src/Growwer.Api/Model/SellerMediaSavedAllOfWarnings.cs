@@ -43,7 +43,13 @@ namespace Growwer.Api.Model
             /// Enum SavedAboveCompetitors for value: saved_above_competitors
             /// </summary>
             [EnumMember(Value = "saved_above_competitors")]
-            SavedAboveCompetitors = 1
+            SavedAboveCompetitors = 1,
+
+            /// <summary>
+            /// Enum SavedNotRecommended for value: saved_not_recommended
+            /// </summary>
+            [EnumMember(Value = "saved_not_recommended")]
+            SavedNotRecommended = 2
         }
 
 

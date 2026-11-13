@@ -189,7 +189,7 @@ export interface SellerMediaSaved {
      */
     createdAt: Date;
     /**
-     * What the save left to know, empty when nothing. `saved_above_competitors`: the fees were saved, but the media still lists above the marketplaces that list the same domain cheaper, and some fee would list it under them. `details.competitiveFees` holds the highest fee of each side that lists it under them (`feeWhenSellerWritesPost`, `feeWhenSellerDoesNotWritePost`, null when none does or the media does not offer that side) and `details.competitors` the names of those marketplaces, never their prices.
+     * What the save left to know, empty when nothing. `saved_above_competitors`: the fees were saved, but the media still lists above the marketplaces that list the same domain cheaper, and some fee would list it under them. `saved_not_recommended`: the same, for a save that raised a fee or added a side or link type: the media is not recommended in buyers' projects while it lists above them, and stays in the catalogue. `details.competitiveFees` holds the highest fee of each side that lists it under them (`feeWhenSellerWritesPost`, `feeWhenSellerDoesNotWritePost`, null when none does or the media does not offer that side) and `details.competitors` the names of those marketplaces, never their prices.
      * @type {Array<SellerMediaSavedAllOfWarnings>}
      * @memberof SellerMediaSaved
      */

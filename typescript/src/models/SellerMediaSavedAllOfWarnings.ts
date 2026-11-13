@@ -52,7 +52,8 @@ export interface SellerMediaSavedAllOfWarnings {
  * @export
  */
 export const SellerMediaSavedAllOfWarningsCodeEnum = {
-    SavedAboveCompetitors: 'saved_above_competitors'
+    SavedAboveCompetitors: 'saved_above_competitors',
+    SavedNotRecommended: 'saved_not_recommended'
 } as const;
 export type SellerMediaSavedAllOfWarningsCodeEnum = typeof SellerMediaSavedAllOfWarningsCodeEnum[keyof typeof SellerMediaSavedAllOfWarningsCodeEnum];
 
@@ -62,8 +63,6 @@ export type SellerMediaSavedAllOfWarningsCodeEnum = typeof SellerMediaSavedAllOf
  */
 export function instanceOfSellerMediaSavedAllOfWarnings(value: object): value is SellerMediaSavedAllOfWarnings {
     if (!('code' in value) || value['code'] === undefined) return false;
-    if (value['code'] !== 'saved_above_competitors') return false;
-    
     if (!('message' in value) || value['message'] === undefined) return false;
     if (!('details' in value) || value['details'] === undefined) return false;
     return true;

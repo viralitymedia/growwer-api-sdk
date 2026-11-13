@@ -1722,6 +1722,15 @@ paths:
         schema:
           type: string
         style: form
+      - description: "Medias with a best-price badge (`bestPrice` not null), of either\
+          \ claim. Only `true` applies it; omit it otherwise."
+        explode: true
+        in: query
+        name: bestPrice
+        required: false
+        schema:
+          type: boolean
+        style: form
       - description: "`true`: only the medias Growwer recommends for the project;\
           \ `false`: only the others."
         explode: true
@@ -2364,6 +2373,15 @@ paths:
         required: false
         schema:
           type: string
+        style: form
+      - description: "Medias with a best-price badge (`bestPrice` not null), of either\
+          \ claim. Only `true` applies it; omit it otherwise."
+        explode: true
+        in: query
+        name: bestPrice
+        required: false
+        schema:
+          type: boolean
         style: form
       - description: "`true`: only the medias Growwer recommends for the project;\
           \ `false`: only the others."
@@ -6940,7 +6958,7 @@ paths:
 
         The fees are your base fees, the ones GET /seller/medias/{id} returns: while a flash offer runs, its discount keeps applying on top of them, and `currentCost` shows the result. `currentCost` may be sent back as read and is ignored. Country, language, topics and comments are not edited here.
 
-        As on the page, a change of the post offer's price may cancel the managed-service proposals accepted for the media whose price it changes. Your fees are always saved, a raise included. When they list the media above the marketplaces that list the same domain cheaper and some fee would list it under them, the 200 carries a `saved_above_competitors` warning in `warnings`, with the competitive fee of each side and the names of those marketplaces. A restricted seller account may edit its offer.
+        As on the page, a change of the post offer's price may cancel the managed-service proposals accepted for the media whose price it changes. Your fees are always saved, a raise included. When they list the media above the marketplaces that list the same domain cheaper and some fee would list it under them, the 200 carries a `saved_above_competitors` warning in `warnings`, with the competitive fee of each side and the names of those marketplaces. When such a save raises a fee, or adds a side or a link type, the warning is `saved_not_recommended` instead, with the same details: the media is not recommended in buyers' projects while it lists above them, and stays in the catalogue. A restricted seller account may edit its offer.
       operationId: updateSellerMedia
       parameters:
       - explode: false
@@ -7005,7 +7023,9 @@ paths:
                 $ref: "#/components/schemas/SellerMediaSaved"
           description: "The media, with the changes saved, and `warnings`: one `saved_above_competitors`\
             \ when it still lists above the marketplaces that list the same domain\
-            \ cheaper and some fee would list it under them, none otherwise."
+            \ cheaper and some fee would list it under them, `saved_not_recommended`\
+            \ instead when the save raised a fee or added a side or a link type, none\
+            \ otherwise."
         "400":
           content:
             application/json:
@@ -11516,6 +11536,16 @@ components:
       schema:
         type: string
       style: form
+    CatalogueBestPrice:
+      description: "Medias with a best-price badge (`bestPrice` not null), of either\
+        \ claim. Only `true` applies it; omit it otherwise."
+      explode: true
+      in: query
+      name: bestPrice
+      required: false
+      schema:
+        type: boolean
+      style: form
     CatalogueRecommended:
       description: "`true`: only the medias Growwer recommends for the project; `false`:\
         \ only the others."
@@ -12063,6 +12093,10 @@ components:
         flashOffer:
           discountPercent: 3
           endsAt: 2000-01-23T04:56:07.000+00:00
+        bestPrice:
+          badge: cheaper
+          platformCount: 1
+          checkedOn: 2000-01-23
         postOffer:
           price: ""
           linkType: dofollow
@@ -12127,6 +12161,8 @@ components:
           type: boolean
         flashOffer:
           $ref: "#/components/schemas/CatalogueMedia_flashOffer"
+        bestPrice:
+          $ref: "#/components/schemas/CatalogueMedia_bestPrice"
         postOffer:
           $ref: "#/components/schemas/CataloguePostOffer"
         linkAdditionOffer:
@@ -12136,6 +12172,7 @@ components:
             \ does not offer it."
       required:
       - averageDaysToPublication
+      - bestPrice
       - bestSeller
       - country
       - domain
@@ -12183,6 +12220,10 @@ components:
         flashOffer:
           discountPercent: 3
           endsAt: 2000-01-23T04:56:07.000+00:00
+        bestPrice:
+          badge: cheaper
+          platformCount: 1
+          checkedOn: 2000-01-23
         postOffer:
           price: ""
           linkType: dofollow
@@ -12432,8 +12473,11 @@ components:
             description: "What the save left to know, empty when nothing. `saved_above_competitors`:\
               \ the fees were saved, but the media still lists above the marketplaces\
               \ that list the same domain cheaper, and some fee would list it under\
-              \ them. `details.competitiveFees` holds the highest fee of each side\
-              \ that lists it under them (`feeWhenSellerWritesPost`, `feeWhenSellerDoesNotWritePost`,\
+              \ them. `saved_not_recommended`: the same, for a save that raised a\
+              \ fee or added a side or link type: the media is not recommended in\
+              \ buyers' projects while it lists above them, and stays in the catalogue.\
+              \ `details.competitiveFees` holds the highest fee of each side that\
+              \ lists it under them (`feeWhenSellerWritesPost`, `feeWhenSellerDoesNotWritePost`,\
               \ null when none does or the media does not offer that side) and `details.competitors`\
               \ the names of those marketplaces, never their prices."
             items:
@@ -12521,7 +12565,7 @@ components:
                 currency: EUR
                 amountDecimal: "125.00"
             competitors:
-            - Prensarank
+            - Prensalink
         - code: saved_above_competitors
           message: Saved. The media still lists above the marketplaces that list the
             same domain cheaper. Setting the fees at most at the competitive fees
@@ -12537,7 +12581,7 @@ components:
                 currency: EUR
                 amountDecimal: "125.00"
             competitors:
-            - Prensarank
+            - Prensalink
       type: object
     SavedFilter:
       example:
@@ -14587,6 +14631,10 @@ components:
           flashOffer:
             discountPercent: 3
             endsAt: 2000-01-23T04:56:07.000+00:00
+          bestPrice:
+            badge: cheaper
+            platformCount: 1
+            checkedOn: 2000-01-23
           postOffer:
             price: ""
             linkType: dofollow
@@ -14640,6 +14688,10 @@ components:
           flashOffer:
             discountPercent: 3
             endsAt: 2000-01-23T04:56:07.000+00:00
+          bestPrice:
+            badge: cheaper
+            platformCount: 1
+            checkedOn: 2000-01-23
           postOffer:
             price: ""
             linkType: dofollow
@@ -16087,6 +16139,36 @@ components:
       - discountPercent
       - endsAt
       type: object
+    CatalogueMedia_bestPrice:
+      description: "The best-price badge the catalogue shows, or null for none: cheaper\
+        \ means the price is at least 1 EUR below the cheapest listing of the media\
+        \ found on the other platforms checked in the last 7 days; only_here means\
+        \ none of the platforms checked lists it. It names neither the platforms nor\
+        \ any price."
+      example:
+        badge: cheaper
+        platformCount: 1
+        checkedOn: 2000-01-23
+      nullable: true
+      properties:
+        badge:
+          enum:
+          - cheaper
+          - only_here
+          type: string
+        platformCount:
+          description: How many platforms the claim was checked against.
+          minimum: 1
+          type: integer
+        checkedOn:
+          description: The day of that check.
+          format: date
+          type: string
+      required:
+      - badge
+      - checkedOn
+      - platformCount
+      type: object
     ProjectCatalogueMedia_allOf_project_aiKeywords:
       example:
         keyword: keyword
@@ -16366,13 +16448,13 @@ components:
             currency: EUR
             amountDecimal: "125.00"
         competitors:
-        - Prensarank
+        - Prensalink
       properties:
         competitiveFees:
           $ref: "#/components/schemas/SellerMediaSaved_allOf_details_competitiveFees"
         competitors:
           example:
-          - Prensarank
+          - Prensalink
           items:
             type: string
           type: array
@@ -16397,11 +16479,12 @@ components:
               currency: EUR
               amountDecimal: "125.00"
           competitors:
-          - Prensarank
+          - Prensalink
       properties:
         code:
           enum:
           - saved_above_competitors
+          - saved_not_recommended
           type: string
         message:
           example: Saved. The media still lists above the marketplaces that list the

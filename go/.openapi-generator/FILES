@@ -27,6 +27,7 @@ docs/BuyerOrdersAPI.md
 docs/BuyerWalletAPI.md
 docs/CatalogueAPI.md
 docs/CatalogueMedia.md
+docs/CatalogueMediaBestPrice.md
 docs/CatalogueMediaFlashOffer.md
 docs/CatalogueMediaMetrics.md
 docs/CatalogueOffer.md
@@ -178,6 +179,7 @@ model_balance.go
 model_balance_low_event_data.go
 model_balance_low_event_data_wallet.go
 model_catalogue_media.go
+model_catalogue_media_best_price.go
 model_catalogue_media_flash_offer.go
 model_catalogue_media_metrics.go
 model_catalogue_offer.go

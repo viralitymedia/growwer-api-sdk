@@ -15,6 +15,7 @@ docs/BuyerOrdersApi.md
 docs/BuyerWalletApi.md
 docs/CatalogueApi.md
 docs/CatalogueMedia.md
+docs/CatalogueMediaBestPrice.md
 docs/CatalogueMediaFlashOffer.md
 docs/CatalogueMediaMetrics.md
 docs/CatalogueOffer.md
@@ -184,6 +185,7 @@ lib/growwer/models/balance.rb
 lib/growwer/models/balance_low_event_data.rb
 lib/growwer/models/balance_low_event_data_wallet.rb
 lib/growwer/models/catalogue_media.rb
+lib/growwer/models/catalogue_media_best_price.rb
 lib/growwer/models/catalogue_media_flash_offer.rb
 lib/growwer/models/catalogue_media_metrics.rb
 lib/growwer/models/catalogue_offer.rb

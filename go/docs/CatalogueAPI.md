@@ -233,7 +233,7 @@ Name | Type | Description  | Notes
 
 ## ListFlashOffers
 
-> ListFlashOffers200Response ListFlashOffers(ctx).ProjectId(projectId).Source(source).Sort(sort).Domain(domain).WebsiteType(websiteType).Language(language).Country(country).Topics(topics).NotBannedTopics(notBannedTopics).MinTraffic(minTraffic).MaxTraffic(maxTraffic).TrafficTrendUpward(trafficTrendUpward).MinDomainRating(minDomainRating).MaxDomainRating(maxDomainRating).MinLinkedToReferringRatio(minLinkedToReferringRatio).MaxLinkedToReferringRatio(maxLinkedToReferringRatio).MinPostPrice(minPostPrice).MaxPostPrice(maxPostPrice).PostLinkType(postLinkType).PromotedSocialNetwork(promotedSocialNetwork).WithoutAdvertisingLabel(withoutAdvertisingLabel).HomepageListing(homepageListing).HasLinkAddition(hasLinkAddition).MinLinkAdditionPrice(minLinkAdditionPrice).MaxLinkAdditionPrice(maxLinkAdditionPrice).LinkAdditionLinkType(linkAdditionLinkType).Recommended(recommended).Favourite(favourite).Requested(requested).Bought(bought).Discarded(discarded).New(new).RanksGoalKeyword(ranksGoalKeyword).RanksAiKeyword(ranksAiKeyword).Limit(limit).Offset(offset).Execute()
+> ListFlashOffers200Response ListFlashOffers(ctx).ProjectId(projectId).Source(source).Sort(sort).Domain(domain).WebsiteType(websiteType).Language(language).Country(country).Topics(topics).NotBannedTopics(notBannedTopics).MinTraffic(minTraffic).MaxTraffic(maxTraffic).TrafficTrendUpward(trafficTrendUpward).MinDomainRating(minDomainRating).MaxDomainRating(maxDomainRating).MinLinkedToReferringRatio(minLinkedToReferringRatio).MaxLinkedToReferringRatio(maxLinkedToReferringRatio).MinPostPrice(minPostPrice).MaxPostPrice(maxPostPrice).PostLinkType(postLinkType).PromotedSocialNetwork(promotedSocialNetwork).WithoutAdvertisingLabel(withoutAdvertisingLabel).HomepageListing(homepageListing).HasLinkAddition(hasLinkAddition).MinLinkAdditionPrice(minLinkAdditionPrice).MaxLinkAdditionPrice(maxLinkAdditionPrice).LinkAdditionLinkType(linkAdditionLinkType).BestPrice(bestPrice).Recommended(recommended).Favourite(favourite).Requested(requested).Bought(bought).Discarded(discarded).New(new).RanksGoalKeyword(ranksGoalKeyword).RanksAiKeyword(ranksAiKeyword).Limit(limit).Offset(offset).Execute()
 
 List flash offers
 
@@ -278,6 +278,7 @@ func main() {
 	minLinkAdditionPrice := int32(56) // int32 | Minimum link addition price, in cents. (optional)
 	maxLinkAdditionPrice := int32(56) // int32 | Maximum link addition price, in cents. (optional)
 	linkAdditionLinkType := "linkAdditionLinkType_example" // string | A comma-separated list of link types the link addition offer gives: `dofollow`, `nofollow`, `citation`. (optional)
+	bestPrice := true // bool | Medias with a best-price badge (`bestPrice` not null), of either claim. Only `true` applies it; omit it otherwise. (optional)
 	recommended := true // bool | `true`: only the medias Growwer recommends for the project; `false`: only the others. (optional)
 	favourite := true // bool | `true`: only your favourites for the project; `false`: leave them out. (optional)
 	requested := true // bool | `true`: only the medias you requested for the project; `false`: leave them out. (optional)
@@ -291,7 +292,7 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.CatalogueAPI.ListFlashOffers(context.Background()).ProjectId(projectId).Source(source).Sort(sort).Domain(domain).WebsiteType(websiteType).Language(language).Country(country).Topics(topics).NotBannedTopics(notBannedTopics).MinTraffic(minTraffic).MaxTraffic(maxTraffic).TrafficTrendUpward(trafficTrendUpward).MinDomainRating(minDomainRating).MaxDomainRating(maxDomainRating).MinLinkedToReferringRatio(minLinkedToReferringRatio).MaxLinkedToReferringRatio(maxLinkedToReferringRatio).MinPostPrice(minPostPrice).MaxPostPrice(maxPostPrice).PostLinkType(postLinkType).PromotedSocialNetwork(promotedSocialNetwork).WithoutAdvertisingLabel(withoutAdvertisingLabel).HomepageListing(homepageListing).HasLinkAddition(hasLinkAddition).MinLinkAdditionPrice(minLinkAdditionPrice).MaxLinkAdditionPrice(maxLinkAdditionPrice).LinkAdditionLinkType(linkAdditionLinkType).Recommended(recommended).Favourite(favourite).Requested(requested).Bought(bought).Discarded(discarded).New(new).RanksGoalKeyword(ranksGoalKeyword).RanksAiKeyword(ranksAiKeyword).Limit(limit).Offset(offset).Execute()
+	resp, r, err := apiClient.CatalogueAPI.ListFlashOffers(context.Background()).ProjectId(projectId).Source(source).Sort(sort).Domain(domain).WebsiteType(websiteType).Language(language).Country(country).Topics(topics).NotBannedTopics(notBannedTopics).MinTraffic(minTraffic).MaxTraffic(maxTraffic).TrafficTrendUpward(trafficTrendUpward).MinDomainRating(minDomainRating).MaxDomainRating(maxDomainRating).MinLinkedToReferringRatio(minLinkedToReferringRatio).MaxLinkedToReferringRatio(maxLinkedToReferringRatio).MinPostPrice(minPostPrice).MaxPostPrice(maxPostPrice).PostLinkType(postLinkType).PromotedSocialNetwork(promotedSocialNetwork).WithoutAdvertisingLabel(withoutAdvertisingLabel).HomepageListing(homepageListing).HasLinkAddition(hasLinkAddition).MinLinkAdditionPrice(minLinkAdditionPrice).MaxLinkAdditionPrice(maxLinkAdditionPrice).LinkAdditionLinkType(linkAdditionLinkType).BestPrice(bestPrice).Recommended(recommended).Favourite(favourite).Requested(requested).Bought(bought).Discarded(discarded).New(new).RanksGoalKeyword(ranksGoalKeyword).RanksAiKeyword(ranksAiKeyword).Limit(limit).Offset(offset).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `CatalogueAPI.ListFlashOffers``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -338,6 +339,7 @@ Name | Type | Description  | Notes
  **minLinkAdditionPrice** | **int32** | Minimum link addition price, in cents. | 
  **maxLinkAdditionPrice** | **int32** | Maximum link addition price, in cents. | 
  **linkAdditionLinkType** | **string** | A comma-separated list of link types the link addition offer gives: &#x60;dofollow&#x60;, &#x60;nofollow&#x60;, &#x60;citation&#x60;. | 
+ **bestPrice** | **bool** | Medias with a best-price badge (&#x60;bestPrice&#x60; not null), of either claim. Only &#x60;true&#x60; applies it; omit it otherwise. | 
  **recommended** | **bool** | &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. | 
  **favourite** | **bool** | &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. | 
  **requested** | **bool** | &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. | 
@@ -443,7 +445,7 @@ Name | Type | Description  | Notes
 
 ## SearchProjectMedias
 
-> ListFlashOffers200Response SearchProjectMedias(ctx, id).Source(source).Sort(sort).SavedFilterId(savedFilterId).Domain(domain).WebsiteType(websiteType).Language(language).Country(country).Topics(topics).NotBannedTopics(notBannedTopics).MinTraffic(minTraffic).MaxTraffic(maxTraffic).TrafficTrendUpward(trafficTrendUpward).MinDomainRating(minDomainRating).MaxDomainRating(maxDomainRating).MinLinkedToReferringRatio(minLinkedToReferringRatio).MaxLinkedToReferringRatio(maxLinkedToReferringRatio).MinPostPrice(minPostPrice).MaxPostPrice(maxPostPrice).PostLinkType(postLinkType).PromotedSocialNetwork(promotedSocialNetwork).WithoutAdvertisingLabel(withoutAdvertisingLabel).HomepageListing(homepageListing).HasLinkAddition(hasLinkAddition).MinLinkAdditionPrice(minLinkAdditionPrice).MaxLinkAdditionPrice(maxLinkAdditionPrice).LinkAdditionLinkType(linkAdditionLinkType).Recommended(recommended).Favourite(favourite).Requested(requested).FlashOffer(flashOffer).Bought(bought).Discarded(discarded).New(new).RanksGoalKeyword(ranksGoalKeyword).RanksAiKeyword(ranksAiKeyword).Limit(limit).Offset(offset).Execute()
+> ListFlashOffers200Response SearchProjectMedias(ctx, id).Source(source).Sort(sort).SavedFilterId(savedFilterId).Domain(domain).WebsiteType(websiteType).Language(language).Country(country).Topics(topics).NotBannedTopics(notBannedTopics).MinTraffic(minTraffic).MaxTraffic(maxTraffic).TrafficTrendUpward(trafficTrendUpward).MinDomainRating(minDomainRating).MaxDomainRating(maxDomainRating).MinLinkedToReferringRatio(minLinkedToReferringRatio).MaxLinkedToReferringRatio(maxLinkedToReferringRatio).MinPostPrice(minPostPrice).MaxPostPrice(maxPostPrice).PostLinkType(postLinkType).PromotedSocialNetwork(promotedSocialNetwork).WithoutAdvertisingLabel(withoutAdvertisingLabel).HomepageListing(homepageListing).HasLinkAddition(hasLinkAddition).MinLinkAdditionPrice(minLinkAdditionPrice).MaxLinkAdditionPrice(maxLinkAdditionPrice).LinkAdditionLinkType(linkAdditionLinkType).BestPrice(bestPrice).Recommended(recommended).Favourite(favourite).Requested(requested).FlashOffer(flashOffer).Bought(bought).Discarded(discarded).New(new).RanksGoalKeyword(ranksGoalKeyword).RanksAiKeyword(ranksAiKeyword).Limit(limit).Offset(offset).Execute()
 
 Search the catalogue for a project
 
@@ -489,6 +491,7 @@ func main() {
 	minLinkAdditionPrice := int32(56) // int32 | Minimum link addition price, in cents. (optional)
 	maxLinkAdditionPrice := int32(56) // int32 | Maximum link addition price, in cents. (optional)
 	linkAdditionLinkType := "linkAdditionLinkType_example" // string | A comma-separated list of link types the link addition offer gives: `dofollow`, `nofollow`, `citation`. (optional)
+	bestPrice := true // bool | Medias with a best-price badge (`bestPrice` not null), of either claim. Only `true` applies it; omit it otherwise. (optional)
 	recommended := true // bool | `true`: only the medias Growwer recommends for the project; `false`: only the others. (optional)
 	favourite := true // bool | `true`: only your favourites for the project; `false`: leave them out. (optional)
 	requested := true // bool | `true`: only the medias you requested for the project; `false`: leave them out. (optional)
@@ -503,7 +506,7 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.CatalogueAPI.SearchProjectMedias(context.Background(), id).Source(source).Sort(sort).SavedFilterId(savedFilterId).Domain(domain).WebsiteType(websiteType).Language(language).Country(country).Topics(topics).NotBannedTopics(notBannedTopics).MinTraffic(minTraffic).MaxTraffic(maxTraffic).TrafficTrendUpward(trafficTrendUpward).MinDomainRating(minDomainRating).MaxDomainRating(maxDomainRating).MinLinkedToReferringRatio(minLinkedToReferringRatio).MaxLinkedToReferringRatio(maxLinkedToReferringRatio).MinPostPrice(minPostPrice).MaxPostPrice(maxPostPrice).PostLinkType(postLinkType).PromotedSocialNetwork(promotedSocialNetwork).WithoutAdvertisingLabel(withoutAdvertisingLabel).HomepageListing(homepageListing).HasLinkAddition(hasLinkAddition).MinLinkAdditionPrice(minLinkAdditionPrice).MaxLinkAdditionPrice(maxLinkAdditionPrice).LinkAdditionLinkType(linkAdditionLinkType).Recommended(recommended).Favourite(favourite).Requested(requested).FlashOffer(flashOffer).Bought(bought).Discarded(discarded).New(new).RanksGoalKeyword(ranksGoalKeyword).RanksAiKeyword(ranksAiKeyword).Limit(limit).Offset(offset).Execute()
+	resp, r, err := apiClient.CatalogueAPI.SearchProjectMedias(context.Background(), id).Source(source).Sort(sort).SavedFilterId(savedFilterId).Domain(domain).WebsiteType(websiteType).Language(language).Country(country).Topics(topics).NotBannedTopics(notBannedTopics).MinTraffic(minTraffic).MaxTraffic(maxTraffic).TrafficTrendUpward(trafficTrendUpward).MinDomainRating(minDomainRating).MaxDomainRating(maxDomainRating).MinLinkedToReferringRatio(minLinkedToReferringRatio).MaxLinkedToReferringRatio(maxLinkedToReferringRatio).MinPostPrice(minPostPrice).MaxPostPrice(maxPostPrice).PostLinkType(postLinkType).PromotedSocialNetwork(promotedSocialNetwork).WithoutAdvertisingLabel(withoutAdvertisingLabel).HomepageListing(homepageListing).HasLinkAddition(hasLinkAddition).MinLinkAdditionPrice(minLinkAdditionPrice).MaxLinkAdditionPrice(maxLinkAdditionPrice).LinkAdditionLinkType(linkAdditionLinkType).BestPrice(bestPrice).Recommended(recommended).Favourite(favourite).Requested(requested).FlashOffer(flashOffer).Bought(bought).Discarded(discarded).New(new).RanksGoalKeyword(ranksGoalKeyword).RanksAiKeyword(ranksAiKeyword).Limit(limit).Offset(offset).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `CatalogueAPI.SearchProjectMedias``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -555,6 +558,7 @@ Name | Type | Description  | Notes
  **minLinkAdditionPrice** | **int32** | Minimum link addition price, in cents. | 
  **maxLinkAdditionPrice** | **int32** | Maximum link addition price, in cents. | 
  **linkAdditionLinkType** | **string** | A comma-separated list of link types the link addition offer gives: &#x60;dofollow&#x60;, &#x60;nofollow&#x60;, &#x60;citation&#x60;. | 
+ **bestPrice** | **bool** | Medias with a best-price badge (&#x60;bestPrice&#x60; not null), of either claim. Only &#x60;true&#x60; applies it; omit it otherwise. | 
  **recommended** | **bool** | &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. | 
  **favourite** | **bool** | &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. | 
  **requested** | **bool** | &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. | 

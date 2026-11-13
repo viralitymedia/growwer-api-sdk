@@ -386,6 +386,7 @@ internal static class Program
     {
         CatalogueMedia media = new CatalogueApi(Answer(Fixture("catalogue-media.json")), Key()).GetCatalogueMedia(MediaId);
 
+        Equal("bestPrice", media.BestPrice, null);
         Equal("linkAdditionOffer", media.LinkAdditionOffer, null);
         Equal("flashOffer", media.FlashOffer, null);
         Equal("country", media.Country, null);
@@ -418,6 +419,21 @@ internal static class Program
         Equal("linkAdditionOffer linkType", offer.LinkType, null);
         Equal("linkAdditionOffer price", offer.Price.Amount, 6000);
         Equal("linkAdditionOffer previousPrice", offer.PreviousPrice, null);
+    }
+
+    private static void ACatalogueMediaReadsItsBestPriceBadge()
+    {
+        CatalogueMedia media = new CatalogueApi(Answer(Fixture("catalogue-media-null-link-type.json")), Key())
+            .GetCatalogueMedia(MediaId);
+
+        CatalogueMediaBestPrice bestPrice = media.BestPrice;
+        if (bestPrice == null)
+        {
+            throw new Exception("bestPrice: got null, want a badge");
+        }
+        Equal("badge", bestPrice.Badge, CatalogueMediaBestPrice.BadgeEnum.Cheaper);
+        Equal("platformCount", bestPrice.PlatformCount, 3);
+        Equal("checkedOn", bestPrice.CheckedOn, new DateOnly(2026, 11, 12));
     }
 
     private static void ASellerMediaReadsNullCompetitiveFees()
@@ -464,6 +480,21 @@ internal static class Program
         Equal("feeWhenSellerDoesNotWritePost", warning.Details.CompetitiveFees.FeeWhenSellerDoesNotWritePost, null);
         Equal("competitors", string.Join(",", warning.Details.Competitors), "Prensarank");
         Equal("domain", saved.Domain, "blog.example");
+    }
+
+    private static void ASellerMediaSaveReadsASavedNotRecommendedWarning()
+    {
+        SellerMediaSaved saved = new SellerMediasApi(Answer(Fixture("seller-media-saved-not-recommended.json")), Key())
+            .UpdateSellerMedia(MediaId, "key-1", new UpdateSellerMediaRequest());
+
+        if (saved.Warnings == null || saved.Warnings.Count != 1)
+        {
+            throw new Exception($"warnings: got {saved.Warnings?.Count.ToString() ?? "null"} entries, want 1");
+        }
+        SellerMediaSavedAllOfWarnings warning = saved.Warnings[0];
+        Equal("warning code", warning.Code, SellerMediaSavedAllOfWarnings.CodeEnum.SavedNotRecommended);
+        Equal("feeWhenSellerWritesPost", warning.Details.CompetitiveFees.FeeWhenSellerWritesPost.Amount, 5400);
+        Equal("competitors", string.Join(",", warning.Details.Competitors), "Prensalink");
     }
 
     private static void ASellerMediaReadsCompetitiveFeesByLinkTypePerLinkType()
@@ -536,6 +567,23 @@ internal static class Program
 
     // An optional, nullable property means something when it is null: a project's country null is
     // worldwide. One the caller never set must be left out of a PATCH, not sent as null.
+    private static void SearchProjectMediasSendsTheBestPriceFilterAndReadsAnOnlyHereBadge()
+    {
+        ListFlashOffers200Response page = new CatalogueApi(Answer(Fixture("project-medias-page.json")), Key())
+            .SearchProjectMedias(ProjectId, bestPrice: true);
+
+        Uri uri = SentRequest().RequestUri;
+        Equal("path", uri.AbsolutePath, "/api/v1/projects/" + ProjectId + "/medias");
+        Equal("bestPrice", uri.Query.TrimStart('?').Split('&').Contains("bestPrice=true"), true);
+        CatalogueMediaBestPrice bestPrice = page.Items[0].BestPrice;
+        if (bestPrice == null)
+        {
+            throw new Exception("bestPrice: got null, want a badge");
+        }
+        Equal("badge", bestPrice.Badge, CatalogueMediaBestPrice.BadgeEnum.OnlyHere);
+        Equal("platformCount", bestPrice.PlatformCount, 2);
+    }
+
     private static void AProjectUpdateWithOnlyANameLeavesTheCountryOut()
     {
         new ProjectsApi(Answer(Fixture("project.json")), Key())
@@ -595,13 +643,16 @@ internal static class Program
             ("a link addition order with fields this client does not know still deserialises", ALinkAdditionOrderWithFieldsThisClientDoesNotKnowStillDeserialises),
             ("a catalogue media reads a null previousPrice and linkAdditionOffer", ACatalogueMediaReadsANullPreviousPriceAndLinkAdditionOffer),
             ("a catalogue media reads a null linkType beside present offers", ACatalogueMediaReadsANullLinkTypeBesidePresentOffers),
+            ("a catalogue media reads its best-price badge", ACatalogueMediaReadsItsBestPriceBadge),
             ("a project media reads an AI keyword with a null source", AProjectMediaReadsAnAiKeywordWithANullSource),
+            ("searchProjectMedias sends the bestPrice filter and reads an only_here badge", SearchProjectMediasSendsTheBestPriceFilterAndReadsAnOnlyHereBadge),
             ("a seller media reads null competitiveFees", ASellerMediaReadsNullCompetitiveFees),
             ("a seller media reads competitiveFees with one side null", ASellerMediaReadsCompetitiveFeesWithOneSideNull),
             ("a seller media reads competitiveFeesByLinkType per link type", ASellerMediaReadsCompetitiveFeesByLinkTypePerLinkType),
             ("a project update with only a name leaves the country out", AProjectUpdateWithOnlyANameLeavesTheCountryOut),
             ("a project update sends a country set to null", AProjectUpdateSendsACountrySetToNull),
             ("a seller media save reads its warnings", ASellerMediaSaveReadsItsWarnings),
+            ("a seller media save reads a saved_not_recommended warning", ASellerMediaSaveReadsASavedNotRecommendedWarning),
             ("a seller media update without a linkAdditionOffer leaves it out", ASellerMediaUpdateWithoutALinkAdditionOfferLeavesItOut),
             ("a seller media update sends a linkAdditionOffer set to null", ASellerMediaUpdateSendsALinkAdditionOfferSetToNull),
             ("the error envelope is readable from the ApiException", TheErrorEnvelopeIsReadableFromTheException),

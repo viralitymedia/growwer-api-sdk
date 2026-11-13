@@ -7,6 +7,7 @@ import com.growwer.api.api.SellerMediasApi;
 import com.growwer.api.api.WebhooksApi;
 import com.growwer.api.model.BalanceLowEventData;
 import com.growwer.api.model.CatalogueMedia;
+import com.growwer.api.model.CatalogueMediaBestPrice;
 import com.growwer.api.model.CatalogueOfferOrNull;
 import com.growwer.api.model.CataloguePostOffer;
 import com.growwer.api.model.CreateWebhookRequest;
@@ -39,6 +40,7 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
@@ -216,6 +218,7 @@ public class FixtureTest {
     void aCatalogueMediaReadsANullPreviousPriceAndLinkAdditionOffer() throws Exception {
         CatalogueMedia media = new CatalogueApi(answer(fixture("catalogue-media.json"))).getCatalogueMedia(MEDIA_ID);
 
+        equal("bestPrice", media.getBestPrice(), null);
         equal("linkAdditionOffer", media.getLinkAdditionOffer(), null);
         equal("flashOffer", media.getFlashOffer(), null);
         equal("country", media.getCountry(), null);
@@ -286,6 +289,32 @@ public class FixtureTest {
         equal("feeWhenSellerWritesPost", warning.getDetails().getCompetitiveFees().getFeeWhenSellerWritesPost().getAmount(), 5400);
         equal("feeWhenSellerDoesNotWritePost", warning.getDetails().getCompetitiveFees().getFeeWhenSellerDoesNotWritePost(), null);
         equal("competitors", warning.getDetails().getCompetitors(), List.of("Prensarank"));
+    }
+
+    void aCatalogueMediaReadsItsBestPriceBadge() throws Exception {
+        CatalogueMedia media = new CatalogueApi(answer(fixture("catalogue-media-null-link-type.json")))
+            .getCatalogueMedia(MEDIA_ID);
+
+        CatalogueMediaBestPrice bestPrice = media.getBestPrice();
+        if (bestPrice == null) {
+            throw new AssertionError("bestPrice: got null, want a badge");
+        }
+        equal("badge", bestPrice.getBadge(), CatalogueMediaBestPrice.BadgeEnum.CHEAPER);
+        equal("platformCount", bestPrice.getPlatformCount(), 3);
+        equal("checkedOn", bestPrice.getCheckedOn(), LocalDate.of(2026, 11, 12));
+    }
+
+    void aSellerMediaSaveReadsASavedNotRecommendedWarning() throws Exception {
+        SellerMediaSaved saved = new SellerMediasApi(answer(fixture("seller-media-saved-not-recommended.json")))
+            .updateSellerMedia(MEDIA_ID, "key-1", new UpdateSellerMediaRequest());
+
+        if (saved.getWarnings() == null || saved.getWarnings().size() != 1) {
+            throw new AssertionError("warnings: got " + saved.getWarnings() + ", want 1 entry");
+        }
+        SellerMediaSavedAllOfWarnings warning = saved.getWarnings().get(0);
+        equal("warning code", warning.getCode(), SellerMediaSavedAllOfWarnings.CodeEnum.SAVED_NOT_RECOMMENDED);
+        equal("feeWhenSellerWritesPost", warning.getDetails().getCompetitiveFees().getFeeWhenSellerWritesPost().getAmount(), 5400);
+        equal("competitors", warning.getDetails().getCompetitors(), List.of("Prensalink"));
     }
 
     void aSellerMediaReadsCompetitiveFeesByLinkTypePerLinkType() throws Exception {
@@ -455,9 +484,11 @@ public class FixtureTest {
         cases.put("a link addition order with fields this client does not know still deserialises", test::aLinkAdditionOrderWithFieldsThisClientDoesNotKnowStillDeserialises);
         cases.put("a catalogue media reads a null previousPrice and linkAdditionOffer", test::aCatalogueMediaReadsANullPreviousPriceAndLinkAdditionOffer);
         cases.put("a catalogue media reads a null linkType beside present offers", test::aCatalogueMediaReadsANullLinkTypeBesidePresentOffers);
+        cases.put("a catalogue media reads its best-price badge", test::aCatalogueMediaReadsItsBestPriceBadge);
         cases.put("a seller media reads null competitiveFees", test::aSellerMediaReadsNullCompetitiveFees);
         cases.put("a seller media reads competitiveFees with one side null", test::aSellerMediaReadsCompetitiveFeesWithOneSideNull);
         cases.put("a seller media save reads its warnings", test::aSellerMediaSaveReadsItsWarnings);
+        cases.put("a seller media save reads a saved_not_recommended warning", test::aSellerMediaSaveReadsASavedNotRecommendedWarning);
         cases.put("a seller media reads competitiveFeesByLinkType per link type", test::aSellerMediaReadsCompetitiveFeesByLinkTypePerLinkType);
         cases.put("a partial seller media update sends only the properties set", test::aPartialSellerMediaUpdateSendsOnlyThePropertiesSet);
         cases.put("an order event parses with fields this client does not know", test::anOrderEventParsesWithFieldsThisClientDoesNotKnow);

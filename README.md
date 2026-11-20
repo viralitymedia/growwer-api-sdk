@@ -16,7 +16,7 @@ contract, one generator run, one version: a change to the API reaches all seven 
 | Python 3.10+ | `growwer` | [![PyPI](https://img.shields.io/pypi/v/growwer?label=pypi&color=informational)](https://pypi.org/project/growwer/) | [`python/`](python/) |
 | TypeScript (Node 22+, browsers) | `@growwer/api` | [![npm](https://img.shields.io/npm/v/%40growwer%2Fapi?label=npm&color=informational)](https://www.npmjs.com/package/@growwer/api) | [`typescript/`](typescript/) |
 | PHP 8.1+ | `growwer/growwer-api-sdk` | [![Packagist](https://img.shields.io/packagist/v/growwer/growwer-api-sdk?label=packagist&color=informational)](https://packagist.org/packages/growwer/growwer-api-sdk) | [`php/`](php/) |
-| Go 1.23+ | `github.com/viralitymedia/growwer-api-sdk/go/v3` | [![Go module](https://img.shields.io/github/v/tag/viralitymedia/growwer-api-sdk?filter=go%2F*&label=go&color=informational)](https://pkg.go.dev/github.com/viralitymedia/growwer-api-sdk/go/v3) | [`go/`](go/) |
+| Go 1.23+ | `github.com/viralitymedia/growwer-api-sdk/go/v4` | [![Go module](https://img.shields.io/github/v/tag/viralitymedia/growwer-api-sdk?filter=go%2F*&label=go&color=informational)](https://pkg.go.dev/github.com/viralitymedia/growwer-api-sdk/go/v4) | [`go/`](go/) |
 | Java 11+ | `com.growwer:growwer-api` | [![Maven Central](https://img.shields.io/maven-central/v/com.growwer/growwer-api?label=maven%20central&color=informational)](https://central.sonatype.com/artifact/com.growwer/growwer-api) | [`java/`](java/) |
 | .NET 8 | `Growwer.Api` | [![NuGet](https://img.shields.io/nuget/v/Growwer.Api?label=nuget&color=informational)](https://www.nuget.org/packages/Growwer.Api/) | [`csharp/`](csharp/) |
 | Ruby 3.0+ | `growwer` | [![RubyGems](https://img.shields.io/gem/v/growwer?label=gem&color=informational)](https://rubygems.org/gems/growwer) | [`ruby/`](ruby/) |
@@ -101,7 +101,7 @@ import (
 	"context"
 	"os"
 
-	growwer "github.com/viralitymedia/growwer-api-sdk/go/v3"
+	growwer "github.com/viralitymedia/growwer-api-sdk/go/v4"
 )
 
 config := growwer.NewConfiguration()
@@ -175,6 +175,56 @@ var config = new Configuration
 var me = new AccountApi(config).GetMe();
 ```
 </details>
+
+## Changes in 4.0.0
+
+**Code that reads the marketplaces of a seller media save warning breaks in every language**, and
+the Go module moves to `/v4`. Growwer no longer tells a seller which marketplaces list the same
+domain cheaper, only how many: in each entry of `warnings`, `details.competitors` (the marketplace
+names) is gone and `details.competitorCount`, a required integer, takes its place. It is the only
+change to the contract; every other call, model and field is as in 3.0.0.
+
+**A 3.x client cannot read the warning of a save that warns.** Production answers `competitorCount` and no longer
+sends `competitors`, which 3.0.0 requires, so `updateSellerMedia` and
+`applySellerMediaCompetitiveFees` fail to parse a 200 that carries a warning in Go, Java, C#, Python
+and Ruby (a save with an empty `warnings` still parses). TypeScript reads `competitors` as
+`undefined`, and PHP reads it as null and flags the details in `valid()`. Upgrade to 4.0.0 to read
+these answers.
+
+- **Go:** the module moves to `github.com/viralitymedia/growwer-api-sdk/go/v4`, because Go requires
+  the major in the path. Update every import and run
+  `go get github.com/viralitymedia/growwer-api-sdk/go/v4@v4.0.0`; the old path stays at 3.0.0.
+  `SellerMediaSavedAllOfDetails` has `CompetitorCount int32` in place of `Competitors []string`
+  (`GetCompetitorCount`, `GetCompetitorCountOk` and `SetCompetitorCount` in place of `GetCompetitors`,
+  `GetCompetitorsOk` and `SetCompetitors`),
+  and `NewSellerMediaSavedAllOfDetails` takes an `int32` as its second argument.
+- **Java:** `SellerMediaSavedAllOfDetails` has `getCompetitorCount()` returning `Integer`, and
+  `competitorCount(Integer)` and `setCompetitorCount(Integer)`; `getCompetitors()`,
+  `competitors(...)`, `addCompetitorsItem(...)` and `setCompetitors(...)` are gone, so code that
+  calls them stops compiling.
+- **C#:** `SellerMediaSavedAllOfDetails.CompetitorCount` is an `int`, and the constructor takes
+  `competitorCount` where it took `competitors`; code that reads `Competitors` or passes
+  `competitors:` stops compiling.
+- **TypeScript:** `SellerMediaSavedAllOfDetails` has `competitorCount: number` in place of
+  `competitors: Array<string>`, so code that reads `competitors` or an object-literal mock that sets
+  it no longer type-checks.
+- **Python, Ruby and PHP:** the property is `competitor_count` (an `int`, an `Integer`, and
+  `getCompetitorCount()` / `setCompetitorCount()` returning or taking an `int` in PHP). Reading
+  `competitors` raises an `AttributeError` in Python and a `NoMethodError` in Ruby, and calling
+  `getCompetitors()` an `Error` in PHP. Python and Ruby refuse a `SellerMediaSavedAllOfDetails` built
+  by hand without `competitor_count`, and Ruby also refuses one given `competitors`.
+
+**Recorded responses with `competitors`.** A seller media save recorded before 4.0.0, with a warning
+whose `details` carry `competitors` and no `competitorCount`, fails to parse when fed to a mock in
+Go (`no value given for required property competitorCount`), Java (``The required field
+`competitorCount` is not found in the JSON string``) and C# (`Required property 'competitorCount' not
+found in JSON`), and also in Python (a pydantic `ValidationError`) and Ruby (an `ArgumentError`,
+`competitor_count cannot be nil`). TypeScript reads it with `competitorCount` `undefined`, and
+`instanceOfSellerMediaSavedAllOfDetails` answers false for it. PHP reads it with
+`getCompetitorCount()` null, and its `valid()` and `listInvalidProperties()` on the details flag it.
+Replace `"competitors": [...]` with `"competitorCount": <how many>` in the mock; a `competitors` left
+beside it does not affect parsing, though Go, Java and C# keep it in their additional properties and
+write it back when the model is serialised.
 
 ## Changes in 3.0.0
 
@@ -902,7 +952,7 @@ import (
 	"net/http"
 
 	standardwebhooks "github.com/standard-webhooks/standard-webhooks/libraries/go"
-	growwer "github.com/viralitymedia/growwer-api-sdk/go/v3"
+	growwer "github.com/viralitymedia/growwer-api-sdk/go/v4"
 )
 
 verifier, err := standardwebhooks.NewWebhook(secret)
@@ -1193,9 +1243,9 @@ These corrections are applied by the generator script rather than by hand, becau
 would be discarded on the next run:
 
 - **Go** has no package registry, so the import path is the repository URL plus the directory, and
-  from 2.0.0 on the major suffix Go requires of a second major (`/v3` since
-  3.0.0). The generator derives the module path from the Go package name, and `go` is a keyword, so it cannot produce `.../growwer-api-sdk/go/v3`
-  on its own.
+  from 2.0.0 on the major suffix Go requires of a second major (`/v4` since 4.0.0). The generator
+  derives the module path from the Go package name, and `go` is a keyword, so it cannot produce
+  `.../growwer-api-sdk/go/v4` on its own.
 - **Go**'s oneOf template writes its no-match branch twice in a row, and `go vet` rejects the second
   copy as unreachable code. The copy is dropped by
   [`scripts/go-oneof-unreachable.py`](scripts/go-oneof-unreachable.py).

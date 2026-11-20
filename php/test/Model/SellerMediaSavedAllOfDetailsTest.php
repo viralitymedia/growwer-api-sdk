@@ -90,9 +90,9 @@ class SellerMediaSavedAllOfDetailsTest extends TestCase
     }
 
     /**
-     * Test attribute "competitors"
+     * Test attribute "competitor_count"
      */
-    public function testPropertyCompetitors()
+    public function testPropertyCompetitorCount()
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');

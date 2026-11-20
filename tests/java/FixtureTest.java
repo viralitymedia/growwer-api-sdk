@@ -288,7 +288,7 @@ public class FixtureTest {
         equal("warning code", warning.getCode(), SellerMediaSavedAllOfWarnings.CodeEnum.SAVED_ABOVE_COMPETITORS);
         equal("feeWhenSellerWritesPost", warning.getDetails().getCompetitiveFees().getFeeWhenSellerWritesPost().getAmount(), 5400);
         equal("feeWhenSellerDoesNotWritePost", warning.getDetails().getCompetitiveFees().getFeeWhenSellerDoesNotWritePost(), null);
-        equal("competitors", warning.getDetails().getCompetitors(), List.of("Prensarank"));
+        equal("competitorCount", warning.getDetails().getCompetitorCount(), 1);
     }
 
     void aCatalogueMediaReadsItsBestPriceBadge() throws Exception {
@@ -314,7 +314,7 @@ public class FixtureTest {
         SellerMediaSavedAllOfWarnings warning = saved.getWarnings().get(0);
         equal("warning code", warning.getCode(), SellerMediaSavedAllOfWarnings.CodeEnum.SAVED_NOT_RECOMMENDED);
         equal("feeWhenSellerWritesPost", warning.getDetails().getCompetitiveFees().getFeeWhenSellerWritesPost().getAmount(), 5400);
-        equal("competitors", warning.getDetails().getCompetitors(), List.of("Prensalink"));
+        equal("competitorCount", warning.getDetails().getCompetitorCount(), 2);
     }
 
     void aSellerMediaReadsCompetitiveFeesByLinkTypePerLinkType() throws Exception {

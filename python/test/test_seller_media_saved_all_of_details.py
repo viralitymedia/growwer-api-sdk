@@ -45,7 +45,7 @@ class TestSellerMediaSavedAllOfDetails(unittest.TestCase):
                         amount = 12500, 
                         currency = 'EUR', 
                         amount_decimal = '125.00', ), ),
-                competitors = ["Prensarank"]
+                competitor_count = 1
             )
         else:
             return SellerMediaSavedAllOfDetails(
@@ -58,7 +58,7 @@ class TestSellerMediaSavedAllOfDetails(unittest.TestCase):
                         amount = 12500, 
                         currency = 'EUR', 
                         amount_decimal = '125.00', ), ),
-                competitors = ["Prensarank"],
+                competitor_count = 1,
         )
         """
 

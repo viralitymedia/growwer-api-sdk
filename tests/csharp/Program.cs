@@ -478,7 +478,7 @@ internal static class Program
         Equal("warning code", warning.Code, SellerMediaSavedAllOfWarnings.CodeEnum.SavedAboveCompetitors);
         Equal("feeWhenSellerWritesPost", warning.Details.CompetitiveFees.FeeWhenSellerWritesPost.Amount, 5400);
         Equal("feeWhenSellerDoesNotWritePost", warning.Details.CompetitiveFees.FeeWhenSellerDoesNotWritePost, null);
-        Equal("competitors", string.Join(",", warning.Details.Competitors), "Prensarank");
+        Equal("competitorCount", warning.Details.CompetitorCount, 1);
         Equal("domain", saved.Domain, "blog.example");
     }
 
@@ -494,7 +494,7 @@ internal static class Program
         SellerMediaSavedAllOfWarnings warning = saved.Warnings[0];
         Equal("warning code", warning.Code, SellerMediaSavedAllOfWarnings.CodeEnum.SavedNotRecommended);
         Equal("feeWhenSellerWritesPost", warning.Details.CompetitiveFees.FeeWhenSellerWritesPost.Amount, 5400);
-        Equal("competitors", string.Join(",", warning.Details.Competitors), "Prensalink");
+        Equal("competitorCount", warning.Details.CompetitorCount, 2);
     }
 
     private static void ASellerMediaReadsCompetitiveFeesByLinkTypePerLinkType()

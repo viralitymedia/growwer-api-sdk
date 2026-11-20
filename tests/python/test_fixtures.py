@@ -294,7 +294,7 @@ class FixtureTest(unittest.TestCase):
         self.assertEqual(warning.code, "saved_not_recommended")
         self.assertEqual(warning.details.competitive_fees.fee_when_seller_writes_post.amount, 5400)
         self.assertIsNone(warning.details.competitive_fees.fee_when_seller_does_not_write_post)
-        self.assertEqual(warning.details.competitors, ["Prensalink"])
+        self.assertEqual(warning.details.competitor_count, 2)
         self.assertEqual(saved.domain, "blog.example")
 
     def test_order_event_parses_with_fields_this_client_does_not_know(self):

@@ -35,10 +35,10 @@ export interface SellerMediaSavedAllOfDetails {
     competitiveFees: SellerMediaSavedAllOfDetailsCompetitiveFees;
     /**
      * 
-     * @type {Array<string>}
+     * @type {number}
      * @memberof SellerMediaSavedAllOfDetails
      */
-    competitors: Array<string>;
+    competitorCount: number;
 }
 
 /**
@@ -46,7 +46,7 @@ export interface SellerMediaSavedAllOfDetails {
  */
 export function instanceOfSellerMediaSavedAllOfDetails(value: object): value is SellerMediaSavedAllOfDetails {
     if (!('competitiveFees' in value) || value['competitiveFees'] === undefined) return false;
-    if (!('competitors' in value) || value['competitors'] === undefined) return false;
+    if (!('competitorCount' in value) || value['competitorCount'] === undefined) return false;
     return true;
 }
 
@@ -61,7 +61,7 @@ export function SellerMediaSavedAllOfDetailsFromJSONTyped(json: any, ignoreDiscr
     return {
         
         'competitiveFees': SellerMediaSavedAllOfDetailsCompetitiveFeesFromJSON(json['competitiveFees']),
-        'competitors': json['competitors'],
+        'competitorCount': json['competitorCount'],
     };
 }
 
@@ -77,7 +77,7 @@ export function SellerMediaSavedAllOfDetailsToJSONTyped(value?: SellerMediaSaved
     return {
         
         'competitiveFees': SellerMediaSavedAllOfDetailsCompetitiveFeesToJSON(value['competitiveFees']),
-        'competitors': value['competitors'],
+        'competitorCount': value['competitorCount'],
     };
 }
 

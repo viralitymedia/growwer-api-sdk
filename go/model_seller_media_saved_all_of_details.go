@@ -22,7 +22,7 @@ var _ MappedNullable = &SellerMediaSavedAllOfDetails{}
 // SellerMediaSavedAllOfDetails struct for SellerMediaSavedAllOfDetails
 type SellerMediaSavedAllOfDetails struct {
 	CompetitiveFees SellerMediaSavedAllOfDetailsCompetitiveFees `json:"competitiveFees"`
-	Competitors []string `json:"competitors"`
+	CompetitorCount int32 `json:"competitorCount"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -32,10 +32,10 @@ type _SellerMediaSavedAllOfDetails SellerMediaSavedAllOfDetails
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewSellerMediaSavedAllOfDetails(competitiveFees SellerMediaSavedAllOfDetailsCompetitiveFees, competitors []string) *SellerMediaSavedAllOfDetails {
+func NewSellerMediaSavedAllOfDetails(competitiveFees SellerMediaSavedAllOfDetailsCompetitiveFees, competitorCount int32) *SellerMediaSavedAllOfDetails {
 	this := SellerMediaSavedAllOfDetails{}
 	this.CompetitiveFees = competitiveFees
-	this.Competitors = competitors
+	this.CompetitorCount = competitorCount
 	return &this
 }
 
@@ -71,28 +71,28 @@ func (o *SellerMediaSavedAllOfDetails) SetCompetitiveFees(v SellerMediaSavedAllO
 	o.CompetitiveFees = v
 }
 
-// GetCompetitors returns the Competitors field value
-func (o *SellerMediaSavedAllOfDetails) GetCompetitors() []string {
+// GetCompetitorCount returns the CompetitorCount field value
+func (o *SellerMediaSavedAllOfDetails) GetCompetitorCount() int32 {
 	if o == nil {
-		var ret []string
+		var ret int32
 		return ret
 	}
 
-	return o.Competitors
+	return o.CompetitorCount
 }
 
-// GetCompetitorsOk returns a tuple with the Competitors field value
+// GetCompetitorCountOk returns a tuple with the CompetitorCount field value
 // and a boolean to check if the value has been set.
-func (o *SellerMediaSavedAllOfDetails) GetCompetitorsOk() ([]string, bool) {
+func (o *SellerMediaSavedAllOfDetails) GetCompetitorCountOk() (*int32, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return o.Competitors, true
+	return &o.CompetitorCount, true
 }
 
-// SetCompetitors sets field value
-func (o *SellerMediaSavedAllOfDetails) SetCompetitors(v []string) {
-	o.Competitors = v
+// SetCompetitorCount sets field value
+func (o *SellerMediaSavedAllOfDetails) SetCompetitorCount(v int32) {
+	o.CompetitorCount = v
 }
 
 func (o SellerMediaSavedAllOfDetails) MarshalJSON() ([]byte, error) {
@@ -106,7 +106,7 @@ func (o SellerMediaSavedAllOfDetails) MarshalJSON() ([]byte, error) {
 func (o SellerMediaSavedAllOfDetails) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["competitiveFees"] = o.CompetitiveFees
-	toSerialize["competitors"] = o.Competitors
+	toSerialize["competitorCount"] = o.CompetitorCount
 
 	for key, value := range o.AdditionalProperties {
 		toSerialize[key] = value
@@ -121,7 +121,7 @@ func (o *SellerMediaSavedAllOfDetails) UnmarshalJSON(data []byte) (err error) {
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
 		"competitiveFees",
-		"competitors",
+		"competitorCount",
 	}
 
 	allProperties := make(map[string]interface{})
@@ -152,7 +152,7 @@ func (o *SellerMediaSavedAllOfDetails) UnmarshalJSON(data []byte) (err error) {
 
 	if err = json.Unmarshal(data, &additionalProperties); err == nil {
 		delete(additionalProperties, "competitiveFees")
-		delete(additionalProperties, "competitors")
+		delete(additionalProperties, "competitorCount")
 		o.AdditionalProperties = additionalProperties
 	}
 

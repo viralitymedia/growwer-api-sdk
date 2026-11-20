@@ -273,7 +273,7 @@ RSpec.describe 'Growwer fixtures' do
     expect(warning.code).to eq('saved_not_recommended')
     expect(warning.details.competitive_fees.fee_when_seller_writes_post.amount).to eq(5400)
     expect(warning.details.competitive_fees.fee_when_seller_does_not_write_post).to be_nil
-    expect(warning.details.competitors).to eq(['Prensalink'])
+    expect(warning.details.competitor_count).to eq(2)
     expect(saved.domain).to eq('blog.example')
   end
 

@@ -18,7 +18,7 @@ import (
 	"testing"
 	"time"
 
-	growwer "github.com/viralitymedia/growwer-api-sdk/go/v3"
+	growwer "github.com/viralitymedia/growwer-api-sdk/go/v4"
 )
 
 const (
@@ -297,6 +297,24 @@ func TestASellerMediaReadsCompetitiveFeesWithOneSideNull(t *testing.T) {
 	}
 	equal(t, "feeWhenSellerWritesPost", fees.FeeWhenSellerWritesPost.Get().Amount, int32(5400))
 	equal(t, "feeWhenSellerDoesNotWritePost", fees.FeeWhenSellerDoesNotWritePost.Get() == nil, true)
+}
+
+func TestASellerMediaSaveReadsHowManyCompetitorsItsWarningCounts(t *testing.T) {
+	client, _ := answer(200, fixture(t, "seller-media-saved.json"), nil)
+
+	saved, _, err := client.SellerMediasAPI.UpdateSellerMedia(authorised(), mediaID).
+		IdempotencyKey("key-1").
+		UpdateSellerMediaRequest(growwer.UpdateSellerMediaRequest{}).
+		Execute()
+	check(t, err)
+
+	if len(saved.Warnings) != 1 {
+		t.Fatalf("warnings: got %d entries, want 1", len(saved.Warnings))
+	}
+	warning := saved.Warnings[0]
+	equal(t, "warning code", warning.Code, "saved_above_competitors")
+	equal(t, "feeWhenSellerWritesPost", warning.Details.CompetitiveFees.FeeWhenSellerWritesPost.Get().Amount, int32(5400))
+	equal(t, "competitorCount", warning.Details.CompetitorCount, int32(1))
 }
 
 func TestASellerMediaReadsCompetitiveFeesByLinkTypePerLinkType(t *testing.T) {

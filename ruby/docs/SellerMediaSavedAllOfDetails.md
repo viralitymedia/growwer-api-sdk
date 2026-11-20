@@ -5,7 +5,7 @@
 | Name | Type | Description | Notes |
 | ---- | ---- | ----------- | ----- |
 | **competitive_fees** | [**SellerMediaSavedAllOfDetailsCompetitiveFees**](SellerMediaSavedAllOfDetailsCompetitiveFees.md) |  |  |
-| **competitors** | **Array&lt;String&gt;** |  |  |
+| **competitor_count** | **Integer** |  |  |
 
 ## Example
 
@@ -14,7 +14,7 @@ require 'growwer'
 
 instance = Growwer::SellerMediaSavedAllOfDetails.new(
   competitive_fees: null,
-  competitors: [&quot;Prensalink&quot;]
+  competitor_count: 1
 )
 ```
 

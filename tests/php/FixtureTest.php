@@ -366,7 +366,7 @@ final class FixtureTest extends TestCase
         $fees = $warnings[0]->getDetails()->getCompetitiveFees();
         self::assertSame(5400, $fees->getFeeWhenSellerWritesPost()->getAmount());
         self::assertNull($fees->getFeeWhenSellerDoesNotWritePost());
-        self::assertSame(['Prensalink'], $warnings[0]->getDetails()->getCompetitors());
+        self::assertSame(2, $warnings[0]->getDetails()->getCompetitorCount());
         self::assertSame('blog.example', $saved->getDomain());
     }
 

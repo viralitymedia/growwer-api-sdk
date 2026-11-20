@@ -65,12 +65,12 @@ namespace Growwer.Api.Test.Model
         }
 
         /// <summary>
-        /// Test the property 'Competitors'
+        /// Test the property 'CompetitorCount'
         /// </summary>
         [Fact]
-        public void CompetitorsTest()
+        public void CompetitorCountTest()
         {
-            // TODO unit test for the property 'Competitors'
+            // TODO unit test for the property 'CompetitorCount'
         }
     }
 }

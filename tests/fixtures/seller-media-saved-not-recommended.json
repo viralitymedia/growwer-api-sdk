@@ -64,9 +64,7 @@
           },
           "feeWhenSellerDoesNotWritePost": null
         },
-        "competitors": [
-          "Prensalink"
-        ]
+        "competitorCount": 2
       }
     }
   ]

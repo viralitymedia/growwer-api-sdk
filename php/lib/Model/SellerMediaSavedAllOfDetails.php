@@ -59,7 +59,7 @@ class SellerMediaSavedAllOfDetails implements ModelInterface, ArrayAccess, \Json
      */
     protected static $openAPITypes = [
         'competitive_fees' => '\Growwer\Api\Model\SellerMediaSavedAllOfDetailsCompetitiveFees',
-        'competitors' => 'string[]'
+        'competitor_count' => 'int'
     ];
 
     /**
@@ -71,7 +71,7 @@ class SellerMediaSavedAllOfDetails implements ModelInterface, ArrayAccess, \Json
      */
     protected static $openAPIFormats = [
         'competitive_fees' => null,
-        'competitors' => null
+        'competitor_count' => null
     ];
 
     /**
@@ -81,7 +81,7 @@ class SellerMediaSavedAllOfDetails implements ModelInterface, ArrayAccess, \Json
      */
     protected static array $openAPINullables = [
         'competitive_fees' => false,
-        'competitors' => false
+        'competitor_count' => false
     ];
 
     /**
@@ -171,7 +171,7 @@ class SellerMediaSavedAllOfDetails implements ModelInterface, ArrayAccess, \Json
      */
     protected static $attributeMap = [
         'competitive_fees' => 'competitiveFees',
-        'competitors' => 'competitors'
+        'competitor_count' => 'competitorCount'
     ];
 
     /**
@@ -181,7 +181,7 @@ class SellerMediaSavedAllOfDetails implements ModelInterface, ArrayAccess, \Json
      */
     protected static $setters = [
         'competitive_fees' => 'setCompetitiveFees',
-        'competitors' => 'setCompetitors'
+        'competitor_count' => 'setCompetitorCount'
     ];
 
     /**
@@ -191,7 +191,7 @@ class SellerMediaSavedAllOfDetails implements ModelInterface, ArrayAccess, \Json
      */
     protected static $getters = [
         'competitive_fees' => 'getCompetitiveFees',
-        'competitors' => 'getCompetitors'
+        'competitor_count' => 'getCompetitorCount'
     ];
 
     /**
@@ -252,7 +252,7 @@ class SellerMediaSavedAllOfDetails implements ModelInterface, ArrayAccess, \Json
     public function __construct(?array $data = null)
     {
         $this->setIfExists('competitive_fees', $data ?? [], null);
-        $this->setIfExists('competitors', $data ?? [], null);
+        $this->setIfExists('competitor_count', $data ?? [], null);
     }
 
     /**
@@ -285,8 +285,8 @@ class SellerMediaSavedAllOfDetails implements ModelInterface, ArrayAccess, \Json
         if ($this->container['competitive_fees'] === null) {
             $invalidProperties[] = "'competitive_fees' can't be null";
         }
-        if ($this->container['competitors'] === null) {
-            $invalidProperties[] = "'competitors' can't be null";
+        if ($this->container['competitor_count'] === null) {
+            $invalidProperties[] = "'competitor_count' can't be null";
         }
         return $invalidProperties;
     }
@@ -331,28 +331,28 @@ class SellerMediaSavedAllOfDetails implements ModelInterface, ArrayAccess, \Json
     }
 
     /**
-     * Gets competitors
+     * Gets competitor_count
      *
-     * @return string[]
+     * @return int
      */
-    public function getCompetitors()
+    public function getCompetitorCount()
     {
-        return $this->container['competitors'];
+        return $this->container['competitor_count'];
     }
 
     /**
-     * Sets competitors
+     * Sets competitor_count
      *
-     * @param string[] $competitors competitors
+     * @param int $competitor_count competitor_count
      *
      * @return self
      */
-    public function setCompetitors($competitors)
+    public function setCompetitorCount($competitor_count)
     {
-        if (is_null($competitors)) {
-            throw new \InvalidArgumentException('non-nullable competitors cannot be null');
+        if (is_null($competitor_count)) {
+            throw new \InvalidArgumentException('non-nullable competitor_count cannot be null');
         }
-        $this->container['competitors'] = $competitors;
+        $this->container['competitor_count'] = $competitor_count;
 
         return $this;
     }

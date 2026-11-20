@@ -1,6 +1,6 @@
 [project]
 name = "growwer"
-version = "3.0.0"
+version = "4.0.0"
 description = "Growwer API"
 authors = [
   {name = "Growwer Support",email = "support@growwer.com"},

@@ -6,7 +6,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **competitive_fees** | [**SellerMediaSavedAllOfDetailsCompetitiveFees**](SellerMediaSavedAllOfDetailsCompetitiveFees.md) |  | 
-**competitors** | **List[str]** |  | 
+**competitor_count** | **int** |  | 
 
 ## Example
 

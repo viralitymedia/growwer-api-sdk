@@ -5,13 +5,13 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **CompetitiveFees** | [**SellerMediaSavedAllOfDetailsCompetitiveFees**](SellerMediaSavedAllOfDetailsCompetitiveFees.md) |  | 
-**Competitors** | **[]string** |  | 
+**CompetitorCount** | **int32** |  | 
 
 ## Methods
 
 ### NewSellerMediaSavedAllOfDetails
 
-`func NewSellerMediaSavedAllOfDetails(competitiveFees SellerMediaSavedAllOfDetailsCompetitiveFees, competitors []string, ) *SellerMediaSavedAllOfDetails`
+`func NewSellerMediaSavedAllOfDetails(competitiveFees SellerMediaSavedAllOfDetailsCompetitiveFees, competitorCount int32, ) *SellerMediaSavedAllOfDetails`
 
 NewSellerMediaSavedAllOfDetails instantiates a new SellerMediaSavedAllOfDetails object
 This constructor will assign default values to properties that have it defined,
@@ -46,24 +46,24 @@ and a boolean to check if the value has been set.
 SetCompetitiveFees sets CompetitiveFees field to given value.
 
 
-### GetCompetitors
+### GetCompetitorCount
 
-`func (o *SellerMediaSavedAllOfDetails) GetCompetitors() []string`
+`func (o *SellerMediaSavedAllOfDetails) GetCompetitorCount() int32`
 
-GetCompetitors returns the Competitors field if non-nil, zero value otherwise.
+GetCompetitorCount returns the CompetitorCount field if non-nil, zero value otherwise.
 
-### GetCompetitorsOk
+### GetCompetitorCountOk
 
-`func (o *SellerMediaSavedAllOfDetails) GetCompetitorsOk() (*[]string, bool)`
+`func (o *SellerMediaSavedAllOfDetails) GetCompetitorCountOk() (*int32, bool)`
 
-GetCompetitorsOk returns a tuple with the Competitors field if it's non-nil, zero value otherwise
+GetCompetitorCountOk returns a tuple with the CompetitorCount field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetCompetitors
+### SetCompetitorCount
 
-`func (o *SellerMediaSavedAllOfDetails) SetCompetitors(v []string)`
+`func (o *SellerMediaSavedAllOfDetails) SetCompetitorCount(v int32)`
 
-SetCompetitors sets Competitors field to given value.
+SetCompetitorCount sets CompetitorCount field to given value.
 
 
 

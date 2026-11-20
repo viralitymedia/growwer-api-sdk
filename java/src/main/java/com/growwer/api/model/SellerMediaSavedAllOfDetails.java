@@ -21,9 +21,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import com.growwer.api.model.SellerMediaSavedAllOfDetailsCompetitiveFees;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -58,10 +56,10 @@ public class SellerMediaSavedAllOfDetails {
   @javax.annotation.Nonnull
   private SellerMediaSavedAllOfDetailsCompetitiveFees competitiveFees;
 
-  public static final String SERIALIZED_NAME_COMPETITORS = "competitors";
-  @SerializedName(SERIALIZED_NAME_COMPETITORS)
+  public static final String SERIALIZED_NAME_COMPETITOR_COUNT = "competitorCount";
+  @SerializedName(SERIALIZED_NAME_COMPETITOR_COUNT)
   @javax.annotation.Nonnull
-  private List<String> competitors;
+  private Integer competitorCount;
 
   public SellerMediaSavedAllOfDetails() {
   }
@@ -85,30 +83,22 @@ public class SellerMediaSavedAllOfDetails {
   }
 
 
-  public SellerMediaSavedAllOfDetails competitors(@javax.annotation.Nonnull List<String> competitors) {
-    this.competitors = competitors;
-    return this;
-  }
-
-  public SellerMediaSavedAllOfDetails addCompetitorsItem(String competitorsItem) {
-    if (this.competitors == null) {
-      this.competitors = new ArrayList<>();
-    }
-    this.competitors.add(competitorsItem);
+  public SellerMediaSavedAllOfDetails competitorCount(@javax.annotation.Nonnull Integer competitorCount) {
+    this.competitorCount = competitorCount;
     return this;
   }
 
   /**
-   * Get competitors
-   * @return competitors
+   * Get competitorCount
+   * @return competitorCount
    */
   @javax.annotation.Nonnull
-  public List<String> getCompetitors() {
-    return competitors;
+  public Integer getCompetitorCount() {
+    return competitorCount;
   }
 
-  public void setCompetitors(@javax.annotation.Nonnull List<String> competitors) {
-    this.competitors = competitors;
+  public void setCompetitorCount(@javax.annotation.Nonnull Integer competitorCount) {
+    this.competitorCount = competitorCount;
   }
 
   /**
@@ -167,13 +157,13 @@ public class SellerMediaSavedAllOfDetails {
     }
     SellerMediaSavedAllOfDetails sellerMediaSavedAllOfDetails = (SellerMediaSavedAllOfDetails) o;
     return Objects.equals(this.competitiveFees, sellerMediaSavedAllOfDetails.competitiveFees) &&
-        Objects.equals(this.competitors, sellerMediaSavedAllOfDetails.competitors)&&
+        Objects.equals(this.competitorCount, sellerMediaSavedAllOfDetails.competitorCount)&&
         Objects.equals(this.additionalProperties, sellerMediaSavedAllOfDetails.additionalProperties);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(competitiveFees, competitors, additionalProperties);
+    return Objects.hash(competitiveFees, competitorCount, additionalProperties);
   }
 
   @Override
@@ -181,7 +171,7 @@ public class SellerMediaSavedAllOfDetails {
     StringBuilder sb = new StringBuilder();
     sb.append("class SellerMediaSavedAllOfDetails {\n");
     sb.append("    competitiveFees: ").append(toIndentedString(competitiveFees)).append("\n");
-    sb.append("    competitors: ").append(toIndentedString(competitors)).append("\n");
+    sb.append("    competitorCount: ").append(toIndentedString(competitorCount)).append("\n");
     sb.append("    additionalProperties: ").append(toIndentedString(additionalProperties)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -201,10 +191,10 @@ public class SellerMediaSavedAllOfDetails {
 
   static {
     // a set of all properties/fields (JSON key names)
-    openapiFields = new HashSet<String>(Arrays.asList("competitiveFees", "competitors"));
+    openapiFields = new HashSet<String>(Arrays.asList("competitiveFees", "competitorCount"));
 
     // a set of required properties/fields (JSON key names)
-    openapiRequiredFields = new HashSet<String>(Arrays.asList("competitiveFees", "competitors"));
+    openapiRequiredFields = new HashSet<String>(Arrays.asList("competitiveFees", "competitorCount"));
   }
 
   /**
@@ -229,12 +219,6 @@ public class SellerMediaSavedAllOfDetails {
         JsonObject jsonObj = jsonElement.getAsJsonObject();
       // validate the required field `competitiveFees`
       SellerMediaSavedAllOfDetailsCompetitiveFees.validateJsonElement(jsonObj.get("competitiveFees"));
-      // ensure the required json array is present
-      if (jsonObj.get("competitors") == null) {
-        throw new IllegalArgumentException("Expected the field `linkedContent` to be an array in the JSON string but got `null`");
-      } else if (!jsonObj.get("competitors").isJsonArray()) {
-        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `competitors` to be an array in the JSON string but got `%s`", jsonObj.get("competitors").toString()));
-      }
   }
 
   public static class CustomTypeAdapterFactory implements TypeAdapterFactory {

@@ -33,7 +33,7 @@ describe Growwer::SellerMediaSavedAllOfDetails do
     end
   end
 
-  describe 'test attribute "competitors"' do
+  describe 'test attribute "competitor_count"' do
     it 'should work' do
       # assertion here. ref: https://rspec.info/features/3-12/rspec-expectations/built-in-matchers/
     end

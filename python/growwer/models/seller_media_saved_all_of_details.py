@@ -18,7 +18,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictInt
 from typing import Any, ClassVar, Dict, List
 from growwer.models.seller_media_saved_all_of_details_competitive_fees import SellerMediaSavedAllOfDetailsCompetitiveFees
 from typing import Optional, Set
@@ -30,8 +30,8 @@ class SellerMediaSavedAllOfDetails(BaseModel):
     SellerMediaSavedAllOfDetails
     """ # noqa: E501
     competitive_fees: SellerMediaSavedAllOfDetailsCompetitiveFees = Field(alias="competitiveFees")
-    competitors: List[StrictStr] = Field(json_schema_extra={"examples": [["Prensalink"]]})
-    __properties: ClassVar[List[str]] = ["competitiveFees", "competitors"]
+    competitor_count: StrictInt = Field(alias="competitorCount", json_schema_extra={"examples": [1]})
+    __properties: ClassVar[List[str]] = ["competitiveFees", "competitorCount"]
 
     model_config = ConfigDict(
         validate_by_name=True,
@@ -88,7 +88,7 @@ class SellerMediaSavedAllOfDetails(BaseModel):
 
         _obj = cls.model_validate({
             "competitiveFees": SellerMediaSavedAllOfDetailsCompetitiveFees.from_dict(obj["competitiveFees"]) if obj.get("competitiveFees") is not None else None,
-            "competitors": obj.get("competitors")
+            "competitorCount": obj.get("competitorCount")
         })
         return _obj
 

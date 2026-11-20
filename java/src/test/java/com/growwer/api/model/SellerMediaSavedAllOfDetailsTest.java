@@ -20,9 +20,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import com.growwer.api.model.SellerMediaSavedAllOfDetailsCompetitiveFees;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -49,11 +47,11 @@ public class SellerMediaSavedAllOfDetailsTest {
     }
 
     /**
-     * Test the property 'competitors'
+     * Test the property 'competitorCount'
      */
     @Test
-    public void competitorsTest() {
-        // TODO: test competitors
+    public void competitorCountTest() {
+        // TODO: test competitorCount
     }
 
 }

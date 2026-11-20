@@ -14,7 +14,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"
-	openapiclient "github.com/viralitymedia/growwer-api-sdk/go/v3"
+	openapiclient "github.com/viralitymedia/growwer-api-sdk/go/v4"
 )
 
 func Test_growwer_TestHelpersAPIService(t *testing.T) {

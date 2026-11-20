@@ -45,8 +45,8 @@ namespace Growwer.Api.Model
         /// Initializes a new instance of the <see cref="SellerMediaSavedAllOfDetails" /> class.
         /// </summary>
         /// <param name="competitiveFees">competitiveFees (required).</param>
-        /// <param name="competitors">competitors (required).</param>
-        public SellerMediaSavedAllOfDetails(SellerMediaSavedAllOfDetailsCompetitiveFees competitiveFees = default, List<string> competitors = default)
+        /// <param name="competitorCount">competitorCount (required).</param>
+        public SellerMediaSavedAllOfDetails(SellerMediaSavedAllOfDetailsCompetitiveFees competitiveFees = default, int competitorCount = default)
         {
             // to ensure "competitiveFees" is required (not null)
             if (competitiveFees == null)
@@ -54,12 +54,7 @@ namespace Growwer.Api.Model
                 throw new ArgumentNullException("competitiveFees is a required property for SellerMediaSavedAllOfDetails and cannot be null");
             }
             this.CompetitiveFees = competitiveFees;
-            // to ensure "competitors" is required (not null)
-            if (competitors == null)
-            {
-                throw new ArgumentNullException("competitors is a required property for SellerMediaSavedAllOfDetails and cannot be null");
-            }
-            this.Competitors = competitors;
+            this.CompetitorCount = competitorCount;
             this.AdditionalProperties = new Dictionary<string, object>();
         }
 
@@ -70,13 +65,13 @@ namespace Growwer.Api.Model
         public SellerMediaSavedAllOfDetailsCompetitiveFees CompetitiveFees { get; set; }
 
         /// <summary>
-        /// Gets or Sets Competitors
+        /// Gets or Sets CompetitorCount
         /// </summary>
         /*
-        <example>[&quot;Prensalink&quot;]</example>
+        <example>1</example>
         */
-        [DataMember(Name = "competitors", IsRequired = true, EmitDefaultValue = true)]
-        public List<string> Competitors { get; set; }
+        [DataMember(Name = "competitorCount", IsRequired = true, EmitDefaultValue = true)]
+        public int CompetitorCount { get; set; }
 
         /// <summary>
         /// Gets or Sets additional properties
@@ -93,7 +88,7 @@ namespace Growwer.Api.Model
             StringBuilder sb = new StringBuilder();
             sb.Append("class SellerMediaSavedAllOfDetails {\n");
             sb.Append("  CompetitiveFees: ").Append(CompetitiveFees).Append("\n");
-            sb.Append("  Competitors: ").Append(Competitors).Append("\n");
+            sb.Append("  CompetitorCount: ").Append(CompetitorCount).Append("\n");
             sb.Append("  AdditionalProperties: ").Append(AdditionalProperties).Append("\n");
             sb.Append("}\n");
             return sb.ToString();

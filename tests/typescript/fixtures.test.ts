@@ -23,6 +23,7 @@ import type {
   OrderEventData,
   PostOrderBriefing,
   SellerMediaCompetitiveFeesByLinkTypeInner,
+  SellerMediaSavedAllOfWarnings,
   WebhookTestEventData,
 } from '../../typescript/dist';
 
@@ -278,6 +279,19 @@ const tests: Array<[string, () => Promise<void>]> = [
     assert.notEqual(media.competitiveFees, null);
     assert.equal(media.competitiveFees!.feeWhenSellerWritesPost?.amount, 5400);
     assert.equal(media.competitiveFees!.feeWhenSellerDoesNotWritePost, null);
+  }],
+
+  ['a seller media save reads how many competitors its warning counts', async () => {
+    const sent: Sent[] = [];
+    const saved = await new SellerMediasApi(answer(sent, 200, fixture('seller-media-saved.json')))
+      .updateSellerMedia({ id: MEDIA_ID, idempotencyKey: 'key-1', updateSellerMediaRequest: {} });
+
+    assert.equal(saved.warnings.length, 1);
+    const warning: SellerMediaSavedAllOfWarnings = saved.warnings[0];
+    assert.equal(warning.code, 'saved_above_competitors');
+    assert.equal(warning.details.competitiveFees.feeWhenSellerWritesPost?.amount, 5400);
+    const competitorCount: number = warning.details.competitorCount;
+    assert.equal(competitorCount, 1);
   }],
 
   ['a seller media reads competitiveFeesByLinkType per link type', async () => {

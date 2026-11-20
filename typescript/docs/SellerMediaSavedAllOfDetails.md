@@ -7,7 +7,7 @@
 Name | Type
 ------------ | -------------
 `competitiveFees` | [SellerMediaSavedAllOfDetailsCompetitiveFees](SellerMediaSavedAllOfDetailsCompetitiveFees.md)
-`competitors` | Array&lt;string&gt;
+`competitorCount` | number
 
 ## Example
 
@@ -17,7 +17,7 @@ import type { SellerMediaSavedAllOfDetails } from '@growwer/api'
 // TODO: Update the object below with actual values
 const example = {
   "competitiveFees": null,
-  "competitors": ["Prensalink"],
+  "competitorCount": 1,
 } satisfies SellerMediaSavedAllOfDetails
 
 console.log(example)

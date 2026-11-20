@@ -17,13 +17,13 @@ module Growwer
   class SellerMediaSavedAllOfDetails < ApiModelBase
     attr_accessor :competitive_fees
 
-    attr_accessor :competitors
+    attr_accessor :competitor_count
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
         :'competitive_fees' => :'competitiveFees',
-        :'competitors' => :'competitors'
+        :'competitor_count' => :'competitorCount'
       }
     end
 
@@ -41,7 +41,7 @@ module Growwer
     def self.openapi_types
       {
         :'competitive_fees' => :'SellerMediaSavedAllOfDetailsCompetitiveFees',
-        :'competitors' => :'Array<String>'
+        :'competitor_count' => :'Integer'
       }
     end
 
@@ -73,12 +73,10 @@ module Growwer
         self.competitive_fees = nil
       end
 
-      if attributes.key?(:'competitors')
-        if (value = attributes[:'competitors']).is_a?(Array)
-          self.competitors = value
-        end
+      if attributes.key?(:'competitor_count')
+        self.competitor_count = attributes[:'competitor_count']
       else
-        self.competitors = nil
+        self.competitor_count = nil
       end
     end
 
@@ -91,8 +89,8 @@ module Growwer
         invalid_properties.push('invalid value for "competitive_fees", competitive_fees cannot be nil.')
       end
 
-      if @competitors.nil?
-        invalid_properties.push('invalid value for "competitors", competitors cannot be nil.')
+      if @competitor_count.nil?
+        invalid_properties.push('invalid value for "competitor_count", competitor_count cannot be nil.')
       end
 
       invalid_properties
@@ -103,7 +101,7 @@ module Growwer
     def valid?
       warn '[DEPRECATED] the `valid?` method is obsolete'
       return false if @competitive_fees.nil?
-      return false if @competitors.nil?
+      return false if @competitor_count.nil?
       true
     end
 
@@ -118,13 +116,13 @@ module Growwer
     end
 
     # Custom attribute writer method with validation
-    # @param [Object] competitors Value to be assigned
-    def competitors=(competitors)
-      if competitors.nil?
-        fail ArgumentError, 'competitors cannot be nil'
+    # @param [Object] competitor_count Value to be assigned
+    def competitor_count=(competitor_count)
+      if competitor_count.nil?
+        fail ArgumentError, 'competitor_count cannot be nil'
       end
 
-      @competitors = competitors
+      @competitor_count = competitor_count
     end
 
     # Checks equality by comparing each attribute.
@@ -133,7 +131,7 @@ module Growwer
       return true if self.equal?(o)
       self.class == o.class &&
           competitive_fees == o.competitive_fees &&
-          competitors == o.competitors
+          competitor_count == o.competitor_count
     end
 
     # @see the `==` method
@@ -145,7 +143,7 @@ module Growwer
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [competitive_fees, competitors].hash
+      [competitive_fees, competitor_count].hash
     end
 
     # Builds the object from hash

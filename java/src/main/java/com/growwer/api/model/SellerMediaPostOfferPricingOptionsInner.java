@@ -191,7 +191,7 @@ public class SellerMediaPostOfferPricingOptionsInner {
   }
 
   /**
-   * What you are paid now for the link type, flash offer discount included; read-only. Null when the link type has no current pricing.
+   * What you are paid now for the link type, the discount of a running offer (&#x60;flashOffer&#x60;) included; read-only. Null when the link type has no current pricing.
    * @return currentCost
    */
   @javax.annotation.Nullable

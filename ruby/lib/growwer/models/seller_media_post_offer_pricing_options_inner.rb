@@ -23,7 +23,7 @@ module Growwer
 
     attr_accessor :link_type
 
-    # What you are paid now for the link type, flash offer discount included; read-only. Null when the link type has no current pricing.
+    # What you are paid now for the link type, the discount of a running offer (`flashOffer`) included; read-only. Null when the link type has no current pricing.
     attr_accessor :current_cost
 
     class EnumAttributeValidator

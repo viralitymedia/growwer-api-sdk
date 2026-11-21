@@ -467,7 +467,7 @@ class SellerMediaPostOfferPricingOptionsInner implements ModelInterface, ArrayAc
     /**
      * Sets current_cost
      *
-     * @param \Growwer\Api\Model\MoneyOrNull|null $current_cost What you are paid now for the link type, flash offer discount included; read-only. Null when the link type has no current pricing.
+     * @param \Growwer\Api\Model\MoneyOrNull|null $current_cost What you are paid now for the link type, the discount of a running offer (`flashOffer`) included; read-only. Null when the link type has no current pricing.
      *
      * @return self
      */

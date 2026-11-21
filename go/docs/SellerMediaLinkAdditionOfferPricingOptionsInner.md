@@ -6,7 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **LinkType** | **string** |  | 
 **Fee** | [**Money**](Money.md) | Your base fee for the link type. | 
-**CurrentCost** | [**NullableMoneyOrNull**](MoneyOrNull.md) | What you are paid now for the link type, flash offer discount included; read-only. | 
+**CurrentCost** | [**NullableMoneyOrNull**](MoneyOrNull.md) | What you are paid now for the link type, the discount of a running offer (&#x60;flashOffer&#x60;) included; read-only. | 
 
 ## Methods
 

@@ -168,7 +168,7 @@ public class SellerMediaLinkAdditionOfferPricingOptionsInner {
   }
 
   /**
-   * What you are paid now for the link type, flash offer discount included; read-only.
+   * What you are paid now for the link type, the discount of a running offer (&#x60;flashOffer&#x60;) included; read-only.
    * @return currentCost
    */
   @javax.annotation.Nullable

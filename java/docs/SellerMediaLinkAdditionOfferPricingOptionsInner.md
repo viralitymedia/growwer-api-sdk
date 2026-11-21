@@ -9,7 +9,7 @@
 |------------ | ------------- | ------------- | -------------|
 |**linkType** | [**LinkTypeEnum**](#LinkTypeEnum) |  |  |
 |**fee** | [**Money**](Money.md) | Your base fee for the link type. |  |
-|**currentCost** | [**MoneyOrNull**](MoneyOrNull.md) | What you are paid now for the link type, flash offer discount included; read-only. |  |
+|**currentCost** | [**MoneyOrNull**](MoneyOrNull.md) | What you are paid now for the link type, the discount of a running offer (&#x60;flashOffer&#x60;) included; read-only. |  |
 
 
 

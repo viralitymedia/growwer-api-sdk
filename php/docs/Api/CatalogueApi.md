@@ -1,6 +1,6 @@
 # Growwer\Api\CatalogueApi
 
-Search the medias of a project, its flash offers, favourites and discards.
+Search the medias of a project, those on offer, its favourites and discards.
 
 All URIs are relative to https://tool.growwer.com, except if the operation defines another base path.
 
@@ -9,7 +9,7 @@ All URIs are relative to https://tool.growwer.com, except if the operation defin
 | [**discardMedia()**](CatalogueApi.md#discardMedia) | **PUT** /api/v1/projects/{id}/discards/{mediaId} | Discard a media for a project |
 | [**favouriteMedia()**](CatalogueApi.md#favouriteMedia) | **PUT** /api/v1/projects/{id}/favourites/{mediaId} | Add a media to the favourites of a project |
 | [**getCatalogueMedia()**](CatalogueApi.md#getCatalogueMedia) | **GET** /api/v1/medias/{id} | Get a media |
-| [**listFlashOffers()**](CatalogueApi.md#listFlashOffers) | **GET** /api/v1/flash-offers | List flash offers |
+| [**listFlashOffers()**](CatalogueApi.md#listFlashOffers) | **GET** /api/v1/flash-offers | List the medias on offer |
 | [**requestMedias()**](CatalogueApi.md#requestMedias) | **POST** /api/v1/projects/{id}/media-requests | Request specific medias for a project |
 | [**searchProjectMedias()**](CatalogueApi.md#searchProjectMedias) | **GET** /api/v1/projects/{id}/medias | Search the catalogue for a project |
 | [**undiscardMedia()**](CatalogueApi.md#undiscardMedia) | **DELETE** /api/v1/projects/{id}/discards/{mediaId} | Restore a discarded media for a project |
@@ -208,9 +208,9 @@ try {
 listFlashOffers($project_id, $source, $sort, $domain, $website_type, $language, $country, $topics, $not_banned_topics, $min_traffic, $max_traffic, $traffic_trend_upward, $min_domain_rating, $max_domain_rating, $min_linked_to_referring_ratio, $max_linked_to_referring_ratio, $min_post_price, $max_post_price, $post_link_type, $promoted_social_network, $without_advertising_label, $homepage_listing, $has_link_addition, $min_link_addition_price, $max_link_addition_price, $link_addition_link_type, $best_price, $recommended, $favourite, $requested, $bought, $discarded, $new, $ranks_goal_keyword, $ranks_ai_keyword, $limit, $offset): \Growwer\Api\Model\ListFlashOffers200Response
 ```
 
-List flash offers
+List the medias on offer
 
-The medias on a flash offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with `flashOffer=true`, and takes the same parameters except `flashOffer` and `savedFilterId`. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
+The medias on an offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with `flashOffer=true`, and takes the same parameters except `flashOffer` and `savedFilterId`. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
 
 ### Example
 
@@ -229,7 +229,7 @@ $apiInstance = new Growwer\Api\Api\CatalogueApi(
     new GuzzleHttp\Client(),
     $config
 );
-$project_id = 'project_id_example'; // string | The project to search flash offers for.
+$project_id = 'project_id_example'; // string | The project to search medias on offer for.
 $source = 'source_example'; // string | Which of the project's medias to search: `all` (the default), `recommended` (those Growwer recommends for the project), or those you marked `favourite`, `discarded` or `requested`, or `bought` for the project. Do not combine it with the parameter of the same state.
 $sort = 'sort_example'; // string | The order. Without it, the web's default order: medias on the project's topic and language first, then best sellers and medias with more published orders. Ties are always broken by media id, so pages never overlap. `-growwerRank`: best match first; `postPrice`, `linkAdditionPrice`: cheapest first; `matchedAt`, `-matchedAt`: when Growwer matched the media with the project; `-traffic`, `-domainRating`, `-referringDomains`: highest first; `linkedToReferringRatio`: lowest first.
 $domain = 'domain_example'; // string | Medias whose domain contains this text, 1 to 255 characters.
@@ -279,7 +279,7 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **project_id** | **string**| The project to search flash offers for. | |
+| **project_id** | **string**| The project to search medias on offer for. | |
 | **source** | **string**| Which of the project&#39;s medias to search: &#x60;all&#x60; (the default), &#x60;recommended&#x60; (those Growwer recommends for the project), or those you marked &#x60;favourite&#x60;, &#x60;discarded&#x60; or &#x60;requested&#x60;, or &#x60;bought&#x60; for the project. Do not combine it with the parameter of the same state. | [optional] |
 | **sort** | **string**| The order. Without it, the web&#39;s default order: medias on the project&#39;s topic and language first, then best sellers and medias with more published orders. Ties are always broken by media id, so pages never overlap. &#x60;-growwerRank&#x60;: best match first; &#x60;postPrice&#x60;, &#x60;linkAdditionPrice&#x60;: cheapest first; &#x60;matchedAt&#x60;, &#x60;-matchedAt&#x60;: when Growwer matched the media with the project; &#x60;-traffic&#x60;, &#x60;-domainRating&#x60;, &#x60;-referringDomains&#x60;: highest first; &#x60;linkedToReferringRatio&#x60;: lowest first. | [optional] |
 | **domain** | **string**| Medias whose domain contains this text, 1 to 255 characters. | [optional] |
@@ -456,7 +456,7 @@ $best_price = True; // bool | Medias with a best-price badge (`bestPrice` not nu
 $recommended = True; // bool | `true`: only the medias Growwer recommends for the project; `false`: only the others.
 $favourite = True; // bool | `true`: only your favourites for the project; `false`: leave them out.
 $requested = True; // bool | `true`: only the medias you requested for the project; `false`: leave them out.
-$flash_offer = True; // bool | `true`: only medias with a flash offer running; `false`: leave them out.
+$flash_offer = True; // bool | `true`: only medias with an offer running; `false`: leave them out.
 $bought = True; // bool | `true`: only medias you bought for the project; `false`: leave them out.
 $discarded = True; // bool | `true`: only the medias you discarded for the project; `false`: leave them out.
 $new = True; // bool | Medias Growwer matched with the project recently. Only `true` applies it; omit it otherwise.
@@ -508,7 +508,7 @@ try {
 | **recommended** | **bool**| &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. | [optional] |
 | **favourite** | **bool**| &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. | [optional] |
 | **requested** | **bool**| &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. | [optional] |
-| **flash_offer** | **bool**| &#x60;true&#x60;: only medias with a flash offer running; &#x60;false&#x60;: leave them out. | [optional] |
+| **flash_offer** | **bool**| &#x60;true&#x60;: only medias with an offer running; &#x60;false&#x60;: leave them out. | [optional] |
 | **bought** | **bool**| &#x60;true&#x60;: only medias you bought for the project; &#x60;false&#x60;: leave them out. | [optional] |
 | **discarded** | **bool**| &#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. | [optional] |
 | **new** | **bool**| Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. | [optional] |

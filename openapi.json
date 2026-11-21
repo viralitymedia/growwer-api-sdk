@@ -118,7 +118,7 @@
                       ],
                       "properties": {
                         "eligible": {
-                          "description": "Whether you have the full daily cap of the catalogue operations (tag Catalogue: searching a project's medias, flash offers and media details). It is open to accounts with recent completed orders, as buyer or as seller; until then the catalogue answers within a smaller daily trial quota, which rises to the full cap after a completed order. A media you have ordered is always readable with GET /medias/{id} and counts against neither.",
+                          "description": "Whether you have the full daily cap of the catalogue operations (tag Catalogue: searching a project's medias, those on offer and media details). It is open to accounts with recent completed orders, as buyer or as seller; until then the catalogue answers within a smaller daily trial quota, which rises to the full cap after a completed order. A media you have ordered is always readable with GET /medias/{id} and counts against neither.",
                           "type": "boolean"
                         },
                         "dailyCap": {
@@ -909,14 +909,14 @@
         "tags": [
           "Catalogue"
         ],
-        "summary": "List flash offers",
-        "description": "The medias on a flash offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with `flashOffer=true`, and takes the same parameters except `flashOffer` and `savedFilterId`. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.",
+        "summary": "List the medias on offer",
+        "description": "The medias on an offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with `flashOffer=true`, and takes the same parameters except `flashOffer` and `savedFilterId`. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.",
         "operationId": "listFlashOffers",
         "parameters": [
           {
             "name": "projectId",
             "in": "query",
-            "description": "The project to search flash offers for.",
+            "description": "The project to search medias on offer for.",
             "required": true,
             "schema": {
               "type": "string",
@@ -1052,7 +1052,7 @@
         ],
         "responses": {
           "200": {
-            "description": "A page of flash offers and how many there are in all.",
+            "description": "A page of medias on offer and how many there are in all.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3702,7 +3702,7 @@
           "Seller medias"
         ],
         "summary": "Lower your fees to the competitive fees Growwer suggests",
-        "description": "Lowers your post fees for the media to the competitive fees Growwer suggests, per link type. On each side, a fee above the highest whole-euro fee that lists the media at least 1 EUR below its cheapest price on the marketplaces Growwer compares with is lowered to that fee, and a link type that then still does not list the media at least 1 EUR below that price has one of its fees lowered by 1 EUR, which does. GET /seller/medias/{id} shows, per side, the highest fee this sets on that side as `competitiveFees`, and the fees it sets on each link type it lowers as `competitiveFeesByLinkType`. Only fees above their suggestion change: a fee is never raised, a cheaper link type keeps its fee, no link type gains a side it did not offer, and a side without a suggestion keeps your fee.\n\nWhen there is no suggestion (Growwer sets the media's prices, it is not listed on a marketplace Growwer compares with, it already lists below its price there, or no fee would bring it below), or your fees already are at or below the suggested ones, nothing changes and the answer is 200 with the media as it is.\n\nThe fees set are your base fees: a running flash offer keeps discounting them. As with a fee edit, a change of the price may cancel the managed-service proposals accepted for the media whose price it changes. When the fees set still list the media above the marketplaces that list the same domain cheaper, they are saved, and `warnings` holds a `saved_above_competitors` warning with the competitive fee of each side and how many marketplaces those are. Send no body, or an empty object.",
+        "description": "Lowers your post fees for the media to the competitive fees Growwer suggests, per link type. On each side, a fee above the highest whole-euro fee that lists the media at least 1 EUR below its cheapest price on the marketplaces Growwer compares with is lowered to that fee, and a link type that then still does not list the media at least 1 EUR below that price has one of its fees lowered by 1 EUR, which does. GET /seller/medias/{id} shows, per side, the highest fee this sets on that side as `competitiveFees`, and the fees it sets on each link type it lowers as `competitiveFeesByLinkType`. Only fees above their suggestion change: a fee is never raised, a cheaper link type keeps its fee, no link type gains a side it did not offer, and a side without a suggestion keeps your fee.\n\nWhen there is no suggestion (Growwer sets the media's prices, it is not listed on a marketplace Growwer compares with, it already lists below its price there, or no fee would bring it below), or your fees already are at or below the suggested ones, nothing changes and the answer is 200 with the media as it is.\n\nThe fees set are your base fees: a running offer keeps discounting them. As with a fee edit, a change of the price may cancel the managed-service proposals accepted for the media whose price it changes. When the fees set still list the media above the marketplaces that list the same domain cheaper, they are saved, and `warnings` holds a `saved_above_competitors` warning with the competitive fee of each side and how many marketplaces those are. Send no body, or an empty object.",
         "operationId": "applySellerMediaCompetitiveFees",
         "parameters": [
           {
@@ -4286,7 +4286,7 @@
           "Seller medias"
         ],
         "summary": "Delete a media you sell on",
-        "description": "Deletes one of your medias, in any state, as the media delete button does. The media must have no order in progress: close or reject its orders first. The API never cancels an order for you, and an order placed while the delete runs is refused, never cancelled.\n\nWhat goes with the media, as on the web:\n\n- A running flash offer ends with it, and its managed-service proposals are deleted.\n- Its finished orders stay, with the media's URL; they read `media.id` null.\n- Buyers' favourites and discards of the domain stay, as they are kept by domain.\n- The catalogue search drops the media shortly after the 204, as the search index updates asynchronously.\n\nRepeating the call with the same `Idempotency-Key` answers the same 204 with `Idempotent-Replayed: true`; a new key after the delete answers 404.",
+        "description": "Deletes one of your medias, in any state, as the media delete button does. The media must have no order in progress: close or reject its orders first. The API never cancels an order for you, and an order placed while the delete runs is refused, never cancelled.\n\nWhat goes with the media, as on the web:\n\n- A running offer ends with it, and its managed-service proposals are deleted.\n- Its finished orders stay, with the media's URL; they read `media.id` null.\n- Buyers' favourites and discards of the domain stay, as they are kept by domain.\n- The catalogue search drops the media shortly after the 204, as the search index updates asynchronously.\n\nRepeating the call with the same `Idempotency-Key` answers the same 204 with `Idempotent-Replayed: true`; a new key after the delete answers 404.",
         "operationId": "deleteSellerMedia",
         "parameters": [
           {
@@ -4351,7 +4351,7 @@
           "Seller medias"
         ],
         "summary": "Edit the offer of a media you sell on",
-        "description": "Sets the fees, extra services, typology and post offer characteristics of one of your medias, as the media edit page saves them. Send only the fields you change: a field you send replaces that field wholly, a field you leave out stays as it is, inside `postOffer` too (sending only `postOffer.maximumLinks` keeps your fees).\n\n- `typology` is `blog` or `press`.\n- `postOffer.pricingOptions` lists every link type you offer for sponsored posts, at least one. A link type you leave out is no longer offered. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR.\n- `postOffer.maximumLinks` is how many links a sponsored post may hold, 1 to 4; `postOffer.advertisingLabellingPolicy` whether posts are labelled as advertising (`always` or `never`); `postOffer.promotedSocialNetworks` the full list of social networks posts are promoted on, each once (an empty list for none).\n- `linkAdditionOffer.pricingOptions` lists the link types you offer for adding a link to an existing article; `null` or an empty list stops offering link additions.\n- `extraServices` is the full list of extra services you offer; an empty list removes them all. It is sent at the top level, although GET /seller/medias/{id} reads it inside `postOffer`.\n\nThe fees are your base fees, the ones GET /seller/medias/{id} returns: while a flash offer runs, its discount keeps applying on top of them, and `currentCost` shows the result. `currentCost` may be sent back as read and is ignored. Country, language, topics and comments are not edited here.\n\nAs on the page, a change of the post offer's price may cancel the managed-service proposals accepted for the media whose price it changes. Your fees are always saved, a raise included. When they list the media above the marketplaces that list the same domain cheaper and some fee would list it under them, the 200 carries a `saved_above_competitors` warning in `warnings`, with the competitive fee of each side and how many marketplaces those are. When such a save raises a fee, or adds a side or a link type, the warning is `saved_not_recommended` instead, with the same details: the media is not recommended in buyers' projects while it lists above them, and stays in the catalogue. A restricted seller account may edit its offer.",
+        "description": "Sets the fees, extra services, typology and post offer characteristics of one of your medias, as the media edit page saves them. Send only the fields you change: a field you send replaces that field wholly, a field you leave out stays as it is, inside `postOffer` too (sending only `postOffer.maximumLinks` keeps your fees).\n\n- `typology` is `blog` or `press`.\n- `postOffer.pricingOptions` lists every link type you offer for sponsored posts, at least one. A link type you leave out is no longer offered. Each option needs at least one fee, and every option must offer the same sides (written by you, written by the buyer or Growwer), as the page requires. Each fee is at least 1 EUR.\n- `postOffer.maximumLinks` is how many links a sponsored post may hold, 1 to 4; `postOffer.advertisingLabellingPolicy` whether posts are labelled as advertising (`always` or `never`); `postOffer.promotedSocialNetworks` the full list of social networks posts are promoted on, each once (an empty list for none).\n- `linkAdditionOffer.pricingOptions` lists the link types you offer for adding a link to an existing article; `null` or an empty list stops offering link additions.\n- `extraServices` is the full list of extra services you offer; an empty list removes them all. It is sent at the top level, although GET /seller/medias/{id} reads it inside `postOffer`.\n\nThe fees are your base fees, the ones GET /seller/medias/{id} returns: while an offer runs, its discount keeps applying on top of them, and `currentCost` shows the result. `currentCost` may be sent back as read and is ignored. Country, language, topics and comments are not edited here.\n\nAs on the page, a change of the post offer's price may cancel the managed-service proposals accepted for the media whose price it changes. Your fees are always saved, a raise included. When they list the media above the marketplaces that list the same domain cheaper and some fee would list it under them, the 200 carries a `saved_above_competitors` warning in `warnings`, with the competitive fee of each side and how many marketplaces those are. When such a save raises a fee, or adds a side or a link type, the warning is `saved_not_recommended` instead, with the same details: the media is not recommended in buyers' projects while it lists above them, and stays in the catalogue. A restricted seller account may edit its offer.",
         "operationId": "updateSellerMedia",
         "parameters": [
           {
@@ -7279,7 +7279,7 @@
         ],
         "properties": {
           "price": {
-            "description": "What you pay for the offer with its dearest link type, flash offer discount included.",
+            "description": "What you pay for the offer with its dearest link type, the discount of a running offer (`flashOffer`) included.",
             "allOf": [
               {
                 "$ref": "#/components/schemas/Money"
@@ -7324,7 +7324,7 @@
         ],
         "properties": {
           "price": {
-            "description": "What you pay for the offer with its dearest link type, flash offer discount included.",
+            "description": "What you pay for the offer with its dearest link type, the discount of a running offer (`flashOffer`) included.",
             "allOf": [
               {
                 "$ref": "#/components/schemas/Money"
@@ -7541,7 +7541,7 @@
             "type": "boolean"
           },
           "flashOffer": {
-            "description": "The flash offer running, or null. Its discount is already in the prices.",
+            "description": "The offer running, a time-limited discount, or null. Its discount is already in the prices.",
             "required": [
               "discountPercent",
               "endsAt"
@@ -7833,7 +7833,7 @@
             "type": "boolean"
           },
           "flashOffer": {
-            "description": "The flash offer running, or null. Its discount is in `currentCost`, never in the fees.",
+            "description": "The offer running, a time-limited discount, or null. Its discount is in `currentCost`, never in the fees.",
             "required": [
               "discountPercent",
               "endsAt"
@@ -7882,7 +7882,7 @@
                           ]
                         },
                         "currentCost": {
-                          "description": "What you are paid now for the link type, flash offer discount included; read-only. Null when the link type has no current pricing.",
+                          "description": "What you are paid now for the link type, the discount of a running offer (`flashOffer`) included; read-only. Null when the link type has no current pricing.",
                           "allOf": [
                             {
                               "$ref": "#/components/schemas/MoneyOrNull"
@@ -7985,7 +7985,7 @@
                       ]
                     },
                     "currentCost": {
-                      "description": "What you are paid now for the link type, flash offer discount included; read-only.",
+                      "description": "What you are paid now for the link type, the discount of a running offer (`flashOffer`) included; read-only.",
                       "allOf": [
                         {
                           "$ref": "#/components/schemas/MoneyOrNull"
@@ -10602,7 +10602,7 @@
       "CatalogueFlashOffer": {
         "name": "flashOffer",
         "in": "query",
-        "description": "`true`: only medias with a flash offer running; `false`: leave them out.",
+        "description": "`true`: only medias with an offer running; `false`: leave them out.",
         "required": false,
         "schema": {
           "type": "boolean"
@@ -10712,7 +10712,7 @@
     },
     {
       "name": "Catalogue",
-      "description": "Search the medias of a project, its flash offers, favourites and discards."
+      "description": "Search the medias of a project, those on offer, its favourites and discards."
     },
     {
       "name": "Saved filters",

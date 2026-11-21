@@ -14,7 +14,7 @@
 
 import { mapValues } from '../runtime';
 /**
- * The flash offer running, or null. Its discount is already in the prices.
+ * The offer running, a time-limited discount, or null. Its discount is already in the prices.
  * @export
  * @interface CatalogueMediaFlashOffer
  */

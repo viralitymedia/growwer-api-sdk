@@ -20,7 +20,7 @@ import (
 // checks if the SellerMediaFlashOffer type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &SellerMediaFlashOffer{}
 
-// SellerMediaFlashOffer The flash offer running, or null. Its discount is in `currentCost`, never in the fees.
+// SellerMediaFlashOffer The offer running, a time-limited discount, or null. Its discount is in `currentCost`, never in the fees.
 type SellerMediaFlashOffer struct {
 	DiscountPercent int32 `json:"discountPercent"`
 	EndsAt time.Time `json:"endsAt"`

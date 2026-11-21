@@ -78,7 +78,7 @@ namespace Growwer.Api.Model
         /// <param name="feeWhenSellerWritesPost">What you are paid for a post you write, or null when you do not offer it. (required).</param>
         /// <param name="feeWhenSellerDoesNotWritePost">What you are paid for a post the buyer or Growwer writes, or null when you do not offer it. (required).</param>
         /// <param name="linkType">linkType (required).</param>
-        /// <param name="currentCost">What you are paid now for the link type, flash offer discount included; read-only. Null when the link type has no current pricing. (required).</param>
+        /// <param name="currentCost">What you are paid now for the link type, the discount of a running offer (&#x60;flashOffer&#x60;) included; read-only. Null when the link type has no current pricing. (required).</param>
         public SellerMediaPostOfferPricingOptionsInner(MoneyOrNull feeWhenSellerWritesPost = default, MoneyOrNull feeWhenSellerDoesNotWritePost = default, LinkTypeEnum linkType = default, MoneyOrNull currentCost = default)
         {
             // to ensure "feeWhenSellerWritesPost" is required (not null)
@@ -118,9 +118,9 @@ namespace Growwer.Api.Model
         public MoneyOrNull FeeWhenSellerDoesNotWritePost { get; set; }
 
         /// <summary>
-        /// What you are paid now for the link type, flash offer discount included; read-only. Null when the link type has no current pricing.
+        /// What you are paid now for the link type, the discount of a running offer (&#x60;flashOffer&#x60;) included; read-only. Null when the link type has no current pricing.
         /// </summary>
-        /// <value>What you are paid now for the link type, flash offer discount included; read-only. Null when the link type has no current pricing.</value>
+        /// <value>What you are paid now for the link type, the discount of a running offer (&#x60;flashOffer&#x60;) included; read-only. Null when the link type has no current pricing.</value>
         [DataMember(Name = "currentCost", IsRequired = true, EmitDefaultValue = true)]
         public MoneyOrNull CurrentCost { get; set; }
 

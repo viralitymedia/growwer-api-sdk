@@ -146,7 +146,7 @@ Class | Method | HTTP request | Description
 *CatalogueApi* | [**discardMedia**](docs/Api/CatalogueApi.md#discardmedia) | **PUT** /api/v1/projects/{id}/discards/{mediaId} | Discard a media for a project
 *CatalogueApi* | [**favouriteMedia**](docs/Api/CatalogueApi.md#favouritemedia) | **PUT** /api/v1/projects/{id}/favourites/{mediaId} | Add a media to the favourites of a project
 *CatalogueApi* | [**getCatalogueMedia**](docs/Api/CatalogueApi.md#getcataloguemedia) | **GET** /api/v1/medias/{id} | Get a media
-*CatalogueApi* | [**listFlashOffers**](docs/Api/CatalogueApi.md#listflashoffers) | **GET** /api/v1/flash-offers | List flash offers
+*CatalogueApi* | [**listFlashOffers**](docs/Api/CatalogueApi.md#listflashoffers) | **GET** /api/v1/flash-offers | List the medias on offer
 *CatalogueApi* | [**requestMedias**](docs/Api/CatalogueApi.md#requestmedias) | **POST** /api/v1/projects/{id}/media-requests | Request specific medias for a project
 *CatalogueApi* | [**searchProjectMedias**](docs/Api/CatalogueApi.md#searchprojectmedias) | **GET** /api/v1/projects/{id}/medias | Search the catalogue for a project
 *CatalogueApi* | [**undiscardMedia**](docs/Api/CatalogueApi.md#undiscardmedia) | **DELETE** /api/v1/projects/{id}/discards/{mediaId} | Restore a discarded media for a project

@@ -11,5 +11,5 @@ Generator version: 7.24.0
 =end
 
 module Growwer
-  VERSION = '4.0.0'
+  VERSION = '4.0.1'
 end

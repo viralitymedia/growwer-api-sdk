@@ -8,7 +8,7 @@ Name | Type | Description | Notes
 **fee_when_seller_writes_post** | [**MoneyOrNull**](MoneyOrNull.md) | What you are paid for a post you write, or null when you do not offer it. | 
 **fee_when_seller_does_not_write_post** | [**MoneyOrNull**](MoneyOrNull.md) | What you are paid for a post the buyer or Growwer writes, or null when you do not offer it. | 
 **link_type** | **str** |  | 
-**current_cost** | [**MoneyOrNull**](MoneyOrNull.md) | What you are paid now for the link type, flash offer discount included; read-only. Null when the link type has no current pricing. | 
+**current_cost** | [**MoneyOrNull**](MoneyOrNull.md) | What you are paid now for the link type, the discount of a running offer (&#x60;flashOffer&#x60;) included; read-only. Null when the link type has no current pricing. | 
 
 ## Example
 

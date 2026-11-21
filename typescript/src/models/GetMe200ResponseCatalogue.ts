@@ -20,7 +20,7 @@ import { mapValues } from '../runtime';
  */
 export interface GetMe200ResponseCatalogue {
     /**
-     * Whether you have the full daily cap of the catalogue operations (tag Catalogue: searching a project's medias, flash offers and media details). It is open to accounts with recent completed orders, as buyer or as seller; until then the catalogue answers within a smaller daily trial quota, which rises to the full cap after a completed order. A media you have ordered is always readable with GET /medias/{id} and counts against neither.
+     * Whether you have the full daily cap of the catalogue operations (tag Catalogue: searching a project's medias, those on offer and media details). It is open to accounts with recent completed orders, as buyer or as seller; until then the catalogue answers within a smaller daily trial quota, which rises to the full cap after a completed order. A media you have ordered is always readable with GET /medias/{id} and counts against neither.
      * @type {boolean}
      * @memberof GetMe200ResponseCatalogue
      */

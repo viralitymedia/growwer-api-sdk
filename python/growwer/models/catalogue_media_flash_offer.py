@@ -27,7 +27,7 @@ from pydantic_core import to_jsonable_python
 
 class CatalogueMediaFlashOffer(BaseModel):
     """
-    The flash offer running, or null. Its discount is already in the prices.
+    The offer running, a time-limited discount, or null. Its discount is already in the prices.
     """ # noqa: E501
     discount_percent: StrictInt = Field(alias="discountPercent")
     ends_at: datetime = Field(alias="endsAt")

@@ -15,7 +15,7 @@ require 'time'
 
 module Growwer
   class GetMe200ResponseCatalogue < ApiModelBase
-    # Whether you have the full daily cap of the catalogue operations (tag Catalogue: searching a project's medias, flash offers and media details). It is open to accounts with recent completed orders, as buyer or as seller; until then the catalogue answers within a smaller daily trial quota, which rises to the full cap after a completed order. A media you have ordered is always readable with GET /medias/{id} and counts against neither.
+    # Whether you have the full daily cap of the catalogue operations (tag Catalogue: searching a project's medias, those on offer and media details). It is open to accounts with recent completed orders, as buyer or as seller; until then the catalogue answers within a smaller daily trial quota, which rises to the full cap after a completed order. A media you have ordered is always readable with GET /medias/{id} and counts against neither.
     attr_accessor :eligible
 
     # How many distinct medias the catalogue operations show you per UTC day: the full cap when `eligible` is true, the trial quota otherwise. 0 means the catalogue answers 403 `catalogue_requires_recent_order` until you have a recent completed order.

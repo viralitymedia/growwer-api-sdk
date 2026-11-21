@@ -416,7 +416,7 @@ class SellerMediaLinkAdditionOfferPricingOptionsInner implements ModelInterface,
     /**
      * Sets current_cost
      *
-     * @param \Growwer\Api\Model\MoneyOrNull|null $current_cost What you are paid now for the link type, flash offer discount included; read-only.
+     * @param \Growwer\Api\Model\MoneyOrNull|null $current_cost What you are paid now for the link type, the discount of a running offer (`flashOffer`) included; read-only.
      *
      * @return self
      */

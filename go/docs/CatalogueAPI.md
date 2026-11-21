@@ -7,7 +7,7 @@ Method | HTTP request | Description
 [**DiscardMedia**](CatalogueAPI.md#DiscardMedia) | **Put** /api/v1/projects/{id}/discards/{mediaId} | Discard a media for a project
 [**FavouriteMedia**](CatalogueAPI.md#FavouriteMedia) | **Put** /api/v1/projects/{id}/favourites/{mediaId} | Add a media to the favourites of a project
 [**GetCatalogueMedia**](CatalogueAPI.md#GetCatalogueMedia) | **Get** /api/v1/medias/{id} | Get a media
-[**ListFlashOffers**](CatalogueAPI.md#ListFlashOffers) | **Get** /api/v1/flash-offers | List flash offers
+[**ListFlashOffers**](CatalogueAPI.md#ListFlashOffers) | **Get** /api/v1/flash-offers | List the medias on offer
 [**RequestMedias**](CatalogueAPI.md#RequestMedias) | **Post** /api/v1/projects/{id}/media-requests | Request specific medias for a project
 [**SearchProjectMedias**](CatalogueAPI.md#SearchProjectMedias) | **Get** /api/v1/projects/{id}/medias | Search the catalogue for a project
 [**UndiscardMedia**](CatalogueAPI.md#UndiscardMedia) | **Delete** /api/v1/projects/{id}/discards/{mediaId} | Restore a discarded media for a project
@@ -235,7 +235,7 @@ Name | Type | Description  | Notes
 
 > ListFlashOffers200Response ListFlashOffers(ctx).ProjectId(projectId).Source(source).Sort(sort).Domain(domain).WebsiteType(websiteType).Language(language).Country(country).Topics(topics).NotBannedTopics(notBannedTopics).MinTraffic(minTraffic).MaxTraffic(maxTraffic).TrafficTrendUpward(trafficTrendUpward).MinDomainRating(minDomainRating).MaxDomainRating(maxDomainRating).MinLinkedToReferringRatio(minLinkedToReferringRatio).MaxLinkedToReferringRatio(maxLinkedToReferringRatio).MinPostPrice(minPostPrice).MaxPostPrice(maxPostPrice).PostLinkType(postLinkType).PromotedSocialNetwork(promotedSocialNetwork).WithoutAdvertisingLabel(withoutAdvertisingLabel).HomepageListing(homepageListing).HasLinkAddition(hasLinkAddition).MinLinkAdditionPrice(minLinkAdditionPrice).MaxLinkAdditionPrice(maxLinkAdditionPrice).LinkAdditionLinkType(linkAdditionLinkType).BestPrice(bestPrice).Recommended(recommended).Favourite(favourite).Requested(requested).Bought(bought).Discarded(discarded).New(new).RanksGoalKeyword(ranksGoalKeyword).RanksAiKeyword(ranksAiKeyword).Limit(limit).Offset(offset).Execute()
 
-List flash offers
+List the medias on offer
 
 
 
@@ -252,7 +252,7 @@ import (
 )
 
 func main() {
-	projectId := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | The project to search flash offers for.
+	projectId := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | The project to search medias on offer for.
 	source := "source_example" // string | Which of the project's medias to search: `all` (the default), `recommended` (those Growwer recommends for the project), or those you marked `favourite`, `discarded` or `requested`, or `bought` for the project. Do not combine it with the parameter of the same state. (optional)
 	sort := "sort_example" // string | The order. Without it, the web's default order: medias on the project's topic and language first, then best sellers and medias with more published orders. Ties are always broken by media id, so pages never overlap. `-growwerRank`: best match first; `postPrice`, `linkAdditionPrice`: cheapest first; `matchedAt`, `-matchedAt`: when Growwer matched the media with the project; `-traffic`, `-domainRating`, `-referringDomains`: highest first; `linkedToReferringRatio`: lowest first. (optional)
 	domain := "domain_example" // string | Medias whose domain contains this text, 1 to 255 characters. (optional)
@@ -313,7 +313,7 @@ Other parameters are passed through a pointer to a apiListFlashOffersRequest str
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **projectId** | **string** | The project to search flash offers for. | 
+ **projectId** | **string** | The project to search medias on offer for. | 
  **source** | **string** | Which of the project&#39;s medias to search: &#x60;all&#x60; (the default), &#x60;recommended&#x60; (those Growwer recommends for the project), or those you marked &#x60;favourite&#x60;, &#x60;discarded&#x60; or &#x60;requested&#x60;, or &#x60;bought&#x60; for the project. Do not combine it with the parameter of the same state. | 
  **sort** | **string** | The order. Without it, the web&#39;s default order: medias on the project&#39;s topic and language first, then best sellers and medias with more published orders. Ties are always broken by media id, so pages never overlap. &#x60;-growwerRank&#x60;: best match first; &#x60;postPrice&#x60;, &#x60;linkAdditionPrice&#x60;: cheapest first; &#x60;matchedAt&#x60;, &#x60;-matchedAt&#x60;: when Growwer matched the media with the project; &#x60;-traffic&#x60;, &#x60;-domainRating&#x60;, &#x60;-referringDomains&#x60;: highest first; &#x60;linkedToReferringRatio&#x60;: lowest first. | 
  **domain** | **string** | Medias whose domain contains this text, 1 to 255 characters. | 
@@ -495,7 +495,7 @@ func main() {
 	recommended := true // bool | `true`: only the medias Growwer recommends for the project; `false`: only the others. (optional)
 	favourite := true // bool | `true`: only your favourites for the project; `false`: leave them out. (optional)
 	requested := true // bool | `true`: only the medias you requested for the project; `false`: leave them out. (optional)
-	flashOffer := true // bool | `true`: only medias with a flash offer running; `false`: leave them out. (optional)
+	flashOffer := true // bool | `true`: only medias with an offer running; `false`: leave them out. (optional)
 	bought := true // bool | `true`: only medias you bought for the project; `false`: leave them out. (optional)
 	discarded := true // bool | `true`: only the medias you discarded for the project; `false`: leave them out. (optional)
 	new := true // bool | Medias Growwer matched with the project recently. Only `true` applies it; omit it otherwise. (optional)
@@ -562,7 +562,7 @@ Name | Type | Description  | Notes
  **recommended** | **bool** | &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. | 
  **favourite** | **bool** | &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. | 
  **requested** | **bool** | &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. | 
- **flashOffer** | **bool** | &#x60;true&#x60;: only medias with a flash offer running; &#x60;false&#x60;: leave them out. | 
+ **flashOffer** | **bool** | &#x60;true&#x60;: only medias with an offer running; &#x60;false&#x60;: leave them out. | 
  **bought** | **bool** | &#x60;true&#x60;: only medias you bought for the project; &#x60;false&#x60;: leave them out. | 
  **discarded** | **bool** | &#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. | 
  **new** | **bool** | Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. | 

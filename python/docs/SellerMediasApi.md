@@ -21,7 +21,7 @@ Lowers your post fees for the media to the competitive fees Growwer suggests, pe
 
 When there is no suggestion (Growwer sets the media's prices, it is not listed on a marketplace Growwer compares with, it already lists below its price there, or no fee would bring it below), or your fees already are at or below the suggested ones, nothing changes and the answer is 200 with the media as it is.
 
-The fees set are your base fees: a running flash offer keeps discounting them. As with a fee edit, a change of the price may cancel the managed-service proposals accepted for the media whose price it changes. When the fees set still list the media above the marketplaces that list the same domain cheaper, they are saved, and `warnings` holds a `saved_above_competitors` warning with the competitive fee of each side and how many marketplaces those are. Send no body, or an empty object.
+The fees set are your base fees: a running offer keeps discounting them. As with a fee edit, a change of the price may cancel the managed-service proposals accepted for the media whose price it changes. When the fees set still list the media above the marketplaces that list the same domain cheaper, they are saved, and `warnings` holds a `saved_above_competitors` warning with the competitive fee of each side and how many marketplaces those are. Send no body, or an empty object.
 
 ### Example
 
@@ -215,7 +215,7 @@ Deletes one of your medias, in any state, as the media delete button does. The m
 
 What goes with the media, as on the web:
 
-- A running flash offer ends with it, and its managed-service proposals are deleted.
+- A running offer ends with it, and its managed-service proposals are deleted.
 - Its finished orders stay, with the media's URL; they read `media.id` null.
 - Buyers' favourites and discards of the domain stay, as they are kept by domain.
 - The catalogue search drops the media shortly after the 204, as the search index updates asynchronously.
@@ -485,7 +485,7 @@ Sets the fees, extra services, typology and post offer characteristics of one of
 - `linkAdditionOffer.pricingOptions` lists the link types you offer for adding a link to an existing article; `null` or an empty list stops offering link additions.
 - `extraServices` is the full list of extra services you offer; an empty list removes them all. It is sent at the top level, although GET /seller/medias/{id} reads it inside `postOffer`.
 
-The fees are your base fees, the ones GET /seller/medias/{id} returns: while a flash offer runs, its discount keeps applying on top of them, and `currentCost` shows the result. `currentCost` may be sent back as read and is ignored. Country, language, topics and comments are not edited here.
+The fees are your base fees, the ones GET /seller/medias/{id} returns: while an offer runs, its discount keeps applying on top of them, and `currentCost` shows the result. `currentCost` may be sent back as read and is ignored. Country, language, topics and comments are not edited here.
 
 As on the page, a change of the post offer's price may cancel the managed-service proposals accepted for the media whose price it changes. Your fees are always saved, a raise included. When they list the media above the marketplaces that list the same domain cheaper and some fee would list it under them, the 200 carries a `saved_above_competitors` warning in `warnings`, with the competitive fee of each side and how many marketplaces those are. When such a save raises a fee, or adds a side or a link type, the warning is `saved_not_recommended` instead, with the same details: the media is not recommended in buyers' projects while it lists above them, and stays in the catalogue. A restricted seller account may edit its offer.
 

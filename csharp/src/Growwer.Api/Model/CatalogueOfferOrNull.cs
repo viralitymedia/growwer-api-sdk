@@ -77,7 +77,7 @@ namespace Growwer.Api.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="CatalogueOfferOrNull" /> class.
         /// </summary>
-        /// <param name="price">What you pay for the offer with its dearest link type, flash offer discount included. (required).</param>
+        /// <param name="price">What you pay for the offer with its dearest link type, the discount of a running offer (&#x60;flashOffer&#x60;) included. (required).</param>
         /// <param name="linkType">The link type &#x60;price&#x60; is for. (required).</param>
         /// <param name="prices">What you pay for each link type the offer gives, by link type. (required).</param>
         /// <param name="previousPrice">The highest price the offer has had, when &#x60;price&#x60; is more than 5% below it; otherwise null. (required).</param>
@@ -106,9 +106,9 @@ namespace Growwer.Api.Model
         }
 
         /// <summary>
-        /// What you pay for the offer with its dearest link type, flash offer discount included.
+        /// What you pay for the offer with its dearest link type, the discount of a running offer (&#x60;flashOffer&#x60;) included.
         /// </summary>
-        /// <value>What you pay for the offer with its dearest link type, flash offer discount included.</value>
+        /// <value>What you pay for the offer with its dearest link type, the discount of a running offer (&#x60;flashOffer&#x60;) included.</value>
         [DataMember(Name = "price", IsRequired = true, EmitDefaultValue = true)]
         public Money Price { get; set; }
 

@@ -15,7 +15,7 @@ require 'time'
 
 module Growwer
   class CataloguePostOffer < ApiModelBase
-    # What you pay for the offer with its dearest link type, flash offer discount included.
+    # What you pay for the offer with its dearest link type, the discount of a running offer (`flashOffer`) included.
     attr_accessor :price
 
     # The link type `price` is for.

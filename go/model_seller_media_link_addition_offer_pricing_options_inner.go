@@ -24,7 +24,7 @@ type SellerMediaLinkAdditionOfferPricingOptionsInner struct {
 	LinkType string `json:"linkType"`
 	// Your base fee for the link type.
 	Fee Money `json:"fee"`
-	// What you are paid now for the link type, flash offer discount included; read-only.
+	// What you are paid now for the link type, the discount of a running offer (`flashOffer`) included; read-only.
 	CurrentCost NullableMoneyOrNull `json:"currentCost"`
 	AdditionalProperties map[string]interface{}
 }

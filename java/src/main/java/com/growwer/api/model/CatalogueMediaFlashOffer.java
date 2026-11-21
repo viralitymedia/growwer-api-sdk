@@ -47,7 +47,7 @@ import java.util.Set;
 import com.growwer.api.JSON;
 
 /**
- * The flash offer running, or null. Its discount is already in the prices.
+ * The offer running, a time-limited discount, or null. Its discount is already in the prices.
  */
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.24.0")
 public class CatalogueMediaFlashOffer {

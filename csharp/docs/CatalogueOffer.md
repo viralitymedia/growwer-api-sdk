@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Price** | [**Money**](Money.md) | What you pay for the offer with its dearest link type, flash offer discount included. | 
+**Price** | [**Money**](Money.md) | What you pay for the offer with its dearest link type, the discount of a running offer (&#x60;flashOffer&#x60;) included. | 
 **LinkType** | **string** | The link type &#x60;price&#x60; is for. | 
 **Prices** | [**Dictionary&lt;string, Money&gt;**](Money.md) | What you pay for each link type the offer gives, by link type. | 
 **PreviousPrice** | [**MoneyOrNull**](MoneyOrNull.md) | The highest price the offer has had, when &#x60;price&#x60; is more than 5% below it; otherwise null. | 

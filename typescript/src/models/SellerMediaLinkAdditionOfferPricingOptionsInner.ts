@@ -47,7 +47,7 @@ export interface SellerMediaLinkAdditionOfferPricingOptionsInner {
      */
     fee: Money;
     /**
-     * What you are paid now for the link type, flash offer discount included; read-only.
+     * What you are paid now for the link type, the discount of a running offer (`flashOffer`) included; read-only.
      * @type {MoneyOrNull}
      * @memberof SellerMediaLinkAdditionOfferPricingOptionsInner
      */

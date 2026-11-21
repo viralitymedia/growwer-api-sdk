@@ -137,7 +137,7 @@ public class CatalogueOfferOrNull {
   }
 
   /**
-   * What you pay for the offer with its dearest link type, flash offer discount included.
+   * What you pay for the offer with its dearest link type, the discount of a running offer (&#x60;flashOffer&#x60;) included.
    * @return price
    */
   @javax.annotation.Nonnull

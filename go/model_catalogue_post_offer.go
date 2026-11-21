@@ -21,7 +21,7 @@ var _ MappedNullable = &CataloguePostOffer{}
 
 // CataloguePostOffer struct for CataloguePostOffer
 type CataloguePostOffer struct {
-	// What you pay for the offer with its dearest link type, flash offer discount included.
+	// What you pay for the offer with its dearest link type, the discount of a running offer (`flashOffer`) included.
 	Price Money `json:"price"`
 	// The link type `price` is for.
 	LinkType NullableString `json:"linkType"`

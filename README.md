@@ -176,6 +176,13 @@ var me = new AccountApi(config).GetMe();
 ```
 </details>
 
+## Changes in 4.0.1
+
+Descriptions only: the contract's texts call a flash offer an "offer", as Growwer's pages, emails and
+MCP now do ("List the medias on offer"; "the discount of a running offer"). Every operation, model,
+field and path keeps its name (`listFlashOffers`, `flashOffer`, `GET /api/v1/flash-offers`), so code
+written for 4.0.0 runs unchanged.
+
 ## Changes in 4.0.0
 
 **Code that reads the marketplaces of a seller media save warning breaks in every language**, and
@@ -1145,7 +1152,7 @@ Dates and date-times are ISO-8601. A date-time sent in a query string carries it
 
 ### The catalogue
 
-The catalogue operations (searching a project's medias, flash offers, media details) show each
+The catalogue operations (searching a project's medias, those on offer, media details) show each
 account a limited number of distinct medias per UTC day; medias seen again the same day are free.
 Accounts with enough recent orders delivered and approved, as buyer or as seller, get the full
 daily cap of **5,000**. Other accounts get a trial quota of **100** distinct medias per UTC day

@@ -7,7 +7,7 @@ All URIs are relative to *https://tool.growwer.com*
 | [**discardMedia**](CatalogueApi.md#discardmedia) | **PUT** /api/v1/projects/{id}/discards/{mediaId} | Discard a media for a project |
 | [**favouriteMedia**](CatalogueApi.md#favouritemedia) | **PUT** /api/v1/projects/{id}/favourites/{mediaId} | Add a media to the favourites of a project |
 | [**getCatalogueMedia**](CatalogueApi.md#getcataloguemedia) | **GET** /api/v1/medias/{id} | Get a media |
-| [**listFlashOffers**](CatalogueApi.md#listflashoffers) | **GET** /api/v1/flash-offers | List flash offers |
+| [**listFlashOffers**](CatalogueApi.md#listflashoffers) | **GET** /api/v1/flash-offers | List the medias on offer |
 | [**requestMedias**](CatalogueApi.md#requestmediasoperation) | **POST** /api/v1/projects/{id}/media-requests | Request specific medias for a project |
 | [**searchProjectMedias**](CatalogueApi.md#searchprojectmedias) | **GET** /api/v1/projects/{id}/medias | Search the catalogue for a project |
 | [**undiscardMedia**](CatalogueApi.md#undiscardmedia) | **DELETE** /api/v1/projects/{id}/discards/{mediaId} | Restore a discarded media for a project |
@@ -266,9 +266,9 @@ example().catch(console.error);
 
 > ListFlashOffers200Response listFlashOffers(projectId, source, sort, domain, websiteType, language, country, topics, notBannedTopics, minTraffic, maxTraffic, trafficTrendUpward, minDomainRating, maxDomainRating, minLinkedToReferringRatio, maxLinkedToReferringRatio, minPostPrice, maxPostPrice, postLinkType, promotedSocialNetwork, withoutAdvertisingLabel, homepageListing, hasLinkAddition, minLinkAdditionPrice, maxLinkAdditionPrice, linkAdditionLinkType, bestPrice, recommended, favourite, requested, bought, discarded, _new, ranksGoalKeyword, ranksAiKeyword, limit, offset)
 
-List flash offers
+List the medias on offer
 
-The medias on a flash offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with &#x60;flashOffer&#x3D;true&#x60;, and takes the same parameters except &#x60;flashOffer&#x60; and &#x60;savedFilterId&#x60;. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
+The medias on an offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with &#x60;flashOffer&#x3D;true&#x60;, and takes the same parameters except &#x60;flashOffer&#x60; and &#x60;savedFilterId&#x60;. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
 
 ### Example
 
@@ -288,7 +288,7 @@ async function example() {
   const api = new CatalogueApi(config);
 
   const body = {
-    // string | The project to search flash offers for.
+    // string | The project to search medias on offer for.
     projectId: 38400000-8cf0-11bd-b23e-10b96e4ef00d,
     // 'all' | 'recommended' | 'favourite' | 'discarded' | 'requested' | 'bought' | Which of the project\'s medias to search: `all` (the default), `recommended` (those Growwer recommends for the project), or those you marked `favourite`, `discarded` or `requested`, or `bought` for the project. Do not combine it with the parameter of the same state. (optional)
     source: source_example,
@@ -381,7 +381,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **projectId** | `string` | The project to search flash offers for. | [Defaults to `undefined`] |
+| **projectId** | `string` | The project to search medias on offer for. | [Defaults to `undefined`] |
 | **source** | `all`, `recommended`, `favourite`, `discarded`, `requested`, `bought` | Which of the project\&#39;s medias to search: &#x60;all&#x60; (the default), &#x60;recommended&#x60; (those Growwer recommends for the project), or those you marked &#x60;favourite&#x60;, &#x60;discarded&#x60; or &#x60;requested&#x60;, or &#x60;bought&#x60; for the project. Do not combine it with the parameter of the same state. | [Optional] [Defaults to `undefined`] [Enum: all, recommended, favourite, discarded, requested, bought] |
 | **sort** | `-growwerRank`, `postPrice`, `linkAdditionPrice`, `matchedAt`, `-matchedAt`, `-traffic`, `-domainRating`, `linkedToReferringRatio`, `-referringDomains` | The order. Without it, the web\&#39;s default order: medias on the project\&#39;s topic and language first, then best sellers and medias with more published orders. Ties are always broken by media id, so pages never overlap. &#x60;-growwerRank&#x60;: best match first; &#x60;postPrice&#x60;, &#x60;linkAdditionPrice&#x60;: cheapest first; &#x60;matchedAt&#x60;, &#x60;-matchedAt&#x60;: when Growwer matched the media with the project; &#x60;-traffic&#x60;, &#x60;-domainRating&#x60;, &#x60;-referringDomains&#x60;: highest first; &#x60;linkedToReferringRatio&#x60;: lowest first. | [Optional] [Defaults to `undefined`] [Enum: -growwerRank, postPrice, linkAdditionPrice, matchedAt, -matchedAt, -traffic, -domainRating, linkedToReferringRatio, -referringDomains] |
 | **domain** | `string` | Medias whose domain contains this text, 1 to 255 characters. | [Optional] [Defaults to `undefined`] |
@@ -436,7 +436,7 @@ example().catch(console.error);
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **200** | A page of flash offers and how many there are in all. |  -  |
+| **200** | A page of medias on offer and how many there are in all. |  -  |
 | **401** | The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). |  -  |
 | **403** | The catalogue is open to accounts with recent orders delivered and approved on Growwer, as buyer or as seller, and to other accounts within a daily trial quota; this account has too few such orders and the trial quota is off (code &#x60;catalogue_requires_recent_order&#x60;). The message names the threshold, which &#x60;details.minOrders&#x60; (how many orders) and &#x60;details.windowDays&#x60; (within how many days) repeat; an order counts only once it is delivered and approved. GET /me reports &#x60;catalogue.eligible&#x60; and &#x60;catalogue.dailyCap&#x60;. |  -  |
 | **404** | The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). |  -  |
@@ -622,7 +622,7 @@ async function example() {
     favourite: true,
     // boolean | `true`: only the medias you requested for the project; `false`: leave them out. (optional)
     requested: true,
-    // boolean | `true`: only medias with a flash offer running; `false`: leave them out. (optional)
+    // boolean | `true`: only medias with an offer running; `false`: leave them out. (optional)
     flashOffer: true,
     // boolean | `true`: only medias you bought for the project; `false`: leave them out. (optional)
     bought: true,
@@ -688,7 +688,7 @@ example().catch(console.error);
 | **recommended** | `boolean` | &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. | [Optional] [Defaults to `undefined`] |
 | **favourite** | `boolean` | &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. | [Optional] [Defaults to `undefined`] |
 | **requested** | `boolean` | &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. | [Optional] [Defaults to `undefined`] |
-| **flashOffer** | `boolean` | &#x60;true&#x60;: only medias with a flash offer running; &#x60;false&#x60;: leave them out. | [Optional] [Defaults to `undefined`] |
+| **flashOffer** | `boolean` | &#x60;true&#x60;: only medias with an offer running; &#x60;false&#x60;: leave them out. | [Optional] [Defaults to `undefined`] |
 | **bought** | `boolean` | &#x60;true&#x60;: only medias you bought for the project; &#x60;false&#x60;: leave them out. | [Optional] [Defaults to `undefined`] |
 | **discarded** | `boolean` | &#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. | [Optional] [Defaults to `undefined`] |
 | **_new** | `boolean` | Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. | [Optional] [Defaults to `undefined`] |

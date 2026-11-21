@@ -77,7 +77,7 @@ namespace Growwer.Api.Model
         /// </summary>
         /// <param name="linkType">linkType (required).</param>
         /// <param name="fee">Your base fee for the link type. (required).</param>
-        /// <param name="currentCost">What you are paid now for the link type, flash offer discount included; read-only. (required).</param>
+        /// <param name="currentCost">What you are paid now for the link type, the discount of a running offer (&#x60;flashOffer&#x60;) included; read-only. (required).</param>
         public SellerMediaLinkAdditionOfferPricingOptionsInner(LinkTypeEnum linkType = default, Money fee = default, MoneyOrNull currentCost = default)
         {
             this.LinkType = linkType;
@@ -104,9 +104,9 @@ namespace Growwer.Api.Model
         public Money Fee { get; set; }
 
         /// <summary>
-        /// What you are paid now for the link type, flash offer discount included; read-only.
+        /// What you are paid now for the link type, the discount of a running offer (&#x60;flashOffer&#x60;) included; read-only.
         /// </summary>
-        /// <value>What you are paid now for the link type, flash offer discount included; read-only.</value>
+        /// <value>What you are paid now for the link type, the discount of a running offer (&#x60;flashOffer&#x60;) included; read-only.</value>
         [DataMember(Name = "currentCost", IsRequired = true, EmitDefaultValue = true)]
         public MoneyOrNull CurrentCost { get; set; }
 

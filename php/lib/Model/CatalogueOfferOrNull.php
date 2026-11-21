@@ -362,7 +362,7 @@ class CatalogueOfferOrNull implements ModelInterface, ArrayAccess, \JsonSerializ
     /**
      * Sets price
      *
-     * @param \Growwer\Api\Model\Money $price What you pay for the offer with its dearest link type, flash offer discount included.
+     * @param \Growwer\Api\Model\Money $price What you pay for the offer with its dearest link type, the discount of a running offer (`flashOffer`) included.
      *
      * @return self
      */

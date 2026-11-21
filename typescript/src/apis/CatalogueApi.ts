@@ -239,7 +239,7 @@ export interface CatalogueApiInterface {
 
     /**
      * Creates request options for listFlashOffers without sending the request
-     * @param {string} projectId The project to search flash offers for.
+     * @param {string} projectId The project to search medias on offer for.
      * @param {'all' | 'recommended' | 'favourite' | 'discarded' | 'requested' | 'bought'} [source] Which of the project\&#39;s medias to search: &#x60;all&#x60; (the default), &#x60;recommended&#x60; (those Growwer recommends for the project), or those you marked &#x60;favourite&#x60;, &#x60;discarded&#x60; or &#x60;requested&#x60;, or &#x60;bought&#x60; for the project. Do not combine it with the parameter of the same state.
      * @param {'-growwerRank' | 'postPrice' | 'linkAdditionPrice' | 'matchedAt' | '-matchedAt' | '-traffic' | '-domainRating' | 'linkedToReferringRatio' | '-referringDomains'} [sort] The order. Without it, the web\&#39;s default order: medias on the project\&#39;s topic and language first, then best sellers and medias with more published orders. Ties are always broken by media id, so pages never overlap. &#x60;-growwerRank&#x60;: best match first; &#x60;postPrice&#x60;, &#x60;linkAdditionPrice&#x60;: cheapest first; &#x60;matchedAt&#x60;, &#x60;-matchedAt&#x60;: when Growwer matched the media with the project; &#x60;-traffic&#x60;, &#x60;-domainRating&#x60;, &#x60;-referringDomains&#x60;: highest first; &#x60;linkedToReferringRatio&#x60;: lowest first.
      * @param {string} [domain] Medias whose domain contains this text, 1 to 255 characters.
@@ -282,9 +282,9 @@ export interface CatalogueApiInterface {
     listFlashOffersRequestOpts(requestParameters: ListFlashOffersRequest): Promise<runtime.RequestOpts>;
 
     /**
-     * The medias on a flash offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with `flashOffer=true`, and takes the same parameters except `flashOffer` and `savedFilterId`. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
-     * @summary List flash offers
-     * @param {string} projectId The project to search flash offers for.
+     * The medias on an offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with `flashOffer=true`, and takes the same parameters except `flashOffer` and `savedFilterId`. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
+     * @summary List the medias on offer
+     * @param {string} projectId The project to search medias on offer for.
      * @param {'all' | 'recommended' | 'favourite' | 'discarded' | 'requested' | 'bought'} [source] Which of the project\&#39;s medias to search: &#x60;all&#x60; (the default), &#x60;recommended&#x60; (those Growwer recommends for the project), or those you marked &#x60;favourite&#x60;, &#x60;discarded&#x60; or &#x60;requested&#x60;, or &#x60;bought&#x60; for the project. Do not combine it with the parameter of the same state.
      * @param {'-growwerRank' | 'postPrice' | 'linkAdditionPrice' | 'matchedAt' | '-matchedAt' | '-traffic' | '-domainRating' | 'linkedToReferringRatio' | '-referringDomains'} [sort] The order. Without it, the web\&#39;s default order: medias on the project\&#39;s topic and language first, then best sellers and medias with more published orders. Ties are always broken by media id, so pages never overlap. &#x60;-growwerRank&#x60;: best match first; &#x60;postPrice&#x60;, &#x60;linkAdditionPrice&#x60;: cheapest first; &#x60;matchedAt&#x60;, &#x60;-matchedAt&#x60;: when Growwer matched the media with the project; &#x60;-traffic&#x60;, &#x60;-domainRating&#x60;, &#x60;-referringDomains&#x60;: highest first; &#x60;linkedToReferringRatio&#x60;: lowest first.
      * @param {string} [domain] Medias whose domain contains this text, 1 to 255 characters.
@@ -328,8 +328,8 @@ export interface CatalogueApiInterface {
     listFlashOffersRaw(requestParameters: ListFlashOffersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListFlashOffers200Response>>;
 
     /**
-     * The medias on a flash offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with `flashOffer=true`, and takes the same parameters except `flashOffer` and `savedFilterId`. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
-     * List flash offers
+     * The medias on an offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with `flashOffer=true`, and takes the same parameters except `flashOffer` and `savedFilterId`. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
+     * List the medias on offer
      */
     listFlashOffers(requestParameters: ListFlashOffersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListFlashOffers200Response>;
 
@@ -394,7 +394,7 @@ export interface CatalogueApiInterface {
      * @param {boolean} [recommended] &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others.
      * @param {boolean} [favourite] &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out.
      * @param {boolean} [requested] &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out.
-     * @param {boolean} [flashOffer] &#x60;true&#x60;: only medias with a flash offer running; &#x60;false&#x60;: leave them out.
+     * @param {boolean} [flashOffer] &#x60;true&#x60;: only medias with an offer running; &#x60;false&#x60;: leave them out.
      * @param {boolean} [bought] &#x60;true&#x60;: only medias you bought for the project; &#x60;false&#x60;: leave them out.
      * @param {boolean} [discarded] &#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out.
      * @param {boolean} [_new] Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise.
@@ -441,7 +441,7 @@ export interface CatalogueApiInterface {
      * @param {boolean} [recommended] &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others.
      * @param {boolean} [favourite] &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out.
      * @param {boolean} [requested] &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out.
-     * @param {boolean} [flashOffer] &#x60;true&#x60;: only medias with a flash offer running; &#x60;false&#x60;: leave them out.
+     * @param {boolean} [flashOffer] &#x60;true&#x60;: only medias with an offer running; &#x60;false&#x60;: leave them out.
      * @param {boolean} [bought] &#x60;true&#x60;: only medias you bought for the project; &#x60;false&#x60;: leave them out.
      * @param {boolean} [discarded] &#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out.
      * @param {boolean} [_new] Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise.
@@ -908,8 +908,8 @@ export class CatalogueApi extends runtime.BaseAPI implements CatalogueApiInterfa
     }
 
     /**
-     * The medias on a flash offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with `flashOffer=true`, and takes the same parameters except `flashOffer` and `savedFilterId`. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
-     * List flash offers
+     * The medias on an offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with `flashOffer=true`, and takes the same parameters except `flashOffer` and `savedFilterId`. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
+     * List the medias on offer
      */
     async listFlashOffersRaw(requestParameters: ListFlashOffersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListFlashOffers200Response>> {
         const requestOptions = await this.listFlashOffersRequestOpts(requestParameters);
@@ -919,8 +919,8 @@ export class CatalogueApi extends runtime.BaseAPI implements CatalogueApiInterfa
     }
 
     /**
-     * The medias on a flash offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with `flashOffer=true`, and takes the same parameters except `flashOffer` and `savedFilterId`. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
-     * List flash offers
+     * The medias on an offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with `flashOffer=true`, and takes the same parameters except `flashOffer` and `savedFilterId`. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
+     * List the medias on offer
      */
     async listFlashOffers(requestParameters: ListFlashOffersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListFlashOffers200Response> {
         const response = await this.listFlashOffersRaw(requestParameters, initOverrides);

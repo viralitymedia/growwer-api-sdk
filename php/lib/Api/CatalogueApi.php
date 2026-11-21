@@ -1156,9 +1156,9 @@ class CatalogueApi
     /**
      * Operation listFlashOffers
      *
-     * List flash offers
+     * List the medias on offer
      *
-     * @param  string $project_id The project to search flash offers for. (required)
+     * @param  string $project_id The project to search medias on offer for. (required)
      * @param  string|null $source Which of the project&#39;s medias to search: &#x60;all&#x60; (the default), &#x60;recommended&#x60; (those Growwer recommends for the project), or those you marked &#x60;favourite&#x60;, &#x60;discarded&#x60; or &#x60;requested&#x60;, or &#x60;bought&#x60; for the project. Do not combine it with the parameter of the same state. (optional)
      * @param  string|null $sort The order. Without it, the web&#39;s default order: medias on the project&#39;s topic and language first, then best sellers and medias with more published orders. Ties are always broken by media id, so pages never overlap. &#x60;-growwerRank&#x60;: best match first; &#x60;postPrice&#x60;, &#x60;linkAdditionPrice&#x60;: cheapest first; &#x60;matchedAt&#x60;, &#x60;-matchedAt&#x60;: when Growwer matched the media with the project; &#x60;-traffic&#x60;, &#x60;-domainRating&#x60;, &#x60;-referringDomains&#x60;: highest first; &#x60;linkedToReferringRatio&#x60;: lowest first. (optional)
      * @param  string|null $domain Medias whose domain contains this text, 1 to 255 characters. (optional)
@@ -1210,9 +1210,9 @@ class CatalogueApi
     /**
      * Operation listFlashOffersWithHttpInfo
      *
-     * List flash offers
+     * List the medias on offer
      *
-     * @param  string $project_id The project to search flash offers for. (required)
+     * @param  string $project_id The project to search medias on offer for. (required)
      * @param  string|null $source Which of the project&#39;s medias to search: &#x60;all&#x60; (the default), &#x60;recommended&#x60; (those Growwer recommends for the project), or those you marked &#x60;favourite&#x60;, &#x60;discarded&#x60; or &#x60;requested&#x60;, or &#x60;bought&#x60; for the project. Do not combine it with the parameter of the same state. (optional)
      * @param  string|null $sort The order. Without it, the web&#39;s default order: medias on the project&#39;s topic and language first, then best sellers and medias with more published orders. Ties are always broken by media id, so pages never overlap. &#x60;-growwerRank&#x60;: best match first; &#x60;postPrice&#x60;, &#x60;linkAdditionPrice&#x60;: cheapest first; &#x60;matchedAt&#x60;, &#x60;-matchedAt&#x60;: when Growwer matched the media with the project; &#x60;-traffic&#x60;, &#x60;-domainRating&#x60;, &#x60;-referringDomains&#x60;: highest first; &#x60;linkedToReferringRatio&#x60;: lowest first. (optional)
      * @param  string|null $domain Medias whose domain contains this text, 1 to 255 characters. (optional)
@@ -1429,9 +1429,9 @@ class CatalogueApi
     /**
      * Operation listFlashOffersAsync
      *
-     * List flash offers
+     * List the medias on offer
      *
-     * @param  string $project_id The project to search flash offers for. (required)
+     * @param  string $project_id The project to search medias on offer for. (required)
      * @param  string|null $source Which of the project&#39;s medias to search: &#x60;all&#x60; (the default), &#x60;recommended&#x60; (those Growwer recommends for the project), or those you marked &#x60;favourite&#x60;, &#x60;discarded&#x60; or &#x60;requested&#x60;, or &#x60;bought&#x60; for the project. Do not combine it with the parameter of the same state. (optional)
      * @param  string|null $sort The order. Without it, the web&#39;s default order: medias on the project&#39;s topic and language first, then best sellers and medias with more published orders. Ties are always broken by media id, so pages never overlap. &#x60;-growwerRank&#x60;: best match first; &#x60;postPrice&#x60;, &#x60;linkAdditionPrice&#x60;: cheapest first; &#x60;matchedAt&#x60;, &#x60;-matchedAt&#x60;: when Growwer matched the media with the project; &#x60;-traffic&#x60;, &#x60;-domainRating&#x60;, &#x60;-referringDomains&#x60;: highest first; &#x60;linkedToReferringRatio&#x60;: lowest first. (optional)
      * @param  string|null $domain Medias whose domain contains this text, 1 to 255 characters. (optional)
@@ -1486,9 +1486,9 @@ class CatalogueApi
     /**
      * Operation listFlashOffersAsyncWithHttpInfo
      *
-     * List flash offers
+     * List the medias on offer
      *
-     * @param  string $project_id The project to search flash offers for. (required)
+     * @param  string $project_id The project to search medias on offer for. (required)
      * @param  string|null $source Which of the project&#39;s medias to search: &#x60;all&#x60; (the default), &#x60;recommended&#x60; (those Growwer recommends for the project), or those you marked &#x60;favourite&#x60;, &#x60;discarded&#x60; or &#x60;requested&#x60;, or &#x60;bought&#x60; for the project. Do not combine it with the parameter of the same state. (optional)
      * @param  string|null $sort The order. Without it, the web&#39;s default order: medias on the project&#39;s topic and language first, then best sellers and medias with more published orders. Ties are always broken by media id, so pages never overlap. &#x60;-growwerRank&#x60;: best match first; &#x60;postPrice&#x60;, &#x60;linkAdditionPrice&#x60;: cheapest first; &#x60;matchedAt&#x60;, &#x60;-matchedAt&#x60;: when Growwer matched the media with the project; &#x60;-traffic&#x60;, &#x60;-domainRating&#x60;, &#x60;-referringDomains&#x60;: highest first; &#x60;linkedToReferringRatio&#x60;: lowest first. (optional)
      * @param  string|null $domain Medias whose domain contains this text, 1 to 255 characters. (optional)
@@ -1574,7 +1574,7 @@ class CatalogueApi
     /**
      * Create request for operation 'listFlashOffers'
      *
-     * @param  string $project_id The project to search flash offers for. (required)
+     * @param  string $project_id The project to search medias on offer for. (required)
      * @param  string|null $source Which of the project&#39;s medias to search: &#x60;all&#x60; (the default), &#x60;recommended&#x60; (those Growwer recommends for the project), or those you marked &#x60;favourite&#x60;, &#x60;discarded&#x60; or &#x60;requested&#x60;, or &#x60;bought&#x60; for the project. Do not combine it with the parameter of the same state. (optional)
      * @param  string|null $sort The order. Without it, the web&#39;s default order: medias on the project&#39;s topic and language first, then best sellers and medias with more published orders. Ties are always broken by media id, so pages never overlap. &#x60;-growwerRank&#x60;: best match first; &#x60;postPrice&#x60;, &#x60;linkAdditionPrice&#x60;: cheapest first; &#x60;matchedAt&#x60;, &#x60;-matchedAt&#x60;: when Growwer matched the media with the project; &#x60;-traffic&#x60;, &#x60;-domainRating&#x60;, &#x60;-referringDomains&#x60;: highest first; &#x60;linkedToReferringRatio&#x60;: lowest first. (optional)
      * @param  string|null $domain Medias whose domain contains this text, 1 to 255 characters. (optional)
@@ -2548,7 +2548,7 @@ class CatalogueApi
      * @param  bool|null $recommended &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. (optional)
      * @param  bool|null $favourite &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $requested &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. (optional)
-     * @param  bool|null $flash_offer &#x60;true&#x60;: only medias with a flash offer running; &#x60;false&#x60;: leave them out. (optional)
+     * @param  bool|null $flash_offer &#x60;true&#x60;: only medias with an offer running; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $bought &#x60;true&#x60;: only medias you bought for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $discarded &#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $new Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)
@@ -2604,7 +2604,7 @@ class CatalogueApi
      * @param  bool|null $recommended &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. (optional)
      * @param  bool|null $favourite &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $requested &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. (optional)
-     * @param  bool|null $flash_offer &#x60;true&#x60;: only medias with a flash offer running; &#x60;false&#x60;: leave them out. (optional)
+     * @param  bool|null $flash_offer &#x60;true&#x60;: only medias with an offer running; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $bought &#x60;true&#x60;: only medias you bought for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $discarded &#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $new Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)
@@ -2825,7 +2825,7 @@ class CatalogueApi
      * @param  bool|null $recommended &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. (optional)
      * @param  bool|null $favourite &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $requested &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. (optional)
-     * @param  bool|null $flash_offer &#x60;true&#x60;: only medias with a flash offer running; &#x60;false&#x60;: leave them out. (optional)
+     * @param  bool|null $flash_offer &#x60;true&#x60;: only medias with an offer running; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $bought &#x60;true&#x60;: only medias you bought for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $discarded &#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $new Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)
@@ -2884,7 +2884,7 @@ class CatalogueApi
      * @param  bool|null $recommended &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. (optional)
      * @param  bool|null $favourite &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $requested &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. (optional)
-     * @param  bool|null $flash_offer &#x60;true&#x60;: only medias with a flash offer running; &#x60;false&#x60;: leave them out. (optional)
+     * @param  bool|null $flash_offer &#x60;true&#x60;: only medias with an offer running; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $bought &#x60;true&#x60;: only medias you bought for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $discarded &#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $new Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)
@@ -2972,7 +2972,7 @@ class CatalogueApi
      * @param  bool|null $recommended &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. (optional)
      * @param  bool|null $favourite &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $requested &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. (optional)
-     * @param  bool|null $flash_offer &#x60;true&#x60;: only medias with a flash offer running; &#x60;false&#x60;: leave them out. (optional)
+     * @param  bool|null $flash_offer &#x60;true&#x60;: only medias with an offer running; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $bought &#x60;true&#x60;: only medias you bought for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $discarded &#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param  bool|null $new Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)

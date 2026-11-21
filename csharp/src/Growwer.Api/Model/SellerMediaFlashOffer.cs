@@ -28,7 +28,7 @@ using OpenAPIDateConverter = Growwer.Api.Client.OpenAPIDateConverter;
 namespace Growwer.Api.Model
 {
     /// <summary>
-    /// The flash offer running, or null. Its discount is in &#x60;currentCost&#x60;, never in the fees.
+    /// The offer running, a time-limited discount, or null. Its discount is in &#x60;currentCost&#x60;, never in the fees.
     /// </summary>
     [DataContract(Name = "SellerMedia_flashOffer")]
     public partial class SellerMediaFlashOffer : IValidatableObject

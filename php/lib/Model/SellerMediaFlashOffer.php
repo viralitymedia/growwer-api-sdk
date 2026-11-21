@@ -36,7 +36,7 @@ use \Growwer\Api\ObjectSerializer;
  * SellerMediaFlashOffer Class Doc Comment
  *
  * @category Class
- * @description The flash offer running, or null. Its discount is in &#x60;currentCost&#x60;, never in the fees.
+ * @description The offer running, a time-limited discount, or null. Its discount is in &#x60;currentCost&#x60;, never in the fees.
  * @package  Growwer\Api
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech

@@ -7,7 +7,7 @@ All URIs are relative to *https://tool.growwer.com*
 | [**discard_media**](CatalogueApi.md#discard_media) | **PUT** /api/v1/projects/{id}/discards/{mediaId} | Discard a media for a project |
 | [**favourite_media**](CatalogueApi.md#favourite_media) | **PUT** /api/v1/projects/{id}/favourites/{mediaId} | Add a media to the favourites of a project |
 | [**get_catalogue_media**](CatalogueApi.md#get_catalogue_media) | **GET** /api/v1/medias/{id} | Get a media |
-| [**list_flash_offers**](CatalogueApi.md#list_flash_offers) | **GET** /api/v1/flash-offers | List flash offers |
+| [**list_flash_offers**](CatalogueApi.md#list_flash_offers) | **GET** /api/v1/flash-offers | List the medias on offer |
 | [**request_medias**](CatalogueApi.md#request_medias) | **POST** /api/v1/projects/{id}/media-requests | Request specific medias for a project |
 | [**search_project_medias**](CatalogueApi.md#search_project_medias) | **GET** /api/v1/projects/{id}/medias | Search the catalogue for a project |
 | [**undiscard_media**](CatalogueApi.md#undiscard_media) | **DELETE** /api/v1/projects/{id}/discards/{mediaId} | Restore a discarded media for a project |
@@ -231,9 +231,9 @@ end
 
 > <ListFlashOffers200Response> list_flash_offers(project_id, opts)
 
-List flash offers
+List the medias on offer
 
-The medias on a flash offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with `flashOffer=true`, and takes the same parameters except `flashOffer` and `savedFilterId`. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
+The medias on an offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with `flashOffer=true`, and takes the same parameters except `flashOffer` and `savedFilterId`. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
 
 ### Examples
 
@@ -247,7 +247,7 @@ Growwer.configure do |config|
 end
 
 api_instance = Growwer::CatalogueApi.new
-project_id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # String | The project to search flash offers for.
+project_id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # String | The project to search medias on offer for.
 opts = {
   source: 'all', # String | Which of the project's medias to search: `all` (the default), `recommended` (those Growwer recommends for the project), or those you marked `favourite`, `discarded` or `requested`, or `bought` for the project. Do not combine it with the parameter of the same state.
   sort: '-growwerRank', # String | The order. Without it, the web's default order: medias on the project's topic and language first, then best sellers and medias with more published orders. Ties are always broken by media id, so pages never overlap. `-growwerRank`: best match first; `postPrice`, `linkAdditionPrice`: cheapest first; `matchedAt`, `-matchedAt`: when Growwer matched the media with the project; `-traffic`, `-domainRating`, `-referringDomains`: highest first; `linkedToReferringRatio`: lowest first.
@@ -288,7 +288,7 @@ opts = {
 }
 
 begin
-  # List flash offers
+  # List the medias on offer
   result = api_instance.list_flash_offers(project_id, opts)
   p result
 rescue Growwer::ApiError => e
@@ -304,7 +304,7 @@ This returns an Array which contains the response data, status code and headers.
 
 ```ruby
 begin
-  # List flash offers
+  # List the medias on offer
   data, status_code, headers = api_instance.list_flash_offers_with_http_info(project_id, opts)
   p status_code # => 2xx
   p headers # => { ... }
@@ -318,7 +318,7 @@ end
 
 | Name | Type | Description | Notes |
 | ---- | ---- | ----------- | ----- |
-| **project_id** | **String** | The project to search flash offers for. |  |
+| **project_id** | **String** | The project to search medias on offer for. |  |
 | **source** | **String** | Which of the project&#39;s medias to search: &#x60;all&#x60; (the default), &#x60;recommended&#x60; (those Growwer recommends for the project), or those you marked &#x60;favourite&#x60;, &#x60;discarded&#x60; or &#x60;requested&#x60;, or &#x60;bought&#x60; for the project. Do not combine it with the parameter of the same state. | [optional] |
 | **sort** | **String** | The order. Without it, the web&#39;s default order: medias on the project&#39;s topic and language first, then best sellers and medias with more published orders. Ties are always broken by media id, so pages never overlap. &#x60;-growwerRank&#x60;: best match first; &#x60;postPrice&#x60;, &#x60;linkAdditionPrice&#x60;: cheapest first; &#x60;matchedAt&#x60;, &#x60;-matchedAt&#x60;: when Growwer matched the media with the project; &#x60;-traffic&#x60;, &#x60;-domainRating&#x60;, &#x60;-referringDomains&#x60;: highest first; &#x60;linkedToReferringRatio&#x60;: lowest first. | [optional] |
 | **domain** | **String** | Medias whose domain contains this text, 1 to 255 characters. | [optional] |
@@ -495,7 +495,7 @@ opts = {
   recommended: true, # Boolean | `true`: only the medias Growwer recommends for the project; `false`: only the others.
   favourite: true, # Boolean | `true`: only your favourites for the project; `false`: leave them out.
   requested: true, # Boolean | `true`: only the medias you requested for the project; `false`: leave them out.
-  flash_offer: true, # Boolean | `true`: only medias with a flash offer running; `false`: leave them out.
+  flash_offer: true, # Boolean | `true`: only medias with an offer running; `false`: leave them out.
   bought: true, # Boolean | `true`: only medias you bought for the project; `false`: leave them out.
   discarded: true, # Boolean | `true`: only the medias you discarded for the project; `false`: leave them out.
   new: true, # Boolean | Medias Growwer matched with the project recently. Only `true` applies it; omit it otherwise.
@@ -567,7 +567,7 @@ end
 | **recommended** | **Boolean** | &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. | [optional] |
 | **favourite** | **Boolean** | &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. | [optional] |
 | **requested** | **Boolean** | &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. | [optional] |
-| **flash_offer** | **Boolean** | &#x60;true&#x60;: only medias with a flash offer running; &#x60;false&#x60;: leave them out. | [optional] |
+| **flash_offer** | **Boolean** | &#x60;true&#x60;: only medias with an offer running; &#x60;false&#x60;: leave them out. | [optional] |
 | **bought** | **Boolean** | &#x60;true&#x60;: only medias you bought for the project; &#x60;false&#x60;: leave them out. | [optional] |
 | **discarded** | **Boolean** | &#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. | [optional] |
 | **new** | **Boolean** | Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. | [optional] |

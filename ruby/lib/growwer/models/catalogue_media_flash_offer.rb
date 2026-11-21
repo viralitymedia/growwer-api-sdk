@@ -14,7 +14,7 @@ require 'date'
 require 'time'
 
 module Growwer
-  # The flash offer running, or null. Its discount is already in the prices.
+  # The offer running, a time-limited discount, or null. Its discount is already in the prices.
   class CatalogueMediaFlashOffer < ApiModelBase
     attr_accessor :discount_percent
 

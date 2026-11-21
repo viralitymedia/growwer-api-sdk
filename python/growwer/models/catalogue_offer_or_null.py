@@ -30,7 +30,7 @@ class CatalogueOfferOrNull(BaseModel):
     """
     CatalogueOfferOrNull
     """ # noqa: E501
-    price: Money = Field(description="What you pay for the offer with its dearest link type, flash offer discount included.")
+    price: Money = Field(description="What you pay for the offer with its dearest link type, the discount of a running offer (`flashOffer`) included.")
     link_type: Optional[StrictStr] = Field(description="The link type `price` is for.", alias="linkType")
     prices: Dict[str, Money] = Field(description="What you pay for each link type the offer gives, by link type.")
     previous_price: Optional[MoneyOrNull] = Field(description="The highest price the offer has had, when `price` is more than 5% below it; otherwise null.", alias="previousPrice")

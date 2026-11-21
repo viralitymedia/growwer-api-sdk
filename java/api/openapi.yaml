@@ -78,7 +78,8 @@ tags:
   name: Webhooks
 - description: "Create, edit and delete the projects you buy for."
   name: Projects
-- description: "Search the medias of a project, its flash offers, favourites and discards."
+- description: "Search the medias of a project, those on offer, its favourites and\
+    \ discards."
   name: Catalogue
 - description: Save catalogue searches of a project and count their medias.
   name: Saved filters
@@ -1467,7 +1468,7 @@ paths:
       - application/json
   /api/v1/flash-offers:
     get:
-      description: "The medias on a flash offer, a time-limited discount, in the catalogue\
+      description: "The medias on an offer, a time-limited discount, in the catalogue\
         \ of one of your projects. It is GET /projects/{id}/medias with `flashOffer=true`,\
         \ and takes the same parameters except `flashOffer` and `savedFilterId`. The\
         \ catalogue access and the daily limit of that operation apply: each new media\
@@ -1476,7 +1477,7 @@ paths:
         \ the media lists, topics and language of the project stay as they were."
       operationId: listFlashOffers
       parameters:
-      - description: The project to search flash offers for.
+      - description: The project to search medias on offer for.
         explode: true
         in: query
         name: projectId
@@ -1833,7 +1834,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/listFlashOffers_200_response"
-          description: A page of flash offers and how many there are in all.
+          description: A page of medias on offer and how many there are in all.
         "401":
           content:
             application/json:
@@ -1932,7 +1933,7 @@ paths:
           headers:
             Retry-After:
               $ref: "#/components/headers/RetryAfter"
-      summary: List flash offers
+      summary: List the medias on offer
       tags:
       - Catalogue
       x-accepts:
@@ -2410,8 +2411,8 @@ paths:
         schema:
           type: boolean
         style: form
-      - description: "`true`: only medias with a flash offer running; `false`: leave\
-          \ them out."
+      - description: "`true`: only medias with an offer running; `false`: leave them\
+          \ out."
         explode: true
         in: query
         name: flashOffer
@@ -6239,7 +6240,7 @@ paths:
 
         When there is no suggestion (Growwer sets the media's prices, it is not listed on a marketplace Growwer compares with, it already lists below its price there, or no fee would bring it below), or your fees already are at or below the suggested ones, nothing changes and the answer is 200 with the media as it is.
 
-        The fees set are your base fees: a running flash offer keeps discounting them. As with a fee edit, a change of the price may cancel the managed-service proposals accepted for the media whose price it changes. When the fees set still list the media above the marketplaces that list the same domain cheaper, they are saved, and `warnings` holds a `saved_above_competitors` warning with the competitive fee of each side and how many marketplaces those are. Send no body, or an empty object.
+        The fees set are your base fees: a running offer keeps discounting them. As with a fee edit, a change of the price may cancel the managed-service proposals accepted for the media whose price it changes. When the fees set still list the media above the marketplaces that list the same domain cheaper, they are saved, and `warnings` holds a `saved_above_competitors` warning with the competitive fee of each side and how many marketplaces those are. Send no body, or an empty object.
       operationId: applySellerMediaCompetitiveFees
       parameters:
       - explode: false
@@ -6720,7 +6721,7 @@ paths:
 
         What goes with the media, as on the web:
 
-        - A running flash offer ends with it, and its managed-service proposals are deleted.
+        - A running offer ends with it, and its managed-service proposals are deleted.
         - Its finished orders stay, with the media's URL; they read `media.id` null.
         - Buyers' favourites and discards of the domain stay, as they are kept by domain.
         - The catalogue search drops the media shortly after the 204, as the search index updates asynchronously.
@@ -6956,7 +6957,7 @@ paths:
         - `linkAdditionOffer.pricingOptions` lists the link types you offer for adding a link to an existing article; `null` or an empty list stops offering link additions.
         - `extraServices` is the full list of extra services you offer; an empty list removes them all. It is sent at the top level, although GET /seller/medias/{id} reads it inside `postOffer`.
 
-        The fees are your base fees, the ones GET /seller/medias/{id} returns: while a flash offer runs, its discount keeps applying on top of them, and `currentCost` shows the result. `currentCost` may be sent back as read and is ignored. Country, language, topics and comments are not edited here.
+        The fees are your base fees, the ones GET /seller/medias/{id} returns: while an offer runs, its discount keeps applying on top of them, and `currentCost` shows the result. `currentCost` may be sent back as read and is ignored. Country, language, topics and comments are not edited here.
 
         As on the page, a change of the post offer's price may cancel the managed-service proposals accepted for the media whose price it changes. Your fees are always saved, a raise included. When they list the media above the marketplaces that list the same domain cheaper and some fee would list it under them, the 200 carries a `saved_above_competitors` warning in `warnings`, with the competitive fee of each side and how many marketplaces those are. When such a save raises a fee, or adds a side or a link type, the warning is `saved_not_recommended` instead, with the same details: the media is not recommended in buyers' projects while it lists above them, and stays in the catalogue. A restricted seller account may edit its offer.
       operationId: updateSellerMedia
@@ -11577,8 +11578,8 @@ components:
         type: boolean
       style: form
     CatalogueFlashOffer:
-      description: "`true`: only medias with a flash offer running; `false`: leave\
-        \ them out."
+      description: "`true`: only medias with an offer running; `false`: leave them\
+        \ out."
       explode: true
       in: query
       name: flashOffer
@@ -11965,8 +11966,8 @@ components:
         price:
           allOf:
           - $ref: "#/components/schemas/Money"
-          description: "What you pay for the offer with its dearest link type, flash\
-            \ offer discount included."
+          description: "What you pay for the offer with its dearest link type, the\
+            \ discount of a running offer (`flashOffer`) included."
         linkType:
           description: The link type `price` is for.
           enum:
@@ -11998,8 +11999,8 @@ components:
         price:
           allOf:
           - $ref: "#/components/schemas/Money"
-          description: "What you pay for the offer with its dearest link type, flash\
-            \ offer discount included."
+          description: "What you pay for the offer with its dearest link type, the\
+            \ discount of a running offer (`flashOffer`) included."
         linkType:
           description: The link type `price` is for.
           enum:
@@ -14341,7 +14342,7 @@ components:
       properties:
         eligible:
           description: "Whether you have the full daily cap of the catalogue operations\
-            \ (tag Catalogue: searching a project's medias, flash offers and media\
+            \ (tag Catalogue: searching a project's medias, those on offer and media\
             \ details). It is open to accounts with recent completed orders, as buyer\
             \ or as seller; until then the catalogue answers within a smaller daily\
             \ trial quota, which rises to the full cap after a completed order. A\
@@ -16121,8 +16122,8 @@ components:
       - referringDomains
       type: object
     CatalogueMedia_flashOffer:
-      description: "The flash offer running, or null. Its discount is already in the\
-        \ prices."
+      description: "The offer running, a time-limited discount, or null. Its discount\
+        \ is already in the prices."
       example:
         discountPercent: 3
         endsAt: 2000-01-23T04:56:07.000+00:00
@@ -16241,8 +16242,8 @@ components:
       - requested
       type: object
     SellerMedia_flashOffer:
-      description: "The flash offer running, or null. Its discount is in `currentCost`,\
-        \ never in the fees."
+      description: "The offer running, a time-limited discount, or null. Its discount\
+        \ is in `currentCost`, never in the fees."
       example:
         discountPercent: 7
         endsAt: 2000-01-23T04:56:07.000+00:00
@@ -16270,8 +16271,9 @@ components:
           currentCost:
             allOf:
             - $ref: "#/components/schemas/MoneyOrNull"
-            description: "What you are paid now for the link type, flash offer discount\
-              \ included; read-only. Null when the link type has no current pricing."
+            description: "What you are paid now for the link type, the discount of\
+              \ a running offer (`flashOffer`) included; read-only. Null when the\
+              \ link type has no current pricing."
         required:
         - currentCost
         - linkType
@@ -16361,8 +16363,8 @@ components:
         currentCost:
           allOf:
           - $ref: "#/components/schemas/MoneyOrNull"
-          description: "What you are paid now for the link type, flash offer discount\
-            \ included; read-only."
+          description: "What you are paid now for the link type, the discount of a\
+            \ running offer (`flashOffer`) included; read-only."
       required:
       - currentCost
       - fee

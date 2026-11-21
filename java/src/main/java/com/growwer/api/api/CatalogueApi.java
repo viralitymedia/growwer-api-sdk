@@ -589,7 +589,7 @@ public class CatalogueApi {
     }
     /**
      * Build call for listFlashOffers
-     * @param projectId The project to search flash offers for. (required)
+     * @param projectId The project to search medias on offer for. (required)
      * @param source Which of the project&#39;s medias to search: &#x60;all&#x60; (the default), &#x60;recommended&#x60; (those Growwer recommends for the project), or those you marked &#x60;favourite&#x60;, &#x60;discarded&#x60; or &#x60;requested&#x60;, or &#x60;bought&#x60; for the project. Do not combine it with the parameter of the same state. (optional)
      * @param sort The order. Without it, the web&#39;s default order: medias on the project&#39;s topic and language first, then best sellers and medias with more published orders. Ties are always broken by media id, so pages never overlap. &#x60;-growwerRank&#x60;: best match first; &#x60;postPrice&#x60;, &#x60;linkAdditionPrice&#x60;: cheapest first; &#x60;matchedAt&#x60;, &#x60;-matchedAt&#x60;: when Growwer matched the media with the project; &#x60;-traffic&#x60;, &#x60;-domainRating&#x60;, &#x60;-referringDomains&#x60;: highest first; &#x60;linkedToReferringRatio&#x60;: lowest first. (optional)
      * @param domain Medias whose domain contains this text, 1 to 255 characters. (optional)
@@ -633,7 +633,7 @@ public class CatalogueApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> A page of flash offers and how many there are in all. </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> A page of medias on offer and how many there are in all. </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The catalogue is open to accounts with recent orders delivered and approved on Growwer, as buyer or as seller, and to other accounts within a daily trial quota; this account has too few such orders and the trial quota is off (code &#x60;catalogue_requires_recent_order&#x60;). The message names the threshold, which &#x60;details.minOrders&#x60; (how many orders) and &#x60;details.windowDays&#x60; (within how many days) repeat; an order counts only once it is delivered and approved. GET /me reports &#x60;catalogue.eligible&#x60; and &#x60;catalogue.dailyCap&#x60;. </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). </td><td>  -  </td></tr>
@@ -847,9 +847,9 @@ public class CatalogueApi {
     }
 
     /**
-     * List flash offers
-     * The medias on a flash offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with &#x60;flashOffer&#x3D;true&#x60;, and takes the same parameters except &#x60;flashOffer&#x60; and &#x60;savedFilterId&#x60;. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
-     * @param projectId The project to search flash offers for. (required)
+     * List the medias on offer
+     * The medias on an offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with &#x60;flashOffer&#x3D;true&#x60;, and takes the same parameters except &#x60;flashOffer&#x60; and &#x60;savedFilterId&#x60;. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
+     * @param projectId The project to search medias on offer for. (required)
      * @param source Which of the project&#39;s medias to search: &#x60;all&#x60; (the default), &#x60;recommended&#x60; (those Growwer recommends for the project), or those you marked &#x60;favourite&#x60;, &#x60;discarded&#x60; or &#x60;requested&#x60;, or &#x60;bought&#x60; for the project. Do not combine it with the parameter of the same state. (optional)
      * @param sort The order. Without it, the web&#39;s default order: medias on the project&#39;s topic and language first, then best sellers and medias with more published orders. Ties are always broken by media id, so pages never overlap. &#x60;-growwerRank&#x60;: best match first; &#x60;postPrice&#x60;, &#x60;linkAdditionPrice&#x60;: cheapest first; &#x60;matchedAt&#x60;, &#x60;-matchedAt&#x60;: when Growwer matched the media with the project; &#x60;-traffic&#x60;, &#x60;-domainRating&#x60;, &#x60;-referringDomains&#x60;: highest first; &#x60;linkedToReferringRatio&#x60;: lowest first. (optional)
      * @param domain Medias whose domain contains this text, 1 to 255 characters. (optional)
@@ -892,7 +892,7 @@ public class CatalogueApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> A page of flash offers and how many there are in all. </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> A page of medias on offer and how many there are in all. </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The catalogue is open to accounts with recent orders delivered and approved on Growwer, as buyer or as seller, and to other accounts within a daily trial quota; this account has too few such orders and the trial quota is off (code &#x60;catalogue_requires_recent_order&#x60;). The message names the threshold, which &#x60;details.minOrders&#x60; (how many orders) and &#x60;details.windowDays&#x60; (within how many days) repeat; an order counts only once it is delivered and approved. GET /me reports &#x60;catalogue.eligible&#x60; and &#x60;catalogue.dailyCap&#x60;. </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). </td><td>  -  </td></tr>
@@ -908,9 +908,9 @@ public class CatalogueApi {
     }
 
     /**
-     * List flash offers
-     * The medias on a flash offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with &#x60;flashOffer&#x3D;true&#x60;, and takes the same parameters except &#x60;flashOffer&#x60; and &#x60;savedFilterId&#x60;. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
-     * @param projectId The project to search flash offers for. (required)
+     * List the medias on offer
+     * The medias on an offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with &#x60;flashOffer&#x3D;true&#x60;, and takes the same parameters except &#x60;flashOffer&#x60; and &#x60;savedFilterId&#x60;. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
+     * @param projectId The project to search medias on offer for. (required)
      * @param source Which of the project&#39;s medias to search: &#x60;all&#x60; (the default), &#x60;recommended&#x60; (those Growwer recommends for the project), or those you marked &#x60;favourite&#x60;, &#x60;discarded&#x60; or &#x60;requested&#x60;, or &#x60;bought&#x60; for the project. Do not combine it with the parameter of the same state. (optional)
      * @param sort The order. Without it, the web&#39;s default order: medias on the project&#39;s topic and language first, then best sellers and medias with more published orders. Ties are always broken by media id, so pages never overlap. &#x60;-growwerRank&#x60;: best match first; &#x60;postPrice&#x60;, &#x60;linkAdditionPrice&#x60;: cheapest first; &#x60;matchedAt&#x60;, &#x60;-matchedAt&#x60;: when Growwer matched the media with the project; &#x60;-traffic&#x60;, &#x60;-domainRating&#x60;, &#x60;-referringDomains&#x60;: highest first; &#x60;linkedToReferringRatio&#x60;: lowest first. (optional)
      * @param domain Medias whose domain contains this text, 1 to 255 characters. (optional)
@@ -953,7 +953,7 @@ public class CatalogueApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> A page of flash offers and how many there are in all. </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> A page of medias on offer and how many there are in all. </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The catalogue is open to accounts with recent orders delivered and approved on Growwer, as buyer or as seller, and to other accounts within a daily trial quota; this account has too few such orders and the trial quota is off (code &#x60;catalogue_requires_recent_order&#x60;). The message names the threshold, which &#x60;details.minOrders&#x60; (how many orders) and &#x60;details.windowDays&#x60; (within how many days) repeat; an order counts only once it is delivered and approved. GET /me reports &#x60;catalogue.eligible&#x60; and &#x60;catalogue.dailyCap&#x60;. </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). </td><td>  -  </td></tr>
@@ -970,9 +970,9 @@ public class CatalogueApi {
     }
 
     /**
-     * List flash offers (asynchronously)
-     * The medias on a flash offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with &#x60;flashOffer&#x3D;true&#x60;, and takes the same parameters except &#x60;flashOffer&#x60; and &#x60;savedFilterId&#x60;. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
-     * @param projectId The project to search flash offers for. (required)
+     * List the medias on offer (asynchronously)
+     * The medias on an offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with &#x60;flashOffer&#x3D;true&#x60;, and takes the same parameters except &#x60;flashOffer&#x60; and &#x60;savedFilterId&#x60;. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
+     * @param projectId The project to search medias on offer for. (required)
      * @param source Which of the project&#39;s medias to search: &#x60;all&#x60; (the default), &#x60;recommended&#x60; (those Growwer recommends for the project), or those you marked &#x60;favourite&#x60;, &#x60;discarded&#x60; or &#x60;requested&#x60;, or &#x60;bought&#x60; for the project. Do not combine it with the parameter of the same state. (optional)
      * @param sort The order. Without it, the web&#39;s default order: medias on the project&#39;s topic and language first, then best sellers and medias with more published orders. Ties are always broken by media id, so pages never overlap. &#x60;-growwerRank&#x60;: best match first; &#x60;postPrice&#x60;, &#x60;linkAdditionPrice&#x60;: cheapest first; &#x60;matchedAt&#x60;, &#x60;-matchedAt&#x60;: when Growwer matched the media with the project; &#x60;-traffic&#x60;, &#x60;-domainRating&#x60;, &#x60;-referringDomains&#x60;: highest first; &#x60;linkedToReferringRatio&#x60;: lowest first. (optional)
      * @param domain Medias whose domain contains this text, 1 to 255 characters. (optional)
@@ -1016,7 +1016,7 @@ public class CatalogueApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> A page of flash offers and how many there are in all. </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> A page of medias on offer and how many there are in all. </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> The catalogue is open to accounts with recent orders delivered and approved on Growwer, as buyer or as seller, and to other accounts within a daily trial quota; this account has too few such orders and the trial quota is off (code &#x60;catalogue_requires_recent_order&#x60;). The message names the threshold, which &#x60;details.minOrders&#x60; (how many orders) and &#x60;details.windowDays&#x60; (within how many days) repeat; an order counts only once it is delivered and approved. GET /me reports &#x60;catalogue.eligible&#x60; and &#x60;catalogue.dailyCap&#x60;. </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). </td><td>  -  </td></tr>
@@ -1253,7 +1253,7 @@ public class CatalogueApi {
      * @param recommended &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. (optional)
      * @param favourite &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param requested &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. (optional)
-     * @param flashOffer &#x60;true&#x60;: only medias with a flash offer running; &#x60;false&#x60;: leave them out. (optional)
+     * @param flashOffer &#x60;true&#x60;: only medias with an offer running; &#x60;false&#x60;: leave them out. (optional)
      * @param bought &#x60;true&#x60;: only medias you bought for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param discarded &#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param _new Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)
@@ -1520,7 +1520,7 @@ public class CatalogueApi {
      * @param recommended &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. (optional)
      * @param favourite &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param requested &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. (optional)
-     * @param flashOffer &#x60;true&#x60;: only medias with a flash offer running; &#x60;false&#x60;: leave them out. (optional)
+     * @param flashOffer &#x60;true&#x60;: only medias with an offer running; &#x60;false&#x60;: leave them out. (optional)
      * @param bought &#x60;true&#x60;: only medias you bought for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param discarded &#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param _new Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)
@@ -1583,7 +1583,7 @@ public class CatalogueApi {
      * @param recommended &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. (optional)
      * @param favourite &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param requested &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. (optional)
-     * @param flashOffer &#x60;true&#x60;: only medias with a flash offer running; &#x60;false&#x60;: leave them out. (optional)
+     * @param flashOffer &#x60;true&#x60;: only medias with an offer running; &#x60;false&#x60;: leave them out. (optional)
      * @param bought &#x60;true&#x60;: only medias you bought for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param discarded &#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param _new Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)
@@ -1647,7 +1647,7 @@ public class CatalogueApi {
      * @param recommended &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. (optional)
      * @param favourite &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param requested &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. (optional)
-     * @param flashOffer &#x60;true&#x60;: only medias with a flash offer running; &#x60;false&#x60;: leave them out. (optional)
+     * @param flashOffer &#x60;true&#x60;: only medias with an offer running; &#x60;false&#x60;: leave them out. (optional)
      * @param bought &#x60;true&#x60;: only medias you bought for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param discarded &#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)
      * @param _new Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)

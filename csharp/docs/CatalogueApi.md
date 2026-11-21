@@ -7,7 +7,7 @@ All URIs are relative to *https://tool.growwer.com*
 | [**DiscardMedia**](CatalogueApi.md#discardmedia) | **PUT** /api/v1/projects/{id}/discards/{mediaId} | Discard a media for a project |
 | [**FavouriteMedia**](CatalogueApi.md#favouritemedia) | **PUT** /api/v1/projects/{id}/favourites/{mediaId} | Add a media to the favourites of a project |
 | [**GetCatalogueMedia**](CatalogueApi.md#getcataloguemedia) | **GET** /api/v1/medias/{id} | Get a media |
-| [**ListFlashOffers**](CatalogueApi.md#listflashoffers) | **GET** /api/v1/flash-offers | List flash offers |
+| [**ListFlashOffers**](CatalogueApi.md#listflashoffers) | **GET** /api/v1/flash-offers | List the medias on offer |
 | [**RequestMedias**](CatalogueApi.md#requestmedias) | **POST** /api/v1/projects/{id}/media-requests | Request specific medias for a project |
 | [**SearchProjectMedias**](CatalogueApi.md#searchprojectmedias) | **GET** /api/v1/projects/{id}/medias | Search the catalogue for a project |
 | [**UndiscardMedia**](CatalogueApi.md#undiscardmedia) | **DELETE** /api/v1/projects/{id}/discards/{mediaId} | Restore a discarded media for a project |
@@ -333,9 +333,9 @@ catch (ApiException e)
 # **ListFlashOffers**
 > ListFlashOffers200Response ListFlashOffers (Guid projectId, string? source = null, string? sort = null, string? domain = null, string? websiteType = null, string? language = null, string? country = null, string? topics = null, bool? notBannedTopics = null, int? minTraffic = null, int? maxTraffic = null, bool? trafficTrendUpward = null, int? minDomainRating = null, int? maxDomainRating = null, decimal? minLinkedToReferringRatio = null, decimal? maxLinkedToReferringRatio = null, int? minPostPrice = null, int? maxPostPrice = null, string? postLinkType = null, string? promotedSocialNetwork = null, bool? withoutAdvertisingLabel = null, bool? homepageListing = null, bool? hasLinkAddition = null, int? minLinkAdditionPrice = null, int? maxLinkAdditionPrice = null, string? linkAdditionLinkType = null, bool? bestPrice = null, bool? recommended = null, bool? favourite = null, bool? requested = null, bool? bought = null, bool? discarded = null, bool? varNew = null, string? ranksGoalKeyword = null, string? ranksAiKeyword = null, int? limit = null, int? offset = null)
 
-List flash offers
+List the medias on offer
 
-The medias on a flash offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with `flashOffer=true`, and takes the same parameters except `flashOffer` and `savedFilterId`. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
+The medias on an offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with `flashOffer=true`, and takes the same parameters except `flashOffer` and `savedFilterId`. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
 
 ### Example
 ```csharp
@@ -361,7 +361,7 @@ namespace Example
             HttpClient httpClient = new HttpClient();
             HttpClientHandler httpClientHandler = new HttpClientHandler();
             var apiInstance = new CatalogueApi(httpClient, config, httpClientHandler);
-            var projectId = "projectId_example";  // Guid | The project to search flash offers for.
+            var projectId = "projectId_example";  // Guid | The project to search medias on offer for.
             var source = "all";  // string? | Which of the project's medias to search: `all` (the default), `recommended` (those Growwer recommends for the project), or those you marked `favourite`, `discarded` or `requested`, or `bought` for the project. Do not combine it with the parameter of the same state. (optional) 
             var sort = "-growwerRank";  // string? | The order. Without it, the web's default order: medias on the project's topic and language first, then best sellers and medias with more published orders. Ties are always broken by media id, so pages never overlap. `-growwerRank`: best match first; `postPrice`, `linkAdditionPrice`: cheapest first; `matchedAt`, `-matchedAt`: when Growwer matched the media with the project; `-traffic`, `-domainRating`, `-referringDomains`: highest first; `linkedToReferringRatio`: lowest first. (optional) 
             var domain = "domain_example";  // string? | Medias whose domain contains this text, 1 to 255 characters. (optional) 
@@ -401,7 +401,7 @@ namespace Example
 
             try
             {
-                // List flash offers
+                // List the medias on offer
                 ListFlashOffers200Response result = apiInstance.ListFlashOffers(projectId, source, sort, domain, websiteType, language, country, topics, notBannedTopics, minTraffic, maxTraffic, trafficTrendUpward, minDomainRating, maxDomainRating, minLinkedToReferringRatio, maxLinkedToReferringRatio, minPostPrice, maxPostPrice, postLinkType, promotedSocialNetwork, withoutAdvertisingLabel, homepageListing, hasLinkAddition, minLinkAdditionPrice, maxLinkAdditionPrice, linkAdditionLinkType, bestPrice, recommended, favourite, requested, bought, discarded, varNew, ranksGoalKeyword, ranksAiKeyword, limit, offset);
                 Debug.WriteLine(result);
             }
@@ -422,7 +422,7 @@ This returns an ApiResponse object which contains the response data, status code
 ```csharp
 try
 {
-    // List flash offers
+    // List the medias on offer
     ApiResponse<ListFlashOffers200Response> response = apiInstance.ListFlashOffersWithHttpInfo(projectId, source, sort, domain, websiteType, language, country, topics, notBannedTopics, minTraffic, maxTraffic, trafficTrendUpward, minDomainRating, maxDomainRating, minLinkedToReferringRatio, maxLinkedToReferringRatio, minPostPrice, maxPostPrice, postLinkType, promotedSocialNetwork, withoutAdvertisingLabel, homepageListing, hasLinkAddition, minLinkAdditionPrice, maxLinkAdditionPrice, linkAdditionLinkType, bestPrice, recommended, favourite, requested, bought, discarded, varNew, ranksGoalKeyword, ranksAiKeyword, limit, offset);
     Debug.Write("Status Code: " + response.StatusCode);
     Debug.Write("Response Headers: " + response.Headers);
@@ -440,7 +440,7 @@ catch (ApiException e)
 
 | Name | Type | Description | Notes |
 |------|------|-------------|-------|
-| **projectId** | **Guid** | The project to search flash offers for. |  |
+| **projectId** | **Guid** | The project to search medias on offer for. |  |
 | **source** | **string?** | Which of the project&#39;s medias to search: &#x60;all&#x60; (the default), &#x60;recommended&#x60; (those Growwer recommends for the project), or those you marked &#x60;favourite&#x60;, &#x60;discarded&#x60; or &#x60;requested&#x60;, or &#x60;bought&#x60; for the project. Do not combine it with the parameter of the same state. | [optional]  |
 | **sort** | **string?** | The order. Without it, the web&#39;s default order: medias on the project&#39;s topic and language first, then best sellers and medias with more published orders. Ties are always broken by media id, so pages never overlap. &#x60;-growwerRank&#x60;: best match first; &#x60;postPrice&#x60;, &#x60;linkAdditionPrice&#x60;: cheapest first; &#x60;matchedAt&#x60;, &#x60;-matchedAt&#x60;: when Growwer matched the media with the project; &#x60;-traffic&#x60;, &#x60;-domainRating&#x60;, &#x60;-referringDomains&#x60;: highest first; &#x60;linkedToReferringRatio&#x60;: lowest first. | [optional]  |
 | **domain** | **string?** | Medias whose domain contains this text, 1 to 255 characters. | [optional]  |
@@ -495,7 +495,7 @@ catch (ApiException e)
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **200** | A page of flash offers and how many there are in all. |  -  |
+| **200** | A page of medias on offer and how many there are in all. |  -  |
 | **401** | The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). |  -  |
 | **403** | The catalogue is open to accounts with recent orders delivered and approved on Growwer, as buyer or as seller, and to other accounts within a daily trial quota; this account has too few such orders and the trial quota is off (code &#x60;catalogue_requires_recent_order&#x60;). The message names the threshold, which &#x60;details.minOrders&#x60; (how many orders) and &#x60;details.windowDays&#x60; (within how many days) repeat; an order counts only once it is delivered and approved. GET /me reports &#x60;catalogue.eligible&#x60; and &#x60;catalogue.dailyCap&#x60;. |  -  |
 | **404** | The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). |  -  |
@@ -680,7 +680,7 @@ namespace Example
             var recommended = true;  // bool? | `true`: only the medias Growwer recommends for the project; `false`: only the others. (optional) 
             var favourite = true;  // bool? | `true`: only your favourites for the project; `false`: leave them out. (optional) 
             var requested = true;  // bool? | `true`: only the medias you requested for the project; `false`: leave them out. (optional) 
-            var flashOffer = true;  // bool? | `true`: only medias with a flash offer running; `false`: leave them out. (optional) 
+            var flashOffer = true;  // bool? | `true`: only medias with an offer running; `false`: leave them out. (optional) 
             var bought = true;  // bool? | `true`: only medias you bought for the project; `false`: leave them out. (optional) 
             var discarded = true;  // bool? | `true`: only the medias you discarded for the project; `false`: leave them out. (optional) 
             var varNew = true;  // bool? | Medias Growwer matched with the project recently. Only `true` applies it; omit it otherwise. (optional) 
@@ -761,7 +761,7 @@ catch (ApiException e)
 | **recommended** | **bool?** | &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. | [optional]  |
 | **favourite** | **bool?** | &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. | [optional]  |
 | **requested** | **bool?** | &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. | [optional]  |
-| **flashOffer** | **bool?** | &#x60;true&#x60;: only medias with a flash offer running; &#x60;false&#x60;: leave them out. | [optional]  |
+| **flashOffer** | **bool?** | &#x60;true&#x60;: only medias with an offer running; &#x60;false&#x60;: leave them out. | [optional]  |
 | **bought** | **bool?** | &#x60;true&#x60;: only medias you bought for the project; &#x60;false&#x60;: leave them out. | [optional]  |
 | **discarded** | **bool?** | &#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. | [optional]  |
 | **varNew** | **bool?** | Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. | [optional]  |

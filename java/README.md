@@ -91,7 +91,7 @@ Add this dependency to your project's POM:
 <dependency>
   <groupId>com.growwer</groupId>
   <artifactId>growwer-api</artifactId>
-  <version>4.0.0</version>
+  <version>4.0.1</version>
   <scope>compile</scope>
 </dependency>
 ```
@@ -107,7 +107,7 @@ Add this dependency to your project's build file:
   }
 
   dependencies {
-     implementation "com.growwer:growwer-api:4.0.0"
+     implementation "com.growwer:growwer-api:4.0.1"
   }
 ```
 
@@ -121,7 +121,7 @@ mvn clean package
 
 Then manually install the following JARs:
 
-* `target/growwer-api-4.0.0.jar`
+* `target/growwer-api-4.0.1.jar`
 * `target/lib/*.jar`
 
 ## Getting Started
@@ -190,7 +190,7 @@ Class | Method | HTTP request | Description
 *CatalogueApi* | [**discardMedia**](docs/CatalogueApi.md#discardMedia) | **PUT** /api/v1/projects/{id}/discards/{mediaId} | Discard a media for a project
 *CatalogueApi* | [**favouriteMedia**](docs/CatalogueApi.md#favouriteMedia) | **PUT** /api/v1/projects/{id}/favourites/{mediaId} | Add a media to the favourites of a project
 *CatalogueApi* | [**getCatalogueMedia**](docs/CatalogueApi.md#getCatalogueMedia) | **GET** /api/v1/medias/{id} | Get a media
-*CatalogueApi* | [**listFlashOffers**](docs/CatalogueApi.md#listFlashOffers) | **GET** /api/v1/flash-offers | List flash offers
+*CatalogueApi* | [**listFlashOffers**](docs/CatalogueApi.md#listFlashOffers) | **GET** /api/v1/flash-offers | List the medias on offer
 *CatalogueApi* | [**requestMedias**](docs/CatalogueApi.md#requestMedias) | **POST** /api/v1/projects/{id}/media-requests | Request specific medias for a project
 *CatalogueApi* | [**searchProjectMedias**](docs/CatalogueApi.md#searchProjectMedias) | **GET** /api/v1/projects/{id}/medias | Search the catalogue for a project
 *CatalogueApi* | [**undiscardMedia**](docs/CatalogueApi.md#undiscardMedia) | **DELETE** /api/v1/projects/{id}/discards/{mediaId} | Restore a discarded media for a project

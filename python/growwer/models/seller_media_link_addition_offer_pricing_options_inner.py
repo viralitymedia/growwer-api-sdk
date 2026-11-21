@@ -32,7 +32,7 @@ class SellerMediaLinkAdditionOfferPricingOptionsInner(BaseModel):
     """ # noqa: E501
     link_type: StrictStr = Field(alias="linkType")
     fee: Money = Field(description="Your base fee for the link type.")
-    current_cost: Optional[MoneyOrNull] = Field(description="What you are paid now for the link type, flash offer discount included; read-only.", alias="currentCost")
+    current_cost: Optional[MoneyOrNull] = Field(description="What you are paid now for the link type, the discount of a running offer (`flashOffer`) included; read-only.", alias="currentCost")
     __properties: ClassVar[List[str]] = ["linkType", "fee", "currentCost"]
 
     @field_validator('link_type')

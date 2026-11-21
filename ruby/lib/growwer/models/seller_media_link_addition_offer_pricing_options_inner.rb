@@ -20,7 +20,7 @@ module Growwer
     # Your base fee for the link type.
     attr_accessor :fee
 
-    # What you are paid now for the link type, flash offer discount included; read-only.
+    # What you are paid now for the link type, the discount of a running offer (`flashOffer`) included; read-only.
     attr_accessor :current_cost
 
     class EnumAttributeValidator

@@ -7,7 +7,7 @@ Method | HTTP request | Description
 [**discard_media**](CatalogueApi.md#discard_media) | **PUT** /api/v1/projects/{id}/discards/{mediaId} | Discard a media for a project
 [**favourite_media**](CatalogueApi.md#favourite_media) | **PUT** /api/v1/projects/{id}/favourites/{mediaId} | Add a media to the favourites of a project
 [**get_catalogue_media**](CatalogueApi.md#get_catalogue_media) | **GET** /api/v1/medias/{id} | Get a media
-[**list_flash_offers**](CatalogueApi.md#list_flash_offers) | **GET** /api/v1/flash-offers | List flash offers
+[**list_flash_offers**](CatalogueApi.md#list_flash_offers) | **GET** /api/v1/flash-offers | List the medias on offer
 [**request_medias**](CatalogueApi.md#request_medias) | **POST** /api/v1/projects/{id}/media-requests | Request specific medias for a project
 [**search_project_medias**](CatalogueApi.md#search_project_medias) | **GET** /api/v1/projects/{id}/medias | Search the catalogue for a project
 [**undiscard_media**](CatalogueApi.md#undiscard_media) | **DELETE** /api/v1/projects/{id}/discards/{mediaId} | Restore a discarded media for a project
@@ -275,9 +275,9 @@ Name | Type | Description  | Notes
 # **list_flash_offers**
 > ListFlashOffers200Response list_flash_offers(project_id, source=source, sort=sort, domain=domain, website_type=website_type, language=language, country=country, topics=topics, not_banned_topics=not_banned_topics, min_traffic=min_traffic, max_traffic=max_traffic, traffic_trend_upward=traffic_trend_upward, min_domain_rating=min_domain_rating, max_domain_rating=max_domain_rating, min_linked_to_referring_ratio=min_linked_to_referring_ratio, max_linked_to_referring_ratio=max_linked_to_referring_ratio, min_post_price=min_post_price, max_post_price=max_post_price, post_link_type=post_link_type, promoted_social_network=promoted_social_network, without_advertising_label=without_advertising_label, homepage_listing=homepage_listing, has_link_addition=has_link_addition, min_link_addition_price=min_link_addition_price, max_link_addition_price=max_link_addition_price, link_addition_link_type=link_addition_link_type, best_price=best_price, recommended=recommended, favourite=favourite, requested=requested, bought=bought, discarded=discarded, new=new, ranks_goal_keyword=ranks_goal_keyword, ranks_ai_keyword=ranks_ai_keyword, limit=limit, offset=offset)
 
-List flash offers
+List the medias on offer
 
-The medias on a flash offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with `flashOffer=true`, and takes the same parameters except `flashOffer` and `savedFilterId`. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
+The medias on an offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with `flashOffer=true`, and takes the same parameters except `flashOffer` and `savedFilterId`. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
 
 ### Example
 
@@ -309,7 +309,7 @@ configuration = growwer.Configuration(
 with growwer.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = growwer.CatalogueApi(api_client)
-    project_id = UUID('38400000-8cf0-11bd-b23e-10b96e4ef00d') # UUID | The project to search flash offers for.
+    project_id = UUID('38400000-8cf0-11bd-b23e-10b96e4ef00d') # UUID | The project to search medias on offer for.
     source = 'source_example' # str | Which of the project's medias to search: `all` (the default), `recommended` (those Growwer recommends for the project), or those you marked `favourite`, `discarded` or `requested`, or `bought` for the project. Do not combine it with the parameter of the same state. (optional)
     sort = 'sort_example' # str | The order. Without it, the web's default order: medias on the project's topic and language first, then best sellers and medias with more published orders. Ties are always broken by media id, so pages never overlap. `-growwerRank`: best match first; `postPrice`, `linkAdditionPrice`: cheapest first; `matchedAt`, `-matchedAt`: when Growwer matched the media with the project; `-traffic`, `-domainRating`, `-referringDomains`: highest first; `linkedToReferringRatio`: lowest first. (optional)
     domain = 'domain_example' # str | Medias whose domain contains this text, 1 to 255 characters. (optional)
@@ -348,7 +348,7 @@ with growwer.ApiClient(configuration) as api_client:
     offset = 0 # int | Medias to skip, at most 99900. (optional) (default to 0)
 
     try:
-        # List flash offers
+        # List the medias on offer
         api_response = api_instance.list_flash_offers(project_id, source=source, sort=sort, domain=domain, website_type=website_type, language=language, country=country, topics=topics, not_banned_topics=not_banned_topics, min_traffic=min_traffic, max_traffic=max_traffic, traffic_trend_upward=traffic_trend_upward, min_domain_rating=min_domain_rating, max_domain_rating=max_domain_rating, min_linked_to_referring_ratio=min_linked_to_referring_ratio, max_linked_to_referring_ratio=max_linked_to_referring_ratio, min_post_price=min_post_price, max_post_price=max_post_price, post_link_type=post_link_type, promoted_social_network=promoted_social_network, without_advertising_label=without_advertising_label, homepage_listing=homepage_listing, has_link_addition=has_link_addition, min_link_addition_price=min_link_addition_price, max_link_addition_price=max_link_addition_price, link_addition_link_type=link_addition_link_type, best_price=best_price, recommended=recommended, favourite=favourite, requested=requested, bought=bought, discarded=discarded, new=new, ranks_goal_keyword=ranks_goal_keyword, ranks_ai_keyword=ranks_ai_keyword, limit=limit, offset=offset)
         print("The response of CatalogueApi->list_flash_offers:\n")
         pprint(api_response)
@@ -363,7 +363,7 @@ with growwer.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **project_id** | **UUID**| The project to search flash offers for. | 
+ **project_id** | **UUID**| The project to search medias on offer for. | 
  **source** | **str**| Which of the project&#39;s medias to search: &#x60;all&#x60; (the default), &#x60;recommended&#x60; (those Growwer recommends for the project), or those you marked &#x60;favourite&#x60;, &#x60;discarded&#x60; or &#x60;requested&#x60;, or &#x60;bought&#x60; for the project. Do not combine it with the parameter of the same state. | [optional] 
  **sort** | **str**| The order. Without it, the web&#39;s default order: medias on the project&#39;s topic and language first, then best sellers and medias with more published orders. Ties are always broken by media id, so pages never overlap. &#x60;-growwerRank&#x60;: best match first; &#x60;postPrice&#x60;, &#x60;linkAdditionPrice&#x60;: cheapest first; &#x60;matchedAt&#x60;, &#x60;-matchedAt&#x60;: when Growwer matched the media with the project; &#x60;-traffic&#x60;, &#x60;-domainRating&#x60;, &#x60;-referringDomains&#x60;: highest first; &#x60;linkedToReferringRatio&#x60;: lowest first. | [optional] 
  **domain** | **str**| Medias whose domain contains this text, 1 to 255 characters. | [optional] 
@@ -418,7 +418,7 @@ Name | Type | Description  | Notes
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | A page of flash offers and how many there are in all. |  -  |
+**200** | A page of medias on offer and how many there are in all. |  -  |
 **401** | The API key is missing, malformed, unknown, revoked or expired, or its account cannot sign in (code &#x60;unauthorized&#x60;). |  -  |
 **403** | The catalogue is open to accounts with recent orders delivered and approved on Growwer, as buyer or as seller, and to other accounts within a daily trial quota; this account has too few such orders and the trial quota is off (code &#x60;catalogue_requires_recent_order&#x60;). The message names the threshold, which &#x60;details.minOrders&#x60; (how many orders) and &#x60;details.windowDays&#x60; (within how many days) repeat; an order counts only once it is delivered and approved. GET /me reports &#x60;catalogue.eligible&#x60; and &#x60;catalogue.dailyCap&#x60;. |  -  |
 **404** | The resource does not exist, or it is not yours (code &#x60;not_found&#x60;). |  -  |
@@ -589,7 +589,7 @@ with growwer.ApiClient(configuration) as api_client:
     recommended = True # bool | `true`: only the medias Growwer recommends for the project; `false`: only the others. (optional)
     favourite = True # bool | `true`: only your favourites for the project; `false`: leave them out. (optional)
     requested = True # bool | `true`: only the medias you requested for the project; `false`: leave them out. (optional)
-    flash_offer = True # bool | `true`: only medias with a flash offer running; `false`: leave them out. (optional)
+    flash_offer = True # bool | `true`: only medias with an offer running; `false`: leave them out. (optional)
     bought = True # bool | `true`: only medias you bought for the project; `false`: leave them out. (optional)
     discarded = True # bool | `true`: only the medias you discarded for the project; `false`: leave them out. (optional)
     new = True # bool | Medias Growwer matched with the project recently. Only `true` applies it; omit it otherwise. (optional)
@@ -645,7 +645,7 @@ Name | Type | Description  | Notes
  **recommended** | **bool**| &#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. | [optional] 
  **favourite** | **bool**| &#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. | [optional] 
  **requested** | **bool**| &#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. | [optional] 
- **flash_offer** | **bool**| &#x60;true&#x60;: only medias with a flash offer running; &#x60;false&#x60;: leave them out. | [optional] 
+ **flash_offer** | **bool**| &#x60;true&#x60;: only medias with an offer running; &#x60;false&#x60;: leave them out. | [optional] 
  **bought** | **bool**| &#x60;true&#x60;: only medias you bought for the project; &#x60;false&#x60;: leave them out. | [optional] 
  **discarded** | **bool**| &#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. | [optional] 
  **new** | **bool**| Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. | [optional] 

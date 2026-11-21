@@ -100,13 +100,13 @@ namespace Growwer.Api.Api
         /// <returns>ApiResponse of CatalogueMedia</returns>
         ApiResponse<CatalogueMedia> GetCatalogueMediaWithHttpInfo(Guid id);
         /// <summary>
-        /// List flash offers
+        /// List the medias on offer
         /// </summary>
         /// <remarks>
-        /// The medias on a flash offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with &#x60;flashOffer&#x3D;true&#x60;, and takes the same parameters except &#x60;flashOffer&#x60; and &#x60;savedFilterId&#x60;. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
+        /// The medias on an offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with &#x60;flashOffer&#x3D;true&#x60;, and takes the same parameters except &#x60;flashOffer&#x60; and &#x60;savedFilterId&#x60;. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="projectId">The project to search flash offers for.</param>
+        /// <param name="projectId">The project to search medias on offer for.</param>
         /// <param name="source">Which of the project&#39;s medias to search: &#x60;all&#x60; (the default), &#x60;recommended&#x60; (those Growwer recommends for the project), or those you marked &#x60;favourite&#x60;, &#x60;discarded&#x60; or &#x60;requested&#x60;, or &#x60;bought&#x60; for the project. Do not combine it with the parameter of the same state. (optional)</param>
         /// <param name="sort">The order. Without it, the web&#39;s default order: medias on the project&#39;s topic and language first, then best sellers and medias with more published orders. Ties are always broken by media id, so pages never overlap. &#x60;-growwerRank&#x60;: best match first; &#x60;postPrice&#x60;, &#x60;linkAdditionPrice&#x60;: cheapest first; &#x60;matchedAt&#x60;, &#x60;-matchedAt&#x60;: when Growwer matched the media with the project; &#x60;-traffic&#x60;, &#x60;-domainRating&#x60;, &#x60;-referringDomains&#x60;: highest first; &#x60;linkedToReferringRatio&#x60;: lowest first. (optional)</param>
         /// <param name="domain">Medias whose domain contains this text, 1 to 255 characters. (optional)</param>
@@ -147,13 +147,13 @@ namespace Growwer.Api.Api
         ListFlashOffers200Response ListFlashOffers(Guid projectId, string? source = default, string? sort = default, string? domain = default, string? websiteType = default, string? language = default, string? country = default, string? topics = default, bool? notBannedTopics = default, int? minTraffic = default, int? maxTraffic = default, bool? trafficTrendUpward = default, int? minDomainRating = default, int? maxDomainRating = default, decimal? minLinkedToReferringRatio = default, decimal? maxLinkedToReferringRatio = default, int? minPostPrice = default, int? maxPostPrice = default, string? postLinkType = default, string? promotedSocialNetwork = default, bool? withoutAdvertisingLabel = default, bool? homepageListing = default, bool? hasLinkAddition = default, int? minLinkAdditionPrice = default, int? maxLinkAdditionPrice = default, string? linkAdditionLinkType = default, bool? bestPrice = default, bool? recommended = default, bool? favourite = default, bool? requested = default, bool? bought = default, bool? discarded = default, bool? varNew = default, string? ranksGoalKeyword = default, string? ranksAiKeyword = default, int? limit = default, int? offset = default);
 
         /// <summary>
-        /// List flash offers
+        /// List the medias on offer
         /// </summary>
         /// <remarks>
-        /// The medias on a flash offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with &#x60;flashOffer&#x3D;true&#x60;, and takes the same parameters except &#x60;flashOffer&#x60; and &#x60;savedFilterId&#x60;. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
+        /// The medias on an offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with &#x60;flashOffer&#x3D;true&#x60;, and takes the same parameters except &#x60;flashOffer&#x60; and &#x60;savedFilterId&#x60;. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="projectId">The project to search flash offers for.</param>
+        /// <param name="projectId">The project to search medias on offer for.</param>
         /// <param name="source">Which of the project&#39;s medias to search: &#x60;all&#x60; (the default), &#x60;recommended&#x60; (those Growwer recommends for the project), or those you marked &#x60;favourite&#x60;, &#x60;discarded&#x60; or &#x60;requested&#x60;, or &#x60;bought&#x60; for the project. Do not combine it with the parameter of the same state. (optional)</param>
         /// <param name="sort">The order. Without it, the web&#39;s default order: medias on the project&#39;s topic and language first, then best sellers and medias with more published orders. Ties are always broken by media id, so pages never overlap. &#x60;-growwerRank&#x60;: best match first; &#x60;postPrice&#x60;, &#x60;linkAdditionPrice&#x60;: cheapest first; &#x60;matchedAt&#x60;, &#x60;-matchedAt&#x60;: when Growwer matched the media with the project; &#x60;-traffic&#x60;, &#x60;-domainRating&#x60;, &#x60;-referringDomains&#x60;: highest first; &#x60;linkedToReferringRatio&#x60;: lowest first. (optional)</param>
         /// <param name="domain">Medias whose domain contains this text, 1 to 255 characters. (optional)</param>
@@ -255,7 +255,7 @@ namespace Growwer.Api.Api
         /// <param name="recommended">&#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. (optional)</param>
         /// <param name="favourite">&#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="requested">&#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. (optional)</param>
-        /// <param name="flashOffer">&#x60;true&#x60;: only medias with a flash offer running; &#x60;false&#x60;: leave them out. (optional)</param>
+        /// <param name="flashOffer">&#x60;true&#x60;: only medias with an offer running; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="bought">&#x60;true&#x60;: only medias you bought for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="discarded">&#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="varNew">Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)</param>
@@ -304,7 +304,7 @@ namespace Growwer.Api.Api
         /// <param name="recommended">&#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. (optional)</param>
         /// <param name="favourite">&#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="requested">&#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. (optional)</param>
-        /// <param name="flashOffer">&#x60;true&#x60;: only medias with a flash offer running; &#x60;false&#x60;: leave them out. (optional)</param>
+        /// <param name="flashOffer">&#x60;true&#x60;: only medias with an offer running; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="bought">&#x60;true&#x60;: only medias you bought for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="discarded">&#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="varNew">Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)</param>
@@ -451,13 +451,13 @@ namespace Growwer.Api.Api
         /// <returns>Task of ApiResponse (CatalogueMedia)</returns>
         System.Threading.Tasks.Task<ApiResponse<CatalogueMedia>> GetCatalogueMediaWithHttpInfoAsync(Guid id, System.Threading.CancellationToken cancellationToken = default);
         /// <summary>
-        /// List flash offers
+        /// List the medias on offer
         /// </summary>
         /// <remarks>
-        /// The medias on a flash offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with &#x60;flashOffer&#x3D;true&#x60;, and takes the same parameters except &#x60;flashOffer&#x60; and &#x60;savedFilterId&#x60;. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
+        /// The medias on an offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with &#x60;flashOffer&#x3D;true&#x60;, and takes the same parameters except &#x60;flashOffer&#x60; and &#x60;savedFilterId&#x60;. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="projectId">The project to search flash offers for.</param>
+        /// <param name="projectId">The project to search medias on offer for.</param>
         /// <param name="source">Which of the project&#39;s medias to search: &#x60;all&#x60; (the default), &#x60;recommended&#x60; (those Growwer recommends for the project), or those you marked &#x60;favourite&#x60;, &#x60;discarded&#x60; or &#x60;requested&#x60;, or &#x60;bought&#x60; for the project. Do not combine it with the parameter of the same state. (optional)</param>
         /// <param name="sort">The order. Without it, the web&#39;s default order: medias on the project&#39;s topic and language first, then best sellers and medias with more published orders. Ties are always broken by media id, so pages never overlap. &#x60;-growwerRank&#x60;: best match first; &#x60;postPrice&#x60;, &#x60;linkAdditionPrice&#x60;: cheapest first; &#x60;matchedAt&#x60;, &#x60;-matchedAt&#x60;: when Growwer matched the media with the project; &#x60;-traffic&#x60;, &#x60;-domainRating&#x60;, &#x60;-referringDomains&#x60;: highest first; &#x60;linkedToReferringRatio&#x60;: lowest first. (optional)</param>
         /// <param name="domain">Medias whose domain contains this text, 1 to 255 characters. (optional)</param>
@@ -499,13 +499,13 @@ namespace Growwer.Api.Api
         System.Threading.Tasks.Task<ListFlashOffers200Response> ListFlashOffersAsync(Guid projectId, string? source = default, string? sort = default, string? domain = default, string? websiteType = default, string? language = default, string? country = default, string? topics = default, bool? notBannedTopics = default, int? minTraffic = default, int? maxTraffic = default, bool? trafficTrendUpward = default, int? minDomainRating = default, int? maxDomainRating = default, decimal? minLinkedToReferringRatio = default, decimal? maxLinkedToReferringRatio = default, int? minPostPrice = default, int? maxPostPrice = default, string? postLinkType = default, string? promotedSocialNetwork = default, bool? withoutAdvertisingLabel = default, bool? homepageListing = default, bool? hasLinkAddition = default, int? minLinkAdditionPrice = default, int? maxLinkAdditionPrice = default, string? linkAdditionLinkType = default, bool? bestPrice = default, bool? recommended = default, bool? favourite = default, bool? requested = default, bool? bought = default, bool? discarded = default, bool? varNew = default, string? ranksGoalKeyword = default, string? ranksAiKeyword = default, int? limit = default, int? offset = default, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// List flash offers
+        /// List the medias on offer
         /// </summary>
         /// <remarks>
-        /// The medias on a flash offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with &#x60;flashOffer&#x3D;true&#x60;, and takes the same parameters except &#x60;flashOffer&#x60; and &#x60;savedFilterId&#x60;. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
+        /// The medias on an offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with &#x60;flashOffer&#x3D;true&#x60;, and takes the same parameters except &#x60;flashOffer&#x60; and &#x60;savedFilterId&#x60;. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
         /// </remarks>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="projectId">The project to search flash offers for.</param>
+        /// <param name="projectId">The project to search medias on offer for.</param>
         /// <param name="source">Which of the project&#39;s medias to search: &#x60;all&#x60; (the default), &#x60;recommended&#x60; (those Growwer recommends for the project), or those you marked &#x60;favourite&#x60;, &#x60;discarded&#x60; or &#x60;requested&#x60;, or &#x60;bought&#x60; for the project. Do not combine it with the parameter of the same state. (optional)</param>
         /// <param name="sort">The order. Without it, the web&#39;s default order: medias on the project&#39;s topic and language first, then best sellers and medias with more published orders. Ties are always broken by media id, so pages never overlap. &#x60;-growwerRank&#x60;: best match first; &#x60;postPrice&#x60;, &#x60;linkAdditionPrice&#x60;: cheapest first; &#x60;matchedAt&#x60;, &#x60;-matchedAt&#x60;: when Growwer matched the media with the project; &#x60;-traffic&#x60;, &#x60;-domainRating&#x60;, &#x60;-referringDomains&#x60;: highest first; &#x60;linkedToReferringRatio&#x60;: lowest first. (optional)</param>
         /// <param name="domain">Medias whose domain contains this text, 1 to 255 characters. (optional)</param>
@@ -610,7 +610,7 @@ namespace Growwer.Api.Api
         /// <param name="recommended">&#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. (optional)</param>
         /// <param name="favourite">&#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="requested">&#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. (optional)</param>
-        /// <param name="flashOffer">&#x60;true&#x60;: only medias with a flash offer running; &#x60;false&#x60;: leave them out. (optional)</param>
+        /// <param name="flashOffer">&#x60;true&#x60;: only medias with an offer running; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="bought">&#x60;true&#x60;: only medias you bought for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="discarded">&#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="varNew">Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)</param>
@@ -660,7 +660,7 @@ namespace Growwer.Api.Api
         /// <param name="recommended">&#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. (optional)</param>
         /// <param name="favourite">&#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="requested">&#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. (optional)</param>
-        /// <param name="flashOffer">&#x60;true&#x60;: only medias with a flash offer running; &#x60;false&#x60;: leave them out. (optional)</param>
+        /// <param name="flashOffer">&#x60;true&#x60;: only medias with an offer running; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="bought">&#x60;true&#x60;: only medias you bought for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="discarded">&#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="varNew">Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)</param>
@@ -1332,10 +1332,10 @@ namespace Growwer.Api.Api
         }
 
         /// <summary>
-        /// List flash offers The medias on a flash offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with &#x60;flashOffer&#x3D;true&#x60;, and takes the same parameters except &#x60;flashOffer&#x60; and &#x60;savedFilterId&#x60;. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
+        /// List the medias on offer The medias on an offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with &#x60;flashOffer&#x3D;true&#x60;, and takes the same parameters except &#x60;flashOffer&#x60; and &#x60;savedFilterId&#x60;. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="projectId">The project to search flash offers for.</param>
+        /// <param name="projectId">The project to search medias on offer for.</param>
         /// <param name="source">Which of the project&#39;s medias to search: &#x60;all&#x60; (the default), &#x60;recommended&#x60; (those Growwer recommends for the project), or those you marked &#x60;favourite&#x60;, &#x60;discarded&#x60; or &#x60;requested&#x60;, or &#x60;bought&#x60; for the project. Do not combine it with the parameter of the same state. (optional)</param>
         /// <param name="sort">The order. Without it, the web&#39;s default order: medias on the project&#39;s topic and language first, then best sellers and medias with more published orders. Ties are always broken by media id, so pages never overlap. &#x60;-growwerRank&#x60;: best match first; &#x60;postPrice&#x60;, &#x60;linkAdditionPrice&#x60;: cheapest first; &#x60;matchedAt&#x60;, &#x60;-matchedAt&#x60;: when Growwer matched the media with the project; &#x60;-traffic&#x60;, &#x60;-domainRating&#x60;, &#x60;-referringDomains&#x60;: highest first; &#x60;linkedToReferringRatio&#x60;: lowest first. (optional)</param>
         /// <param name="domain">Medias whose domain contains this text, 1 to 255 characters. (optional)</param>
@@ -1380,10 +1380,10 @@ namespace Growwer.Api.Api
         }
 
         /// <summary>
-        /// List flash offers The medias on a flash offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with &#x60;flashOffer&#x3D;true&#x60;, and takes the same parameters except &#x60;flashOffer&#x60; and &#x60;savedFilterId&#x60;. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
+        /// List the medias on offer The medias on an offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with &#x60;flashOffer&#x3D;true&#x60;, and takes the same parameters except &#x60;flashOffer&#x60; and &#x60;savedFilterId&#x60;. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="projectId">The project to search flash offers for.</param>
+        /// <param name="projectId">The project to search medias on offer for.</param>
         /// <param name="source">Which of the project&#39;s medias to search: &#x60;all&#x60; (the default), &#x60;recommended&#x60; (those Growwer recommends for the project), or those you marked &#x60;favourite&#x60;, &#x60;discarded&#x60; or &#x60;requested&#x60;, or &#x60;bought&#x60; for the project. Do not combine it with the parameter of the same state. (optional)</param>
         /// <param name="sort">The order. Without it, the web&#39;s default order: medias on the project&#39;s topic and language first, then best sellers and medias with more published orders. Ties are always broken by media id, so pages never overlap. &#x60;-growwerRank&#x60;: best match first; &#x60;postPrice&#x60;, &#x60;linkAdditionPrice&#x60;: cheapest first; &#x60;matchedAt&#x60;, &#x60;-matchedAt&#x60;: when Growwer matched the media with the project; &#x60;-traffic&#x60;, &#x60;-domainRating&#x60;, &#x60;-referringDomains&#x60;: highest first; &#x60;linkedToReferringRatio&#x60;: lowest first. (optional)</param>
         /// <param name="domain">Medias whose domain contains this text, 1 to 255 characters. (optional)</param>
@@ -1605,10 +1605,10 @@ namespace Growwer.Api.Api
         }
 
         /// <summary>
-        /// List flash offers The medias on a flash offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with &#x60;flashOffer&#x3D;true&#x60;, and takes the same parameters except &#x60;flashOffer&#x60; and &#x60;savedFilterId&#x60;. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
+        /// List the medias on offer The medias on an offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with &#x60;flashOffer&#x3D;true&#x60;, and takes the same parameters except &#x60;flashOffer&#x60; and &#x60;savedFilterId&#x60;. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="projectId">The project to search flash offers for.</param>
+        /// <param name="projectId">The project to search medias on offer for.</param>
         /// <param name="source">Which of the project&#39;s medias to search: &#x60;all&#x60; (the default), &#x60;recommended&#x60; (those Growwer recommends for the project), or those you marked &#x60;favourite&#x60;, &#x60;discarded&#x60; or &#x60;requested&#x60;, or &#x60;bought&#x60; for the project. Do not combine it with the parameter of the same state. (optional)</param>
         /// <param name="sort">The order. Without it, the web&#39;s default order: medias on the project&#39;s topic and language first, then best sellers and medias with more published orders. Ties are always broken by media id, so pages never overlap. &#x60;-growwerRank&#x60;: best match first; &#x60;postPrice&#x60;, &#x60;linkAdditionPrice&#x60;: cheapest first; &#x60;matchedAt&#x60;, &#x60;-matchedAt&#x60;: when Growwer matched the media with the project; &#x60;-traffic&#x60;, &#x60;-domainRating&#x60;, &#x60;-referringDomains&#x60;: highest first; &#x60;linkedToReferringRatio&#x60;: lowest first. (optional)</param>
         /// <param name="domain">Medias whose domain contains this text, 1 to 255 characters. (optional)</param>
@@ -1654,10 +1654,10 @@ namespace Growwer.Api.Api
         }
 
         /// <summary>
-        /// List flash offers The medias on a flash offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with &#x60;flashOffer&#x3D;true&#x60;, and takes the same parameters except &#x60;flashOffer&#x60; and &#x60;savedFilterId&#x60;. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
+        /// List the medias on offer The medias on an offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with &#x60;flashOffer&#x3D;true&#x60;, and takes the same parameters except &#x60;flashOffer&#x60; and &#x60;savedFilterId&#x60;. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
         /// </summary>
         /// <exception cref="Growwer.Api.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="projectId">The project to search flash offers for.</param>
+        /// <param name="projectId">The project to search medias on offer for.</param>
         /// <param name="source">Which of the project&#39;s medias to search: &#x60;all&#x60; (the default), &#x60;recommended&#x60; (those Growwer recommends for the project), or those you marked &#x60;favourite&#x60;, &#x60;discarded&#x60; or &#x60;requested&#x60;, or &#x60;bought&#x60; for the project. Do not combine it with the parameter of the same state. (optional)</param>
         /// <param name="sort">The order. Without it, the web&#39;s default order: medias on the project&#39;s topic and language first, then best sellers and medias with more published orders. Ties are always broken by media id, so pages never overlap. &#x60;-growwerRank&#x60;: best match first; &#x60;postPrice&#x60;, &#x60;linkAdditionPrice&#x60;: cheapest first; &#x60;matchedAt&#x60;, &#x60;-matchedAt&#x60;: when Growwer matched the media with the project; &#x60;-traffic&#x60;, &#x60;-domainRating&#x60;, &#x60;-referringDomains&#x60;: highest first; &#x60;linkedToReferringRatio&#x60;: lowest first. (optional)</param>
         /// <param name="domain">Medias whose domain contains this text, 1 to 255 characters. (optional)</param>
@@ -2066,7 +2066,7 @@ namespace Growwer.Api.Api
         /// <param name="recommended">&#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. (optional)</param>
         /// <param name="favourite">&#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="requested">&#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. (optional)</param>
-        /// <param name="flashOffer">&#x60;true&#x60;: only medias with a flash offer running; &#x60;false&#x60;: leave them out. (optional)</param>
+        /// <param name="flashOffer">&#x60;true&#x60;: only medias with an offer running; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="bought">&#x60;true&#x60;: only medias you bought for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="discarded">&#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="varNew">Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)</param>
@@ -2116,7 +2116,7 @@ namespace Growwer.Api.Api
         /// <param name="recommended">&#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. (optional)</param>
         /// <param name="favourite">&#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="requested">&#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. (optional)</param>
-        /// <param name="flashOffer">&#x60;true&#x60;: only medias with a flash offer running; &#x60;false&#x60;: leave them out. (optional)</param>
+        /// <param name="flashOffer">&#x60;true&#x60;: only medias with an offer running; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="bought">&#x60;true&#x60;: only medias you bought for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="discarded">&#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="varNew">Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)</param>
@@ -2351,7 +2351,7 @@ namespace Growwer.Api.Api
         /// <param name="recommended">&#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. (optional)</param>
         /// <param name="favourite">&#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="requested">&#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. (optional)</param>
-        /// <param name="flashOffer">&#x60;true&#x60;: only medias with a flash offer running; &#x60;false&#x60;: leave them out. (optional)</param>
+        /// <param name="flashOffer">&#x60;true&#x60;: only medias with an offer running; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="bought">&#x60;true&#x60;: only medias you bought for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="discarded">&#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="varNew">Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)</param>
@@ -2402,7 +2402,7 @@ namespace Growwer.Api.Api
         /// <param name="recommended">&#x60;true&#x60;: only the medias Growwer recommends for the project; &#x60;false&#x60;: only the others. (optional)</param>
         /// <param name="favourite">&#x60;true&#x60;: only your favourites for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="requested">&#x60;true&#x60;: only the medias you requested for the project; &#x60;false&#x60;: leave them out. (optional)</param>
-        /// <param name="flashOffer">&#x60;true&#x60;: only medias with a flash offer running; &#x60;false&#x60;: leave them out. (optional)</param>
+        /// <param name="flashOffer">&#x60;true&#x60;: only medias with an offer running; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="bought">&#x60;true&#x60;: only medias you bought for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="discarded">&#x60;true&#x60;: only the medias you discarded for the project; &#x60;false&#x60;: leave them out. (optional)</param>
         /// <param name="varNew">Medias Growwer matched with the project recently. Only &#x60;true&#x60; applies it; omit it otherwise. (optional)</param>

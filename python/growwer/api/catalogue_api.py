@@ -955,7 +955,7 @@ class CatalogueApi:
     @validate_call
     def list_flash_offers(
         self,
-        project_id: Annotated[UUID, Field(description="The project to search flash offers for.")],
+        project_id: Annotated[UUID, Field(description="The project to search medias on offer for.")],
         source: Annotated[Optional[StrictStr], Field(description="Which of the project's medias to search: `all` (the default), `recommended` (those Growwer recommends for the project), or those you marked `favourite`, `discarded` or `requested`, or `bought` for the project. Do not combine it with the parameter of the same state.")] = None,
         sort: Annotated[Optional[StrictStr], Field(description="The order. Without it, the web's default order: medias on the project's topic and language first, then best sellers and medias with more published orders. Ties are always broken by media id, so pages never overlap. `-growwerRank`: best match first; `postPrice`, `linkAdditionPrice`: cheapest first; `matchedAt`, `-matchedAt`: when Growwer matched the media with the project; `-traffic`, `-domainRating`, `-referringDomains`: highest first; `linkedToReferringRatio`: lowest first.")] = None,
         domain: Annotated[Optional[StrictStr], Field(description="Medias whose domain contains this text, 1 to 255 characters.")] = None,
@@ -1005,11 +1005,11 @@ class CatalogueApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> ListFlashOffers200Response:
-        """List flash offers
+        """List the medias on offer
 
-        The medias on a flash offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with `flashOffer=true`, and takes the same parameters except `flashOffer` and `savedFilterId`. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
+        The medias on an offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with `flashOffer=true`, and takes the same parameters except `flashOffer` and `savedFilterId`. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
 
-        :param project_id: The project to search flash offers for. (required)
+        :param project_id: The project to search medias on offer for. (required)
         :type project_id: UUID
         :param source: Which of the project's medias to search: `all` (the default), `recommended` (those Growwer recommends for the project), or those you marked `favourite`, `discarded` or `requested`, or `bought` for the project. Do not combine it with the parameter of the same state.
         :type source: str
@@ -1173,7 +1173,7 @@ class CatalogueApi:
     @validate_call
     def list_flash_offers_with_http_info(
         self,
-        project_id: Annotated[UUID, Field(description="The project to search flash offers for.")],
+        project_id: Annotated[UUID, Field(description="The project to search medias on offer for.")],
         source: Annotated[Optional[StrictStr], Field(description="Which of the project's medias to search: `all` (the default), `recommended` (those Growwer recommends for the project), or those you marked `favourite`, `discarded` or `requested`, or `bought` for the project. Do not combine it with the parameter of the same state.")] = None,
         sort: Annotated[Optional[StrictStr], Field(description="The order. Without it, the web's default order: medias on the project's topic and language first, then best sellers and medias with more published orders. Ties are always broken by media id, so pages never overlap. `-growwerRank`: best match first; `postPrice`, `linkAdditionPrice`: cheapest first; `matchedAt`, `-matchedAt`: when Growwer matched the media with the project; `-traffic`, `-domainRating`, `-referringDomains`: highest first; `linkedToReferringRatio`: lowest first.")] = None,
         domain: Annotated[Optional[StrictStr], Field(description="Medias whose domain contains this text, 1 to 255 characters.")] = None,
@@ -1223,11 +1223,11 @@ class CatalogueApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> ApiResponse[ListFlashOffers200Response]:
-        """List flash offers
+        """List the medias on offer
 
-        The medias on a flash offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with `flashOffer=true`, and takes the same parameters except `flashOffer` and `savedFilterId`. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
+        The medias on an offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with `flashOffer=true`, and takes the same parameters except `flashOffer` and `savedFilterId`. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
 
-        :param project_id: The project to search flash offers for. (required)
+        :param project_id: The project to search medias on offer for. (required)
         :type project_id: UUID
         :param source: Which of the project's medias to search: `all` (the default), `recommended` (those Growwer recommends for the project), or those you marked `favourite`, `discarded` or `requested`, or `bought` for the project. Do not combine it with the parameter of the same state.
         :type source: str
@@ -1391,7 +1391,7 @@ class CatalogueApi:
     @validate_call
     def list_flash_offers_without_preload_content(
         self,
-        project_id: Annotated[UUID, Field(description="The project to search flash offers for.")],
+        project_id: Annotated[UUID, Field(description="The project to search medias on offer for.")],
         source: Annotated[Optional[StrictStr], Field(description="Which of the project's medias to search: `all` (the default), `recommended` (those Growwer recommends for the project), or those you marked `favourite`, `discarded` or `requested`, or `bought` for the project. Do not combine it with the parameter of the same state.")] = None,
         sort: Annotated[Optional[StrictStr], Field(description="The order. Without it, the web's default order: medias on the project's topic and language first, then best sellers and medias with more published orders. Ties are always broken by media id, so pages never overlap. `-growwerRank`: best match first; `postPrice`, `linkAdditionPrice`: cheapest first; `matchedAt`, `-matchedAt`: when Growwer matched the media with the project; `-traffic`, `-domainRating`, `-referringDomains`: highest first; `linkedToReferringRatio`: lowest first.")] = None,
         domain: Annotated[Optional[StrictStr], Field(description="Medias whose domain contains this text, 1 to 255 characters.")] = None,
@@ -1441,11 +1441,11 @@ class CatalogueApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> RESTResponseType:
-        """List flash offers
+        """List the medias on offer
 
-        The medias on a flash offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with `flashOffer=true`, and takes the same parameters except `flashOffer` and `savedFilterId`. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
+        The medias on an offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with `flashOffer=true`, and takes the same parameters except `flashOffer` and `savedFilterId`. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
 
-        :param project_id: The project to search flash offers for. (required)
+        :param project_id: The project to search medias on offer for. (required)
         :type project_id: UUID
         :param source: Which of the project's medias to search: `all` (the default), `recommended` (those Growwer recommends for the project), or those you marked `favourite`, `discarded` or `requested`, or `bought` for the project. Do not combine it with the parameter of the same state.
         :type source: str
@@ -2213,7 +2213,7 @@ class CatalogueApi:
         recommended: Annotated[Optional[StrictBool], Field(description="`true`: only the medias Growwer recommends for the project; `false`: only the others.")] = None,
         favourite: Annotated[Optional[StrictBool], Field(description="`true`: only your favourites for the project; `false`: leave them out.")] = None,
         requested: Annotated[Optional[StrictBool], Field(description="`true`: only the medias you requested for the project; `false`: leave them out.")] = None,
-        flash_offer: Annotated[Optional[StrictBool], Field(description="`true`: only medias with a flash offer running; `false`: leave them out.")] = None,
+        flash_offer: Annotated[Optional[StrictBool], Field(description="`true`: only medias with an offer running; `false`: leave them out.")] = None,
         bought: Annotated[Optional[StrictBool], Field(description="`true`: only medias you bought for the project; `false`: leave them out.")] = None,
         discarded: Annotated[Optional[StrictBool], Field(description="`true`: only the medias you discarded for the project; `false`: leave them out.")] = None,
         new: Annotated[Optional[StrictBool], Field(description="Medias Growwer matched with the project recently. Only `true` applies it; omit it otherwise.")] = None,
@@ -2300,7 +2300,7 @@ class CatalogueApi:
         :type favourite: bool
         :param requested: `true`: only the medias you requested for the project; `false`: leave them out.
         :type requested: bool
-        :param flash_offer: `true`: only medias with a flash offer running; `false`: leave them out.
+        :param flash_offer: `true`: only medias with an offer running; `false`: leave them out.
         :type flash_offer: bool
         :param bought: `true`: only medias you bought for the project; `false`: leave them out.
         :type bought: bool
@@ -2439,7 +2439,7 @@ class CatalogueApi:
         recommended: Annotated[Optional[StrictBool], Field(description="`true`: only the medias Growwer recommends for the project; `false`: only the others.")] = None,
         favourite: Annotated[Optional[StrictBool], Field(description="`true`: only your favourites for the project; `false`: leave them out.")] = None,
         requested: Annotated[Optional[StrictBool], Field(description="`true`: only the medias you requested for the project; `false`: leave them out.")] = None,
-        flash_offer: Annotated[Optional[StrictBool], Field(description="`true`: only medias with a flash offer running; `false`: leave them out.")] = None,
+        flash_offer: Annotated[Optional[StrictBool], Field(description="`true`: only medias with an offer running; `false`: leave them out.")] = None,
         bought: Annotated[Optional[StrictBool], Field(description="`true`: only medias you bought for the project; `false`: leave them out.")] = None,
         discarded: Annotated[Optional[StrictBool], Field(description="`true`: only the medias you discarded for the project; `false`: leave them out.")] = None,
         new: Annotated[Optional[StrictBool], Field(description="Medias Growwer matched with the project recently. Only `true` applies it; omit it otherwise.")] = None,
@@ -2526,7 +2526,7 @@ class CatalogueApi:
         :type favourite: bool
         :param requested: `true`: only the medias you requested for the project; `false`: leave them out.
         :type requested: bool
-        :param flash_offer: `true`: only medias with a flash offer running; `false`: leave them out.
+        :param flash_offer: `true`: only medias with an offer running; `false`: leave them out.
         :type flash_offer: bool
         :param bought: `true`: only medias you bought for the project; `false`: leave them out.
         :type bought: bool
@@ -2665,7 +2665,7 @@ class CatalogueApi:
         recommended: Annotated[Optional[StrictBool], Field(description="`true`: only the medias Growwer recommends for the project; `false`: only the others.")] = None,
         favourite: Annotated[Optional[StrictBool], Field(description="`true`: only your favourites for the project; `false`: leave them out.")] = None,
         requested: Annotated[Optional[StrictBool], Field(description="`true`: only the medias you requested for the project; `false`: leave them out.")] = None,
-        flash_offer: Annotated[Optional[StrictBool], Field(description="`true`: only medias with a flash offer running; `false`: leave them out.")] = None,
+        flash_offer: Annotated[Optional[StrictBool], Field(description="`true`: only medias with an offer running; `false`: leave them out.")] = None,
         bought: Annotated[Optional[StrictBool], Field(description="`true`: only medias you bought for the project; `false`: leave them out.")] = None,
         discarded: Annotated[Optional[StrictBool], Field(description="`true`: only the medias you discarded for the project; `false`: leave them out.")] = None,
         new: Annotated[Optional[StrictBool], Field(description="Medias Growwer matched with the project recently. Only `true` applies it; omit it otherwise.")] = None,
@@ -2752,7 +2752,7 @@ class CatalogueApi:
         :type favourite: bool
         :param requested: `true`: only the medias you requested for the project; `false`: leave them out.
         :type requested: bool
-        :param flash_offer: `true`: only medias with a flash offer running; `false`: leave them out.
+        :param flash_offer: `true`: only medias with an offer running; `false`: leave them out.
         :type flash_offer: bool
         :param bought: `true`: only medias you bought for the project; `false`: leave them out.
         :type bought: bool

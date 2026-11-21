@@ -628,7 +628,7 @@ type ApiListFlashOffersRequest struct {
 	offset *int32
 }
 
-// The project to search flash offers for.
+// The project to search medias on offer for.
 func (r ApiListFlashOffersRequest) ProjectId(projectId string) ApiListFlashOffersRequest {
 	r.projectId = &projectId
 	return r
@@ -855,9 +855,9 @@ func (r ApiListFlashOffersRequest) Execute() (*ListFlashOffers200Response, *http
 }
 
 /*
-ListFlashOffers List flash offers
+ListFlashOffers List the medias on offer
 
-The medias on a flash offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with `flashOffer=true`, and takes the same parameters except `flashOffer` and `savedFilterId`. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
+The medias on an offer, a time-limited discount, in the catalogue of one of your projects. It is GET /projects/{id}/medias with `flashOffer=true`, and takes the same parameters except `flashOffer` and `savedFilterId`. The catalogue access and the daily limit of that operation apply: each new media costs one unit, a page that holds no new media, an empty one included, costs one, and repeating a request already answered the same day is free while the media lists, topics and language of the project stay as they were.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiListFlashOffersRequest
@@ -1590,7 +1590,7 @@ func (r ApiSearchProjectMediasRequest) Requested(requested bool) ApiSearchProjec
 	return r
 }
 
-// &#x60;true&#x60;: only medias with a flash offer running; &#x60;false&#x60;: leave them out.
+// &#x60;true&#x60;: only medias with an offer running; &#x60;false&#x60;: leave them out.
 func (r ApiSearchProjectMediasRequest) FlashOffer(flashOffer bool) ApiSearchProjectMediasRequest {
 	r.flashOffer = &flashOffer
 	return r

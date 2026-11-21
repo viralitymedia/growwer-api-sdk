@@ -2,7 +2,7 @@
 
 # SellerMediaFlashOffer
 
-The flash offer running, or null. Its discount is in `currentCost`, never in the fees.
+The offer running, a time-limited discount, or null. Its discount is in `currentCost`, never in the fees.
 
 ## Properties
 

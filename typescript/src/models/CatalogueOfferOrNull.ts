@@ -35,7 +35,7 @@ import {
  */
 export interface CatalogueOfferOrNull {
     /**
-     * What you pay for the offer with its dearest link type, flash offer discount included.
+     * What you pay for the offer with its dearest link type, the discount of a running offer (`flashOffer`) included.
      * @type {Money}
      * @memberof CatalogueOfferOrNull
      */

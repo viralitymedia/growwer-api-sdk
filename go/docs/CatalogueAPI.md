@@ -32,7 +32,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/viralitymedia/growwer-api-sdk/go/v4"
+	openapiclient "github.com/viralitymedia/growwer-api-sdk/go/v5"
 )
 
 func main() {
@@ -105,7 +105,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/viralitymedia/growwer-api-sdk/go/v4"
+	openapiclient "github.com/viralitymedia/growwer-api-sdk/go/v5"
 )
 
 func main() {
@@ -178,7 +178,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/viralitymedia/growwer-api-sdk/go/v4"
+	openapiclient "github.com/viralitymedia/growwer-api-sdk/go/v5"
 )
 
 func main() {
@@ -233,7 +233,7 @@ Name | Type | Description  | Notes
 
 ## ListFlashOffers
 
-> ListFlashOffers200Response ListFlashOffers(ctx).ProjectId(projectId).Source(source).Sort(sort).Domain(domain).WebsiteType(websiteType).Language(language).Country(country).Topics(topics).NotBannedTopics(notBannedTopics).MinTraffic(minTraffic).MaxTraffic(maxTraffic).TrafficTrendUpward(trafficTrendUpward).MinDomainRating(minDomainRating).MaxDomainRating(maxDomainRating).MinLinkedToReferringRatio(minLinkedToReferringRatio).MaxLinkedToReferringRatio(maxLinkedToReferringRatio).MinPostPrice(minPostPrice).MaxPostPrice(maxPostPrice).PostLinkType(postLinkType).PromotedSocialNetwork(promotedSocialNetwork).WithoutAdvertisingLabel(withoutAdvertisingLabel).HomepageListing(homepageListing).HasLinkAddition(hasLinkAddition).MinLinkAdditionPrice(minLinkAdditionPrice).MaxLinkAdditionPrice(maxLinkAdditionPrice).LinkAdditionLinkType(linkAdditionLinkType).BestPrice(bestPrice).Recommended(recommended).Favourite(favourite).Requested(requested).Bought(bought).Discarded(discarded).New(new).RanksGoalKeyword(ranksGoalKeyword).RanksAiKeyword(ranksAiKeyword).Limit(limit).Offset(offset).Execute()
+> ListFlashOffers200Response ListFlashOffers(ctx).ProjectId(projectId).Source(source).Sort(sort).Domain(domain).WebsiteType(websiteType).Language(language).Country(country).Topics(topics).NotBannedTopics(notBannedTopics).MinTraffic(minTraffic).MaxTraffic(maxTraffic).TrafficTrendUpward(trafficTrendUpward).MinDomainRating(minDomainRating).MaxDomainRating(maxDomainRating).MinLinkedToReferringRatio(minLinkedToReferringRatio).MaxLinkedToReferringRatio(maxLinkedToReferringRatio).MinPostPrice(minPostPrice).MaxPostPrice(maxPostPrice).PostLinkType(postLinkType).PromotedSocialNetwork(promotedSocialNetwork).WithoutAdvertisingLabel(withoutAdvertisingLabel).HomepageListing(homepageListing).HasLinkAddition(hasLinkAddition).MinLinkAdditionPrice(minLinkAdditionPrice).MaxLinkAdditionPrice(maxLinkAdditionPrice).LinkAdditionLinkType(linkAdditionLinkType).BestPrice(bestPrice).Recommended(recommended).Favourite(favourite).Requested(requested).Bought(bought).Discarded(discarded).New(new).RanksGoalKeyword(ranksGoalKeyword).RanksAiKeyword(ranksAiKeyword).Limit(limit).Offset(offset).Deals(deals).Execute()
 
 List the medias on offer
 
@@ -248,7 +248,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/viralitymedia/growwer-api-sdk/go/v4"
+	openapiclient "github.com/viralitymedia/growwer-api-sdk/go/v5"
 )
 
 func main() {
@@ -289,10 +289,11 @@ func main() {
 	ranksAiKeyword := "ranksAiKeyword_example" // string | A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`. (optional)
 	limit := int32(56) // int32 | Medias per page, 1 to 100. (optional) (default to 20)
 	offset := int32(56) // int32 | Medias to skip, at most 99900. (optional) (default to 0)
+	deals := true // bool | Deals: medias with an offer running (`flashOffer`) or a best-price badge (`bestPrice` not null), either one, within the other filters. Only `true` applies it; omit it otherwise. With `flashOffer=true` it selects the medias on offer. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.CatalogueAPI.ListFlashOffers(context.Background()).ProjectId(projectId).Source(source).Sort(sort).Domain(domain).WebsiteType(websiteType).Language(language).Country(country).Topics(topics).NotBannedTopics(notBannedTopics).MinTraffic(minTraffic).MaxTraffic(maxTraffic).TrafficTrendUpward(trafficTrendUpward).MinDomainRating(minDomainRating).MaxDomainRating(maxDomainRating).MinLinkedToReferringRatio(minLinkedToReferringRatio).MaxLinkedToReferringRatio(maxLinkedToReferringRatio).MinPostPrice(minPostPrice).MaxPostPrice(maxPostPrice).PostLinkType(postLinkType).PromotedSocialNetwork(promotedSocialNetwork).WithoutAdvertisingLabel(withoutAdvertisingLabel).HomepageListing(homepageListing).HasLinkAddition(hasLinkAddition).MinLinkAdditionPrice(minLinkAdditionPrice).MaxLinkAdditionPrice(maxLinkAdditionPrice).LinkAdditionLinkType(linkAdditionLinkType).BestPrice(bestPrice).Recommended(recommended).Favourite(favourite).Requested(requested).Bought(bought).Discarded(discarded).New(new).RanksGoalKeyword(ranksGoalKeyword).RanksAiKeyword(ranksAiKeyword).Limit(limit).Offset(offset).Execute()
+	resp, r, err := apiClient.CatalogueAPI.ListFlashOffers(context.Background()).ProjectId(projectId).Source(source).Sort(sort).Domain(domain).WebsiteType(websiteType).Language(language).Country(country).Topics(topics).NotBannedTopics(notBannedTopics).MinTraffic(minTraffic).MaxTraffic(maxTraffic).TrafficTrendUpward(trafficTrendUpward).MinDomainRating(minDomainRating).MaxDomainRating(maxDomainRating).MinLinkedToReferringRatio(minLinkedToReferringRatio).MaxLinkedToReferringRatio(maxLinkedToReferringRatio).MinPostPrice(minPostPrice).MaxPostPrice(maxPostPrice).PostLinkType(postLinkType).PromotedSocialNetwork(promotedSocialNetwork).WithoutAdvertisingLabel(withoutAdvertisingLabel).HomepageListing(homepageListing).HasLinkAddition(hasLinkAddition).MinLinkAdditionPrice(minLinkAdditionPrice).MaxLinkAdditionPrice(maxLinkAdditionPrice).LinkAdditionLinkType(linkAdditionLinkType).BestPrice(bestPrice).Recommended(recommended).Favourite(favourite).Requested(requested).Bought(bought).Discarded(discarded).New(new).RanksGoalKeyword(ranksGoalKeyword).RanksAiKeyword(ranksAiKeyword).Limit(limit).Offset(offset).Deals(deals).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `CatalogueAPI.ListFlashOffers``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -350,6 +351,7 @@ Name | Type | Description  | Notes
  **ranksAiKeyword** | **string** | A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. | 
  **limit** | **int32** | Medias per page, 1 to 100. | [default to 20]
  **offset** | **int32** | Medias to skip, at most 99900. | [default to 0]
+ **deals** | **bool** | Deals: medias with an offer running (&#x60;flashOffer&#x60;) or a best-price badge (&#x60;bestPrice&#x60; not null), either one, within the other filters. Only &#x60;true&#x60; applies it; omit it otherwise. With &#x60;flashOffer&#x3D;true&#x60; it selects the medias on offer. | 
 
 ### Return type
 
@@ -386,7 +388,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/viralitymedia/growwer-api-sdk/go/v4"
+	openapiclient "github.com/viralitymedia/growwer-api-sdk/go/v5"
 )
 
 func main() {
@@ -445,7 +447,7 @@ Name | Type | Description  | Notes
 
 ## SearchProjectMedias
 
-> ListFlashOffers200Response SearchProjectMedias(ctx, id).Source(source).Sort(sort).SavedFilterId(savedFilterId).Domain(domain).WebsiteType(websiteType).Language(language).Country(country).Topics(topics).NotBannedTopics(notBannedTopics).MinTraffic(minTraffic).MaxTraffic(maxTraffic).TrafficTrendUpward(trafficTrendUpward).MinDomainRating(minDomainRating).MaxDomainRating(maxDomainRating).MinLinkedToReferringRatio(minLinkedToReferringRatio).MaxLinkedToReferringRatio(maxLinkedToReferringRatio).MinPostPrice(minPostPrice).MaxPostPrice(maxPostPrice).PostLinkType(postLinkType).PromotedSocialNetwork(promotedSocialNetwork).WithoutAdvertisingLabel(withoutAdvertisingLabel).HomepageListing(homepageListing).HasLinkAddition(hasLinkAddition).MinLinkAdditionPrice(minLinkAdditionPrice).MaxLinkAdditionPrice(maxLinkAdditionPrice).LinkAdditionLinkType(linkAdditionLinkType).BestPrice(bestPrice).Recommended(recommended).Favourite(favourite).Requested(requested).FlashOffer(flashOffer).Bought(bought).Discarded(discarded).New(new).RanksGoalKeyword(ranksGoalKeyword).RanksAiKeyword(ranksAiKeyword).Limit(limit).Offset(offset).Execute()
+> ListFlashOffers200Response SearchProjectMedias(ctx, id).Source(source).Sort(sort).SavedFilterId(savedFilterId).Domain(domain).WebsiteType(websiteType).Language(language).Country(country).Topics(topics).NotBannedTopics(notBannedTopics).MinTraffic(minTraffic).MaxTraffic(maxTraffic).TrafficTrendUpward(trafficTrendUpward).MinDomainRating(minDomainRating).MaxDomainRating(maxDomainRating).MinLinkedToReferringRatio(minLinkedToReferringRatio).MaxLinkedToReferringRatio(maxLinkedToReferringRatio).MinPostPrice(minPostPrice).MaxPostPrice(maxPostPrice).PostLinkType(postLinkType).PromotedSocialNetwork(promotedSocialNetwork).WithoutAdvertisingLabel(withoutAdvertisingLabel).HomepageListing(homepageListing).HasLinkAddition(hasLinkAddition).MinLinkAdditionPrice(minLinkAdditionPrice).MaxLinkAdditionPrice(maxLinkAdditionPrice).LinkAdditionLinkType(linkAdditionLinkType).BestPrice(bestPrice).Recommended(recommended).Favourite(favourite).Requested(requested).FlashOffer(flashOffer).Bought(bought).Discarded(discarded).New(new).RanksGoalKeyword(ranksGoalKeyword).RanksAiKeyword(ranksAiKeyword).Limit(limit).Offset(offset).Deals(deals).Execute()
 
 Search the catalogue for a project
 
@@ -460,7 +462,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/viralitymedia/growwer-api-sdk/go/v4"
+	openapiclient "github.com/viralitymedia/growwer-api-sdk/go/v5"
 )
 
 func main() {
@@ -503,10 +505,11 @@ func main() {
 	ranksAiKeyword := "ranksAiKeyword_example" // string | A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`. (optional)
 	limit := int32(56) // int32 | Medias per page, 1 to 100. (optional) (default to 20)
 	offset := int32(56) // int32 | Medias to skip, at most 99900. (optional) (default to 0)
+	deals := true // bool | Deals: medias with an offer running (`flashOffer`) or a best-price badge (`bestPrice` not null), either one, within the other filters. Only `true` applies it; omit it otherwise. With `flashOffer=true` it selects the medias on offer. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.CatalogueAPI.SearchProjectMedias(context.Background(), id).Source(source).Sort(sort).SavedFilterId(savedFilterId).Domain(domain).WebsiteType(websiteType).Language(language).Country(country).Topics(topics).NotBannedTopics(notBannedTopics).MinTraffic(minTraffic).MaxTraffic(maxTraffic).TrafficTrendUpward(trafficTrendUpward).MinDomainRating(minDomainRating).MaxDomainRating(maxDomainRating).MinLinkedToReferringRatio(minLinkedToReferringRatio).MaxLinkedToReferringRatio(maxLinkedToReferringRatio).MinPostPrice(minPostPrice).MaxPostPrice(maxPostPrice).PostLinkType(postLinkType).PromotedSocialNetwork(promotedSocialNetwork).WithoutAdvertisingLabel(withoutAdvertisingLabel).HomepageListing(homepageListing).HasLinkAddition(hasLinkAddition).MinLinkAdditionPrice(minLinkAdditionPrice).MaxLinkAdditionPrice(maxLinkAdditionPrice).LinkAdditionLinkType(linkAdditionLinkType).BestPrice(bestPrice).Recommended(recommended).Favourite(favourite).Requested(requested).FlashOffer(flashOffer).Bought(bought).Discarded(discarded).New(new).RanksGoalKeyword(ranksGoalKeyword).RanksAiKeyword(ranksAiKeyword).Limit(limit).Offset(offset).Execute()
+	resp, r, err := apiClient.CatalogueAPI.SearchProjectMedias(context.Background(), id).Source(source).Sort(sort).SavedFilterId(savedFilterId).Domain(domain).WebsiteType(websiteType).Language(language).Country(country).Topics(topics).NotBannedTopics(notBannedTopics).MinTraffic(minTraffic).MaxTraffic(maxTraffic).TrafficTrendUpward(trafficTrendUpward).MinDomainRating(minDomainRating).MaxDomainRating(maxDomainRating).MinLinkedToReferringRatio(minLinkedToReferringRatio).MaxLinkedToReferringRatio(maxLinkedToReferringRatio).MinPostPrice(minPostPrice).MaxPostPrice(maxPostPrice).PostLinkType(postLinkType).PromotedSocialNetwork(promotedSocialNetwork).WithoutAdvertisingLabel(withoutAdvertisingLabel).HomepageListing(homepageListing).HasLinkAddition(hasLinkAddition).MinLinkAdditionPrice(minLinkAdditionPrice).MaxLinkAdditionPrice(maxLinkAdditionPrice).LinkAdditionLinkType(linkAdditionLinkType).BestPrice(bestPrice).Recommended(recommended).Favourite(favourite).Requested(requested).FlashOffer(flashOffer).Bought(bought).Discarded(discarded).New(new).RanksGoalKeyword(ranksGoalKeyword).RanksAiKeyword(ranksAiKeyword).Limit(limit).Offset(offset).Deals(deals).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `CatalogueAPI.SearchProjectMedias``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -570,6 +573,7 @@ Name | Type | Description  | Notes
  **ranksAiKeyword** | **string** | A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. | 
  **limit** | **int32** | Medias per page, 1 to 100. | [default to 20]
  **offset** | **int32** | Medias to skip, at most 99900. | [default to 0]
+ **deals** | **bool** | Deals: medias with an offer running (&#x60;flashOffer&#x60;) or a best-price badge (&#x60;bestPrice&#x60; not null), either one, within the other filters. Only &#x60;true&#x60; applies it; omit it otherwise. With &#x60;flashOffer&#x3D;true&#x60; it selects the medias on offer. | 
 
 ### Return type
 
@@ -606,7 +610,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/viralitymedia/growwer-api-sdk/go/v4"
+	openapiclient "github.com/viralitymedia/growwer-api-sdk/go/v5"
 )
 
 func main() {
@@ -679,7 +683,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/viralitymedia/growwer-api-sdk/go/v4"
+	openapiclient "github.com/viralitymedia/growwer-api-sdk/go/v5"
 )
 
 func main() {

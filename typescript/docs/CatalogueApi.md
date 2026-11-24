@@ -264,7 +264,7 @@ example().catch(console.error);
 
 ## listFlashOffers
 
-> ListFlashOffers200Response listFlashOffers(projectId, source, sort, domain, websiteType, language, country, topics, notBannedTopics, minTraffic, maxTraffic, trafficTrendUpward, minDomainRating, maxDomainRating, minLinkedToReferringRatio, maxLinkedToReferringRatio, minPostPrice, maxPostPrice, postLinkType, promotedSocialNetwork, withoutAdvertisingLabel, homepageListing, hasLinkAddition, minLinkAdditionPrice, maxLinkAdditionPrice, linkAdditionLinkType, bestPrice, recommended, favourite, requested, bought, discarded, _new, ranksGoalKeyword, ranksAiKeyword, limit, offset)
+> ListFlashOffers200Response listFlashOffers(projectId, source, sort, domain, websiteType, language, country, topics, notBannedTopics, minTraffic, maxTraffic, trafficTrendUpward, minDomainRating, maxDomainRating, minLinkedToReferringRatio, maxLinkedToReferringRatio, minPostPrice, maxPostPrice, postLinkType, promotedSocialNetwork, withoutAdvertisingLabel, homepageListing, hasLinkAddition, minLinkAdditionPrice, maxLinkAdditionPrice, linkAdditionLinkType, bestPrice, recommended, favourite, requested, bought, discarded, _new, ranksGoalKeyword, ranksAiKeyword, limit, offset, deals)
 
 List the medias on offer
 
@@ -362,6 +362,8 @@ async function example() {
     limit: 56,
     // number | Medias to skip, at most 99900. (optional)
     offset: 56,
+    // boolean | Deals: medias with an offer running (`flashOffer`) or a best-price badge (`bestPrice` not null), either one, within the other filters. Only `true` applies it; omit it otherwise. With `flashOffer=true` it selects the medias on offer. (optional)
+    deals: true,
   } satisfies ListFlashOffersRequest;
 
   try {
@@ -418,6 +420,7 @@ example().catch(console.error);
 | **ranksAiKeyword** | `string` | A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. | [Optional] [Defaults to `undefined`] |
 | **limit** | `number` | Medias per page, 1 to 100. | [Optional] [Defaults to `20`] |
 | **offset** | `number` | Medias to skip, at most 99900. | [Optional] [Defaults to `0`] |
+| **deals** | `boolean` | Deals: medias with an offer running (&#x60;flashOffer&#x60;) or a best-price badge (&#x60;bestPrice&#x60; not null), either one, within the other filters. Only &#x60;true&#x60; applies it; omit it otherwise. With &#x60;flashOffer&#x3D;true&#x60; it selects the medias on offer. | [Optional] [Defaults to `undefined`] |
 
 ### Return type
 
@@ -536,7 +539,7 @@ example().catch(console.error);
 
 ## searchProjectMedias
 
-> ListFlashOffers200Response searchProjectMedias(id, source, sort, savedFilterId, domain, websiteType, language, country, topics, notBannedTopics, minTraffic, maxTraffic, trafficTrendUpward, minDomainRating, maxDomainRating, minLinkedToReferringRatio, maxLinkedToReferringRatio, minPostPrice, maxPostPrice, postLinkType, promotedSocialNetwork, withoutAdvertisingLabel, homepageListing, hasLinkAddition, minLinkAdditionPrice, maxLinkAdditionPrice, linkAdditionLinkType, bestPrice, recommended, favourite, requested, flashOffer, bought, discarded, _new, ranksGoalKeyword, ranksAiKeyword, limit, offset)
+> ListFlashOffers200Response searchProjectMedias(id, source, sort, savedFilterId, domain, websiteType, language, country, topics, notBannedTopics, minTraffic, maxTraffic, trafficTrendUpward, minDomainRating, maxDomainRating, minLinkedToReferringRatio, maxLinkedToReferringRatio, minPostPrice, maxPostPrice, postLinkType, promotedSocialNetwork, withoutAdvertisingLabel, homepageListing, hasLinkAddition, minLinkAdditionPrice, maxLinkAdditionPrice, linkAdditionLinkType, bestPrice, recommended, favourite, requested, flashOffer, bought, discarded, _new, ranksGoalKeyword, ranksAiKeyword, limit, offset, deals)
 
 Search the catalogue for a project
 
@@ -638,6 +641,8 @@ async function example() {
     limit: 56,
     // number | Medias to skip, at most 99900. (optional)
     offset: 56,
+    // boolean | Deals: medias with an offer running (`flashOffer`) or a best-price badge (`bestPrice` not null), either one, within the other filters. Only `true` applies it; omit it otherwise. With `flashOffer=true` it selects the medias on offer. (optional)
+    deals: true,
   } satisfies SearchProjectMediasRequest;
 
   try {
@@ -696,6 +701,7 @@ example().catch(console.error);
 | **ranksAiKeyword** | `string` | A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. | [Optional] [Defaults to `undefined`] |
 | **limit** | `number` | Medias per page, 1 to 100. | [Optional] [Defaults to `20`] |
 | **offset** | `number` | Medias to skip, at most 99900. | [Optional] [Defaults to `0`] |
+| **deals** | `boolean` | Deals: medias with an offer running (&#x60;flashOffer&#x60;) or a best-price badge (&#x60;bestPrice&#x60; not null), either one, within the other filters. Only &#x60;true&#x60; applies it; omit it otherwise. With &#x60;flashOffer&#x3D;true&#x60; it selects the medias on offer. | [Optional] [Defaults to `undefined`] |
 
 ### Return type
 

@@ -14,7 +14,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"
-	openapiclient "github.com/viralitymedia/growwer-api-sdk/go/v4"
+	openapiclient "github.com/viralitymedia/growwer-api-sdk/go/v5"
 )
 
 func Test_growwer_BuyerWalletAPIService(t *testing.T) {

@@ -1805,6 +1805,17 @@ paths:
           minimum: 0
           type: integer
         style: form
+      - description: "Deals: medias with an offer running (`flashOffer`) or a best-price\
+          \ badge (`bestPrice` not null), either one, within the other filters. Only\
+          \ `true` applies it; omit it otherwise. With `flashOffer=true` it selects\
+          \ the medias on offer."
+        explode: true
+        in: query
+        name: deals
+        required: false
+        schema:
+          type: boolean
+        style: form
       responses:
         "200":
           content:
@@ -2460,6 +2471,17 @@ paths:
           maximum: 99900
           minimum: 0
           type: integer
+        style: form
+      - description: "Deals: medias with an offer running (`flashOffer`) or a best-price\
+          \ badge (`bestPrice` not null), either one, within the other filters. Only\
+          \ `true` applies it; omit it otherwise. With `flashOffer=true` it selects\
+          \ the medias on offer."
+        explode: true
+        in: query
+        name: deals
+        required: false
+        schema:
+          type: boolean
         style: form
       responses:
         "200":
@@ -11346,6 +11368,18 @@ components:
       explode: true
       in: query
       name: bestPrice
+      required: false
+      schema:
+        type: boolean
+      style: form
+    CatalogueDeals:
+      description: "Deals: medias with an offer running (`flashOffer`) or a best-price\
+        \ badge (`bestPrice` not null), either one, within the other filters. Only\
+        \ `true` applies it; omit it otherwise. With `flashOffer=true` it selects\
+        \ the medias on offer."
+      explode: true
+      in: query
+      name: deals
       required: false
       schema:
         type: boolean

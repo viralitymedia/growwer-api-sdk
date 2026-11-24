@@ -582,6 +582,28 @@ internal static class Program
         Equal("platformCount", bestPrice.PlatformCount, 2);
     }
 
+    private static void SearchProjectMediasSendsTheDealsFilterAfterThePage()
+    {
+        new CatalogueApi(Answer(Fixture("project-medias-page.json")), Key())
+            .SearchProjectMedias(ProjectId, limit: 10, offset: 20, deals: true);
+
+        string[] query = SentRequest().RequestUri.Query.TrimStart('?').Split('&');
+        Equal("deals", query.Contains("deals=true"), true);
+        Equal("limit", query.Contains("limit=10"), true);
+        Equal("offset", query.Contains("offset=20"), true);
+        Equal("bestPrice sent", query.Any(p => p.StartsWith("bestPrice=")), false);
+    }
+
+    private static void ListFlashOffersSendsTheDealsFilter()
+    {
+        new CatalogueApi(Answer(Fixture("project-medias-page.json")), Key())
+            .ListFlashOffers(ProjectId, deals: true);
+
+        Uri uri = SentRequest().RequestUri;
+        Equal("path", uri.AbsolutePath, "/api/v1/flash-offers");
+        Equal("deals", uri.Query.TrimStart('?').Split('&').Contains("deals=true"), true);
+    }
+
     private static void AProjectMediaWithoutABadgeReadsANullBestPrice()
     {
         ListFlashOffers200Response page = new CatalogueApi(Answer(Fixture("project-medias-page-no-badge.json")), Key())
@@ -656,6 +678,8 @@ internal static class Program
             ("a catalogue media reads its best-price badge", ACatalogueMediaReadsItsBestPriceBadge),
             ("a project media reads an AI keyword with a null source", AProjectMediaReadsAnAiKeywordWithANullSource),
             ("searchProjectMedias sends the bestPrice filter and reads an only_here badge", SearchProjectMediasSendsTheBestPriceFilterAndReadsAnOnlyHereBadge),
+            ("searchProjectMedias sends the deals filter beside limit and offset", SearchProjectMediasSendsTheDealsFilterAfterThePage),
+            ("listFlashOffers sends the deals filter", ListFlashOffersSendsTheDealsFilter),
             ("a project media without a badge reads a null bestPrice", AProjectMediaWithoutABadgeReadsANullBestPrice),
             ("a seller media reads null competitiveFees", ASellerMediaReadsNullCompetitiveFees),
             ("a seller media reads competitiveFees with one side null", ASellerMediaReadsCompetitiveFeesWithOneSideNull),

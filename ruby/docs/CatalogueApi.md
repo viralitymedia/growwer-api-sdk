@@ -284,7 +284,8 @@ opts = {
   ranks_goal_keyword: 'ranks_goal_keyword_example', # String | A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. `user`: your keywords; `publicGenerated`: keywords Growwer found for the project.
   ranks_ai_keyword: 'ranks_ai_keyword_example', # String | A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.
   limit: 56, # Integer | Medias per page, 1 to 100.
-  offset: 56 # Integer | Medias to skip, at most 99900.
+  offset: 56, # Integer | Medias to skip, at most 99900.
+  deals: true # Boolean | Deals: medias with an offer running (`flashOffer`) or a best-price badge (`bestPrice` not null), either one, within the other filters. Only `true` applies it; omit it otherwise. With `flashOffer=true` it selects the medias on offer.
 }
 
 begin
@@ -355,6 +356,7 @@ end
 | **ranks_ai_keyword** | **String** | A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. | [optional] |
 | **limit** | **Integer** | Medias per page, 1 to 100. | [optional][default to 20] |
 | **offset** | **Integer** | Medias to skip, at most 99900. | [optional][default to 0] |
+| **deals** | **Boolean** | Deals: medias with an offer running (&#x60;flashOffer&#x60;) or a best-price badge (&#x60;bestPrice&#x60; not null), either one, within the other filters. Only &#x60;true&#x60; applies it; omit it otherwise. With &#x60;flashOffer&#x3D;true&#x60; it selects the medias on offer. | [optional] |
 
 ### Return type
 
@@ -502,7 +504,8 @@ opts = {
   ranks_goal_keyword: 'ranks_goal_keyword_example', # String | A comma-separated list of keyword origins: medias that rank for a keyword of the project from any of them. `user`: your keywords; `publicGenerated`: keywords Growwer found for the project.
   ranks_ai_keyword: 'ranks_ai_keyword_example', # String | A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.
   limit: 56, # Integer | Medias per page, 1 to 100.
-  offset: 56 # Integer | Medias to skip, at most 99900.
+  offset: 56, # Integer | Medias to skip, at most 99900.
+  deals: true # Boolean | Deals: medias with an offer running (`flashOffer`) or a best-price badge (`bestPrice` not null), either one, within the other filters. Only `true` applies it; omit it otherwise. With `flashOffer=true` it selects the medias on offer.
 }
 
 begin
@@ -575,6 +578,7 @@ end
 | **ranks_ai_keyword** | **String** | A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. | [optional] |
 | **limit** | **Integer** | Medias per page, 1 to 100. | [optional][default to 20] |
 | **offset** | **Integer** | Medias to skip, at most 99900. | [optional][default to 0] |
+| **deals** | **Boolean** | Deals: medias with an offer running (&#x60;flashOffer&#x60;) or a best-price badge (&#x60;bestPrice&#x60; not null), either one, within the other filters. Only &#x60;true&#x60; applies it; omit it otherwise. With &#x60;flashOffer&#x3D;true&#x60; it selects the medias on offer. | [optional] |
 
 ### Return type
 

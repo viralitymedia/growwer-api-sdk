@@ -282,6 +282,7 @@ module Growwer
     # @option opts [String] :ranks_ai_keyword A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;.
     # @option opts [Integer] :limit Medias per page, 1 to 100. (default to 20)
     # @option opts [Integer] :offset Medias to skip, at most 99900. (default to 0)
+    # @option opts [Boolean] :deals Deals: medias with an offer running (&#x60;flashOffer&#x60;) or a best-price badge (&#x60;bestPrice&#x60; not null), either one, within the other filters. Only &#x60;true&#x60; applies it; omit it otherwise. With &#x60;flashOffer&#x3D;true&#x60; it selects the medias on offer.
     # @return [ListFlashOffers200Response]
     def list_flash_offers(project_id, opts = {})
       data, _status_code, _headers = list_flash_offers_with_http_info(project_id, opts)
@@ -328,6 +329,7 @@ module Growwer
     # @option opts [String] :ranks_ai_keyword A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;.
     # @option opts [Integer] :limit Medias per page, 1 to 100. (default to 20)
     # @option opts [Integer] :offset Medias to skip, at most 99900. (default to 0)
+    # @option opts [Boolean] :deals Deals: medias with an offer running (&#x60;flashOffer&#x60;) or a best-price badge (&#x60;bestPrice&#x60; not null), either one, within the other filters. Only &#x60;true&#x60; applies it; omit it otherwise. With &#x60;flashOffer&#x3D;true&#x60; it selects the medias on offer.
     # @return [Array<(ListFlashOffers200Response, Integer, Hash)>] ListFlashOffers200Response data, response status code and response headers
     def list_flash_offers_with_http_info(project_id, opts = {})
       if @api_client.config.debugging
@@ -403,6 +405,7 @@ module Growwer
       query_params[:'ranksAiKeyword'] = opts[:'ranks_ai_keyword'] if !opts[:'ranks_ai_keyword'].nil?
       query_params[:'limit'] = opts[:'limit'] if !opts[:'limit'].nil?
       query_params[:'offset'] = opts[:'offset'] if !opts[:'offset'].nil?
+      query_params[:'deals'] = opts[:'deals'] if !opts[:'deals'].nil?
 
       # header parameters
       header_params = opts[:header_params] || {}
@@ -565,6 +568,7 @@ module Growwer
     # @option opts [String] :ranks_ai_keyword A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;.
     # @option opts [Integer] :limit Medias per page, 1 to 100. (default to 20)
     # @option opts [Integer] :offset Medias to skip, at most 99900. (default to 0)
+    # @option opts [Boolean] :deals Deals: medias with an offer running (&#x60;flashOffer&#x60;) or a best-price badge (&#x60;bestPrice&#x60; not null), either one, within the other filters. Only &#x60;true&#x60; applies it; omit it otherwise. With &#x60;flashOffer&#x3D;true&#x60; it selects the medias on offer.
     # @return [ListFlashOffers200Response]
     def search_project_medias(id, opts = {})
       data, _status_code, _headers = search_project_medias_with_http_info(id, opts)
@@ -613,6 +617,7 @@ module Growwer
     # @option opts [String] :ranks_ai_keyword A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;.
     # @option opts [Integer] :limit Medias per page, 1 to 100. (default to 20)
     # @option opts [Integer] :offset Medias to skip, at most 99900. (default to 0)
+    # @option opts [Boolean] :deals Deals: medias with an offer running (&#x60;flashOffer&#x60;) or a best-price badge (&#x60;bestPrice&#x60; not null), either one, within the other filters. Only &#x60;true&#x60; applies it; omit it otherwise. With &#x60;flashOffer&#x3D;true&#x60; it selects the medias on offer.
     # @return [Array<(ListFlashOffers200Response, Integer, Hash)>] ListFlashOffers200Response data, response status code and response headers
     def search_project_medias_with_http_info(id, opts = {})
       if @api_client.config.debugging
@@ -689,6 +694,7 @@ module Growwer
       query_params[:'ranksAiKeyword'] = opts[:'ranks_ai_keyword'] if !opts[:'ranks_ai_keyword'].nil?
       query_params[:'limit'] = opts[:'limit'] if !opts[:'limit'].nil?
       query_params[:'offset'] = opts[:'offset'] if !opts[:'offset'].nil?
+      query_params[:'deals'] = opts[:'deals'] if !opts[:'deals'].nil?
 
       # header parameters
       header_params = opts[:header_params] || {}

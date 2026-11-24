@@ -16,7 +16,7 @@ contract, one generator run, one version: a change to the API reaches all seven 
 | Python 3.10+ | `growwer` | [![PyPI](https://img.shields.io/pypi/v/growwer?label=pypi&color=informational)](https://pypi.org/project/growwer/) | [`python/`](python/) |
 | TypeScript (Node 22+, browsers) | `@growwer/api` | [![npm](https://img.shields.io/npm/v/%40growwer%2Fapi?label=npm&color=informational)](https://www.npmjs.com/package/@growwer/api) | [`typescript/`](typescript/) |
 | PHP 8.1+ | `growwer/growwer-api-sdk` | [![Packagist](https://img.shields.io/packagist/v/growwer/growwer-api-sdk?label=packagist&color=informational)](https://packagist.org/packages/growwer/growwer-api-sdk) | [`php/`](php/) |
-| Go 1.23+ | `github.com/viralitymedia/growwer-api-sdk/go/v4` | [![Go module](https://img.shields.io/github/v/tag/viralitymedia/growwer-api-sdk?filter=go%2F*&label=go&color=informational)](https://pkg.go.dev/github.com/viralitymedia/growwer-api-sdk/go/v4) | [`go/`](go/) |
+| Go 1.23+ | `github.com/viralitymedia/growwer-api-sdk/go/v5` | [![Go module](https://img.shields.io/github/v/tag/viralitymedia/growwer-api-sdk?filter=go%2F*&label=go&color=informational)](https://pkg.go.dev/github.com/viralitymedia/growwer-api-sdk/go/v5) | [`go/`](go/) |
 | Java 11+ | `com.growwer:growwer-api` | [![Maven Central](https://img.shields.io/maven-central/v/com.growwer/growwer-api?label=maven%20central&color=informational)](https://central.sonatype.com/artifact/com.growwer/growwer-api) | [`java/`](java/) |
 | .NET 8 | `Growwer.Api` | [![NuGet](https://img.shields.io/nuget/v/Growwer.Api?label=nuget&color=informational)](https://www.nuget.org/packages/Growwer.Api/) | [`csharp/`](csharp/) |
 | Ruby 3.0+ | `growwer` | [![RubyGems](https://img.shields.io/gem/v/growwer?label=gem&color=informational)](https://rubygems.org/gems/growwer) | [`ruby/`](ruby/) |
@@ -101,7 +101,7 @@ import (
 	"context"
 	"os"
 
-	growwer "github.com/viralitymedia/growwer-api-sdk/go/v4"
+	growwer "github.com/viralitymedia/growwer-api-sdk/go/v5"
 )
 
 config := growwer.NewConfiguration()
@@ -175,6 +175,35 @@ var config = new Configuration
 var me = new AccountApi(config).GetMe();
 ```
 </details>
+
+## Changes in 5.0.0
+
+**Every Java call of `listFlashOffers` or `searchProjectMedias` breaks**, and the Go module moves to
+`/v5`. Both calls take a new `deals` filter: `true` answers only the medias with an offer running
+(`flashOffer`) or a best-price badge (`bestPrice` not null), either one, within the other filters.
+Only `true` applies it; leave it unset otherwise. With `flashOffer=true` it selects the medias on
+offer. It is the only change to the contract; every other call, model and field is as in 4.0.1.
+
+The filter is the last method parameter, after `offset`, so no existing argument moves: a call that
+passes the filters, `limit` or `offset` by position still sends each one under its own name.
+
+- **Go:** the module moves to `github.com/viralitymedia/growwer-api-sdk/go/v5`, because Go requires
+  the major in the path. Update every import and run
+  `go get github.com/viralitymedia/growwer-api-sdk/go/v5@v5.0.0`; the old path stays at 4.0.1.
+  Both request builders gain `Deals(bool)`.
+- **Java:** `listFlashOffers` and `searchProjectMedias` (and their `WithHttpInfo`, `Async` and `Call`
+  forms) take a `Boolean deals` after `offset`, so every existing call of them stops compiling; pass
+  `null` there to leave the filter out.
+- **C#:** `ListFlashOffers` and `SearchProjectMedias` (and their `WithHttpInfo` and async forms) take
+  an optional `bool? deals` after `offset`, so an existing call compiles unchanged. A class that
+  implements `ICatalogueApiSync`, `ICatalogueApiAsync` or `ICatalogueApi` no longer compiles, and
+  neither does a Moq `Setup` on any of these forms, which lists every argument and now lacks `deals`.
+- **PHP and Python:** `listFlashOffers` / `list_flash_offers` and `searchProjectMedias` /
+  `search_project_medias` (and their other forms) take an optional `deals` after `offset`; existing
+  calls run unchanged. In PHP an argument passed by position after `offset`, such as
+  `$contentType`, now lands in `$deals`: name it.
+- **TypeScript and Ruby:** the request object (TypeScript) and `opts` (Ruby) accept `deals`; nothing
+  else changes.
 
 ## Changes in 4.0.1
 
@@ -959,7 +988,7 @@ import (
 	"net/http"
 
 	standardwebhooks "github.com/standard-webhooks/standard-webhooks/libraries/go"
-	growwer "github.com/viralitymedia/growwer-api-sdk/go/v4"
+	growwer "github.com/viralitymedia/growwer-api-sdk/go/v5"
 )
 
 verifier, err := standardwebhooks.NewWebhook(secret)
@@ -1250,9 +1279,9 @@ These corrections are applied by the generator script rather than by hand, becau
 would be discarded on the next run:
 
 - **Go** has no package registry, so the import path is the repository URL plus the directory, and
-  from 2.0.0 on the major suffix Go requires of a second major (`/v4` since 4.0.0). The generator
+  from 2.0.0 on the major suffix Go requires of a second major (`/v5` since 5.0.0). The generator
   derives the module path from the Go package name, and `go` is a keyword, so it cannot produce
-  `.../growwer-api-sdk/go/v4` on its own.
+  `.../growwer-api-sdk/go/v5` on its own.
 - **Go**'s oneOf template writes its no-match branch twice in a row, and `go vet` rejects the second
   copy as unreachable code. The copy is dropped by
   [`scripts/go-oneof-unreachable.py`](scripts/go-oneof-unreachable.py).

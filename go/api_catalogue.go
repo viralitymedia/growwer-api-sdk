@@ -626,6 +626,7 @@ type ApiListFlashOffersRequest struct {
 	ranksAiKeyword *string
 	limit *int32
 	offset *int32
+	deals *bool
 }
 
 // The project to search medias on offer for.
@@ -850,6 +851,12 @@ func (r ApiListFlashOffersRequest) Offset(offset int32) ApiListFlashOffersReques
 	return r
 }
 
+// Deals: medias with an offer running (&#x60;flashOffer&#x60;) or a best-price badge (&#x60;bestPrice&#x60; not null), either one, within the other filters. Only &#x60;true&#x60; applies it; omit it otherwise. With &#x60;flashOffer&#x3D;true&#x60; it selects the medias on offer.
+func (r ApiListFlashOffersRequest) Deals(deals bool) ApiListFlashOffersRequest {
+	r.deals = &deals
+	return r
+}
+
 func (r ApiListFlashOffersRequest) Execute() (*ListFlashOffers200Response, *http.Response, error) {
 	return r.ApiService.ListFlashOffersExecute(r)
 }
@@ -1009,6 +1016,9 @@ func (a *CatalogueAPIService) ListFlashOffersExecute(r ApiListFlashOffersRequest
 		var defaultValue int32 = 0
 		parameterAddToHeaderOrQuery(localVarQueryParams, "offset", defaultValue, "form", "")
 		r.offset = &defaultValue
+	}
+	if r.deals != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "deals", r.deals, "form", "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -1408,6 +1418,7 @@ type ApiSearchProjectMediasRequest struct {
 	ranksAiKeyword *string
 	limit *int32
 	offset *int32
+	deals *bool
 }
 
 // Which of the project&#39;s medias to search: &#x60;all&#x60; (the default), &#x60;recommended&#x60; (those Growwer recommends for the project), or those you marked &#x60;favourite&#x60;, &#x60;discarded&#x60; or &#x60;requested&#x60;, or &#x60;bought&#x60; for the project. Do not combine it with the parameter of the same state.
@@ -1638,6 +1649,12 @@ func (r ApiSearchProjectMediasRequest) Offset(offset int32) ApiSearchProjectMedi
 	return r
 }
 
+// Deals: medias with an offer running (&#x60;flashOffer&#x60;) or a best-price badge (&#x60;bestPrice&#x60; not null), either one, within the other filters. Only &#x60;true&#x60; applies it; omit it otherwise. With &#x60;flashOffer&#x3D;true&#x60; it selects the medias on offer.
+func (r ApiSearchProjectMediasRequest) Deals(deals bool) ApiSearchProjectMediasRequest {
+	r.deals = &deals
+	return r
+}
+
 func (r ApiSearchProjectMediasRequest) Execute() (*ListFlashOffers200Response, *http.Response, error) {
 	return r.ApiService.SearchProjectMediasExecute(r)
 }
@@ -1802,6 +1819,9 @@ func (a *CatalogueAPIService) SearchProjectMediasExecute(r ApiSearchProjectMedia
 		var defaultValue int32 = 0
 		parameterAddToHeaderOrQuery(localVarQueryParams, "offset", defaultValue, "form", "")
 		r.offset = &defaultValue
+	}
+	if r.deals != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "deals", r.deals, "form", "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}

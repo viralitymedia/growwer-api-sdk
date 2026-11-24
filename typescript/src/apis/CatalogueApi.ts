@@ -88,6 +88,7 @@ export interface ListFlashOffersRequest {
     ranksAiKeyword?: string;
     limit?: number;
     offset?: number;
+    deals?: boolean;
 }
 
 export interface RequestMediasOperationRequest {
@@ -136,6 +137,7 @@ export interface SearchProjectMediasRequest {
     ranksAiKeyword?: string;
     limit?: number;
     offset?: number;
+    deals?: boolean;
 }
 
 export interface UndiscardMediaRequest {
@@ -276,6 +278,7 @@ export interface CatalogueApiInterface {
      * @param {string} [ranksAiKeyword] A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;.
      * @param {number} [limit] Medias per page, 1 to 100.
      * @param {number} [offset] Medias to skip, at most 99900.
+     * @param {boolean} [deals] Deals: medias with an offer running (&#x60;flashOffer&#x60;) or a best-price badge (&#x60;bestPrice&#x60; not null), either one, within the other filters. Only &#x60;true&#x60; applies it; omit it otherwise. With &#x60;flashOffer&#x3D;true&#x60; it selects the medias on offer.
      * @throws {RequiredError}
      * @memberof CatalogueApiInterface
      */
@@ -321,6 +324,7 @@ export interface CatalogueApiInterface {
      * @param {string} [ranksAiKeyword] A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;.
      * @param {number} [limit] Medias per page, 1 to 100.
      * @param {number} [offset] Medias to skip, at most 99900.
+     * @param {boolean} [deals] Deals: medias with an offer running (&#x60;flashOffer&#x60;) or a best-price badge (&#x60;bestPrice&#x60; not null), either one, within the other filters. Only &#x60;true&#x60; applies it; omit it otherwise. With &#x60;flashOffer&#x3D;true&#x60; it selects the medias on offer.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CatalogueApiInterface
@@ -402,6 +406,7 @@ export interface CatalogueApiInterface {
      * @param {string} [ranksAiKeyword] A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;.
      * @param {number} [limit] Medias per page, 1 to 100.
      * @param {number} [offset] Medias to skip, at most 99900.
+     * @param {boolean} [deals] Deals: medias with an offer running (&#x60;flashOffer&#x60;) or a best-price badge (&#x60;bestPrice&#x60; not null), either one, within the other filters. Only &#x60;true&#x60; applies it; omit it otherwise. With &#x60;flashOffer&#x3D;true&#x60; it selects the medias on offer.
      * @throws {RequiredError}
      * @memberof CatalogueApiInterface
      */
@@ -449,6 +454,7 @@ export interface CatalogueApiInterface {
      * @param {string} [ranksAiKeyword] A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;.
      * @param {number} [limit] Medias per page, 1 to 100.
      * @param {number} [offset] Medias to skip, at most 99900.
+     * @param {boolean} [deals] Deals: medias with an offer running (&#x60;flashOffer&#x60;) or a best-price badge (&#x60;bestPrice&#x60; not null), either one, within the other filters. Only &#x60;true&#x60; applies it; omit it otherwise. With &#x60;flashOffer&#x3D;true&#x60; it selects the medias on offer.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CatalogueApiInterface
@@ -886,6 +892,10 @@ export class CatalogueApi extends runtime.BaseAPI implements CatalogueApiInterfa
             queryParameters['offset'] = requestParameters['offset'];
         }
 
+        if (requestParameters['deals'] != null) {
+            queryParameters['deals'] = requestParameters['deals'];
+        }
+
         const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.accessToken) {
@@ -1166,6 +1176,10 @@ export class CatalogueApi extends runtime.BaseAPI implements CatalogueApiInterfa
 
         if (requestParameters['offset'] != null) {
             queryParameters['offset'] = requestParameters['offset'];
+        }
+
+        if (requestParameters['deals'] != null) {
+            queryParameters['deals'] = requestParameters['deals'];
         }
 
         const headerParameters: runtime.HTTPHeaders = {};

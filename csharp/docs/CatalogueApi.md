@@ -331,7 +331,7 @@ catch (ApiException e)
 
 <a id="listflashoffers"></a>
 # **ListFlashOffers**
-> ListFlashOffers200Response ListFlashOffers (Guid projectId, string? source = null, string? sort = null, string? domain = null, string? websiteType = null, string? language = null, string? country = null, string? topics = null, bool? notBannedTopics = null, int? minTraffic = null, int? maxTraffic = null, bool? trafficTrendUpward = null, int? minDomainRating = null, int? maxDomainRating = null, decimal? minLinkedToReferringRatio = null, decimal? maxLinkedToReferringRatio = null, int? minPostPrice = null, int? maxPostPrice = null, string? postLinkType = null, string? promotedSocialNetwork = null, bool? withoutAdvertisingLabel = null, bool? homepageListing = null, bool? hasLinkAddition = null, int? minLinkAdditionPrice = null, int? maxLinkAdditionPrice = null, string? linkAdditionLinkType = null, bool? bestPrice = null, bool? recommended = null, bool? favourite = null, bool? requested = null, bool? bought = null, bool? discarded = null, bool? varNew = null, string? ranksGoalKeyword = null, string? ranksAiKeyword = null, int? limit = null, int? offset = null)
+> ListFlashOffers200Response ListFlashOffers (Guid projectId, string? source = null, string? sort = null, string? domain = null, string? websiteType = null, string? language = null, string? country = null, string? topics = null, bool? notBannedTopics = null, int? minTraffic = null, int? maxTraffic = null, bool? trafficTrendUpward = null, int? minDomainRating = null, int? maxDomainRating = null, decimal? minLinkedToReferringRatio = null, decimal? maxLinkedToReferringRatio = null, int? minPostPrice = null, int? maxPostPrice = null, string? postLinkType = null, string? promotedSocialNetwork = null, bool? withoutAdvertisingLabel = null, bool? homepageListing = null, bool? hasLinkAddition = null, int? minLinkAdditionPrice = null, int? maxLinkAdditionPrice = null, string? linkAdditionLinkType = null, bool? bestPrice = null, bool? recommended = null, bool? favourite = null, bool? requested = null, bool? bought = null, bool? discarded = null, bool? varNew = null, string? ranksGoalKeyword = null, string? ranksAiKeyword = null, int? limit = null, int? offset = null, bool? deals = null)
 
 List the medias on offer
 
@@ -398,11 +398,12 @@ namespace Example
             var ranksAiKeyword = "ranksAiKeyword_example";  // string? | A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`. (optional) 
             var limit = 20;  // int? | Medias per page, 1 to 100. (optional)  (default to 20)
             var offset = 0;  // int? | Medias to skip, at most 99900. (optional)  (default to 0)
+            var deals = true;  // bool? | Deals: medias with an offer running (`flashOffer`) or a best-price badge (`bestPrice` not null), either one, within the other filters. Only `true` applies it; omit it otherwise. With `flashOffer=true` it selects the medias on offer. (optional) 
 
             try
             {
                 // List the medias on offer
-                ListFlashOffers200Response result = apiInstance.ListFlashOffers(projectId, source, sort, domain, websiteType, language, country, topics, notBannedTopics, minTraffic, maxTraffic, trafficTrendUpward, minDomainRating, maxDomainRating, minLinkedToReferringRatio, maxLinkedToReferringRatio, minPostPrice, maxPostPrice, postLinkType, promotedSocialNetwork, withoutAdvertisingLabel, homepageListing, hasLinkAddition, minLinkAdditionPrice, maxLinkAdditionPrice, linkAdditionLinkType, bestPrice, recommended, favourite, requested, bought, discarded, varNew, ranksGoalKeyword, ranksAiKeyword, limit, offset);
+                ListFlashOffers200Response result = apiInstance.ListFlashOffers(projectId, source, sort, domain, websiteType, language, country, topics, notBannedTopics, minTraffic, maxTraffic, trafficTrendUpward, minDomainRating, maxDomainRating, minLinkedToReferringRatio, maxLinkedToReferringRatio, minPostPrice, maxPostPrice, postLinkType, promotedSocialNetwork, withoutAdvertisingLabel, homepageListing, hasLinkAddition, minLinkAdditionPrice, maxLinkAdditionPrice, linkAdditionLinkType, bestPrice, recommended, favourite, requested, bought, discarded, varNew, ranksGoalKeyword, ranksAiKeyword, limit, offset, deals);
                 Debug.WriteLine(result);
             }
             catch (ApiException  e)
@@ -423,7 +424,7 @@ This returns an ApiResponse object which contains the response data, status code
 try
 {
     // List the medias on offer
-    ApiResponse<ListFlashOffers200Response> response = apiInstance.ListFlashOffersWithHttpInfo(projectId, source, sort, domain, websiteType, language, country, topics, notBannedTopics, minTraffic, maxTraffic, trafficTrendUpward, minDomainRating, maxDomainRating, minLinkedToReferringRatio, maxLinkedToReferringRatio, minPostPrice, maxPostPrice, postLinkType, promotedSocialNetwork, withoutAdvertisingLabel, homepageListing, hasLinkAddition, minLinkAdditionPrice, maxLinkAdditionPrice, linkAdditionLinkType, bestPrice, recommended, favourite, requested, bought, discarded, varNew, ranksGoalKeyword, ranksAiKeyword, limit, offset);
+    ApiResponse<ListFlashOffers200Response> response = apiInstance.ListFlashOffersWithHttpInfo(projectId, source, sort, domain, websiteType, language, country, topics, notBannedTopics, minTraffic, maxTraffic, trafficTrendUpward, minDomainRating, maxDomainRating, minLinkedToReferringRatio, maxLinkedToReferringRatio, minPostPrice, maxPostPrice, postLinkType, promotedSocialNetwork, withoutAdvertisingLabel, homepageListing, hasLinkAddition, minLinkAdditionPrice, maxLinkAdditionPrice, linkAdditionLinkType, bestPrice, recommended, favourite, requested, bought, discarded, varNew, ranksGoalKeyword, ranksAiKeyword, limit, offset, deals);
     Debug.Write("Status Code: " + response.StatusCode);
     Debug.Write("Response Headers: " + response.Headers);
     Debug.Write("Response Body: " + response.Data);
@@ -477,6 +478,7 @@ catch (ApiException e)
 | **ranksAiKeyword** | **string?** | A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. | [optional]  |
 | **limit** | **int?** | Medias per page, 1 to 100. | [optional] [default to 20] |
 | **offset** | **int?** | Medias to skip, at most 99900. | [optional] [default to 0] |
+| **deals** | **bool?** | Deals: medias with an offer running (&#x60;flashOffer&#x60;) or a best-price badge (&#x60;bestPrice&#x60; not null), either one, within the other filters. Only &#x60;true&#x60; applies it; omit it otherwise. With &#x60;flashOffer&#x3D;true&#x60; it selects the medias on offer. | [optional]  |
 
 ### Return type
 
@@ -619,7 +621,7 @@ catch (ApiException e)
 
 <a id="searchprojectmedias"></a>
 # **SearchProjectMedias**
-> ListFlashOffers200Response SearchProjectMedias (Guid id, string? source = null, string? sort = null, Guid? savedFilterId = null, string? domain = null, string? websiteType = null, string? language = null, string? country = null, string? topics = null, bool? notBannedTopics = null, int? minTraffic = null, int? maxTraffic = null, bool? trafficTrendUpward = null, int? minDomainRating = null, int? maxDomainRating = null, decimal? minLinkedToReferringRatio = null, decimal? maxLinkedToReferringRatio = null, int? minPostPrice = null, int? maxPostPrice = null, string? postLinkType = null, string? promotedSocialNetwork = null, bool? withoutAdvertisingLabel = null, bool? homepageListing = null, bool? hasLinkAddition = null, int? minLinkAdditionPrice = null, int? maxLinkAdditionPrice = null, string? linkAdditionLinkType = null, bool? bestPrice = null, bool? recommended = null, bool? favourite = null, bool? requested = null, bool? flashOffer = null, bool? bought = null, bool? discarded = null, bool? varNew = null, string? ranksGoalKeyword = null, string? ranksAiKeyword = null, int? limit = null, int? offset = null)
+> ListFlashOffers200Response SearchProjectMedias (Guid id, string? source = null, string? sort = null, Guid? savedFilterId = null, string? domain = null, string? websiteType = null, string? language = null, string? country = null, string? topics = null, bool? notBannedTopics = null, int? minTraffic = null, int? maxTraffic = null, bool? trafficTrendUpward = null, int? minDomainRating = null, int? maxDomainRating = null, decimal? minLinkedToReferringRatio = null, decimal? maxLinkedToReferringRatio = null, int? minPostPrice = null, int? maxPostPrice = null, string? postLinkType = null, string? promotedSocialNetwork = null, bool? withoutAdvertisingLabel = null, bool? homepageListing = null, bool? hasLinkAddition = null, int? minLinkAdditionPrice = null, int? maxLinkAdditionPrice = null, string? linkAdditionLinkType = null, bool? bestPrice = null, bool? recommended = null, bool? favourite = null, bool? requested = null, bool? flashOffer = null, bool? bought = null, bool? discarded = null, bool? varNew = null, string? ranksGoalKeyword = null, string? ranksAiKeyword = null, int? limit = null, int? offset = null, bool? deals = null)
 
 Search the catalogue for a project
 
@@ -688,11 +690,12 @@ namespace Example
             var ranksAiKeyword = "ranksAiKeyword_example";  // string? | A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`. (optional) 
             var limit = 20;  // int? | Medias per page, 1 to 100. (optional)  (default to 20)
             var offset = 0;  // int? | Medias to skip, at most 99900. (optional)  (default to 0)
+            var deals = true;  // bool? | Deals: medias with an offer running (`flashOffer`) or a best-price badge (`bestPrice` not null), either one, within the other filters. Only `true` applies it; omit it otherwise. With `flashOffer=true` it selects the medias on offer. (optional) 
 
             try
             {
                 // Search the catalogue for a project
-                ListFlashOffers200Response result = apiInstance.SearchProjectMedias(id, source, sort, savedFilterId, domain, websiteType, language, country, topics, notBannedTopics, minTraffic, maxTraffic, trafficTrendUpward, minDomainRating, maxDomainRating, minLinkedToReferringRatio, maxLinkedToReferringRatio, minPostPrice, maxPostPrice, postLinkType, promotedSocialNetwork, withoutAdvertisingLabel, homepageListing, hasLinkAddition, minLinkAdditionPrice, maxLinkAdditionPrice, linkAdditionLinkType, bestPrice, recommended, favourite, requested, flashOffer, bought, discarded, varNew, ranksGoalKeyword, ranksAiKeyword, limit, offset);
+                ListFlashOffers200Response result = apiInstance.SearchProjectMedias(id, source, sort, savedFilterId, domain, websiteType, language, country, topics, notBannedTopics, minTraffic, maxTraffic, trafficTrendUpward, minDomainRating, maxDomainRating, minLinkedToReferringRatio, maxLinkedToReferringRatio, minPostPrice, maxPostPrice, postLinkType, promotedSocialNetwork, withoutAdvertisingLabel, homepageListing, hasLinkAddition, minLinkAdditionPrice, maxLinkAdditionPrice, linkAdditionLinkType, bestPrice, recommended, favourite, requested, flashOffer, bought, discarded, varNew, ranksGoalKeyword, ranksAiKeyword, limit, offset, deals);
                 Debug.WriteLine(result);
             }
             catch (ApiException  e)
@@ -713,7 +716,7 @@ This returns an ApiResponse object which contains the response data, status code
 try
 {
     // Search the catalogue for a project
-    ApiResponse<ListFlashOffers200Response> response = apiInstance.SearchProjectMediasWithHttpInfo(id, source, sort, savedFilterId, domain, websiteType, language, country, topics, notBannedTopics, minTraffic, maxTraffic, trafficTrendUpward, minDomainRating, maxDomainRating, minLinkedToReferringRatio, maxLinkedToReferringRatio, minPostPrice, maxPostPrice, postLinkType, promotedSocialNetwork, withoutAdvertisingLabel, homepageListing, hasLinkAddition, minLinkAdditionPrice, maxLinkAdditionPrice, linkAdditionLinkType, bestPrice, recommended, favourite, requested, flashOffer, bought, discarded, varNew, ranksGoalKeyword, ranksAiKeyword, limit, offset);
+    ApiResponse<ListFlashOffers200Response> response = apiInstance.SearchProjectMediasWithHttpInfo(id, source, sort, savedFilterId, domain, websiteType, language, country, topics, notBannedTopics, minTraffic, maxTraffic, trafficTrendUpward, minDomainRating, maxDomainRating, minLinkedToReferringRatio, maxLinkedToReferringRatio, minPostPrice, maxPostPrice, postLinkType, promotedSocialNetwork, withoutAdvertisingLabel, homepageListing, hasLinkAddition, minLinkAdditionPrice, maxLinkAdditionPrice, linkAdditionLinkType, bestPrice, recommended, favourite, requested, flashOffer, bought, discarded, varNew, ranksGoalKeyword, ranksAiKeyword, limit, offset, deals);
     Debug.Write("Status Code: " + response.StatusCode);
     Debug.Write("Response Headers: " + response.Headers);
     Debug.Write("Response Body: " + response.Data);
@@ -769,6 +772,7 @@ catch (ApiException e)
 | **ranksAiKeyword** | **string?** | A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. | [optional]  |
 | **limit** | **int?** | Medias per page, 1 to 100. | [optional] [default to 20] |
 | **offset** | **int?** | Medias to skip, at most 99900. | [optional] [default to 0] |
+| **deals** | **bool?** | Deals: medias with an offer running (&#x60;flashOffer&#x60;) or a best-price badge (&#x60;bestPrice&#x60; not null), either one, within the other filters. Only &#x60;true&#x60; applies it; omit it otherwise. With &#x60;flashOffer&#x3D;true&#x60; it selects the medias on offer. | [optional]  |
 
 ### Return type
 

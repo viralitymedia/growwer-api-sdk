@@ -992,6 +992,7 @@ class CatalogueApi:
         ranks_ai_keyword: Annotated[Optional[StrictStr], Field(description="A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.")] = None,
         limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Medias per page, 1 to 100.")] = None,
         offset: Annotated[Optional[Annotated[int, Field(le=99900, strict=True, ge=0)]], Field(description="Medias to skip, at most 99900.")] = None,
+        deals: Annotated[Optional[StrictBool], Field(description="Deals: medias with an offer running (`flashOffer`) or a best-price badge (`bestPrice` not null), either one, within the other filters. Only `true` applies it; omit it otherwise. With `flashOffer=true` it selects the medias on offer.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1083,6 +1084,8 @@ class CatalogueApi:
         :type limit: int
         :param offset: Medias to skip, at most 99900.
         :type offset: int
+        :param deals: Deals: medias with an offer running (`flashOffer`) or a best-price badge (`bestPrice` not null), either one, within the other filters. Only `true` applies it; omit it otherwise. With `flashOffer=true` it selects the medias on offer.
+        :type deals: bool
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1143,6 +1146,7 @@ class CatalogueApi:
             ranks_ai_keyword=ranks_ai_keyword,
             limit=limit,
             offset=offset,
+            deals=deals,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1210,6 +1214,7 @@ class CatalogueApi:
         ranks_ai_keyword: Annotated[Optional[StrictStr], Field(description="A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.")] = None,
         limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Medias per page, 1 to 100.")] = None,
         offset: Annotated[Optional[Annotated[int, Field(le=99900, strict=True, ge=0)]], Field(description="Medias to skip, at most 99900.")] = None,
+        deals: Annotated[Optional[StrictBool], Field(description="Deals: medias with an offer running (`flashOffer`) or a best-price badge (`bestPrice` not null), either one, within the other filters. Only `true` applies it; omit it otherwise. With `flashOffer=true` it selects the medias on offer.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1301,6 +1306,8 @@ class CatalogueApi:
         :type limit: int
         :param offset: Medias to skip, at most 99900.
         :type offset: int
+        :param deals: Deals: medias with an offer running (`flashOffer`) or a best-price badge (`bestPrice` not null), either one, within the other filters. Only `true` applies it; omit it otherwise. With `flashOffer=true` it selects the medias on offer.
+        :type deals: bool
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1361,6 +1368,7 @@ class CatalogueApi:
             ranks_ai_keyword=ranks_ai_keyword,
             limit=limit,
             offset=offset,
+            deals=deals,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1428,6 +1436,7 @@ class CatalogueApi:
         ranks_ai_keyword: Annotated[Optional[StrictStr], Field(description="A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.")] = None,
         limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Medias per page, 1 to 100.")] = None,
         offset: Annotated[Optional[Annotated[int, Field(le=99900, strict=True, ge=0)]], Field(description="Medias to skip, at most 99900.")] = None,
+        deals: Annotated[Optional[StrictBool], Field(description="Deals: medias with an offer running (`flashOffer`) or a best-price badge (`bestPrice` not null), either one, within the other filters. Only `true` applies it; omit it otherwise. With `flashOffer=true` it selects the medias on offer.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1519,6 +1528,8 @@ class CatalogueApi:
         :type limit: int
         :param offset: Medias to skip, at most 99900.
         :type offset: int
+        :param deals: Deals: medias with an offer running (`flashOffer`) or a best-price badge (`bestPrice` not null), either one, within the other filters. Only `true` applies it; omit it otherwise. With `flashOffer=true` it selects the medias on offer.
+        :type deals: bool
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1579,6 +1590,7 @@ class CatalogueApi:
             ranks_ai_keyword=ranks_ai_keyword,
             limit=limit,
             offset=offset,
+            deals=deals,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1641,6 +1653,7 @@ class CatalogueApi:
         ranks_ai_keyword,
         limit,
         offset,
+        deals,
         _request_auth,
         _content_type,
         _headers,
@@ -1810,6 +1823,10 @@ class CatalogueApi:
         if offset is not None:
             
             _query_params.append(('offset', offset))
+            
+        if deals is not None:
+            
+            _query_params.append(('deals', deals))
             
         # process the header parameters
         # process the form parameters
@@ -2221,6 +2238,7 @@ class CatalogueApi:
         ranks_ai_keyword: Annotated[Optional[StrictStr], Field(description="A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.")] = None,
         limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Medias per page, 1 to 100.")] = None,
         offset: Annotated[Optional[Annotated[int, Field(le=99900, strict=True, ge=0)]], Field(description="Medias to skip, at most 99900.")] = None,
+        deals: Annotated[Optional[StrictBool], Field(description="Deals: medias with an offer running (`flashOffer`) or a best-price badge (`bestPrice` not null), either one, within the other filters. Only `true` applies it; omit it otherwise. With `flashOffer=true` it selects the medias on offer.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -2316,6 +2334,8 @@ class CatalogueApi:
         :type limit: int
         :param offset: Medias to skip, at most 99900.
         :type offset: int
+        :param deals: Deals: medias with an offer running (`flashOffer`) or a best-price badge (`bestPrice` not null), either one, within the other filters. Only `true` applies it; omit it otherwise. With `flashOffer=true` it selects the medias on offer.
+        :type deals: bool
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -2378,6 +2398,7 @@ class CatalogueApi:
             ranks_ai_keyword=ranks_ai_keyword,
             limit=limit,
             offset=offset,
+            deals=deals,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -2447,6 +2468,7 @@ class CatalogueApi:
         ranks_ai_keyword: Annotated[Optional[StrictStr], Field(description="A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.")] = None,
         limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Medias per page, 1 to 100.")] = None,
         offset: Annotated[Optional[Annotated[int, Field(le=99900, strict=True, ge=0)]], Field(description="Medias to skip, at most 99900.")] = None,
+        deals: Annotated[Optional[StrictBool], Field(description="Deals: medias with an offer running (`flashOffer`) or a best-price badge (`bestPrice` not null), either one, within the other filters. Only `true` applies it; omit it otherwise. With `flashOffer=true` it selects the medias on offer.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -2542,6 +2564,8 @@ class CatalogueApi:
         :type limit: int
         :param offset: Medias to skip, at most 99900.
         :type offset: int
+        :param deals: Deals: medias with an offer running (`flashOffer`) or a best-price badge (`bestPrice` not null), either one, within the other filters. Only `true` applies it; omit it otherwise. With `flashOffer=true` it selects the medias on offer.
+        :type deals: bool
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -2604,6 +2628,7 @@ class CatalogueApi:
             ranks_ai_keyword=ranks_ai_keyword,
             limit=limit,
             offset=offset,
+            deals=deals,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -2673,6 +2698,7 @@ class CatalogueApi:
         ranks_ai_keyword: Annotated[Optional[StrictStr], Field(description="A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.")] = None,
         limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Medias per page, 1 to 100.")] = None,
         offset: Annotated[Optional[Annotated[int, Field(le=99900, strict=True, ge=0)]], Field(description="Medias to skip, at most 99900.")] = None,
+        deals: Annotated[Optional[StrictBool], Field(description="Deals: medias with an offer running (`flashOffer`) or a best-price badge (`bestPrice` not null), either one, within the other filters. Only `true` applies it; omit it otherwise. With `flashOffer=true` it selects the medias on offer.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -2768,6 +2794,8 @@ class CatalogueApi:
         :type limit: int
         :param offset: Medias to skip, at most 99900.
         :type offset: int
+        :param deals: Deals: medias with an offer running (`flashOffer`) or a best-price badge (`bestPrice` not null), either one, within the other filters. Only `true` applies it; omit it otherwise. With `flashOffer=true` it selects the medias on offer.
+        :type deals: bool
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -2830,6 +2858,7 @@ class CatalogueApi:
             ranks_ai_keyword=ranks_ai_keyword,
             limit=limit,
             offset=offset,
+            deals=deals,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -2894,6 +2923,7 @@ class CatalogueApi:
         ranks_ai_keyword,
         limit,
         offset,
+        deals,
         _request_auth,
         _content_type,
         _headers,
@@ -3069,6 +3099,10 @@ class CatalogueApi:
         if offset is not None:
             
             _query_params.append(('offset', offset))
+            
+        if deals is not None:
+            
+            _query_params.append(('deals', deals))
             
         # process the header parameters
         # process the form parameters

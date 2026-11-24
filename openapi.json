@@ -1048,6 +1048,9 @@
               "maximum": 99900,
               "minimum": 0
             }
+          },
+          {
+            "$ref": "#/components/parameters/CatalogueDeals"
           }
         ],
         "responses": {
@@ -1355,6 +1358,9 @@
               "maximum": 99900,
               "minimum": 0
             }
+          },
+          {
+            "$ref": "#/components/parameters/CatalogueDeals"
           }
         ],
         "responses": {
@@ -10567,6 +10573,15 @@
         "name": "bestPrice",
         "in": "query",
         "description": "Medias with a best-price badge (`bestPrice` not null), of either claim. Only `true` applies it; omit it otherwise.",
+        "required": false,
+        "schema": {
+          "type": "boolean"
+        }
+      },
+      "CatalogueDeals": {
+        "name": "deals",
+        "in": "query",
+        "description": "Deals: medias with an offer running (`flashOffer`) or a best-price badge (`bestPrice` not null), either one, within the other filters. Only `true` applies it; omit it otherwise. With `flashOffer=true` it selects the medias on offer.",
         "required": false,
         "schema": {
           "type": "boolean"

@@ -205,7 +205,7 @@ try {
 ## `listFlashOffers()`
 
 ```php
-listFlashOffers($project_id, $source, $sort, $domain, $website_type, $language, $country, $topics, $not_banned_topics, $min_traffic, $max_traffic, $traffic_trend_upward, $min_domain_rating, $max_domain_rating, $min_linked_to_referring_ratio, $max_linked_to_referring_ratio, $min_post_price, $max_post_price, $post_link_type, $promoted_social_network, $without_advertising_label, $homepage_listing, $has_link_addition, $min_link_addition_price, $max_link_addition_price, $link_addition_link_type, $best_price, $recommended, $favourite, $requested, $bought, $discarded, $new, $ranks_goal_keyword, $ranks_ai_keyword, $limit, $offset): \Growwer\Api\Model\ListFlashOffers200Response
+listFlashOffers($project_id, $source, $sort, $domain, $website_type, $language, $country, $topics, $not_banned_topics, $min_traffic, $max_traffic, $traffic_trend_upward, $min_domain_rating, $max_domain_rating, $min_linked_to_referring_ratio, $max_linked_to_referring_ratio, $min_post_price, $max_post_price, $post_link_type, $promoted_social_network, $without_advertising_label, $homepage_listing, $has_link_addition, $min_link_addition_price, $max_link_addition_price, $link_addition_link_type, $best_price, $recommended, $favourite, $requested, $bought, $discarded, $new, $ranks_goal_keyword, $ranks_ai_keyword, $limit, $offset, $deals): \Growwer\Api\Model\ListFlashOffers200Response
 ```
 
 List the medias on offer
@@ -266,9 +266,10 @@ $ranks_goal_keyword = 'ranks_goal_keyword_example'; // string | A comma-separate
 $ranks_ai_keyword = 'ranks_ai_keyword_example'; // string | A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.
 $limit = 20; // int | Medias per page, 1 to 100.
 $offset = 0; // int | Medias to skip, at most 99900.
+$deals = True; // bool | Deals: medias with an offer running (`flashOffer`) or a best-price badge (`bestPrice` not null), either one, within the other filters. Only `true` applies it; omit it otherwise. With `flashOffer=true` it selects the medias on offer.
 
 try {
-    $result = $apiInstance->listFlashOffers($project_id, $source, $sort, $domain, $website_type, $language, $country, $topics, $not_banned_topics, $min_traffic, $max_traffic, $traffic_trend_upward, $min_domain_rating, $max_domain_rating, $min_linked_to_referring_ratio, $max_linked_to_referring_ratio, $min_post_price, $max_post_price, $post_link_type, $promoted_social_network, $without_advertising_label, $homepage_listing, $has_link_addition, $min_link_addition_price, $max_link_addition_price, $link_addition_link_type, $best_price, $recommended, $favourite, $requested, $bought, $discarded, $new, $ranks_goal_keyword, $ranks_ai_keyword, $limit, $offset);
+    $result = $apiInstance->listFlashOffers($project_id, $source, $sort, $domain, $website_type, $language, $country, $topics, $not_banned_topics, $min_traffic, $max_traffic, $traffic_trend_upward, $min_domain_rating, $max_domain_rating, $min_linked_to_referring_ratio, $max_linked_to_referring_ratio, $min_post_price, $max_post_price, $post_link_type, $promoted_social_network, $without_advertising_label, $homepage_listing, $has_link_addition, $min_link_addition_price, $max_link_addition_price, $link_addition_link_type, $best_price, $recommended, $favourite, $requested, $bought, $discarded, $new, $ranks_goal_keyword, $ranks_ai_keyword, $limit, $offset, $deals);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling CatalogueApi->listFlashOffers: ', $e->getMessage(), PHP_EOL;
@@ -316,6 +317,7 @@ try {
 | **ranks_ai_keyword** | **string**| A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. | [optional] |
 | **limit** | **int**| Medias per page, 1 to 100. | [optional] [default to 20] |
 | **offset** | **int**| Medias to skip, at most 99900. | [optional] [default to 0] |
+| **deals** | **bool**| Deals: medias with an offer running (&#x60;flashOffer&#x60;) or a best-price badge (&#x60;bestPrice&#x60; not null), either one, within the other filters. Only &#x60;true&#x60; applies it; omit it otherwise. With &#x60;flashOffer&#x3D;true&#x60; it selects the medias on offer. | [optional] |
 
 ### Return type
 
@@ -401,7 +403,7 @@ try {
 ## `searchProjectMedias()`
 
 ```php
-searchProjectMedias($id, $source, $sort, $saved_filter_id, $domain, $website_type, $language, $country, $topics, $not_banned_topics, $min_traffic, $max_traffic, $traffic_trend_upward, $min_domain_rating, $max_domain_rating, $min_linked_to_referring_ratio, $max_linked_to_referring_ratio, $min_post_price, $max_post_price, $post_link_type, $promoted_social_network, $without_advertising_label, $homepage_listing, $has_link_addition, $min_link_addition_price, $max_link_addition_price, $link_addition_link_type, $best_price, $recommended, $favourite, $requested, $flash_offer, $bought, $discarded, $new, $ranks_goal_keyword, $ranks_ai_keyword, $limit, $offset): \Growwer\Api\Model\ListFlashOffers200Response
+searchProjectMedias($id, $source, $sort, $saved_filter_id, $domain, $website_type, $language, $country, $topics, $not_banned_topics, $min_traffic, $max_traffic, $traffic_trend_upward, $min_domain_rating, $max_domain_rating, $min_linked_to_referring_ratio, $max_linked_to_referring_ratio, $min_post_price, $max_post_price, $post_link_type, $promoted_social_network, $without_advertising_label, $homepage_listing, $has_link_addition, $min_link_addition_price, $max_link_addition_price, $link_addition_link_type, $best_price, $recommended, $favourite, $requested, $flash_offer, $bought, $discarded, $new, $ranks_goal_keyword, $ranks_ai_keyword, $limit, $offset, $deals): \Growwer\Api\Model\ListFlashOffers200Response
 ```
 
 Search the catalogue for a project
@@ -464,9 +466,10 @@ $ranks_goal_keyword = 'ranks_goal_keyword_example'; // string | A comma-separate
 $ranks_ai_keyword = 'ranks_ai_keyword_example'; // string | A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. `googleAiOverview`, `chatgpt`, `googleAiMode`.
 $limit = 20; // int | Medias per page, 1 to 100.
 $offset = 0; // int | Medias to skip, at most 99900.
+$deals = True; // bool | Deals: medias with an offer running (`flashOffer`) or a best-price badge (`bestPrice` not null), either one, within the other filters. Only `true` applies it; omit it otherwise. With `flashOffer=true` it selects the medias on offer.
 
 try {
-    $result = $apiInstance->searchProjectMedias($id, $source, $sort, $saved_filter_id, $domain, $website_type, $language, $country, $topics, $not_banned_topics, $min_traffic, $max_traffic, $traffic_trend_upward, $min_domain_rating, $max_domain_rating, $min_linked_to_referring_ratio, $max_linked_to_referring_ratio, $min_post_price, $max_post_price, $post_link_type, $promoted_social_network, $without_advertising_label, $homepage_listing, $has_link_addition, $min_link_addition_price, $max_link_addition_price, $link_addition_link_type, $best_price, $recommended, $favourite, $requested, $flash_offer, $bought, $discarded, $new, $ranks_goal_keyword, $ranks_ai_keyword, $limit, $offset);
+    $result = $apiInstance->searchProjectMedias($id, $source, $sort, $saved_filter_id, $domain, $website_type, $language, $country, $topics, $not_banned_topics, $min_traffic, $max_traffic, $traffic_trend_upward, $min_domain_rating, $max_domain_rating, $min_linked_to_referring_ratio, $max_linked_to_referring_ratio, $min_post_price, $max_post_price, $post_link_type, $promoted_social_network, $without_advertising_label, $homepage_listing, $has_link_addition, $min_link_addition_price, $max_link_addition_price, $link_addition_link_type, $best_price, $recommended, $favourite, $requested, $flash_offer, $bought, $discarded, $new, $ranks_goal_keyword, $ranks_ai_keyword, $limit, $offset, $deals);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling CatalogueApi->searchProjectMedias: ', $e->getMessage(), PHP_EOL;
@@ -516,6 +519,7 @@ try {
 | **ranks_ai_keyword** | **string**| A comma-separated list of AI answer engines: medias the web lists an AI keyword of the project for, from any of them. &#x60;googleAiOverview&#x60;, &#x60;chatgpt&#x60;, &#x60;googleAiMode&#x60;. | [optional] |
 | **limit** | **int**| Medias per page, 1 to 100. | [optional] [default to 20] |
 | **offset** | **int**| Medias to skip, at most 99900. | [optional] [default to 0] |
+| **deals** | **bool**| Deals: medias with an offer running (&#x60;flashOffer&#x60;) or a best-price badge (&#x60;bestPrice&#x60; not null), either one, within the other filters. Only &#x60;true&#x60; applies it; omit it otherwise. With &#x60;flashOffer&#x3D;true&#x60; it selects the medias on offer. | [optional] |
 
 ### Return type
 

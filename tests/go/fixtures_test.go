@@ -18,7 +18,7 @@ import (
 	"testing"
 	"time"
 
-	growwer "github.com/viralitymedia/growwer-api-sdk/go/v4"
+	growwer "github.com/viralitymedia/growwer-api-sdk/go/v5"
 )
 
 const (
